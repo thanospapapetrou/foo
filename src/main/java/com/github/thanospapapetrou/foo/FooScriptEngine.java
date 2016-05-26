@@ -10,8 +10,10 @@ import javax.script.Invocable;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptException;
+import javax.script.SimpleBindings;
 
 import com.github.thanospapapetrou.foo.runtime.FooCompiledScript;
+import com.github.thanospapapetrou.foo.runtime.Literal;
 
 public class FooScriptEngine extends AbstractScriptEngine implements Compilable, Invocable {
 	private final FooScriptEngineFactory factory;
@@ -34,20 +36,17 @@ public class FooScriptEngine extends AbstractScriptEngine implements Compilable,
 
 	@Override
 	public Bindings createBindings() {
-		// TODO Auto-generated method stub
-		return null;
+		return new SimpleBindings();
 	}
 
 	@Override
-	public Object eval(final String script, final ScriptContext context) throws ScriptException {
-		// TODO Auto-generated method stub
-		return null;
+	public Literal eval(final String script, final ScriptContext context) throws ScriptException {
+		return compile(script).eval(context);
 	}
 
 	@Override
-	public Object eval(final Reader reader, final ScriptContext context) throws ScriptException {
-		// TODO Auto-generated method stub
-		return null;
+	public Literal eval(final Reader script, final ScriptContext context) throws ScriptException {
+		return compile(script).eval(context);
 	}
 
 	@Override
