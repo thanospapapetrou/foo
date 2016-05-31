@@ -19,6 +19,29 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<archive>
+						<manifestSections>
+							<manifestSection>
+								<name>com/github/thanospapapetrou/foo</name>
+								<manifestEntries>
+									<Specification-Title>Java Scripting API</Specification-Title>
+									<Specification-Version>JSR-000223</Specification-Version>
+									<Specification-Vendor>Java Community Process</Specification-Vendor>
+									<Implementation-Title>${project.artifactId}</Implementation-Title>
+									<Implementation-Version>${project.version}</Implementation-Version>
+									<Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
+									<Sealed>true</Sealed>
+								</manifestEntries>
+							</manifestSection>
+						</manifestSections>
+					</archive>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<name>Foo</name>
