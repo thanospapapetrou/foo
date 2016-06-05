@@ -1,8 +1,5 @@
 package com.github.thanospapapetrou.foo.runtime;
 
-import java.math.BigDecimal;
-import java.util.Objects;
-
 import com.github.thanospapapetrou.foo.FooScriptEngine;
 
 /**
@@ -14,29 +11,29 @@ public class FooNumber extends Literal {
 	/**
 	 * Foo number representing π.
 	 */
-	public static final FooNumber PI = new FooNumber(null, BigDecimal.valueOf(Math.PI));
+	public static final FooNumber PI = new FooNumber(null, Math.PI);
 
 	/**
 	 * Foo number representing e.
 	 */
-	public static final FooNumber E = new FooNumber(null, BigDecimal.valueOf(Math.E));
+	public static final FooNumber E = new FooNumber(null, Math.E);
 
 	/**
 	 * Foo number representing +∞.
 	 */
-	public static final FooNumber POSITIVE_INFINITY = new FooNumber(null, BigDecimal.valueOf(Double.POSITIVE_INFINITY));
+	public static final FooNumber POSITIVE_INFINITY = new FooNumber(null, Double.POSITIVE_INFINITY);
 
 	/**
 	 * Foo number representing -∞.
 	 */
-	public static final FooNumber NEGATIVE_INFINITY = new FooNumber(null, BigDecimal.valueOf(Double.NEGATIVE_INFINITY));
+	public static final FooNumber NEGATIVE_INFINITY = new FooNumber(null, Double.NEGATIVE_INFINITY);
 
 	/**
 	 * Foo number representing NaN.
 	 */
-	public static final FooNumber NaN = new FooNumber(null, BigDecimal.valueOf(Double.NaN));
+	public static final FooNumber NaN = new FooNumber(null, Double.NaN);
 
-	private final BigDecimal value;
+	private final double value;
 
 	/**
 	 * Construct a new Foo number.
@@ -46,24 +43,24 @@ public class FooNumber extends Literal {
 	 * @param value
 	 *            the value of this number
 	 */
-	public FooNumber(final FooScriptEngine engine, final BigDecimal value) {
+	public FooNumber(final FooScriptEngine engine, final double value) {
 		super(engine);
-		this.value = Objects.requireNonNull(value, "Value must not be null");
+		this.value = value;
 	}
 
 	@Override
 	public boolean equals(final Object object) {
-		return (object instanceof FooNumber) && value.equals(((FooNumber) object).value);
+		return (object instanceof FooNumber) && (value == ((FooNumber) object).value);
 	}
 
 	@Override
 	public int hashCode() {
-		return value.hashCode();
+		return Double.valueOf(value).hashCode();
 	}
 
 	@Override
 	public String toString() {
-		return value.toString();
+		return Double.toString(value);
 	}
 
 	@Override

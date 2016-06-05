@@ -3,7 +3,6 @@ package com.github.thanospapapetrou.foo.parser;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StreamTokenizer;
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -95,7 +94,7 @@ public class Parser {
 					expression = (expression == null) ? reference : new Application(engine, expression, reference);
 					break;
 				case NUMBER:
-					final FooNumber number = new FooNumber(engine, BigDecimal.valueOf(tokenizer.nval));
+					final FooNumber number = new FooNumber(engine, tokenizer.nval);
 					expression = (expression == null) ? number : new Application(engine, expression, number);
 					break;
 				default:

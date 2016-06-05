@@ -25,12 +25,20 @@ public class Application extends Expression {
 	 *            the function to apply
 	 * @param argument
 	 *            the argument to apply the given function to
+	 * @throws ScriptException
 	 */
-	public Application(final FooScriptEngine engine, final Expression function, final Expression argument) {
+	public Application(final FooScriptEngine engine, final Expression function, final Expression argument) throws ScriptException {
 		super(Objects.requireNonNull(engine, "Engine must not be null"));
 		this.function = Objects.requireNonNull(function, "Function must not be null");
 		this.argument = Objects.requireNonNull(argument, "Argument must not be null");
-		// TODO validate types
+		final FooType functionType = function.getType(engine.getContext());
+		final FooType argumentType = argument.getType(engine.getContext());
+		if (!(functionType instanceof FunctionType)) {
+			throw new ScriptException(String.format("%1$s can not be applied to %2$s: %2$s is not a function", argument, function));
+		}
+		if (!argumentType.equals(((FunctionType) functionType).getDomain())) {
+			throw new ScriptException(String.format("%1$s can not be applied to function %2$s: %2$s has type %3$s and %1$s has type %4$s", argument, function, functionType, argumentType));
+		}
 	}
 
 	@Override
