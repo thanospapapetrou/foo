@@ -34,6 +34,7 @@ public class Parser {
 	private static final int EOL = StreamTokenizer.TT_EOL;
 	private static final int EOF = StreamTokenizer.TT_EOF;
 	private static final Map<Integer, String> TOKEN_NAMES = new HashMap<Integer, String>();
+	// TODO remove these
 	private static final String UNEXPECTED = "Unexpected %1$s, expected %2$s";
 	private static final String UNPARSABLE = "Unparsable input %1$s";
 	private static final String OR_2 = "%1$s or %2$s";

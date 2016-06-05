@@ -26,6 +26,7 @@ public class Application extends Expression {
 	 * @param argument
 	 *            the argument to apply the given function to
 	 * @throws ScriptException
+	 *             if function is not actually a function or it can not be applied to the given argument
 	 */
 	public Application(final FooScriptEngine engine, final Expression function, final Expression argument) throws ScriptException {
 		super(Objects.requireNonNull(engine, "Engine must not be null"));
@@ -37,13 +38,13 @@ public class Application extends Expression {
 			throw new ScriptException(String.format("%1$s can not be applied to %2$s: %2$s is not a function", argument, function));
 		}
 		if (!argumentType.equals(((FunctionType) functionType).getDomain())) {
-			throw new ScriptException(String.format("%1$s can not be applied to function %2$s: %2$s has type %3$s and %1$s has type %4$s", argument, function, functionType, argumentType));
+			throw new ScriptException(String.format("%1$s can not be applied to %2$s: %2$s has type %3$s and %1$s has type %4$s", argument, function, functionType, argumentType));
 		}
 	}
 
 	@Override
 	public Literal eval(final ScriptContext context) throws ScriptException {
-		return ((Function) function.eval(context)).apply(argument);
+		return ((Function) function.eval(context)).apply(argument, context);
 	}
 
 	@Override

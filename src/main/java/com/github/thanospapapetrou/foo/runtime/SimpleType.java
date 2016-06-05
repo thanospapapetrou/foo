@@ -9,17 +9,17 @@ public class SimpleType extends FooType {
 	/**
 	 * Simple type representing a type.
 	 */
-	public static final SimpleType TYPE = new SimpleType("Type");
+	public static final SimpleType TYPE = new SimpleType("type");
 
 	/**
 	 * Simple type representing a number.
 	 */
-	public static final SimpleType NUMBER = new SimpleType("Number");
+	public static final SimpleType NUMBER = new SimpleType("number");
 
 	/**
 	 * Simple type representing a boolean.
 	 */
-	public static final SimpleType BOOLEAN = new SimpleType("Boolean");
+	public static final SimpleType BOOLEAN = new SimpleType("boolean");
 
 	private final String name;
 

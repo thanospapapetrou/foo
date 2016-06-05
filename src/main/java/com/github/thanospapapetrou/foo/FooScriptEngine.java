@@ -15,14 +15,33 @@ import javax.script.SimpleBindings;
 
 import com.github.thanospapapetrou.foo.parser.Parser;
 import com.github.thanospapapetrou.foo.runtime.Expression;
+import com.github.thanospapapetrou.foo.runtime.FooBoolean;
 import com.github.thanospapapetrou.foo.runtime.FooCompiledScript;
+import com.github.thanospapapetrou.foo.runtime.FooNumber;
+import com.github.thanospapapetrou.foo.runtime.Function;
 import com.github.thanospapapetrou.foo.runtime.Literal;
+import com.github.thanospapapetrou.foo.runtime.SimpleType;
 
 public class FooScriptEngine extends AbstractScriptEngine implements Compilable, Invocable {
 	private final FooScriptEngineFactory factory;
 
 	public FooScriptEngine(final FooScriptEngineFactory factory) {
 		this.factory = Objects.requireNonNull(factory, "Factory must not be null");
+		setBindings(new SimpleBindings() {
+			{
+				put(SimpleType.TYPE.toString(), SimpleType.TYPE);
+				put(SimpleType.NUMBER.toString(), SimpleType.NUMBER);
+				put(SimpleType.BOOLEAN.toString(), SimpleType.BOOLEAN);
+				put("pi", FooNumber.PI);
+				put("e", FooNumber.E);
+				put("positiveInfinity", FooNumber.POSITIVE_INFINITY);
+				put("negativeInfinity", FooNumber.NEGATIVE_INFINITY);
+				put("NaN", FooNumber.NaN);
+				put(FooBoolean.TRUE.toString(), FooBoolean.TRUE);
+				put(FooBoolean.FALSE.toString(), FooBoolean.FALSE);
+				put("add", Function.ADD);
+			}
+		}, ScriptContext.ENGINE_SCOPE);
 	}
 
 	@Override

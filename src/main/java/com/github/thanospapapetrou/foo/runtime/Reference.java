@@ -41,4 +41,9 @@ public class Reference extends Expression {
 	public FooType getType(final ScriptContext context) throws ScriptException {
 		return eval(context).getType();
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }

@@ -63,6 +63,10 @@ public class FooNumber extends Literal {
 		return Double.toString(value);
 	}
 
+	double getValue() {
+		return value;
+	}
+
 	@Override
 	protected SimpleType getType() {
 		return SimpleType.NUMBER;
