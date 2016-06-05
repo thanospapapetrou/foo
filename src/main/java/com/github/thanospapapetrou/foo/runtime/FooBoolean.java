@@ -19,6 +19,7 @@ public class FooBoolean extends Literal {
 	private final boolean value;
 
 	private FooBoolean(final boolean value) {
+		super(null);
 		this.value = value;
 	}
 

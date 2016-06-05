@@ -7,6 +7,11 @@ import java.util.List;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 
+/**
+ * Class implementing a Foo script engine factory
+ * 
+ * @author thanos
+ */
 public class FooScriptEngineFactory implements ScriptEngineFactory {
 	private static final String LANGUAGE_NAME = "Foo";
 	private static final String LANGUAGE_VERSION = "1.0.0";

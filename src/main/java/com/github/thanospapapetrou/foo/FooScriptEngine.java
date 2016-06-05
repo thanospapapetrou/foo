@@ -1,6 +1,7 @@
 package com.github.thanospapapetrou.foo;
 
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.Objects;
 
 import javax.script.AbstractScriptEngine;
@@ -12,6 +13,8 @@ import javax.script.ScriptEngineFactory;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
+import com.github.thanospapapetrou.foo.parser.Parser;
+import com.github.thanospapapetrou.foo.runtime.Expression;
 import com.github.thanospapapetrou.foo.runtime.FooCompiledScript;
 import com.github.thanospapapetrou.foo.runtime.Literal;
 
@@ -23,9 +26,8 @@ public class FooScriptEngine extends AbstractScriptEngine implements Compilable,
 	}
 
 	@Override
-	public FooCompiledScript compile(final String script) throws ScriptException {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression compile(final String script) throws ScriptException {
+		return new Parser(this, new StringReader(script)).parseExpression();
 	}
 
 	@Override
@@ -45,7 +47,7 @@ public class FooScriptEngine extends AbstractScriptEngine implements Compilable,
 	}
 
 	@Override
-	public Literal eval(final Reader script, final ScriptContext context) throws ScriptException {
+	public Void eval(final Reader script, final ScriptContext context) throws ScriptException {
 		return compile(script).eval(context);
 	}
 

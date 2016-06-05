@@ -5,7 +5,6 @@ import java.util.Objects;
 
 import javax.script.CompiledScript;
 import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.foo.FooScriptEngine;
@@ -17,32 +16,31 @@ import com.github.thanospapapetrou.foo.FooScriptEngine;
  */
 public class FooCompiledScript extends CompiledScript {
 	private final FooScriptEngine engine;
-	private final List<Command> commands;
+	private final List<Definition> definitions;
 
 	/**
 	 * Construct a new Foo compiled script.
 	 * 
 	 * @param engine
 	 *            the Foo script engine that created this compiled script
-	 * @param commands
-	 *            the list of commands that make up this compiled script
+	 * @param definitions
+	 *            the list of definitions that make up this compiled script
 	 */
-	public FooCompiledScript(final FooScriptEngine engine, final List<Command> commands) {
+	public FooCompiledScript(final FooScriptEngine engine, final List<Definition> definitions) {
 		this.engine = Objects.requireNonNull(engine, "Engine must not be null");
-		this.commands = Objects.requireNonNull(commands, "Commands must not be null");
+		this.definitions = Objects.requireNonNull(definitions, "Definitions must not be null");
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws ScriptException {
-		Literal result = null;
-		for (final Command command : commands) {
-			result = command.eval(context);
+	public Void eval(final ScriptContext context) throws ScriptException {
+		for (final Definition definition : definitions) {
+			definition.eval(context);
 		}
-		return result;
+		return null;
 	}
 
 	@Override
-	public ScriptEngine getEngine() {
+	public FooScriptEngine getEngine() {
 		return engine;
 	}
 }

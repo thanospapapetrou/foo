@@ -6,6 +6,13 @@ package com.github.thanospapapetrou.foo.runtime;
  * @author thanos
  */
 public abstract class FooType extends Literal {
+	/**
+	 * Construct a new type.
+	 */
+	public FooType() {
+		super(null);
+	}
+
 	@Override
 	protected SimpleType getType() {
 		return SimpleType.TYPE;
