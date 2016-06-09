@@ -1,47 +1,21 @@
-package com.github.thanospapapetrou.foo.runtime;
+package com.github.thanospapapetrou.funcky;
 
 import java.util.Objects;
 
 /**
- * Class representing a Foo function type.
+ * Class representing a Funcky function type.
  * 
  * @author thanos
  */
-public class FunctionType extends FooType {
+public class FunctionType extends FunckyType {
 	private static final String FUNCTION_TYPE = "function %1$s %2$s";
 
-	private final FooType domain;
-	private final FooType range;
+	private final FunckyType domain;
+	private final FunckyType range;
 
-	/**
-	 * Construct a new function type.
-	 * 
-	 * @param domain
-	 *            the function domain
-	 * @param range
-	 *            the function range
-	 */
-	public FunctionType(final FooType domain, final FooType range) {
+	FunctionType(final FunckyType domain, final FunckyType range) {
 		this.domain = Objects.requireNonNull(domain, "Domain must not be null");
 		this.range = Objects.requireNonNull(range, "Range must not be null");
-	}
-
-	/**
-	 * Get the domain.
-	 * 
-	 * @return the domain
-	 */
-	public FooType getDomain() {
-		return domain;
-	}
-
-	/**
-	 * Get the range.
-	 * 
-	 * @return the range
-	 */
-	public FooType getRange() {
-		return range;
 	}
 
 	@Override
@@ -61,5 +35,13 @@ public class FunctionType extends FooType {
 	@Override
 	public String toString() {
 		return String.format(FUNCTION_TYPE, domain, range);
+	}
+
+	FunckyType getDomain() {
+		return domain;
+	}
+
+	FunckyType getRange() {
+		return range;
 	}
 }

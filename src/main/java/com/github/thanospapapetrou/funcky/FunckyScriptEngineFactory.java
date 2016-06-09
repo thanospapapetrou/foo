@@ -1,4 +1,4 @@
-package com.github.thanospapapetrou.foo;
+package com.github.thanospapapetrou.funcky;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,17 +8,17 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 
 /**
- * Class implementing a Foo script engine factory
+ * Class implementing a Funcky script engine factory.
  * 
  * @author thanos
  */
-public class FooScriptEngineFactory implements ScriptEngineFactory {
-	private static final String LANGUAGE_NAME = "Foo";
+public class FunckyScriptEngineFactory implements ScriptEngineFactory {
+	private static final String LANGUAGE_NAME = "Funcky";
 	private static final String LANGUAGE_VERSION = "1.0.0";
-	private static final String ENGINE_NAME = "Foo";
+	private static final String ENGINE_NAME = "Funcky";
 	private static final String ENGINE_VERSION = "1.0.0";
-	private static final List<String> NAMES = Arrays.asList("Foo", "foo");
-	private static final List<String> EXTENSIONS = Collections.singletonList("foo");
+	private static final List<String> NAMES = Arrays.asList("Funcky", "funcky");
+	private static final List<String> EXTENSIONS = Collections.singletonList("funcky");
 
 	@Override
 	public String getEngineName() {
@@ -56,6 +56,18 @@ public class FooScriptEngineFactory implements ScriptEngineFactory {
 	}
 
 	@Override
+	public String getMethodCallSyntax(final String object, final String method, final String... arguments) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getOutputStatement(final String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public String getParameter(final String key) {
 		if (key == null) {
 			return null;
@@ -77,25 +89,13 @@ public class FooScriptEngineFactory implements ScriptEngineFactory {
 	}
 
 	@Override
-	public String getMethodCallSyntax(final String object, final String method, final String... arguments) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getOutputStatement(final String string) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String getProgram(final String... statements) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public FooScriptEngine getScriptEngine() {
-		return new FooScriptEngine(this);
+	public FunckyScriptEngine getScriptEngine() {
+		return new FunckyScriptEngine(this);
 	}
 }

@@ -1,11 +1,11 @@
-package com.github.thanospapapetrou.foo.runtime;
+package com.github.thanospapapetrou.funcky;
 
 /**
- * Class representing a Foo simple type.
+ * Class representing a Funcky simple type.
  * 
  * @author thanos
  */
-public class SimpleType extends FooType {
+public class SimpleType extends FunckyType {
 	/**
 	 * Simple type representing a type.
 	 */

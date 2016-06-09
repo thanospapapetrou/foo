@@ -1,4 +1,4 @@
-package com.github.thanospapapetrou.foo.runtime;
+package com.github.thanospapapetrou.funcky;
 
 import java.util.List;
 import java.util.Objects;
@@ -7,26 +7,16 @@ import javax.script.CompiledScript;
 import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.foo.FooScriptEngine;
-
 /**
- * Class representing a Foo compiled script.
+ * Class representing a Funcky script.
  * 
  * @author thanos
  */
-public class FooCompiledScript extends CompiledScript {
-	private final FooScriptEngine engine;
+public class FunckyScript extends CompiledScript {
+	private final FunckyScriptEngine engine;
 	private final List<Definition> definitions;
 
-	/**
-	 * Construct a new Foo compiled script.
-	 * 
-	 * @param engine
-	 *            the Foo script engine that created this compiled script
-	 * @param definitions
-	 *            the list of definitions that make up this compiled script
-	 */
-	public FooCompiledScript(final FooScriptEngine engine, final List<Definition> definitions) {
+	FunckyScript(final FunckyScriptEngine engine, final List<Definition> definitions) {
 		this.engine = Objects.requireNonNull(engine, "Engine must not be null");
 		this.definitions = Objects.requireNonNull(definitions, "Definitions must not be null");
 	}
@@ -40,7 +30,7 @@ public class FooCompiledScript extends CompiledScript {
 	}
 
 	@Override
-	public FooScriptEngine getEngine() {
+	public FunckyScriptEngine getEngine() {
 		return engine;
 	}
 }

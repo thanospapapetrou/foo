@@ -1,29 +1,19 @@
-package com.github.thanospapapetrou.foo.runtime;
+package com.github.thanospapapetrou.funcky;
 
 import java.util.Objects;
 
 import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.foo.FooScriptEngine;
-
 /**
- * Class representing a Foo reference.
+ * Class representing a Funcky reference.
  * 
  * @author thanos
  */
 public class Reference extends Expression {
 	private final String name;
 
-	/**
-	 * Construct a new reference.
-	 * 
-	 * @param engine
-	 *            the Foo script engine that created this reference
-	 * @param name
-	 *            the name of the reference to create
-	 */
-	public Reference(final FooScriptEngine engine, final String name) {
+	Reference(final FunckyScriptEngine engine, final String name) {
 		super(Objects.requireNonNull(engine, "Engine must not be null"));
 		this.name = Objects.requireNonNull(name, "Name must not be null");
 	}
@@ -38,7 +28,7 @@ public class Reference extends Expression {
 	}
 
 	@Override
-	public FooType getType(final ScriptContext context) throws ScriptException {
+	public FunckyType getType(final ScriptContext context) throws ScriptException {
 		return eval(context).getType();
 	}
 

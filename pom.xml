@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.thanospapapetrou</groupId>
-	<artifactId>foo</artifactId>
+	<artifactId>funcky</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<properties>
@@ -27,7 +27,7 @@
 					<archive>
 						<manifestSections>
 							<manifestSection>
-								<name>com/github/thanospapapetrou/foo</name>
+								<name>com/github/thanospapapetrou/funcky</name>
 								<manifestEntries>
 									<Specification-Title>Java Scripting API</Specification-Title>
 									<Specification-Version>JSR-000223</Specification-Version>
@@ -44,7 +44,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	<name>Foo</name>
+	<name>Funcky</name>
 	<inceptionYear>2016</inceptionYear>
 	<licenses>
 		<license>
@@ -64,9 +64,9 @@
 		</developer>
 	</developers>
 	<scm>
-		<connection>scm:git:git://github.com/thanospapapetrou/foo.git</connection>
-		<developerConnection>scm:git:git@gibhub.com:thanospapapetrou/foo.git</developerConnection>
-		<url>https://github.com/thanospapapetrou/foo</url>
+		<connection>scm:git:git://github.com/thanospapapetrou/funcky.git</connection>
+		<developerConnection>scm:git:git@gibhub.com:thanospapapetrou/funcky.git</developerConnection>
+		<url>https://github.com/thanospapapetrou/funcky</url>
 	</scm>
 </project>
 

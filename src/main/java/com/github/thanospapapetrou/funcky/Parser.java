@@ -1,4 +1,4 @@
-package com.github.thanospapapetrou.foo.parser;
+package com.github.thanospapapetrou.funcky;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -10,13 +10,8 @@ import java.util.Objects;
 
 import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.foo.FooScriptEngine;
-import com.github.thanospapapetrou.foo.runtime.Application;
-import com.github.thanospapapetrou.foo.runtime.Expression;
-import com.github.thanospapapetrou.foo.runtime.FooNumber;
-import com.github.thanospapapetrou.foo.runtime.Reference;
-
 /**
+ * TODO BNF
  * <script> ::= <definition>\n<script> | ε <definition> ::= <symbol>=<expression> <expression> ::= (<expression>) | <application> | <list> | <tuple> | <literal> | <symbol> <application> ::= <expression> <expression> <list> ::= [<expressions>] | [] <tuple> ::= {<expression>,<expressions>} <expressions> ::= <expression>,<expressions> | <expression> <literal> ::= <number> | <character> | <string> <symbol> ::= ... <number> ::= ... <character> ::= '...' <string> ::= "..."
  * 
  * @author thanos
@@ -40,7 +35,7 @@ public class Parser {
 	private static final String OR_2 = "%1$s or %2$s";
 	private static final String OR_MORE = "%1$s, %2$s";
 
-	private final FooScriptEngine engine;
+	private final FunckyScriptEngine engine;
 	private final StreamTokenizer tokenizer;
 
 	static {
@@ -55,7 +50,7 @@ public class Parser {
 		TOKEN_NAMES.put(EOF, "end of input");
 	}
 
-	public Parser(final FooScriptEngine engine, final Reader reader) {
+	Parser(final FunckyScriptEngine engine, final Reader reader) {
 		this.engine = Objects.requireNonNull(engine, "Engine must not be null");
 		tokenizer = new StreamTokenizer(Objects.requireNonNull(reader, "Reader must not be null"));
 		tokenizer.resetSyntax();
@@ -95,7 +90,7 @@ public class Parser {
 					expression = (expression == null) ? reference : new Application(engine, expression, reference);
 					break;
 				case NUMBER:
-					final FooNumber number = new FooNumber(engine, tokenizer.nval);
+					final FunckyNumber number = new FunckyNumber(engine, tokenizer.nval);
 					expression = (expression == null) ? number : new Application(engine, expression, number);
 					break;
 				default:
