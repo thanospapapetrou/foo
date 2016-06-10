@@ -40,8 +40,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	@Override
 	public FunckyScript compile(final Reader script) throws ScriptException {
-		// TODO Auto-generated method stub
-		return null;
+		return new Parser(this, script).parseScript();
 	}
 
 	@Override
