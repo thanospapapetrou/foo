@@ -158,8 +158,8 @@ public class Parser {
 		while (true) {
 			switch (tokenizer.nextToken()) {
 			case LEFT_PARENTHESIS:
-				final Expression nestedExpression = parseExpression();
-				expression = (tokenizer.ttype == RIGHT_PARENTHESIS) ? ((expression == null) ? nestedExpression : new Application(engine, expression, nestedExpression)) : this.<Expression> unexpected(RIGHT_PARENTHESIS);
+				final Expression nestedExpression = _parseExpression();
+				expression = (tokenizer.nextToken() == RIGHT_PARENTHESIS) ? ((expression == null) ? nestedExpression : new Application(engine, expression, nestedExpression)) : this.<Expression> unexpected(RIGHT_PARENTHESIS);
 				break;
 			case SYMBOL:
 				final Reference reference = new Reference(engine, tokenizer.sval);
