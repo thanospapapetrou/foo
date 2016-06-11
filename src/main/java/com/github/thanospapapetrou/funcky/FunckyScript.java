@@ -33,4 +33,8 @@ public class FunckyScript extends CompiledScript {
 	public FunckyScriptEngine getEngine() {
 		return engine;
 	}
+
+	List<Definition> getDefinitions() {
+		return definitions;
+	}
 }

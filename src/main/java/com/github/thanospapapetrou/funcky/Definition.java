@@ -30,4 +30,12 @@ public class Definition {
 	public void eval(final ScriptContext context) throws ScriptException {
 		context.setAttribute(name, expression.eval(context), ScriptContext.ENGINE_SCOPE);
 	}
+	
+	String getName() {
+		return name;
+	}
+	
+	Expression getExpression() {
+		return expression;
+	}
 }

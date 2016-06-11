@@ -1,0 +1,144 @@
+# Type of types.
+# type
+# type = ...
+
+# Type of numbers.
+# type
+# number = ...
+
+# Type of booleans.
+# type
+# boolean = ...
+
+# Number π, the ratio of the circumference of a circle to its diameter.
+# number
+# pi = ...
+
+# Number e, the base of natural algorithms.
+# number
+# e = ...
+
+# Positive infinity, +∞.
+# number
+# positiveInfinity = ...
+
+# Negative infinity, -∞.
+# number
+# negativeInfinity = ...
+
+# NaN, not a number.
+# number
+# NaN = ...
+
+# Boolean true.
+# boolean
+# true = ...
+
+# Boolean false.
+# boolean
+# false = ...
+
+# Generate an error using the given error message.
+# function string <type>
+# error message
+# message the error message to use
+# return anything
+# error = ... TODO
+
+# Check two values for equality.
+# function <type> (function <type> boolean)
+# equal x y
+# x the first value to check
+# y the second value to check
+# return true if x and y are equal, false if not
+# equal = ... TODO
+
+# Return then if condition is true or else if condition is false. 
+# function boolean (function <type> (function <type> <type>))
+# if condition then else
+# condition the condition to check
+# then the value to return if condition is true
+# else the value to return if condition is false
+# return then if condition is true or else if condition is false
+# if = ... TODO
+
+# Add two numbers.
+# function number (function number number)
+# add term1 term2
+# term1 the first term to add
+# term2 the second term to add
+# return the sum of term1 and term2 (term1 + term2)
+# add = ...
+
+# Subtract two numbers.
+# function number (function number number)
+# subtract minuend subtrahend
+# minuend the minuend to subtract from
+# subtrahend the subtrahend to subtract
+# return the difference of minuend minus subtrahend (minuend - subtrahend)
+# subtract = ...
+
+# Multiply two numbers.
+# function number (function number number)
+# multiply factor1 factor2
+# factor1 the first factor to multiply
+# factor2 the second factor to multiply
+# return the product of factor1 multiplied by factor2 (factor1 * factor2)
+# multiply = ...
+
+# Divide two numbers.
+# function number (function number number)
+# divide dividend divisor
+# dividend the dividend to divide
+# divisor the divisor to divide by
+# return the quotient of dividend divided by divisor (dividend / divisor)
+# divide = ...
+
+# Negate a number.
+# function number number
+# minus number
+# number the number to negate
+# return the negation of number (-number)
+minus = subtract 0
+
+# Calculate the integer quotient of the division of two numbers.
+# function number (function number number)
+# quotient dividend divisor
+# dividend the dividend to divide
+# divisor the divisor to divide by
+# return the integer quotient of dividend divided by divisor (dividend / divisor)
+# quotient = ... TODO
+
+# Calculate the remainder of the division of two numbers.
+# function number (function number number)
+# modulo dividend divisor
+# dividend the dividend to divide
+# divisor the divisor to divide by
+# return the remainder of dividend divided by divisor (dividend / divisor)
+# modulo = ... TODO
+
+# lessThan
+# greaterThan
+# lessEqual x y = or (lessThan x y) (equal x y)
+# greaterEqual x y = or (lessThan x y) (equal x y)
+# abs
+# round
+# ceil
+# floor
+# min x y = if (le x y) x y 
+# max x y = if (ge x y) x y
+# sin
+# cos
+# tan
+# asin
+# acos
+# atan
+# pow
+# sqrt x = pow x (div 1 2)
+# ln
+# log x y = ln y / ln y 
+# Boolean functions
+# not
+# and
+# or
+# xor

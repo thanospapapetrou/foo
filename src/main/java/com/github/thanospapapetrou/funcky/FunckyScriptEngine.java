@@ -1,7 +1,9 @@
 package com.github.thanospapapetrou.funcky;
 
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 import javax.script.AbstractScriptEngine;
@@ -18,27 +20,37 @@ import javax.script.SimpleBindings;
  * @author thanos
  */
 public class FunckyScriptEngine extends AbstractScriptEngine implements Compilable, Invocable {
+	private static final Bindings BUILTINS = new SimpleBindings() {
+		{
+			put(SimpleType.TYPE.toString(), SimpleType.TYPE);
+			put(SimpleType.NUMBER.toString(), SimpleType.NUMBER);
+			put(SimpleType.BOOLEAN.toString(), SimpleType.BOOLEAN);
+			put("pi", FunckyNumber.PI);
+			put("e", FunckyNumber.E);
+			put(FunckyNumber.INFINITY.toString(), FunckyNumber.INFINITY);
+			put(FunckyNumber.NAN.toString(), FunckyNumber.NAN);
+			put(FunckyBoolean.TRUE.toString(), FunckyBoolean.TRUE);
+			put(FunckyBoolean.FALSE.toString(), FunckyBoolean.FALSE);
+			put(Function.ADD.toString(), Function.ADD);
+			put(Function.SUBTRACT.toString(), Function.SUBTRACT);
+			put(Function.MULTIPLY.toString(), Function.MULTIPLY);
+			put(Function.DIVIDE.toString(), Function.DIVIDE);
+		}
+	};
+	private static final String PRELUDE = "/Prelude.funcky";
+
 	private final FunckyScriptEngineFactory factory;
 
 	FunckyScriptEngine(final FunckyScriptEngineFactory factory) {
 		this.factory = Objects.requireNonNull(factory, "Factory must not be null");
-		setBindings(new SimpleBindings() {
-			{
-				put(SimpleType.TYPE.toString(), SimpleType.TYPE);
-				put(SimpleType.NUMBER.toString(), SimpleType.NUMBER);
-				put(SimpleType.BOOLEAN.toString(), SimpleType.BOOLEAN);
-				put("pi", FunckyNumber.PI);
-				put("e", FunckyNumber.E);
-				put(FunckyNumber.INFINITY.toString(), FunckyNumber.INFINITY);
-				put(FunckyNumber.NAN.toString(), FunckyNumber.NAN);
-				put(FunckyBoolean.TRUE.toString(), FunckyBoolean.TRUE);
-				put(FunckyBoolean.FALSE.toString(), FunckyBoolean.FALSE);
-				put(Function.ADD.toString(), Function.ADD);
-				put(Function.SUBTRACT.toString(), Function.SUBTRACT);
-				put(Function.MULTIPLY.toString(), Function.MULTIPLY);
-				put(Function.DIVIDE.toString(), Function.DIVIDE);
+		setBindings(BUILTINS, ScriptContext.ENGINE_SCOPE);
+		try {
+			for (final Definition definition : compile(new InputStreamReader(getClass().getResourceAsStream(PRELUDE), StandardCharsets.UTF_8)).getDefinitions()) {
+				this.getBindings(ScriptContext.ENGINE_SCOPE).put(definition.getName(), definition.getExpression().eval());
 			}
-		}, ScriptContext.ENGINE_SCOPE);
+		} catch (final ScriptException e) {
+			throw new RuntimeException("Error loading prelude", e);
+		}
 	}
 
 	@Override
