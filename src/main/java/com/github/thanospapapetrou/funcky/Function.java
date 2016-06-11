@@ -26,7 +26,7 @@ public abstract class Function extends Literal {
 
 				@Override
 				public String toString() {
-					return String.format("add %1$s", term);
+					return String.format("%1$s %2$s", ADD, term);
 				}
 			};
 		}
@@ -34,6 +34,84 @@ public abstract class Function extends Literal {
 		@Override
 		public String toString() {
 			return "add";
+		}
+	};
+
+	/**
+	 * Subtract two numbers.
+	 */
+	public static final Function SUBTRACT = new Function(SimpleType.NUMBER, new FunctionType(SimpleType.NUMBER, SimpleType.NUMBER)) {
+		@Override
+		public Literal apply(final Expression expression, final ScriptContext context) throws ScriptException {
+			final FunckyNumber minuend = (FunckyNumber) expression.eval(context);
+			return new Function(SimpleType.NUMBER, SimpleType.NUMBER) {
+				@Override
+				public Literal apply(final Expression expression, final ScriptContext context) throws ScriptException {
+					return new FunckyNumber(null, minuend.getValue() - ((FunckyNumber) expression.eval(context)).getValue());
+				}
+
+				@Override
+				public String toString() {
+					return String.format("%1$s %2$s", SUBTRACT, minuend);
+				}
+			};
+		}
+
+		@Override
+		public String toString() {
+			return "subtract";
+		}
+	};
+
+	/**
+	 * Multiply two numbers.
+	 */
+	public static final Function MULTIPLY = new Function(SimpleType.NUMBER, new FunctionType(SimpleType.NUMBER, SimpleType.NUMBER)) {
+		@Override
+		public Literal apply(final Expression expression, final ScriptContext context) throws ScriptException {
+			final FunckyNumber factor = (FunckyNumber) expression.eval(context);
+			return new Function(SimpleType.NUMBER, SimpleType.NUMBER) {
+				@Override
+				public Literal apply(final Expression expression, final ScriptContext context) throws ScriptException {
+					return new FunckyNumber(null, factor.getValue() * ((FunckyNumber) expression.eval(context)).getValue());
+				}
+
+				@Override
+				public String toString() {
+					return String.format("%1$s %2$s", MULTIPLY, factor);
+				}
+			};
+		}
+
+		@Override
+		public String toString() {
+			return "multiply";
+		}
+	};
+
+	/**
+	 * Divide two numbers.
+	 */
+	public static final Function DIVIDE = new Function(SimpleType.NUMBER, new FunctionType(SimpleType.NUMBER, SimpleType.NUMBER)) {
+		@Override
+		public Literal apply(final Expression expression, final ScriptContext context) throws ScriptException {
+			final FunckyNumber subtrahend = (FunckyNumber) expression.eval(context);
+			return new Function(SimpleType.NUMBER, SimpleType.NUMBER) {
+				@Override
+				public Literal apply(final Expression expression, final ScriptContext context) throws ScriptException {
+					return new FunckyNumber(null, subtrahend.getValue() / ((FunckyNumber) expression.eval(context)).getValue());
+				}
+
+				@Override
+				public String toString() {
+					return String.format("%1$s %2$s", DIVIDE, subtrahend);
+				}
+			};
+		}
+
+		@Override
+		public String toString() {
+			return "divide";
 		}
 	};
 
