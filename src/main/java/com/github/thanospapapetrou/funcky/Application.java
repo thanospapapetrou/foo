@@ -18,13 +18,13 @@ public class Application extends Expression {
 		super(Objects.requireNonNull(engine, "Engine must not be null"));
 		this.function = Objects.requireNonNull(function, "Function must not be null");
 		this.argument = Objects.requireNonNull(argument, "Argument must not be null");
-		final FunckyType functionType = function.getType(engine.getContext());
-		final FunckyType argumentType = argument.getType(engine.getContext());
-		if (!(functionType instanceof FunctionType)) {
-			throw new ScriptException(String.format("%1$s can not be applied to %2$s: %2$s is not a function", argument, function));
+		if (!(function.getType(engine.getContext()) instanceof FunctionType)) {
+			throw new ScriptException(String.format("%1$s is not a function", function));
 		}
-		if (!argumentType.equals(((FunctionType) functionType).getDomain())) {
-			throw new ScriptException(String.format("%1$s can not be applied to %2$s: %2$s has type %3$s and %1$s has type %4$s", argument, function, functionType, argumentType));
+		final FunctionType functionType = (FunctionType) function.getType(engine.getContext());
+		final FunckyType argumentType = argument.getType(engine.getContext());
+		if (!argumentType.equals(functionType.getDomain())) {
+			throw new ScriptException(String.format("Function %1$s expects an argument of type %2$s but %3$s has type %4$s", function, functionType.getDomain(), argument, argumentType));
 		}
 	}
 
@@ -36,5 +36,10 @@ public class Application extends Expression {
 	@Override
 	public FunckyType getType(final ScriptContext context) throws ScriptException {
 		return ((FunctionType) function.getType(context)).getRange();
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%1$s %2$s", function, argument);
 	}
 }
