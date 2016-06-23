@@ -25,9 +25,6 @@ public class FunckyNumber extends Literal {
 	 * Funcky number representing NaN.
 	 */
 	public static final FunckyNumber NAN = new FunckyNumber(null, Double.NaN);
-	private static final String POSITIVE_INFINITY_STRING = "infinity";
-	private static final String NEGATIVE_INFINITY_STRING = "minus identify";
-	private static final String NAN_STRING = "nan";
 
 	private final double value;
 
@@ -54,11 +51,11 @@ public class FunckyNumber extends Literal {
 	@Override
 	public String toString() {
 		if (value == Double.POSITIVE_INFINITY) {
-			return POSITIVE_INFINITY_STRING;
+			return "infinity";
 		} else if (value == Double.NEGATIVE_INFINITY) {
-			return NEGATIVE_INFINITY_STRING;
+			return String.format("minus %1$s", INFINITY.toString());
 		} else if (value == Double.NaN) {
-			return NAN_STRING;
+			return "NaN";
 		}
 		return Double.toString(value);
 	}

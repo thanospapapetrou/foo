@@ -31,6 +31,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 			put(FunckyNumber.NAN.toString(), FunckyNumber.NAN);
 			put(FunckyBoolean.TRUE.toString(), FunckyBoolean.TRUE);
 			put(FunckyBoolean.FALSE.toString(), FunckyBoolean.FALSE);
+			put(Function.FUNCTION.toString(), Function.FUNCTION);
 			put(Function.ADD.toString(), Function.ADD);
 			put(Function.SUBTRACT.toString(), Function.SUBTRACT);
 			put(Function.MULTIPLY.toString(), Function.MULTIPLY);

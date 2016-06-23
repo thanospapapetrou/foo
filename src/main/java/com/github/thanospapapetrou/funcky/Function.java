@@ -12,6 +12,32 @@ import javax.script.ScriptException;
  */
 public abstract class Function extends Literal {
 	/**
+	 * Construct a function type.
+	 */
+	public static final Function FUNCTION = new Function(SimpleType.TYPE, new FunctionType(SimpleType.TYPE, SimpleType.TYPE)) {
+		@Override
+		public Literal apply(final Expression expression, final ScriptContext context) throws ScriptException {
+			final FunckyType domain = (FunckyType) expression.eval(context);
+			return new Function(SimpleType.TYPE, SimpleType.TYPE) {
+				@Override
+				public Literal apply(final Expression expression, final ScriptContext context) throws ScriptException {
+					return new FunctionType(domain, (FunckyType) expression.eval(context));
+				}
+
+				@Override
+				public String toString() {
+					return String.format("%1$s %2$s", FUNCTION, domain);
+				}
+			};
+		}
+
+		@Override
+		public String toString() {
+			return String.format("function");
+		}
+	};
+
+	/**
 	 * Add two numbers.
 	 */
 	public static final Function ADD = new Function(SimpleType.NUMBER, new FunctionType(SimpleType.NUMBER, SimpleType.NUMBER)) {

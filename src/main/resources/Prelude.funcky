@@ -18,13 +18,9 @@
 # number
 # e = ...
 
-# Positive infinity, +∞.
+# Infinity, ∞.
 # number
-# positiveInfinity = ...
-
-# Negative infinity, -∞.
-# number
-# negativeInfinity = ...
+# infinity = ...
 
 # NaN, not a number.
 # number
@@ -38,11 +34,19 @@
 # boolean
 # false = ...
 
+# Construct a function type.
+# function type function type type
+# function domain range
+# domain the function domain type
+# range the function range type
+# return the function type corresponding to functions from the given domain type to the given range type
+# function = ...  
+
 # Generate an error using the given error message.
 # function string <type>
 # error message
 # message the error message to use
-# return anything
+# return bottom
 # error = ... TODO
 
 # Check two values for equality.
