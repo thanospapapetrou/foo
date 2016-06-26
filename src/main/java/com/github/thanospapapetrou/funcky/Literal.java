@@ -19,12 +19,12 @@ public abstract class Literal extends Expression {
 	}
 
 	@Override
-	public Literal eval(final ScriptContext _) {
+	public Literal eval(final ScriptContext context) {
 		return this;
 	}
 
 	@Override
-	public FunckyType getType(final ScriptContext _) {
+	public FunckyType getType(final ScriptContext context) {
 		return getType();
 	}
 

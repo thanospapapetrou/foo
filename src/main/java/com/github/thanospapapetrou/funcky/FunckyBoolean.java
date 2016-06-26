@@ -40,6 +40,6 @@ public class FunckyBoolean extends Literal {
 
 	@Override
 	public String toString() {
-		return Boolean.valueOf(value).toString();
+		return Boolean.toString(value);
 	}
 }

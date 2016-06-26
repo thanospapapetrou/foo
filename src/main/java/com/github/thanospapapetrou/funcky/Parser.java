@@ -57,7 +57,7 @@ public class Parser {
 	private static final int STRING = '"';
 	private static final int EOL = StreamTokenizer.TT_EOL;
 	private static final int EOF = StreamTokenizer.TT_EOF;
-	private static final Map<Integer, String> TOKEN_NAMES = new HashMap<Integer, String>();
+	private static final Map<Integer, String> TOKEN_NAMES = new HashMap<>();
 
 	private final FunckyScriptEngine engine;
 	private final StreamTokenizer tokenizer;
@@ -103,7 +103,7 @@ public class Parser {
 	 */
 	public FunckyScript parseScript() throws ScriptException {
 		try {
-			final List<Definition> definitions = new ArrayList<Definition>();
+			final List<Definition> definitions = new ArrayList<>();
 			while (true) {
 				switch (tokenizer.nextToken()) {
 				case SYMBOL:

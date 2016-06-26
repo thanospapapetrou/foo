@@ -3,6 +3,7 @@ package com.github.thanospapapetrou.funcky;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
@@ -13,26 +14,22 @@ import javax.script.ScriptEngineFactory;
  * @author thanos
  */
 public class FunckyScriptEngineFactory implements ScriptEngineFactory {
-	private static final String LANGUAGE_NAME = "Funcky";
-	private static final String LANGUAGE_VERSION = "1.0.0";
-	private static final String ENGINE_NAME = "Funcky";
-	private static final String ENGINE_VERSION = "1.0.0";
-	private static final List<String> NAMES = Arrays.asList("Funcky", "funcky");
-	private static final List<String> EXTENSIONS = Collections.singletonList("funcky");
+	private static final String NAME = "Funcky";
+	private static final String VERSION = "1.0.0-SNAPSHOT";
 
 	@Override
 	public String getEngineName() {
-		return ENGINE_NAME;
+		return NAME;
 	}
 
 	@Override
 	public String getEngineVersion() {
-		return ENGINE_VERSION;
+		return VERSION;
 	}
 
 	@Override
 	public List<String> getExtensions() {
-		return EXTENSIONS;
+		return Collections.singletonList(NAME.toLowerCase(Locale.ROOT));
 	}
 
 	@Override
@@ -42,17 +39,17 @@ public class FunckyScriptEngineFactory implements ScriptEngineFactory {
 
 	@Override
 	public List<String> getNames() {
-		return NAMES;
+		return Arrays.asList(NAME, NAME.toLowerCase(Locale.ROOT));
 	}
 
 	@Override
 	public String getLanguageName() {
-		return LANGUAGE_NAME;
+		return NAME;
 	}
 
 	@Override
 	public String getLanguageVersion() {
-		return LANGUAGE_VERSION;
+		return VERSION;
 	}
 
 	@Override

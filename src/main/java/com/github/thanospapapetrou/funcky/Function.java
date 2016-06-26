@@ -33,7 +33,7 @@ public abstract class Function extends Literal {
 
 		@Override
 		public String toString() {
-			return String.format("function");
+			return "function";
 		}
 	};
 
