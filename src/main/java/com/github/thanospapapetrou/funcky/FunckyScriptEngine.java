@@ -17,12 +17,8 @@ import javax.script.SimpleBindings;
 import com.github.thanospapapetrou.funcky.parser.Parser;
 import com.github.thanospapapetrou.funcky.runtime.Definition;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.FunckyBoolean;
-import com.github.thanospapapetrou.funcky.runtime.FunckyNumber;
 import com.github.thanospapapetrou.funcky.runtime.FunckyScript;
-import com.github.thanospapapetrou.funcky.runtime.Function;
 import com.github.thanospapapetrou.funcky.runtime.Literal;
-import com.github.thanospapapetrou.funcky.runtime.SimpleType;
 
 /**
  * Class implementing a Funcky script engine.
@@ -30,31 +26,13 @@ import com.github.thanospapapetrou.funcky.runtime.SimpleType;
  * @author thanos
  */
 public class FunckyScriptEngine extends AbstractScriptEngine implements Compilable, Invocable {
-	private static final Bindings BUILTINS = new SimpleBindings() {
-		{
-			put(SimpleType.TYPE.toString(), SimpleType.TYPE);
-			put(SimpleType.NUMBER.toString(), SimpleType.NUMBER);
-			put(SimpleType.BOOLEAN.toString(), SimpleType.BOOLEAN);
-			put("pi", FunckyNumber.PI);
-			put("e", FunckyNumber.E);
-			put(FunckyNumber.INFINITY.toString(), FunckyNumber.INFINITY);
-			put(FunckyNumber.NAN.toString(), FunckyNumber.NAN);
-			put(FunckyBoolean.TRUE.toString(), FunckyBoolean.TRUE);
-			put(FunckyBoolean.FALSE.toString(), FunckyBoolean.FALSE);
-			put(Function.FUNCTION.toString(), Function.FUNCTION);
-			put(Function.ADD.toString(), Function.ADD);
-			put(Function.SUBTRACT.toString(), Function.SUBTRACT);
-			put(Function.MULTIPLY.toString(), Function.MULTIPLY);
-			put(Function.DIVIDE.toString(), Function.DIVIDE);
-		}
-	};
 	private static final String PRELUDE = "/Prelude.funcky";
 
 	private final FunckyScriptEngineFactory factory;
 
 	FunckyScriptEngine(final FunckyScriptEngineFactory factory) {
 		this.factory = Objects.requireNonNull(factory, "Factory must not be null");
-		setBindings(BUILTINS, ScriptContext.ENGINE_SCOPE);
+		setBindings(new Builtins(), ScriptContext.ENGINE_SCOPE);
 		try {
 			for (final Definition definition : compile(new InputStreamReader(getClass().getResourceAsStream(PRELUDE), StandardCharsets.UTF_8)).getDefinitions()) {
 				this.getBindings(ScriptContext.ENGINE_SCOPE).put(definition.getName(), definition.getExpression().eval());
