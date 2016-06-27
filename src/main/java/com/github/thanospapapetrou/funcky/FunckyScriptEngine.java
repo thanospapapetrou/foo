@@ -14,6 +14,16 @@ import javax.script.ScriptContext;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
+import com.github.thanospapapetrou.funcky.parser.Parser;
+import com.github.thanospapapetrou.funcky.runtime.Definition;
+import com.github.thanospapapetrou.funcky.runtime.Expression;
+import com.github.thanospapapetrou.funcky.runtime.FunckyBoolean;
+import com.github.thanospapapetrou.funcky.runtime.FunckyNumber;
+import com.github.thanospapapetrou.funcky.runtime.FunckyScript;
+import com.github.thanospapapetrou.funcky.runtime.Function;
+import com.github.thanospapapetrou.funcky.runtime.Literal;
+import com.github.thanospapapetrou.funcky.runtime.SimpleType;
+
 /**
  * Class implementing a Funcky script engine.
  * 

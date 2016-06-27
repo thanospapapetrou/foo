@@ -1,4 +1,6 @@
-package com.github.thanospapapetrou.funcky;
+package com.github.thanospapapetrou.funcky.runtime;
+
+import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 
 /**
  * Class representing a Funcky number.
@@ -28,7 +30,15 @@ public class FunckyNumber extends Literal {
 
 	private final double value;
 
-	FunckyNumber(final FunckyScriptEngine engine, final double value) {
+	/**
+	 * Construct a new number.
+	 * 
+	 * @param engine
+	 *            the engine that parsed this number
+	 * @param value
+	 *            the value of this number
+	 */
+	public FunckyNumber(final FunckyScriptEngine engine, final double value) {
 		super(engine);
 		this.value = value;
 	}

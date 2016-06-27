@@ -1,4 +1,4 @@
-package com.github.thanospapapetrou.funcky;
+package com.github.thanospapapetrou.funcky.parser;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -11,6 +11,14 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.script.ScriptException;
+
+import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.Application;
+import com.github.thanospapapetrou.funcky.runtime.Definition;
+import com.github.thanospapapetrou.funcky.runtime.Expression;
+import com.github.thanospapapetrou.funcky.runtime.FunckyNumber;
+import com.github.thanospapapetrou.funcky.runtime.FunckyScript;
+import com.github.thanospapapetrou.funcky.runtime.Reference;
 
 /**
  * Class implementing a Funcky parser. This parser is based on the following BNF:
@@ -74,7 +82,15 @@ public class Parser {
 		TOKEN_NAMES.put(EOF, "end of input");
 	}
 
-	Parser(final FunckyScriptEngine engine, final Reader reader) {
+	/**
+	 * Construct a new parser.
+	 * 
+	 * @param engine
+	 *            the engine of this parser
+	 * @param reader
+	 *            the reader to parse script from
+	 */
+	public Parser(final FunckyScriptEngine engine, final Reader reader) {
 		this.engine = Objects.requireNonNull(engine, "Engine must not be null");
 		tokenizer = new StreamTokenizer(Objects.requireNonNull(reader, "Reader must not be null"));
 		tokenizer.resetSyntax();

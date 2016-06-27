@@ -1,4 +1,4 @@
-package com.github.thanospapapetrou.funcky;
+package com.github.thanospapapetrou.funcky.runtime;
 
 import java.util.Objects;
 
@@ -14,7 +14,15 @@ public class Definition {
 	private final String name;
 	private final Expression expression;
 
-	Definition(final String name, final Expression expression) {
+	/**
+	 * Construct a new definition.
+	 * 
+	 * @param name
+	 *            the name of this definition.
+	 * @param expression
+	 *            the expression of this definition
+	 */
+	public Definition(final String name, final Expression expression) {
 		this.name = Objects.requireNonNull(name, "Name must not be null");
 		this.expression = Objects.requireNonNull(expression, "Expression must not be null");
 	}
@@ -30,12 +38,22 @@ public class Definition {
 	public void eval(final ScriptContext context) throws ScriptException {
 		context.setAttribute(name, expression.eval(context), ScriptContext.ENGINE_SCOPE);
 	}
-	
-	String getName() {
-		return name;
-	}
-	
-	Expression getExpression() {
+
+	/**
+	 * Get the expression.
+	 * 
+	 * @return the expression of this definition
+	 */
+	public Expression getExpression() {
 		return expression;
+	}
+
+	/**
+	 * Get the name.
+	 * 
+	 * @return the name of this definition
+	 */
+	public String getName() {
+		return name;
 	}
 }

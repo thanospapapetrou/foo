@@ -1,8 +1,10 @@
-package com.github.thanospapapetrou.funcky;
+package com.github.thanospapapetrou.funcky.runtime;
 
 import javax.script.CompiledScript;
 import javax.script.ScriptContext;
 import javax.script.ScriptException;
+
+import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 
 /**
  * Abstract class representing a Funcky expression.

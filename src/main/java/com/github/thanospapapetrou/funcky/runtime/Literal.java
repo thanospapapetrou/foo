@@ -1,6 +1,8 @@
-package com.github.thanospapapetrou.funcky;
+package com.github.thanospapapetrou.funcky.runtime;
 
 import javax.script.ScriptContext;
+
+import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 
 /**
  * Abstract class representing a Funcky literal.

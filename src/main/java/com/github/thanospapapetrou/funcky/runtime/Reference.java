@@ -1,9 +1,11 @@
-package com.github.thanospapapetrou.funcky;
+package com.github.thanospapapetrou.funcky.runtime;
 
 import java.util.Objects;
 
 import javax.script.ScriptContext;
 import javax.script.ScriptException;
+
+import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 
 /**
  * Class representing a Funcky reference.
@@ -13,7 +15,15 @@ import javax.script.ScriptException;
 public class Reference extends Expression {
 	private final String name;
 
-	Reference(final FunckyScriptEngine engine, final String name) {
+	/**
+	 * Construct a new reference.
+	 * 
+	 * @param engine
+	 *            the script engine that parsed this reference
+	 * @param name
+	 *            the name of this reference
+	 */
+	public Reference(final FunckyScriptEngine engine, final String name) {
 		super(Objects.requireNonNull(engine, "Engine must not be null"));
 		this.name = Objects.requireNonNull(name, "Name must not be null");
 	}

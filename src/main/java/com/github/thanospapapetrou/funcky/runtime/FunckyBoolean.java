@@ -1,4 +1,4 @@
-package com.github.thanospapapetrou.funcky;
+package com.github.thanospapapetrou.funcky.runtime;
 
 /**
  * Class representing a Funcky boolean.
