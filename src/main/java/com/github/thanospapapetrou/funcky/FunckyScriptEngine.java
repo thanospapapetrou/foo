@@ -38,7 +38,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 				this.getBindings(ScriptContext.ENGINE_SCOPE).put(definition.getName(), definition.getExpression().eval());
 			}
 		} catch (final ScriptException e) {
-			throw new RuntimeException("Error loading prelude", e);
+			throw new IllegalStateException("Error loading prelude", e);
 		}
 	}
 
