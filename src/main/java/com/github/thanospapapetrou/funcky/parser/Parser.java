@@ -125,9 +125,9 @@ public class Parser {
 				case SYMBOL:
 					tokenizer.pushBack();
 					definitions.add(parseDefinition());
-					continue;
+					break;
 				case EOL:
-					continue;
+					break;
 				case EOF:
 					return new FunckyScript(engine, definitions);
 				default:
