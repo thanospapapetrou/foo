@@ -11,6 +11,7 @@ import javax.script.Bindings;
 import javax.script.Compilable;
 import javax.script.Invocable;
 import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
@@ -27,6 +28,7 @@ import com.github.thanospapapetrou.funcky.runtime.Literal;
  */
 public class FunckyScriptEngine extends AbstractScriptEngine implements Compilable, Invocable {
 	private static final String PRELUDE = "/Prelude.funcky";
+	private static final String UNKNOWN = "<unknown>";
 
 	private final FunckyScriptEngineFactory factory;
 
@@ -34,7 +36,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 		this.factory = Objects.requireNonNull(factory, "Factory must not be null");
 		setBindings(new Builtins(), ScriptContext.ENGINE_SCOPE);
 		try {
-			for (final Definition definition : compile(new InputStreamReader(getClass().getResourceAsStream(PRELUDE), StandardCharsets.UTF_8)).getDefinitions()) {
+			for (final Definition definition : compile(new InputStreamReader(getClass().getResourceAsStream(PRELUDE), StandardCharsets.UTF_8), PRELUDE).getDefinitions()) {
 				this.getBindings(ScriptContext.ENGINE_SCOPE).put(definition.getName(), definition.getExpression().eval());
 			}
 		} catch (final ScriptException e) {
@@ -44,12 +46,12 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	@Override
 	public FunckyScript compile(final Reader script) throws ScriptException {
-		return new Parser(this, script).parseScript();
+		return compile(script, UNKNOWN);
 	}
 
 	@Override
 	public Expression compile(final String script) throws ScriptException {
-		return new Parser(this, new StringReader(script)).parseExpression();
+		return compile(script, UNKNOWN);
 	}
 
 	@Override
@@ -59,12 +61,12 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	@Override
 	public Void eval(final Reader script, final ScriptContext context) throws ScriptException {
-		return compile(script).eval(context);
+		return compile(script, (String) context.getAttribute(ScriptEngine.FILENAME)).eval(context);
 	}
 
 	@Override
 	public Literal eval(final String script, final ScriptContext context) throws ScriptException {
-		return compile(script).eval(context);
+		return compile(script, (String) context.getAttribute(ScriptEngine.FILENAME)).eval(context);
 	}
 
 	@Override
@@ -94,5 +96,13 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	public Object invokeMethod(final Object object, final String method, final Object... arguments) throws ScriptException, NoSuchMethodException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	private FunckyScript compile(final Reader script, final String fileName) throws ScriptException {
+		return new Parser(this, script, fileName).parseScript();
+	}
+
+	private Expression compile(final String script, final String fileName) throws ScriptException {
+		return new Parser(this, new StringReader(script), fileName).parseExpression();
 	}
 }
