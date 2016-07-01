@@ -10,6 +10,8 @@ import java.util.Objects;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.parser.exceptions.UnexpectedTokenException;
+import com.github.thanospapapetrou.funcky.parser.exceptions.UnparsableInputException;
 import com.github.thanospapapetrou.funcky.runtime.Application;
 import com.github.thanospapapetrou.funcky.runtime.Definition;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
@@ -50,16 +52,16 @@ import com.github.thanospapapetrou.funcky.runtime.Reference;
  * @author thanos
  */
 public class Parser {
-	static final int COMMENT = '#';
-	static final int EQUALS = '=';
-	static final int LEFT_PARENTHESIS = '(';
-	static final int RIGHT_PARENTHESIS = ')';
-	static final int SYMBOL = StreamTokenizer.TT_WORD;
-	static final int NUMBER = StreamTokenizer.TT_NUMBER;
-	static final int CHARACTER = '\'';
-	static final int STRING = '"';
-	static final int EOL = StreamTokenizer.TT_EOL;
-	static final int EOF = StreamTokenizer.TT_EOF;
+	public static final int COMMENT = '#';
+	public static final int EQUALS = '=';
+	public static final int LEFT_PARENTHESIS = '(';
+	public static final int RIGHT_PARENTHESIS = ')';
+	public static final int SYMBOL = StreamTokenizer.TT_WORD;
+	public static final int NUMBER = StreamTokenizer.TT_NUMBER;
+	public static final int CHARACTER = '\'';
+	public static final int STRING = '"';
+	public static final int EOL = StreamTokenizer.TT_EOL;
+	public static final int EOF = StreamTokenizer.TT_EOF;
 	private static final String WHITESPACE = "\t\n\f\r ";
 	private static final String WORD = "ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
 

@@ -1,9 +1,10 @@
-package com.github.thanospapapetrou.funcky.parser;
+package com.github.thanospapapetrou.funcky.parser.exceptions;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.github.thanospapapetrou.funcky.FunckyException;
+import com.github.thanospapapetrou.funcky.parser.Parser;
 
 /**
  * Expression thrown by parser when encountering an unexpected token.
