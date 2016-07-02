@@ -18,6 +18,9 @@ import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.FunckyNumber;
 import com.github.thanospapapetrou.funcky.runtime.FunckyScript;
 import com.github.thanospapapetrou.funcky.runtime.Reference;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 
 /**
  * Class implementing a Funcky parser. This parser is based on the following BNF:
@@ -205,7 +208,7 @@ public class Parser {
 		}
 	}
 
-	private Definition parseDefinition() throws IOException, UnexpectedTokenException, UnparsableInputException, ScriptException { // TODO remove ScriptException by applications
+	private Definition parseDefinition() throws IOException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException, UnexpectedTokenException, UnparsableInputException {
 		switch (tokenizer.nextToken()) {
 		case SYMBOL:
 			final String name = tokenizer.sval;
@@ -251,7 +254,7 @@ public class Parser {
 		}
 	}
 
-	private Expression _parseExpression() throws IOException, UnexpectedTokenException, UnparsableInputException, ScriptException { // TODO remove ScriptException by applications
+	private Expression _parseExpression() throws IOException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException, UnexpectedTokenException, UnparsableInputException {
 		Expression expression = null;
 		while (true) {
 			switch (tokenizer.nextToken()) {

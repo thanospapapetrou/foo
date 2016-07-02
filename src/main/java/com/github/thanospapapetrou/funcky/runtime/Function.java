@@ -16,7 +16,7 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceE
  * @author thanos
  */
 public abstract class Function extends Literal {
-	private static abstract class TwoArgumentFunction extends Function {
+	private abstract static class TwoArgumentFunction extends Function {
 		private TwoArgumentFunction(final String name, final FunckyType domain1, final FunckyType domain2, final FunckyType range) {
 			super(name, domain1, new FunctionType(domain2, range));
 		}
