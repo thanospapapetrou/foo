@@ -17,6 +17,7 @@ public class UnexpectedTokenException extends FunckyException {
 	private static final String COMMA = ", ";
 	private static final String OR = " or ";
 	private static final Map<Integer, String> TOKEN_NAMES = new HashMap<>();
+
 	static {
 		TOKEN_NAMES.put(Parser.EQUALS, "equals");
 		TOKEN_NAMES.put(Parser.LEFT_PARENTHESIS, "left parenthesis");

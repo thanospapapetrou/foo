@@ -11,22 +11,22 @@ public class FunckyNumber extends Literal {
 	/**
 	 * Funcky number representing π.
 	 */
-	public static final FunckyNumber PI = new FunckyNumber(null, Math.PI);
+	public static final FunckyNumber PI = new FunckyNumber(null, null, 0, Math.PI);
 
 	/**
 	 * Funcky number representing e.
 	 */
-	public static final FunckyNumber E = new FunckyNumber(null, Math.E);
+	public static final FunckyNumber E = new FunckyNumber(null, null, 0, Math.E);
 
 	/**
 	 * Funcky number representing ∞.
 	 */
-	public static final FunckyNumber INFINITY = new FunckyNumber(null, Double.POSITIVE_INFINITY);
+	public static final FunckyNumber INFINITY = new FunckyNumber(null, null, 0, Double.POSITIVE_INFINITY);
 
 	/**
 	 * Funcky number representing NaN.
 	 */
-	public static final FunckyNumber NAN = new FunckyNumber(null, Double.NaN);
+	public static final FunckyNumber NAN = new FunckyNumber(null, null, 0, Double.NaN);
 
 	private final double value;
 
@@ -34,12 +34,16 @@ public class FunckyNumber extends Literal {
 	 * Construct a new number.
 	 * 
 	 * @param engine
-	 *            the engine that parsed this number
+	 *            the engine that parsed this number or <code>null</code> if this number was not parsed by any engine
+	 * @param fileName
+	 *            the name of the file from which this number was parsed or <code>null</code> if this number was not parsed from any file
+	 * @param lineNumber
+	 *            the number of the line from which this number was parsed or <code>0</code> if this number was not parsed from any line
 	 * @param value
 	 *            the value of this number
 	 */
-	public FunckyNumber(final FunckyScriptEngine engine, final double value) {
-		super(engine);
+	public FunckyNumber(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final double value) {
+		super(engine, fileName, lineNumber);
 		this.value = value;
 	}
 

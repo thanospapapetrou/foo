@@ -3,40 +3,43 @@ package com.github.thanospapapetrou.funcky.runtime;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
-import javax.script.ScriptException;
+
+import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 
 /**
  * Class representing a Funcky definition.
  * 
  * @author thanos
  */
-public class Definition {
+public class Definition extends AbstractSyntaxTreeNode {
 	private final String name;
 	private final Expression expression;
 
 	/**
 	 * Construct a new definition.
 	 * 
+	 * @param engine
+	 *            the Funcky script engine that parsed this definition
+	 * @param fileName
+	 *            the name of the file from which this definition was parsed
+	 * @param lineNumber
+	 *            the number of the line from which this definition was parsed
 	 * @param name
 	 *            the name of this definition.
 	 * @param expression
 	 *            the expression of this definition
 	 */
-	public Definition(final String name, final Expression expression) {
+	public Definition(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final String name, final Expression expression) {
+		super(engine, fileName, lineNumber);
 		this.name = Objects.requireNonNull(name, "Name must not be null");
 		this.expression = Objects.requireNonNull(expression, "Expression must not be null");
 	}
 
-	/**
-	 * Establish this definition in the given script context.
-	 * 
-	 * @param context
-	 *            the script context in which to establish this definition
-	 * @throws ScriptException
-	 *             if any errors occur during the definition
-	 */
-	public void eval(final ScriptContext context) throws ScriptException {
+	@Override
+	public Void eval(final ScriptContext context) throws UndefinedReferenceException {
 		context.setAttribute(name, expression.eval(context), ScriptContext.ENGINE_SCOPE);
+		return null;
 	}
 
 	/**

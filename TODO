@@ -1,0 +1,12 @@
+add (minus infinity)
+function (function number boolean)
+print expressions like the above that can't be simplified as applications
+define compare and use it to define equals
+lineNumber must be positive
+Application must specify engine, fileName, lineNumber
+Reference must specify engine, fileName, lineNumber
+Definition must specify engine, fileName, lineNumber
+FunckyScript must specify engine, fileName, lineNumber
+Use single code to validate positive line number in AbstractSyntaxTreeNode
+Eliminate inline strings
+

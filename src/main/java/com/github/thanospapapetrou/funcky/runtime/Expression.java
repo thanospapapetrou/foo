@@ -1,36 +1,32 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
-import javax.script.CompiledScript;
 import javax.script.ScriptContext;
-import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 
 /**
  * Abstract class representing a Funcky expression.
  * 
  * @author thanos
  */
-public abstract class Expression extends CompiledScript {
-	private final FunckyScriptEngine engine;
-
+public abstract class Expression extends AbstractSyntaxTreeNode {
 	/**
 	 * Construct a new expression.
 	 * 
 	 * @param engine
-	 *            the Funcky script engine that created this expression or <code>null</code> if this expression was not created by any Funcky script engine
+	 *            the Funcky script engine that parsed this expression
+	 * @param fileName
+	 *            the name of the file from which this expression was parsed
+	 * @param lineNumber
+	 *            the number of the line from which this expression was parsed
 	 */
-	protected Expression(final FunckyScriptEngine engine) {
-		this.engine = engine;
+	protected Expression(final FunckyScriptEngine engine, final String fileName, final int lineNumber) {
+		super(engine, fileName, lineNumber);
 	}
 
 	@Override
-	public abstract Literal eval(final ScriptContext context) throws ScriptException;
-
-	@Override
-	public FunckyScriptEngine getEngine() {
-		return engine;
-	}
+	public abstract Literal eval(final ScriptContext context) throws UndefinedReferenceException;
 
 	/**
 	 * Get the type of this expression.
@@ -38,8 +34,8 @@ public abstract class Expression extends CompiledScript {
 	 * @param context
 	 *            the script context in which to evaluate the type of this expression
 	 * @return the type of this expression
-	 * @throws ScriptException
-	 *             if any errors occur while evaluating the type
+	 * @throws UndefinedReferenceException
+	 *             if any undefined reference is encountered during type evaluation
 	 */
-	public abstract FunckyType getType(final ScriptContext context) throws ScriptException;
+	public abstract FunckyType getType(final ScriptContext context) throws UndefinedReferenceException;
 }

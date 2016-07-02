@@ -14,10 +14,14 @@ public abstract class Literal extends Expression {
 	 * Construct a new literal.
 	 * 
 	 * @param engine
-	 *            the Funcky script engine that created this literal or <code>null</code> if this literal was not created by any engine
+	 *            the Funcky script engine that parsed this literal or <code>null</code> if this literal was not parsed by any engine
+	 * @param fileName
+	 *            the name of the file from which this literal was parsed or <code>null</code> if this literal was not parsed from any file
+	 * @param lineNumber
+	 *            the number of the line from which this literal was parsed or <code>0</code> if this literal was not parsed from any line
 	 */
-	protected Literal(final FunckyScriptEngine engine) {
-		super(engine);
+	protected Literal(final FunckyScriptEngine engine, final String fileName, final int lineNumber) {
+		super(engine, fileName, lineNumber);
 	}
 
 	@Override

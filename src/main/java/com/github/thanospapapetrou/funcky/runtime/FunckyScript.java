@@ -3,19 +3,17 @@ package com.github.thanospapapetrou.funcky.runtime;
 import java.util.List;
 import java.util.Objects;
 
-import javax.script.CompiledScript;
 import javax.script.ScriptContext;
-import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 
 /**
  * Class representing a Funcky script.
  * 
  * @author thanos
  */
-public class FunckyScript extends CompiledScript {
-	private final FunckyScriptEngine engine;
+public class FunckyScript extends AbstractSyntaxTreeNode {
 	private final List<Definition> definitions;
 
 	/**
@@ -23,16 +21,20 @@ public class FunckyScript extends CompiledScript {
 	 * 
 	 * @param engine
 	 *            the engine that parsed this script
+	 * @param fileName
+	 *            the name of the file from which this script was parsed
+	 * @param lineNumber
+	 *            the number of the line from which this script was parsed
 	 * @param definitions
 	 *            the definitions of this script
 	 */
-	public FunckyScript(final FunckyScriptEngine engine, final List<Definition> definitions) {
-		this.engine = Objects.requireNonNull(engine, "Engine must not be null");
+	public FunckyScript(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final List<Definition> definitions) {
+		super(engine, fileName, lineNumber);
 		this.definitions = Objects.requireNonNull(definitions, "Definitions must not be null");
 	}
 
 	@Override
-	public Void eval(final ScriptContext context) throws ScriptException {
+	public Void eval(final ScriptContext context) throws UndefinedReferenceException {
 		for (final Definition definition : definitions) {
 			definition.eval(context);
 		}
@@ -46,10 +48,5 @@ public class FunckyScript extends CompiledScript {
 	 */
 	public List<Definition> getDefinitions() {
 		return definitions;
-	}
-
-	@Override
-	public FunckyScriptEngine getEngine() {
-		return engine;
 	}
 }

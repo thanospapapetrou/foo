@@ -52,15 +52,54 @@ import com.github.thanospapapetrou.funcky.runtime.Reference;
  * @author thanos
  */
 public class Parser {
+	/**
+	 * Comment
+	 */
 	public static final int COMMENT = '#';
+
+	/**
+	 * Equals ('=')
+	 */
 	public static final int EQUALS = '=';
+
+	/**
+	 * Left parenthesis ('(')
+	 */
 	public static final int LEFT_PARENTHESIS = '(';
+
+	/**
+	 * Right parenthesis (')')
+	 */
 	public static final int RIGHT_PARENTHESIS = ')';
+
+	/**
+	 * Symbol
+	 */
 	public static final int SYMBOL = StreamTokenizer.TT_WORD;
+
+	/**
+	 * Number
+	 */
 	public static final int NUMBER = StreamTokenizer.TT_NUMBER;
+
+	/**
+	 * Character
+	 */
 	public static final int CHARACTER = '\'';
+
+	/**
+	 * String
+	 */
 	public static final int STRING = '"';
+
+	/**
+	 * End of line
+	 */
 	public static final int EOL = StreamTokenizer.TT_EOL;
+
+	/**
+	 * End of input
+	 */
 	public static final int EOF = StreamTokenizer.TT_EOF;
 	private static final String WHITESPACE = "\t\n\f\r ";
 	private static final String WORD = "ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
@@ -119,7 +158,7 @@ public class Parser {
 				case EOL:
 					break;
 				case EOF:
-					return new FunckyScript(engine, definitions);
+					return new FunckyScript(engine, fileName, tokenizer.lineno(), definitions);
 				case EQUALS:
 				case LEFT_PARENTHESIS:
 				case RIGHT_PARENTHESIS:
@@ -175,7 +214,7 @@ public class Parser {
 				final Expression expression = _parseExpression();
 				switch (tokenizer.nextToken()) {
 				case EOL:
-					return new Definition(name, expression);
+					return new Definition(engine, fileName, tokenizer.lineno(), name, expression);
 				case EQUALS:
 				case LEFT_PARENTHESIS:
 				case RIGHT_PARENTHESIS:
@@ -220,7 +259,7 @@ public class Parser {
 				final Expression nestedExpression = _parseExpression();
 				switch (tokenizer.nextToken()) {
 				case RIGHT_PARENTHESIS:
-					expression = (expression == null) ? nestedExpression : new Application(engine, expression, nestedExpression);
+					expression = (expression == null) ? nestedExpression : new Application(engine, fileName, tokenizer.lineno(), expression, nestedExpression);
 					break;
 				case EQUALS:
 				case LEFT_PARENTHESIS:
@@ -236,12 +275,12 @@ public class Parser {
 				}
 				break;
 			case SYMBOL:
-				final Reference reference = new Reference(engine, tokenizer.sval);
-				expression = (expression == null) ? reference : new Application(engine, expression, reference);
+				final Reference reference = new Reference(engine, fileName, tokenizer.lineno(), tokenizer.sval);
+				expression = (expression == null) ? reference : new Application(engine, fileName, tokenizer.lineno(), expression, reference);
 				break;
 			case NUMBER:
-				final FunckyNumber number = new FunckyNumber(engine, tokenizer.nval);
-				expression = (expression == null) ? number : new Application(engine, expression, number);
+				final FunckyNumber number = new FunckyNumber(engine, fileName, tokenizer.lineno(), tokenizer.nval);
+				expression = (expression == null) ? number : new Application(engine, fileName, tokenizer.lineno(), expression, number);
 				break;
 			case EQUALS:
 			case RIGHT_PARENTHESIS:

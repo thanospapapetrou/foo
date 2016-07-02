@@ -19,7 +19,7 @@ public class FunckyBoolean extends Literal {
 	private final boolean value;
 
 	private FunckyBoolean(final boolean value) {
-		super(null);
+		super(null, null, 0);
 		this.value = value;
 	}
 

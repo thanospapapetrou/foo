@@ -10,7 +10,7 @@ public abstract class FunckyType extends Literal {
 	 * Construct a new type.
 	 */
 	protected FunckyType() {
-		super(null);
+		super(null, null, 0);
 	}
 
 	@Override
