@@ -65,11 +65,9 @@ public class FunckyNumber extends Literal {
 	@Override
 	public String toString() {
 		if (value == Double.POSITIVE_INFINITY) {
-			return "infinity";
+			return Double.toString(Double.POSITIVE_INFINITY).toLowerCase();
 		} else if (value == Double.NEGATIVE_INFINITY) {
 			return String.format("minus %1$s", INFINITY.toString());
-		} else if (value == Double.NaN) {
-			return "NaN";
 		}
 		return Double.toString(value);
 	}

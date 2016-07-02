@@ -1,9 +1,13 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.script.ScriptContext;
 
+import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 
 /**
@@ -12,141 +16,87 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceE
  * @author thanos
  */
 public abstract class Function extends Literal {
-	/**
-	 * Construct a function type.
-	 */
-	public static final Function FUNCTION = new Function(SimpleType.TYPE, new FunctionType(SimpleType.TYPE, SimpleType.TYPE)) {
-		@Override
-		public Literal apply(final Expression expression, final ScriptContext context) throws UndefinedReferenceException {
-			final FunckyType domain = (FunckyType) expression.eval(context);
-			return new Function(SimpleType.TYPE, SimpleType.TYPE) {
-				@Override
-				public Literal apply(final Expression expression, final ScriptContext context) throws UndefinedReferenceException {
-					return new FunctionType(domain, (FunckyType) expression.eval(context));
-				}
-
-				@Override
-				public String toString() {
-					return String.format("%1$s %2$s", FUNCTION, domain);
-				}
-			};
+	private static abstract class TwoArgumentFunction extends Function {
+		private TwoArgumentFunction(final String name, final FunckyType domain1, final FunckyType domain2, final FunckyType range) {
+			super(name, domain1, new FunctionType(domain2, range));
 		}
 
 		@Override
-		public String toString() {
-			return "function";
+		public Literal apply(final Expression argument1, final ScriptContext context) throws UndefinedReferenceException {
+			try {
+				final FunctionType range = (FunctionType) super.range;
+				return new Function(new Application(context, this, argument1).toString(), range.getDomain(), range.getRange()) {
+					@Override
+					public Literal apply(final Expression argument2, final ScriptContext context) throws UndefinedReferenceException {
+						return TwoArgumentFunction.this.apply(argument1, argument2, context);
+					}
+				};
+			} catch (final InvalidArgumentException | InvalidFunctionException e) {
+				Logger.getLogger(Function.class.getName()).log(Level.WARNING, "", e); // TODO error message?
+				return null;
+			}
+		}
+
+		protected abstract Literal apply(final Expression argument1, final Expression argument2, final ScriptContext context) throws UndefinedReferenceException;
+	}
+
+	/**
+	 * Construct a function type.
+	 */
+	public static final Function FUNCTION = new TwoArgumentFunction("function", SimpleType.TYPE, SimpleType.TYPE, SimpleType.TYPE) {
+		@Override
+		protected Literal apply(final Expression domain, final Expression range, final ScriptContext context) throws UndefinedReferenceException {
+			return new FunctionType((FunckyType) domain.eval(context), (FunckyType) range.eval(context));
 		}
 	};
 
 	/**
 	 * Add two numbers.
 	 */
-	public static final Function ADD = new Function(SimpleType.NUMBER, new FunctionType(SimpleType.NUMBER, SimpleType.NUMBER)) {
+	public static final Function ADD = new TwoArgumentFunction("add", SimpleType.NUMBER, SimpleType.NUMBER, SimpleType.NUMBER) {
 		@Override
-		public Literal apply(final Expression expression, final ScriptContext context) throws UndefinedReferenceException {
-			final FunckyNumber term = (FunckyNumber) expression.eval(context);
-			return new Function(SimpleType.NUMBER, SimpleType.NUMBER) {
-				@Override
-				public Literal apply(final Expression expression, final ScriptContext context) throws UndefinedReferenceException {
-					return new FunckyNumber(null, null, 0, term.getValue() + ((FunckyNumber) expression.eval(context)).getValue());
-				}
-
-				@Override
-				public String toString() {
-					return String.format("%1$s %2$s", ADD, term);
-				}
-			};
-		}
-
-		@Override
-		public String toString() {
-			return "add";
+		protected Literal apply(final Expression term1, final Expression term2, final ScriptContext context) throws UndefinedReferenceException {
+			return new FunckyNumber(null, null, 0, ((FunckyNumber) term1.eval(context)).getValue() + ((FunckyNumber) term2.eval(context)).getValue());
 		}
 	};
 
 	/**
 	 * Subtract two numbers.
 	 */
-	public static final Function SUBTRACT = new Function(SimpleType.NUMBER, new FunctionType(SimpleType.NUMBER, SimpleType.NUMBER)) {
+	public static final Function SUBTRACT = new TwoArgumentFunction("subtract", SimpleType.NUMBER, SimpleType.NUMBER, SimpleType.NUMBER) {
 		@Override
-		public Literal apply(final Expression expression, final ScriptContext context) throws UndefinedReferenceException {
-			final FunckyNumber minuend = (FunckyNumber) expression.eval(context);
-			return new Function(SimpleType.NUMBER, SimpleType.NUMBER) {
-				@Override
-				public Literal apply(final Expression expression, final ScriptContext context) throws UndefinedReferenceException {
-					return new FunckyNumber(null, null, 0, minuend.getValue() - ((FunckyNumber) expression.eval(context)).getValue());
-				}
-
-				@Override
-				public String toString() {
-					return String.format("%1$s %2$s", SUBTRACT, minuend);
-				}
-			};
-		}
-
-		@Override
-		public String toString() {
-			return "subtract";
+		protected Literal apply(final Expression minuend, final Expression subtrahend, final ScriptContext context) throws UndefinedReferenceException {
+			return new FunckyNumber(null, null, 0, ((FunckyNumber) minuend.eval(context)).getValue() - ((FunckyNumber) subtrahend.eval(context)).getValue());
 		}
 	};
 
 	/**
 	 * Multiply two numbers.
 	 */
-	public static final Function MULTIPLY = new Function(SimpleType.NUMBER, new FunctionType(SimpleType.NUMBER, SimpleType.NUMBER)) {
+	public static final Function MULTIPLY = new TwoArgumentFunction("multiply", SimpleType.NUMBER, SimpleType.NUMBER, SimpleType.NUMBER) {
 		@Override
-		public Literal apply(final Expression expression, final ScriptContext context) throws UndefinedReferenceException {
-			final FunckyNumber factor = (FunckyNumber) expression.eval(context);
-			return new Function(SimpleType.NUMBER, SimpleType.NUMBER) {
-				@Override
-				public Literal apply(final Expression expression, final ScriptContext context) throws UndefinedReferenceException {
-					return new FunckyNumber(null, null, 0, factor.getValue() * ((FunckyNumber) expression.eval(context)).getValue());
-				}
-
-				@Override
-				public String toString() {
-					return String.format("%1$s %2$s", MULTIPLY, factor);
-				}
-			};
-		}
-
-		@Override
-		public String toString() {
-			return "multiply";
+		protected Literal apply(final Expression factor1, final Expression factor2, final ScriptContext context) throws UndefinedReferenceException {
+			return new FunckyNumber(null, null, 0, ((FunckyNumber) factor1.eval(context)).getValue() * ((FunckyNumber) factor2.eval(context)).getValue());
 		}
 	};
 
 	/**
 	 * Divide two numbers.
 	 */
-	public static final Function DIVIDE = new Function(SimpleType.NUMBER, new FunctionType(SimpleType.NUMBER, SimpleType.NUMBER)) {
+	public static final Function DIVIDE = new TwoArgumentFunction("divide", SimpleType.NUMBER, SimpleType.NUMBER, SimpleType.NUMBER) {
 		@Override
-		public Literal apply(final Expression expression, final ScriptContext context) throws UndefinedReferenceException {
-			final FunckyNumber dividend = (FunckyNumber) expression.eval(context);
-			return new Function(SimpleType.NUMBER, SimpleType.NUMBER) {
-				@Override
-				public Literal apply(final Expression expression, final ScriptContext context) throws UndefinedReferenceException {
-					return new FunckyNumber(null, null, 0, dividend.getValue() / ((FunckyNumber) expression.eval(context)).getValue());
-				}
-
-				@Override
-				public String toString() {
-					return String.format("%1$s %2$s", DIVIDE, dividend);
-				}
-			};
-		}
-
-		@Override
-		public String toString() {
-			return "divide";
+		protected Literal apply(final Expression dividend, final Expression divisor, final ScriptContext context) throws UndefinedReferenceException {
+			return new FunckyNumber(null, null, 0, ((FunckyNumber) dividend.eval(context)).getValue() / ((FunckyNumber) divisor.eval(context)).getValue());
 		}
 	};
 
+	private final String name;
 	private final FunckyType domain;
 	private final FunckyType range;
 
-	private Function(final FunckyType domain, final FunckyType range) {
+	private Function(final String name, final FunckyType domain, final FunckyType range) {
 		super(null, null, 0);
+		this.name = Objects.requireNonNull(name, "Name must not be null");
 		this.domain = Objects.requireNonNull(domain, "Domain must not be null");
 		this.range = Objects.requireNonNull(range, "Range must not be null");
 	}
@@ -167,5 +117,10 @@ public abstract class Function extends Literal {
 	@Override
 	protected FunckyType getType() {
 		return new FunctionType(domain, range);
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 }

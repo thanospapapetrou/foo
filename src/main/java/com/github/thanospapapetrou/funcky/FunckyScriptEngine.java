@@ -5,6 +5,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.script.AbstractScriptEngine;
 import javax.script.Bindings;
@@ -38,10 +40,10 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 		setBindings(new Builtins(), ScriptContext.ENGINE_SCOPE);
 		try {
 			for (final Definition definition : compile(new InputStreamReader(getClass().getResourceAsStream(PRELUDE), StandardCharsets.UTF_8), PRELUDE_FILE_NAME).getDefinitions()) {
-				this.getBindings(ScriptContext.ENGINE_SCOPE).put(definition.getName(), definition.getExpression().eval());
+				definition.eval(context);
 			}
 		} catch (final ScriptException e) {
-			throw new IllegalStateException("Error loading prelude", e);
+			Logger.getLogger(FunckyScriptEngine.class.getName()).log(Level.WARNING, "Error loading prelude", e);
 		}
 	}
 

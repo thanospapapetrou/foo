@@ -38,7 +38,7 @@ public class Definition extends AbstractSyntaxTreeNode {
 
 	@Override
 	public Void eval(final ScriptContext context) throws UndefinedReferenceException {
-		context.setAttribute(name, expression.eval(context), ScriptContext.ENGINE_SCOPE);
+		context.setAttribute(name, expression.eval(context), ScriptContext.ENGINE_SCOPE); // TODO already defined?
 		return null;
 	}
 
