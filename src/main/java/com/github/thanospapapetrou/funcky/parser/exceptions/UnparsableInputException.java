@@ -21,7 +21,7 @@ public class UnparsableInputException extends FunckyException {
 	 * @param lineNumber
 	 *            the line of the file in which the unparsable input was encountered
 	 */
-	public UnparsableInputException(final String unparsableInput, final String fileName, final int lineNumber) {
+	public UnparsableInputException(final char unparsableInput, final String fileName, final int lineNumber) {
 		super(String.format(UNPARSABLE_INPUT, unparsableInput), fileName, lineNumber);
 	}
 }

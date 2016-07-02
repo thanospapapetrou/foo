@@ -28,6 +28,7 @@ import com.github.thanospapapetrou.funcky.runtime.Literal;
  */
 public class FunckyScriptEngine extends AbstractScriptEngine implements Compilable, Invocable {
 	private static final String PRELUDE = "/Prelude.funcky";
+	private static final String PRELUDE_FILE_NAME = "<prelude>";
 	private static final String UNKNOWN = "<unknown>";
 
 	private final FunckyScriptEngineFactory factory;
@@ -36,7 +37,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 		this.factory = Objects.requireNonNull(factory, "Factory must not be null");
 		setBindings(new Builtins(), ScriptContext.ENGINE_SCOPE);
 		try {
-			for (final Definition definition : compile(new InputStreamReader(getClass().getResourceAsStream(PRELUDE), StandardCharsets.UTF_8), PRELUDE).getDefinitions()) {
+			for (final Definition definition : compile(new InputStreamReader(getClass().getResourceAsStream(PRELUDE), StandardCharsets.UTF_8), PRELUDE_FILE_NAME).getDefinitions()) {
 				this.getBindings(ScriptContext.ENGINE_SCOPE).put(definition.getName(), definition.getExpression().eval());
 			}
 		} catch (final ScriptException e) {
@@ -61,7 +62,8 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	@Override
 	public Void eval(final Reader script, final ScriptContext context) throws ScriptException {
-		return compile(script, (String) context.getAttribute(ScriptEngine.FILENAME)).eval(context);
+		compile(script, (String) context.getAttribute(ScriptEngine.FILENAME)).eval(context);
+		return null;
 	}
 
 	@Override

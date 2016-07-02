@@ -266,6 +266,6 @@ public class Parser {
 	}
 
 	private <T> T throwUnparsableInputException() throws UnparsableInputException {
-		throw new UnparsableInputException(tokenizer.sval, fileName, tokenizer.lineno());
+		throw new UnparsableInputException((char) tokenizer.ttype, fileName, tokenizer.lineno());
 	}
 }
