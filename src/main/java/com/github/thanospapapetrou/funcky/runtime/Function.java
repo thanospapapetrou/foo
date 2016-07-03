@@ -69,7 +69,7 @@ public abstract class Function extends Literal {
 	public static final Function ADD = new TwoArgumentArithmeticOperator("add") {
 		@Override
 		protected Literal apply(final FunckyNumber term1, final FunckyNumber term2, final ScriptContext context) throws UndefinedReferenceException {
-			return new FunckyNumber(null, null, 0, term1.getValue() + term2.getValue());
+			return new FunckyNumber(term1.getValue() + term2.getValue());
 		}
 	};
 
@@ -79,7 +79,7 @@ public abstract class Function extends Literal {
 	public static final Function SUBTRACT = new TwoArgumentArithmeticOperator("subtract") {
 		@Override
 		protected Literal apply(final FunckyNumber minuend, final FunckyNumber subtrahend, final ScriptContext context) throws UndefinedReferenceException {
-			return new FunckyNumber(null, null, 0, minuend.getValue() - subtrahend.getValue());
+			return new FunckyNumber(minuend.getValue() - subtrahend.getValue());
 		}
 	};
 
@@ -89,7 +89,7 @@ public abstract class Function extends Literal {
 	public static final Function MULTIPLY = new TwoArgumentArithmeticOperator("multiply") {
 		@Override
 		protected Literal apply(final FunckyNumber factor1, final FunckyNumber factor2, final ScriptContext context) throws UndefinedReferenceException {
-			return new FunckyNumber(null, null, 0, factor1.getValue() * factor2.getValue());
+			return new FunckyNumber(factor1.getValue() * factor2.getValue());
 		}
 	};
 
@@ -99,7 +99,7 @@ public abstract class Function extends Literal {
 	public static final Function DIVIDE = new TwoArgumentArithmeticOperator("divide") {
 		@Override
 		protected Literal apply(final FunckyNumber dividend, final FunckyNumber divisor, final ScriptContext context) throws UndefinedReferenceException {
-			return new FunckyNumber(null, null, 0, dividend.getValue() / divisor.getValue());
+			return new FunckyNumber(dividend.getValue() / divisor.getValue());
 		}
 	};
 

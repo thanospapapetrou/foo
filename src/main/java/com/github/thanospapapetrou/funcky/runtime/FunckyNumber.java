@@ -11,22 +11,22 @@ public class FunckyNumber extends Literal {
 	/**
 	 * Funcky number representing π.
 	 */
-	public static final FunckyNumber PI = new FunckyNumber(null, null, 0, Math.PI);
+	public static final FunckyNumber PI = new FunckyNumber(Math.PI);
 
 	/**
 	 * Funcky number representing e.
 	 */
-	public static final FunckyNumber E = new FunckyNumber(null, null, 0, Math.E);
+	public static final FunckyNumber E = new FunckyNumber(Math.E);
 
 	/**
 	 * Funcky number representing ∞.
 	 */
-	public static final FunckyNumber INFINITY = new FunckyNumber(null, null, 0, Double.POSITIVE_INFINITY);
+	public static final FunckyNumber INFINITY = new FunckyNumber(Double.POSITIVE_INFINITY);
 
 	/**
 	 * Funcky number representing NaN.
 	 */
-	public static final FunckyNumber NAN = new FunckyNumber(null, null, 0, Double.NaN);
+	public static final FunckyNumber NAN = new FunckyNumber(Double.NaN);
 
 	private static final String MINUS = "minus %1$s";
 
@@ -47,6 +47,10 @@ public class FunckyNumber extends Literal {
 	public FunckyNumber(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final double value) {
 		super(engine, fileName, lineNumber);
 		this.value = value;
+	}
+
+	FunckyNumber(final double value) {
+		this(null, null, 0, value);
 	}
 
 	@Override
