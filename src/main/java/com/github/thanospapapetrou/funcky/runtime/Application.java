@@ -42,7 +42,7 @@ public class Application extends Expression {
 	 *             if any undefined reference is encountered during type evaluations
 	 */
 	public Application(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final Expression function, final Expression argument) throws InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
-		this(engine, fileName, lineNumber, engine.getContext(), function, argument); // TODO check arguments
+		this(Objects.requireNonNull(engine, "Engine must not be null"), Objects.requireNonNull(fileName, "File name must not be null"), requirePositiveLineNumber(lineNumber), engine.getContext(), function, argument); // TODO check arguments
 	}
 
 	Application(final ScriptContext context, final Expression function, final Expression argument) throws InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {

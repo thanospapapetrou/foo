@@ -28,7 +28,7 @@ public class Reference extends Expression {
 	 *            the name of this reference
 	 */
 	public Reference(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final String name) {
-		super(engine, fileName, lineNumber);
+		super(Objects.requireNonNull(engine, "Engine must not be null"), Objects.requireNonNull(fileName, "File name must not be null"), requirePositiveLineNumber(lineNumber));
 		this.name = Objects.requireNonNull(name, "Name must not be null");
 	}
 

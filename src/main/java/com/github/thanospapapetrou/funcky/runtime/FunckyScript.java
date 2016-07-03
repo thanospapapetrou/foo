@@ -29,7 +29,7 @@ public class FunckyScript extends AbstractSyntaxTreeNode {
 	 *            the definitions of this script
 	 */
 	public FunckyScript(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final List<Definition> definitions) {
-		super(engine, fileName, lineNumber);
+		super(Objects.requireNonNull(engine, "Engine must not be null"), Objects.requireNonNull(fileName, "File name must not be null"), requirePositiveLineNumber(lineNumber));
 		this.definitions = Objects.requireNonNull(definitions, "Definitions must not be null");
 	}
 

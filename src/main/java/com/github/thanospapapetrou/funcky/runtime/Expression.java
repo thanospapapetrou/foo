@@ -15,11 +15,11 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	 * Construct a new expression.
 	 * 
 	 * @param engine
-	 *            the Funcky script engine that parsed this expression
+	 *            the Funcky script engine that parsed this expression or <code>null</code> if this expression was not parsed by any engine
 	 * @param fileName
-	 *            the name of the file from which this expression was parsed
+	 *            the name of the file from which this expression was parsed or <code>null</code> if this expression was not parsed from any file
 	 * @param lineNumber
-	 *            the number of the line from which this expression was parsed
+	 *            the number of the line from which this expression was parsed or <code>null</code> if this expression was not parsed from any line
 	 */
 	protected Expression(final FunckyScriptEngine engine, final String fileName, final int lineNumber) {
 		super(engine, fileName, lineNumber);

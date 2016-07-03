@@ -31,7 +31,7 @@ public class Definition extends AbstractSyntaxTreeNode {
 	 *            the expression of this definition
 	 */
 	public Definition(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final String name, final Expression expression) {
-		super(engine, fileName, lineNumber);
+		super(Objects.requireNonNull(engine, "Engine must not be null"), Objects.requireNonNull(fileName, "File name must not be null"), requirePositiveLineNumber(lineNumber));
 		this.name = Objects.requireNonNull(name, "Name must not be null");
 		this.expression = Objects.requireNonNull(expression, "Expression must not be null");
 	}

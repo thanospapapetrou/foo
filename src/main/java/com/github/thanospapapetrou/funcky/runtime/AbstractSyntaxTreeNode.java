@@ -24,12 +24,26 @@ public abstract class AbstractSyntaxTreeNode extends CompiledScript {
 	 * @param fileName
 	 *            the name of the file from which this abstract syntax tree node was parsed or <code>null</code> if this abstract syntax tree node was not parsed from any file
 	 * @param lineNumber
-	 *            the number of the line from which this abstract syntax tree node was parsed or <code>null</code> if this abstract syntax tree node was not parsed from any line
+	 *            the number of the line from which this abstract syntax tree node was parsed or <code>0</code> if this abstract syntax tree node was not parsed from any line
 	 */
 	protected AbstractSyntaxTreeNode(final FunckyScriptEngine engine, final String fileName, final int lineNumber) {
 		this.engine = engine;
 		this.fileName = fileName;
 		this.lineNumber = lineNumber;
+	}
+
+	/**
+	 * Check that a line number is positive.
+	 * 
+	 * @param lineNumber
+	 *            the line number to check
+	 * @return the given line number, if positive
+	 */
+	public static int requirePositiveLineNumber(final int lineNumber) {
+		if (lineNumber <= 0) {
+			throw new IllegalArgumentException("Line number must be positive");
+		}
+		return lineNumber;
 	}
 
 	@Override
