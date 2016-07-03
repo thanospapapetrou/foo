@@ -40,6 +40,19 @@ public abstract class Function extends Literal {
 		protected abstract Literal apply(final Expression argument1, final Expression argument2, final ScriptContext context) throws UndefinedReferenceException;
 	}
 
+	private abstract static class TwoArgumentArithmeticOperator extends TwoArgumentFunction {
+		private TwoArgumentArithmeticOperator(final String name) {
+			super(name, SimpleType.NUMBER, SimpleType.NUMBER, SimpleType.NUMBER);
+		}
+
+		@Override
+		protected Literal apply(final Expression argument1, final Expression argument2, final ScriptContext context) throws UndefinedReferenceException {
+			return apply((FunckyNumber) argument1.eval(context), (FunckyNumber) argument2.eval(context), context);
+		}
+
+		protected abstract Literal apply(final FunckyNumber argument1, final FunckyNumber argument2, final ScriptContext context) throws UndefinedReferenceException;
+	}
+
 	/**
 	 * Construct a function type.
 	 */
@@ -53,40 +66,40 @@ public abstract class Function extends Literal {
 	/**
 	 * Add two numbers.
 	 */
-	public static final Function ADD = new TwoArgumentFunction("add", SimpleType.NUMBER, SimpleType.NUMBER, SimpleType.NUMBER) {
+	public static final Function ADD = new TwoArgumentArithmeticOperator("add") {
 		@Override
-		protected Literal apply(final Expression term1, final Expression term2, final ScriptContext context) throws UndefinedReferenceException {
-			return new FunckyNumber(null, null, 0, ((FunckyNumber) term1.eval(context)).getValue() + ((FunckyNumber) term2.eval(context)).getValue());
+		protected Literal apply(final FunckyNumber term1, final FunckyNumber term2, final ScriptContext context) throws UndefinedReferenceException {
+			return new FunckyNumber(null, null, 0, term1.getValue() + term2.getValue());
 		}
 	};
 
 	/**
 	 * Subtract two numbers.
 	 */
-	public static final Function SUBTRACT = new TwoArgumentFunction("subtract", SimpleType.NUMBER, SimpleType.NUMBER, SimpleType.NUMBER) {
+	public static final Function SUBTRACT = new TwoArgumentArithmeticOperator("subtract") {
 		@Override
-		protected Literal apply(final Expression minuend, final Expression subtrahend, final ScriptContext context) throws UndefinedReferenceException {
-			return new FunckyNumber(null, null, 0, ((FunckyNumber) minuend.eval(context)).getValue() - ((FunckyNumber) subtrahend.eval(context)).getValue());
+		protected Literal apply(final FunckyNumber minuend, final FunckyNumber subtrahend, final ScriptContext context) throws UndefinedReferenceException {
+			return new FunckyNumber(null, null, 0, minuend.getValue() - subtrahend.getValue());
 		}
 	};
 
 	/**
 	 * Multiply two numbers.
 	 */
-	public static final Function MULTIPLY = new TwoArgumentFunction("multiply", SimpleType.NUMBER, SimpleType.NUMBER, SimpleType.NUMBER) {
+	public static final Function MULTIPLY = new TwoArgumentArithmeticOperator("multiply") {
 		@Override
-		protected Literal apply(final Expression factor1, final Expression factor2, final ScriptContext context) throws UndefinedReferenceException {
-			return new FunckyNumber(null, null, 0, ((FunckyNumber) factor1.eval(context)).getValue() * ((FunckyNumber) factor2.eval(context)).getValue());
+		protected Literal apply(final FunckyNumber factor1, final FunckyNumber factor2, final ScriptContext context) throws UndefinedReferenceException {
+			return new FunckyNumber(null, null, 0, factor1.getValue() * factor2.getValue());
 		}
 	};
 
 	/**
 	 * Divide two numbers.
 	 */
-	public static final Function DIVIDE = new TwoArgumentFunction("divide", SimpleType.NUMBER, SimpleType.NUMBER, SimpleType.NUMBER) {
+	public static final Function DIVIDE = new TwoArgumentArithmeticOperator("divide") {
 		@Override
-		protected Literal apply(final Expression dividend, final Expression divisor, final ScriptContext context) throws UndefinedReferenceException {
-			return new FunckyNumber(null, null, 0, ((FunckyNumber) dividend.eval(context)).getValue() / ((FunckyNumber) divisor.eval(context)).getValue());
+		protected Literal apply(final FunckyNumber dividend, final FunckyNumber divisor, final ScriptContext context) throws UndefinedReferenceException {
+			return new FunckyNumber(null, null, 0, dividend.getValue() / divisor.getValue());
 		}
 	};
 
