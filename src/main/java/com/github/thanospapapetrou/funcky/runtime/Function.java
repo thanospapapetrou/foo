@@ -23,8 +23,8 @@ public abstract class Function extends Literal {
 
 		@Override
 		public Literal apply(final Expression argument1, final ScriptContext context) throws UndefinedReferenceException {
+			final FunctionType range = (FunctionType) super.range;
 			try {
-				final FunctionType range = (FunctionType) super.range;
 				return new Function(new Application(context, this, argument1).toString(), range.getDomain(), range.getRange()) {
 					@Override
 					public Literal apply(final Expression argument2, final ScriptContext context) throws UndefinedReferenceException {
@@ -32,7 +32,7 @@ public abstract class Function extends Literal {
 					}
 				};
 			} catch (final InvalidArgumentException | InvalidFunctionException e) {
-				Logger.getLogger(Function.class.getName()).log(Level.WARNING, "", e); // TODO error message?
+				Logger.getLogger(Function.class.getName()).log(Level.WARNING, String.format("Error defining return function of functor %1$s", this), e);
 				return null;
 			}
 		}

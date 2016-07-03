@@ -28,6 +28,8 @@ public class FunckyNumber extends Literal {
 	 */
 	public static final FunckyNumber NAN = new FunckyNumber(null, null, 0, Double.NaN);
 
+	private static final String MINUS = "minus %1$s";
+
 	private final double value;
 
 	/**
@@ -67,7 +69,7 @@ public class FunckyNumber extends Literal {
 		if (value == Double.POSITIVE_INFINITY) {
 			return Double.toString(Double.POSITIVE_INFINITY).toLowerCase();
 		} else if (value == Double.NEGATIVE_INFINITY) {
-			return String.format("minus %1$s", INFINITY.toString());
+			return String.format(MINUS, INFINITY);
 		}
 		return Double.toString(value);
 	}
