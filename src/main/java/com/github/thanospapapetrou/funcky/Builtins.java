@@ -27,6 +27,7 @@ public class Builtins extends SimpleBindings {
 		put(FunckyBoolean.TRUE.toString(), FunckyBoolean.TRUE);
 		put(FunckyBoolean.FALSE.toString(), FunckyBoolean.FALSE);
 		put(Function.FUNCTION.toString(), Function.FUNCTION);
+		put(Function.IF.toString(), Function.IF);
 		put(Function.ADD.toString(), Function.ADD);
 		put(Function.SUBTRACT.toString(), Function.SUBTRACT);
 		put(Function.MULTIPLY.toString(), Function.MULTIPLY);

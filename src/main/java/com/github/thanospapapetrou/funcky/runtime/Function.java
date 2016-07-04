@@ -1,5 +1,6 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,19 +17,29 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceE
  * @author thanos
  */
 public abstract class Function extends Literal {
-	private abstract static class TwoArgumentFunction extends Function {
-		private TwoArgumentFunction(final String name, final FunckyType domain1, final FunckyType domain2, final FunckyType range) {
-			super(name, domain1, new FunctionType(domain2, range));
+	private abstract static class Functor extends Function {
+		private final FunckyType[] types;
+
+		private Functor(final String name, final FunckyType... types) {
+			super(name, types[0], getFunctionType(Arrays.copyOfRange(types, 1, types.length)));
+			this.types = types;
+		}
+
+		private static FunckyType getFunctionType(final FunckyType... types) {
+			return (types.length == 1) ? types[0] : new FunctionType(types[0], getFunctionType(Arrays.copyOfRange(types, 1, types.length)));
 		}
 
 		@Override
-		public Literal apply(final Expression argument1, final ScriptContext context) throws UndefinedReferenceException {
-			final FunctionType range = (FunctionType) super.range;
+		public Literal apply(final Expression argument, final ScriptContext context) throws UndefinedReferenceException {
+			final Functor that = this;
 			try {
-				return new Function(new Application(context, this, argument1).toString(), range.getDomain(), range.getRange()) {
+				return (types.length == 2) ? apply(context, argument) : new Functor(new Application(context, that, argument).toString(), Arrays.copyOfRange(types, 1, types.length)) {
 					@Override
-					public Literal apply(final Expression argument2, final ScriptContext context) throws UndefinedReferenceException {
-						return TwoArgumentFunction.this.apply(argument1, argument2, context);
+					protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedReferenceException {
+						final Expression[] newArguments = new Expression[arguments.length + 1];
+						newArguments[0] = argument;
+						System.arraycopy(arguments, 0, newArguments, 1, arguments.length);
+						return that.apply(context, newArguments);
 					}
 				};
 			} catch (final InvalidArgumentException | InvalidFunctionException e) {
@@ -37,17 +48,17 @@ public abstract class Function extends Literal {
 			}
 		}
 
-		protected abstract Literal apply(final Expression argument1, final Expression argument2, final ScriptContext context) throws UndefinedReferenceException;
+		protected abstract Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedReferenceException;
 	}
 
-	private abstract static class TwoArgumentArithmeticOperator extends TwoArgumentFunction {
+	private abstract static class TwoArgumentArithmeticOperator extends Functor {
 		private TwoArgumentArithmeticOperator(final String name) {
 			super(name, SimpleType.NUMBER, SimpleType.NUMBER, SimpleType.NUMBER);
 		}
 
 		@Override
-		protected Literal apply(final Expression argument1, final Expression argument2, final ScriptContext context) throws UndefinedReferenceException {
-			return apply((FunckyNumber) argument1.eval(context), (FunckyNumber) argument2.eval(context), context);
+		protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedReferenceException {
+			return apply((FunckyNumber) arguments[0].eval(context), (FunckyNumber) arguments[1].eval(context), context);
 		}
 
 		protected abstract Literal apply(final FunckyNumber argument1, final FunckyNumber argument2, final ScriptContext context) throws UndefinedReferenceException;
@@ -56,10 +67,22 @@ public abstract class Function extends Literal {
 	/**
 	 * Construct a function type.
 	 */
-	public static final Function FUNCTION = new TwoArgumentFunction("function", SimpleType.TYPE, SimpleType.TYPE, SimpleType.TYPE) {
+	public static final Function FUNCTION = new Functor("function", SimpleType.TYPE, SimpleType.TYPE, SimpleType.TYPE) {
 		@Override
-		protected Literal apply(final Expression domain, final Expression range, final ScriptContext context) throws UndefinedReferenceException {
-			return new FunctionType((FunckyType) domain.eval(context), (FunckyType) range.eval(context));
+		protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedReferenceException {
+			return new FunctionType((FunckyType) arguments[0].eval(context), (FunckyType) arguments[1].eval(context));
+		}
+	};
+
+	private static final TypeVariable TYPE = new TypeVariable("type");
+
+	/**
+	 * Ternary operator.
+	 */
+	public static final Function IF = new Functor("if", SimpleType.BOOLEAN, new FunctionType(TYPE, new FunctionType(TYPE, TYPE))) {
+		@Override
+		public Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedReferenceException {
+			return ((FunckyBoolean) arguments[0].eval(context)).equals(FunckyBoolean.TRUE) ? arguments[1].eval(context) : arguments[2].eval(context);
 		}
 	};
 

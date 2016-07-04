@@ -1,6 +1,6 @@
-add (minus infinity)
-function (function number boolean)
-print expressions like the above that can't be simplified as applications
 define compare and use it to define equals
-Eliminate inline strings
+find a better way for minus infinity
+application package private constructor is a hack
+cast
+error
 
