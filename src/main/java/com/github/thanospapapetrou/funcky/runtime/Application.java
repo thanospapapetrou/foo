@@ -42,25 +42,24 @@ public class Application extends Expression {
 	 *             if any undefined reference is encountered during type evaluations
 	 */
 	public Application(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final Expression function, final Expression argument) throws InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
-		this(Objects.requireNonNull(engine, "Engine must not be null"), Objects.requireNonNull(fileName, "File name must not be null"), requirePositiveLineNumber(lineNumber), engine.getContext(), function, argument); // TODO check arguments
-	}
-
-	Application(final ScriptContext context, final Expression function, final Expression argument) throws InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
-		this(null, null, 0, context, function, argument);
-	}
-
-	private Application(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final ScriptContext context, final Expression function, final Expression argument) throws InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
-		super(engine, fileName, lineNumber);
+		super(Objects.requireNonNull(engine, "Engine must not be null"), Objects.requireNonNull(fileName, "File name must not be null"), requirePositiveLineNumber(lineNumber));
 		this.function = Objects.requireNonNull(function, "Function must not be null");
 		this.argument = Objects.requireNonNull(argument, "Argument must not be null");
-		if (!(function.getType(context) instanceof FunctionType)) {
+		if (!(function.getType(engine.getContext()) instanceof FunctionType)) {
 			throw new InvalidFunctionException(function);
 		}
-		final FunctionType functionType = (FunctionType) function.getType(context);
-		final FunckyType argumentType = argument.getType(context);
+		final FunctionType functionType = (FunctionType) function.getType(engine.getContext());
+		final FunckyType argumentType = argument.getType(engine.getContext());
 		if ((!(functionType.getDomain() instanceof TypeVariable)) && (!functionType.getDomain().equals(argumentType))) {
 			throw new InvalidArgumentException(function, functionType.getDomain(), argument, argumentType);
 		}
+
+	}
+
+	Application(final Expression function, final Expression argument) {
+		super(null, null, 0);
+		this.function = Objects.requireNonNull(function, "Function must not be null");
+		this.argument = Objects.requireNonNull(argument, "Argument must not be null");
 	}
 
 	@Override

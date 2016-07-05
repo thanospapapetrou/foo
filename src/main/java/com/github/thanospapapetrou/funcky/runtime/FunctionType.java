@@ -8,8 +8,6 @@ import java.util.Objects;
  * @author thanos
  */
 public class FunctionType extends FunckyType {
-	private static final String FUNCTION_TYPE = "function %1$s %2$s";
-
 	private final FunckyType domain;
 	private final FunckyType range;
 
@@ -34,7 +32,7 @@ public class FunctionType extends FunckyType {
 
 	@Override
 	public String toString() {
-		return String.format(FUNCTION_TYPE, domain, range);
+		return new Application(new Application(Function.FUNCTION, domain), range).toString();
 	}
 
 	FunckyType getDomain() {

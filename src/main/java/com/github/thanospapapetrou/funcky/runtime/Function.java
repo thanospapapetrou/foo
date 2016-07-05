@@ -2,13 +2,9 @@ package com.github.thanospapapetrou.funcky.runtime;
 
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.script.ScriptContext;
 
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 
 /**
@@ -32,20 +28,15 @@ public abstract class Function extends Literal {
 		@Override
 		public Literal apply(final Expression argument, final ScriptContext context) throws UndefinedReferenceException {
 			final Functor that = this;
-			try {
-				return (types.length == 2) ? apply(context, argument) : new Functor(new Application(context, that, argument).toString(), Arrays.copyOfRange(types, 1, types.length)) {
-					@Override
-					protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedReferenceException {
-						final Expression[] newArguments = new Expression[arguments.length + 1];
-						newArguments[0] = argument;
-						System.arraycopy(arguments, 0, newArguments, 1, arguments.length);
-						return that.apply(context, newArguments);
-					}
-				};
-			} catch (final InvalidArgumentException | InvalidFunctionException e) {
-				Logger.getLogger(Function.class.getName()).log(Level.WARNING, String.format("Error defining return function of functor %1$s", this), e);
-				return null;
-			}
+			return (types.length == 2) ? apply(context, argument) : new Functor(new Application(that, argument).toString(), Arrays.copyOfRange(types, 1, types.length)) {
+				@Override
+				protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedReferenceException {
+					final Expression[] newArguments = new Expression[arguments.length + 1];
+					newArguments[0] = argument;
+					System.arraycopy(arguments, 0, newArguments, 1, arguments.length);
+					return that.apply(context, newArguments);
+				}
+			};
 		}
 
 		protected abstract Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedReferenceException;
@@ -75,7 +66,7 @@ public abstract class Function extends Literal {
 	};
 
 	private static final TypeVariable TYPE = new TypeVariable("type");
-	
+
 	/**
 	 * Get the type of an expression.
 	 */

@@ -32,6 +32,11 @@ public class Reference extends Expression {
 		this.name = Objects.requireNonNull(name, "Name must not be null");
 	}
 
+	Reference(final String name) {
+		super(null, null, 0);
+		this.name = Objects.requireNonNull(name, "Name must not be null");
+	}
+
 	@Override
 	public Literal eval(final ScriptContext context) throws UndefinedReferenceException {
 		final Object object = context.getAttribute(name);
