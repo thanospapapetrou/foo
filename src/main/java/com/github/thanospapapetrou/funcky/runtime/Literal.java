@@ -1,5 +1,7 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
+import java.util.Objects;
+
 import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
@@ -10,6 +12,8 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
  * @author thanos
  */
 public abstract class Literal extends Expression {
+	private static final String NULL_CONTEXT = "Context must not be null";
+
 	/**
 	 * Construct a new literal.
 	 * 
@@ -26,11 +30,13 @@ public abstract class Literal extends Expression {
 
 	@Override
 	public Literal eval(final ScriptContext context) {
+		Objects.requireNonNull(context, NULL_CONTEXT);
 		return this;
 	}
 
 	@Override
 	public FunckyType getType(final ScriptContext context) {
+		Objects.requireNonNull(context, NULL_CONTEXT);
 		return getType();
 	}
 

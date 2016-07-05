@@ -13,6 +13,10 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceE
  * @author thanos
  */
 public class Definition extends AbstractSyntaxTreeNode {
+	private static final String NULL_NAME = "Name must not be null";
+	private static final String NULL_EXPRESSION = "Expression must not be null";
+	private static final String NULL_CONTEXT = "Context must not be null";
+
 	private final String name;
 	private final Expression expression;
 
@@ -31,32 +35,22 @@ public class Definition extends AbstractSyntaxTreeNode {
 	 *            the expression of this definition
 	 */
 	public Definition(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final String name, final Expression expression) {
-		super(Objects.requireNonNull(engine, "Engine must not be null"), Objects.requireNonNull(fileName, "File name must not be null"), requirePositiveLineNumber(lineNumber));
-		this.name = Objects.requireNonNull(name, "Name must not be null");
-		this.expression = Objects.requireNonNull(expression, "Expression must not be null");
+		super(requireNonNullEngine(engine), requireValidFileName(fileName), requirePositiveLineNumber(lineNumber));
+		this.name = Objects.requireNonNull(name, NULL_NAME);
+		this.expression = Objects.requireNonNull(expression, NULL_EXPRESSION);
 	}
 
 	@Override
 	public Void eval(final ScriptContext context) throws UndefinedReferenceException {
-		context.setAttribute(name, expression.eval(context), ScriptContext.ENGINE_SCOPE); // TODO already defined?
+		Objects.requireNonNull(context, NULL_CONTEXT).setAttribute(name, expression.eval(context), ScriptContext.ENGINE_SCOPE); // TODO already defined?
 		return null;
 	}
 
-	/**
-	 * Get the expression.
-	 * 
-	 * @return the expression of this definition
-	 */
-	public Expression getExpression() {
+	Expression getExpression() {
 		return expression;
 	}
 
-	/**
-	 * Get the name.
-	 * 
-	 * @return the name of this definition
-	 */
-	public String getName() {
+	String getName() {
 		return name;
 	}
 }

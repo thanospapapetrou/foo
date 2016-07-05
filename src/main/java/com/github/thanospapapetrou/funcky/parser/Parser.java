@@ -106,6 +106,10 @@ public class Parser {
 	public static final int EOF = StreamTokenizer.TT_EOF;
 	private static final String WHITESPACE = "\t\n\f\r ";
 	private static final String WORD = "ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
+	private static final String NULL_ENGINE = "Engine must not be null";
+	private static final String NULL_READER = "Reader must not be null";
+	private static final String NULL_FILE_NAME = "File name must not be null";
+	private static final String EMPTY_FILE_NAME = "File name must not be empty";
 
 	private final FunckyScriptEngine engine;
 	private final StreamTokenizer tokenizer;
@@ -122,8 +126,8 @@ public class Parser {
 	 *            the name of the file to use for error reporting
 	 */
 	public Parser(final FunckyScriptEngine engine, final Reader reader, final String fileName) {
-		this.engine = Objects.requireNonNull(engine, "Engine must not be null");
-		tokenizer = new StreamTokenizer(Objects.requireNonNull(reader, "Reader must not be null"));
+		this.engine = Objects.requireNonNull(engine, NULL_ENGINE);
+		tokenizer = new StreamTokenizer(Objects.requireNonNull(reader, NULL_READER));
 		tokenizer.resetSyntax();
 		tokenizer.parseNumbers();
 		tokenizer.eolIsSignificant(true);
@@ -139,7 +143,15 @@ public class Parser {
 		for (final char word : WORD.toCharArray()) {
 			tokenizer.wordChars(word, word);
 		}
-		this.fileName = Objects.requireNonNull(fileName, "File name must not be null");
+		this.fileName = requireValidFileName(fileName);
+	}
+
+	private static String requireValidFileName(final String fileName) {
+		Objects.requireNonNull(fileName, NULL_FILE_NAME);
+		if (fileName.isEmpty()) {
+			throw new IllegalArgumentException(EMPTY_FILE_NAME);
+		}
+		return fileName;
 	}
 
 	/**

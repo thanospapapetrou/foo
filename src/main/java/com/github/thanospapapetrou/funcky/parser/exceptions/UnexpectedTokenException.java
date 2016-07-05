@@ -2,6 +2,7 @@ package com.github.thanospapapetrou.funcky.parser.exceptions;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.parser.Parser;
@@ -16,6 +17,9 @@ public class UnexpectedTokenException extends FunckyException {
 	private static final String UNEXPECTED_TOKEN = "Unexpected %1$s, expected %2$s";
 	private static final String COMMA = ", ";
 	private static final String OR = " or ";
+	private static final String INVALID_TOKEN = "Invalid token %1$d";
+	private static final String NULL_EXPECTED_TOKENS = "Expected tokens must not be null";
+	private static final String EMPTY_EXPECTED_TOKENS = "Expected tokens must not be empty";
 	private static final Map<Integer, String> TOKEN_NAMES = new HashMap<>();
 
 	static {
@@ -43,7 +47,25 @@ public class UnexpectedTokenException extends FunckyException {
 	 *            the tokens normally expected
 	 */
 	public UnexpectedTokenException(final int unexpectedToken, final String fileName, final int lineNumber, final int... expectedTokens) {
-		super(String.format(UNEXPECTED_TOKEN, TOKEN_NAMES.get(unexpectedToken), or(expectedTokens)), fileName, lineNumber);
+		super(String.format(UNEXPECTED_TOKEN, TOKEN_NAMES.get(requireValidToken(unexpectedToken)), or(requireValidExpectedTokens(expectedTokens))), fileName, lineNumber);
+	}
+
+	private static final int requireValidToken(final int token) {
+		if (!TOKEN_NAMES.containsKey(token)) {
+			throw new IllegalArgumentException(String.format(INVALID_TOKEN, token));
+		}
+		return token;
+	}
+
+	private static final int[] requireValidExpectedTokens(final int[] expectedTokens) {
+		Objects.requireNonNull(expectedTokens, NULL_EXPECTED_TOKENS);
+		if (expectedTokens.length == 0) {
+			throw new IllegalArgumentException(EMPTY_EXPECTED_TOKENS);
+		}
+		for (final int expectedToken : expectedTokens) {
+			requireValidToken(expectedToken);
+		}
+		return expectedTokens;
 	}
 
 	private static String or(final int... tokens) {

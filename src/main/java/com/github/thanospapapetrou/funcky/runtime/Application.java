@@ -17,6 +17,9 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceE
 public class Application extends Expression {
 	private static final String APPLICATION = "%1$s %2$s";
 	private static final String NESTED_APPLICATION = "(%1$s)";
+	private static final String NULL_FUNCTION = "Function must not be null";
+	private static final String NULL_ARGUMENT = "Argument must not be null";
+	private static final String NULL_CONTEXT = "Context must not be null";
 
 	private final Expression function;
 	private final Expression argument;
@@ -42,9 +45,9 @@ public class Application extends Expression {
 	 *             if any undefined reference is encountered during type evaluations
 	 */
 	public Application(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final Expression function, final Expression argument) throws InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
-		super(Objects.requireNonNull(engine, "Engine must not be null"), Objects.requireNonNull(fileName, "File name must not be null"), requirePositiveLineNumber(lineNumber));
-		this.function = Objects.requireNonNull(function, "Function must not be null");
-		this.argument = Objects.requireNonNull(argument, "Argument must not be null");
+		super(requireNonNullEngine(engine), requireValidFileName(fileName), requirePositiveLineNumber(lineNumber));
+		this.function = Objects.requireNonNull(function, NULL_FUNCTION);
+		this.argument = Objects.requireNonNull(argument, NULL_ARGUMENT);
 		if (!(function.getType(engine.getContext()) instanceof FunctionType)) {
 			throw new InvalidFunctionException(function);
 		}
@@ -58,18 +61,18 @@ public class Application extends Expression {
 
 	Application(final Expression function, final Expression argument) {
 		super(null, null, 0);
-		this.function = Objects.requireNonNull(function, "Function must not be null");
-		this.argument = Objects.requireNonNull(argument, "Argument must not be null");
+		this.function = Objects.requireNonNull(function, NULL_FUNCTION);
+		this.argument = Objects.requireNonNull(argument, NULL_ARGUMENT);
 	}
 
 	@Override
 	public Literal eval(final ScriptContext context) throws UndefinedReferenceException {
-		return ((Function) function.eval(context)).apply(argument, context);
+		return ((Function) function.eval(Objects.requireNonNull(context, NULL_CONTEXT))).apply(argument, context);
 	}
 
 	@Override
 	public FunckyType getType(final ScriptContext context) throws UndefinedReferenceException {
-		return ((FunctionType) function.getType(context)).getRange();
+		return ((FunctionType) function.getType(Objects.requireNonNull(context, NULL_CONTEXT))).getRange();
 	}
 
 	@Override

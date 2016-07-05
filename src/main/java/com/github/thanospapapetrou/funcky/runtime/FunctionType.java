@@ -8,12 +8,15 @@ import java.util.Objects;
  * @author thanos
  */
 public class FunctionType extends FunckyType {
+	private static final String NULL_DOMAIN = "Domain must not be null";
+	private static final String NULL_RANGE = "Range must not be null";
+
 	private final FunckyType domain;
 	private final FunckyType range;
 
 	FunctionType(final FunckyType domain, final FunckyType range) {
-		this.domain = Objects.requireNonNull(domain, "Domain must not be null");
-		this.range = Objects.requireNonNull(range, "Range must not be null");
+		this.domain = Objects.requireNonNull(domain, NULL_DOMAIN);
+		this.range = Objects.requireNonNull(range, NULL_RANGE);
 	}
 
 	@Override

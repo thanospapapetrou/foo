@@ -14,27 +14,48 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceE
  */
 public abstract class Function extends Literal {
 	private abstract static class Functor extends Function {
+		private static final int MIN_TYPES = 2;
+		private static final String NULL_TYPES = "Types must not be null";
+		private static final String TYPES_CONTAINS_LESS_THAN_TWO_ELEMENTS = "Types must contain at least two elements";
+		private static final String NULL_TYPE = "Types must not be null";
+		private static final String EMPTY_TYPES = "Types must not be empty";
+		private static final String NULL_ARGUMENT = "Argument must not be null";
+		private static final String NULL_CONTEXT = "Context must not be null";
+		private static final String NULL_ARGUMENTS = "Arguments must not be null";
+
 		private final FunckyType[] types;
 
 		private Functor(final String name, final FunckyType... types) {
-			super(name, types[0], getFunctionType(Arrays.copyOfRange(types, 1, types.length)));
+			super(name, requireValidTypes(types, MIN_TYPES, TYPES_CONTAINS_LESS_THAN_TWO_ELEMENTS)[0], getFunctionType(Arrays.copyOfRange(types, 1, types.length)));
 			this.types = types;
 		}
 
+		private static FunckyType[] requireValidTypes(final FunckyType[] types, final int minTypes, final String lessThanMinMessage) {
+			if (Objects.requireNonNull(types, NULL_TYPES).length < minTypes) {
+				throw new IllegalArgumentException(lessThanMinMessage);
+			}
+			for (final FunckyType type : types) {
+				Objects.requireNonNull(type, NULL_TYPE);
+			}
+			return types;
+		}
+
 		private static FunckyType getFunctionType(final FunckyType... types) {
-			return (types.length == 1) ? types[0] : new FunctionType(types[0], getFunctionType(Arrays.copyOfRange(types, 1, types.length)));
+			return (requireValidTypes(types, 1, EMPTY_TYPES).length == 1) ? types[0] : new FunctionType(types[0], getFunctionType(Arrays.copyOfRange(types, 1, types.length)));
 		}
 
 		@Override
 		public Literal apply(final Expression argument, final ScriptContext context) throws UndefinedReferenceException {
+			Objects.requireNonNull(argument, NULL_ARGUMENT);
+			Objects.requireNonNull(context, NULL_CONTEXT);
 			final Functor that = this;
 			return (types.length == 2) ? apply(context, argument) : new Functor(new Application(that, argument).toString(), Arrays.copyOfRange(types, 1, types.length)) {
 				@Override
 				protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedReferenceException {
-					final Expression[] newArguments = new Expression[arguments.length + 1];
+					final Expression[] newArguments = new Expression[Objects.requireNonNull(arguments, NULL_ARGUMENTS).length + 1];
 					newArguments[0] = argument;
 					System.arraycopy(arguments, 0, newArguments, 1, arguments.length);
-					return that.apply(context, newArguments);
+					return that.apply(Objects.requireNonNull(context, NULL_CONTEXT), newArguments);
 				}
 			};
 		}
@@ -127,15 +148,28 @@ public abstract class Function extends Literal {
 		}
 	};
 
+	private static final String NULL_NAME = "Name must not be null";
+	private static final String EMPTY_NAME = "Name must not be empty";
+	private static final String NULL_DOMAIN = "Domain must not be null";
+	private static final String NULL_RANGE = "Range must not be null";
+
 	private final String name;
 	private final FunckyType domain;
 	private final FunckyType range;
 
 	private Function(final String name, final FunckyType domain, final FunckyType range) {
 		super(null, null, 0);
-		this.name = Objects.requireNonNull(name, "Name must not be null");
-		this.domain = Objects.requireNonNull(domain, "Domain must not be null");
-		this.range = Objects.requireNonNull(range, "Range must not be null");
+		this.name = requireValidName(name);
+		this.domain = Objects.requireNonNull(domain, NULL_DOMAIN);
+		this.range = Objects.requireNonNull(range, NULL_RANGE);
+	}
+
+	private static String requireValidName(final String name) {
+		Objects.requireNonNull(name, NULL_NAME);
+		if (name.isEmpty()) {
+			throw new IllegalArgumentException(EMPTY_NAME);
+		}
+		return name;
 	}
 
 	/**

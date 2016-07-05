@@ -1,5 +1,7 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
+import java.util.Objects;
+
 /**
  * Class representing a Funcky simple type.
  * 
@@ -21,10 +23,21 @@ public class SimpleType extends FunckyType {
 	 */
 	public static final SimpleType BOOLEAN = new SimpleType("boolean");
 
+	private static final String NULL_NAME = "Name must not be null";
+	private static final String EMPTY_NAME = "Name must not be empty";
+
 	private final String name;
 
 	private SimpleType(final String name) {
-		this.name = name;
+		this.name = requireValidName(name);
+	}
+
+	private static final String requireValidName(final String name) {
+		Objects.requireNonNull(name, NULL_NAME);
+		if (name.isEmpty()) {
+			throw new IllegalArgumentException(EMPTY_NAME);
+		}
+		return name;
 	}
 
 	@Override

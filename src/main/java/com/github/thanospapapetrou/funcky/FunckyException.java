@@ -13,6 +13,10 @@ import com.github.thanospapapetrou.funcky.runtime.AbstractSyntaxTreeNode;
  */
 public abstract class FunckyException extends ScriptException {
 	private static final long serialVersionUID = 1L;
+	private static final String NULL_MESSAGE = "Message must not be null";
+	private static final String EMPTY_MESSAGE = "Message must not be empty";
+	private static final String NULL_FILE_NAME = "File name must not be null";
+	private static final String EMPTY_FILE_NAME = "File name must not be empty";
 
 	/**
 	 * Construct a new Funcky exception.
@@ -25,6 +29,14 @@ public abstract class FunckyException extends ScriptException {
 	 *            the line of the file in which the error occurred
 	 */
 	public FunckyException(final String message, final String fileName, final int lineNumber) {
-		super(Objects.requireNonNull(message, "Message must not be null"), Objects.requireNonNull(fileName, "File name must not be null"), AbstractSyntaxTreeNode.requirePositiveLineNumber(lineNumber));
+		super(requireValidString(message, NULL_MESSAGE, EMPTY_MESSAGE), requireValidString(fileName, NULL_FILE_NAME, EMPTY_FILE_NAME), AbstractSyntaxTreeNode.requirePositiveLineNumber(lineNumber));
+	}
+
+	private static final String requireValidString(final String string, final String nullMessage, final String emptyMessage) {
+		Objects.requireNonNull(string, nullMessage);
+		if (string.isEmpty()) {
+			throw new IllegalArgumentException(emptyMessage);
+		}
+		return string;
 	}
 }

@@ -32,29 +32,36 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	private static final String PRELUDE = "/Prelude.funcky";
 	private static final String PRELUDE_FILE_NAME = "<prelude>";
 	private static final String UNKNOWN = "<unknown>";
+	private static final String NULL_FACTORY = "Factory must not be null";
+	private static final String ERROR_LOADING_PRELUDE = "Error loading prelude";
+	private static final String NULL_SCRIPT = "Script must not be null";
+	private static final String NULL_CONTEXT = "Context must not be null";
+	private static final String UNSUPPORTED_GET_INTERFACE = "getInterface() is not supported";
+	private static final String UNSUPPORTED_INVOKE_FUNCTION = "invokeFunction() is not supported";
+	private static final String UNSUPPORTED_INVOKE_METHOD = "invokeMethod() is not supported";
 
 	private final FunckyScriptEngineFactory factory;
 
 	FunckyScriptEngine(final FunckyScriptEngineFactory factory) {
-		this.factory = Objects.requireNonNull(factory, "Factory must not be null");
+		this.factory = Objects.requireNonNull(factory, NULL_FACTORY);
 		setBindings(new Builtins(), ScriptContext.ENGINE_SCOPE);
 		try {
 			for (final Definition definition : compile(new InputStreamReader(getClass().getResourceAsStream(PRELUDE), StandardCharsets.UTF_8), PRELUDE_FILE_NAME).getDefinitions()) {
 				definition.eval(context);
 			}
 		} catch (final ScriptException e) {
-			Logger.getLogger(FunckyScriptEngine.class.getName()).log(Level.WARNING, "Error loading prelude", e);
+			Logger.getLogger(FunckyScriptEngine.class.getName()).log(Level.WARNING, ERROR_LOADING_PRELUDE, e);
 		}
 	}
 
 	@Override
 	public FunckyScript compile(final Reader script) throws ScriptException {
-		return compile(script, UNKNOWN);
+		return compile(Objects.requireNonNull(script, NULL_SCRIPT), UNKNOWN);
 	}
 
 	@Override
 	public Expression compile(final String script) throws ScriptException {
-		return compile(script, UNKNOWN);
+		return compile(Objects.requireNonNull(script, NULL_SCRIPT), UNKNOWN);
 	}
 
 	@Override
@@ -64,13 +71,13 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	@Override
 	public Void eval(final Reader script, final ScriptContext context) throws ScriptException {
-		compile(script, (String) context.getAttribute(ScriptEngine.FILENAME)).eval(context);
+		compile(Objects.requireNonNull(script, NULL_SCRIPT), (String) Objects.requireNonNull(context, NULL_CONTEXT).getAttribute(ScriptEngine.FILENAME)).eval(context);
 		return null;
 	}
 
 	@Override
 	public Literal eval(final String script, final ScriptContext context) throws ScriptException {
-		return compile(script, (String) context.getAttribute(ScriptEngine.FILENAME)).eval(context);
+		return compile(Objects.requireNonNull(script, NULL_SCRIPT), (String) Objects.requireNonNull(context, NULL_CONTEXT).getAttribute(ScriptEngine.FILENAME)).eval(context);
 	}
 
 	@Override
@@ -80,22 +87,22 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	@Override
 	public <T> T getInterface(final Class<T> clazz) {
-		throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException(UNSUPPORTED_GET_INTERFACE);
 	}
 
 	@Override
 	public <T> T getInterface(final Object object, final Class<T> clazz) {
-		throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException(UNSUPPORTED_GET_INTERFACE);
 	}
 
 	@Override
 	public Object invokeFunction(final String function, final Object... arguments) throws ScriptException, NoSuchMethodException {
-		throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException(UNSUPPORTED_INVOKE_FUNCTION);
 	}
 
 	@Override
 	public Object invokeMethod(final Object object, final String method, final Object... arguments) throws ScriptException, NoSuchMethodException {
-		throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException(UNSUPPORTED_INVOKE_METHOD);
 	}
 
 	private FunckyScript compile(final Reader script, final String fileName) throws ScriptException {

@@ -13,6 +13,9 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceE
  * @author thanos
  */
 public class Reference extends Expression {
+	private static final String NULL_NAME = "Name must not be null";
+	private static final String NULL_CONTEXT = "Context must not be null";
+
 	private final String name;
 
 	/**
@@ -28,18 +31,18 @@ public class Reference extends Expression {
 	 *            the name of this reference
 	 */
 	public Reference(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final String name) {
-		super(Objects.requireNonNull(engine, "Engine must not be null"), Objects.requireNonNull(fileName, "File name must not be null"), requirePositiveLineNumber(lineNumber));
-		this.name = Objects.requireNonNull(name, "Name must not be null");
+		super(requireNonNullEngine(engine), requireValidFileName(fileName), requirePositiveLineNumber(lineNumber));
+		this.name = Objects.requireNonNull(name, NULL_NAME);
 	}
 
 	Reference(final String name) {
 		super(null, null, 0);
-		this.name = Objects.requireNonNull(name, "Name must not be null");
+		this.name = Objects.requireNonNull(name, NULL_NAME);
 	}
 
 	@Override
 	public Literal eval(final ScriptContext context) throws UndefinedReferenceException {
-		final Object object = context.getAttribute(name);
+		final Object object = Objects.requireNonNull(context, NULL_CONTEXT).getAttribute(name);
 		if (object instanceof Literal) {
 			return (Literal) object;
 		}
@@ -48,7 +51,7 @@ public class Reference extends Expression {
 
 	@Override
 	public FunckyType getType(final ScriptContext context) throws UndefinedReferenceException {
-		return eval(context).getType();
+		return eval(Objects.requireNonNull(context, NULL_CONTEXT)).getType();
 	}
 
 	@Override

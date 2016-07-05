@@ -14,6 +14,9 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceE
  * @author thanos
  */
 public class FunckyScript extends AbstractSyntaxTreeNode {
+	private static final String NULL_DEFINITIONS = "Definitions must not be null";
+	private static final String NULL_CONTEXT = "Context must not be null";
+
 	private final List<Definition> definitions;
 
 	/**
@@ -29,14 +32,14 @@ public class FunckyScript extends AbstractSyntaxTreeNode {
 	 *            the definitions of this script
 	 */
 	public FunckyScript(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final List<Definition> definitions) {
-		super(Objects.requireNonNull(engine, "Engine must not be null"), Objects.requireNonNull(fileName, "File name must not be null"), requirePositiveLineNumber(lineNumber));
-		this.definitions = Objects.requireNonNull(definitions, "Definitions must not be null");
+		super(requireNonNullEngine(engine), requireValidFileName(fileName), requirePositiveLineNumber(lineNumber));
+		this.definitions = Objects.requireNonNull(definitions, NULL_DEFINITIONS);
 	}
 
 	@Override
 	public Void eval(final ScriptContext context) throws UndefinedReferenceException {
 		for (final Definition definition : definitions) {
-			definition.eval(context);
+			definition.eval(Objects.requireNonNull(context, NULL_CONTEXT));
 		}
 		return null;
 	}

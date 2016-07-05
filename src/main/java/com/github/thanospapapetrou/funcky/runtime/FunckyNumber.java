@@ -45,12 +45,13 @@ public class FunckyNumber extends Literal {
 	 *            the value of this number
 	 */
 	public FunckyNumber(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final double value) {
-		super(engine, fileName, lineNumber);
+		super(requireNonNullEngine(engine), requireValidFileName(fileName), requirePositiveLineNumber(lineNumber));
 		this.value = value;
 	}
 
 	FunckyNumber(final double value) {
-		this(null, null, 0, value);
+		super(null, null, 0);
+		this.value = value;
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
+import java.util.Objects;
+
 import javax.script.CompiledScript;
 import javax.script.ScriptContext;
 
@@ -12,6 +14,11 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceE
  * @author thanos
  */
 public abstract class AbstractSyntaxTreeNode extends CompiledScript {
+	private static final String NON_POSITIVE_LINE_NUMBER = "Line number must be positive";
+	private static final String NULL_ENGINE = "Engine must not be null";
+	private static final String NULL_FILE_NAME = "File name must not be null";
+	private static final String EMPTY_FILE_NAME = "File name must not be empty";
+
 	private final FunckyScriptEngine engine;
 	private final String fileName;
 	private final int lineNumber;
@@ -41,9 +48,35 @@ public abstract class AbstractSyntaxTreeNode extends CompiledScript {
 	 */
 	public static int requirePositiveLineNumber(final int lineNumber) {
 		if (lineNumber <= 0) {
-			throw new IllegalArgumentException("Line number must be positive");
+			throw new IllegalArgumentException(NON_POSITIVE_LINE_NUMBER);
 		}
 		return lineNumber;
+	}
+
+	/**
+	 * Check that a Funcky script engine is not null.
+	 * 
+	 * @param engine
+	 *            the engine to check
+	 * @return the given engine, if non <code>null</code>
+	 */
+	protected static FunckyScriptEngine requireNonNullEngine(final FunckyScriptEngine engine) {
+		return Objects.requireNonNull(engine, NULL_ENGINE);
+	}
+
+	/**
+	 * Check that a file name is valid.
+	 * 
+	 * @param fileName
+	 *            the file name to check
+	 * @return the given file name, if non <code>null</code> and non empty
+	 */
+	protected static String requireValidFileName(final String fileName) {
+		Objects.requireNonNull(fileName, NULL_FILE_NAME);
+		if (fileName.isEmpty()) {
+			throw new IllegalArgumentException(EMPTY_FILE_NAME);
+		}
+		return fileName;
 	}
 
 	@Override
