@@ -17,22 +17,19 @@ public class Builtins extends SimpleBindings {
 	private static final String E = "e";
 
 	Builtins() {
-		
-		put(SimpleType.TYPE.toString(), SimpleType.TYPE);
-		put(SimpleType.NUMBER.toString(), SimpleType.NUMBER);
-		put(SimpleType.BOOLEAN.toString(), SimpleType.BOOLEAN);
+		for (final SimpleType simpleType : new SimpleType[] {SimpleType.TYPE, SimpleType.NUMBER, SimpleType.BOOLEAN}) {
+			put(simpleType.toString(), simpleType);
+		}
 		put(PI, FunckyNumber.PI);
 		put(E, FunckyNumber.E);
-		put(FunckyNumber.INFINITY.toString(), FunckyNumber.INFINITY);
-		put(FunckyNumber.NAN.toString(), FunckyNumber.NAN);
-		put(FunckyBoolean.TRUE.toString(), FunckyBoolean.TRUE);
-		put(FunckyBoolean.FALSE.toString(), FunckyBoolean.FALSE);
-		put(Function.FUNCTION.toString(), Function.FUNCTION);
-		put(Function.TYPE_OF.toString(), Function.TYPE_OF);
-		put(Function.IF.toString(), Function.IF);
-		put(Function.ADD.toString(), Function.ADD);
-		put(Function.SUBTRACT.toString(), Function.SUBTRACT);
-		put(Function.MULTIPLY.toString(), Function.MULTIPLY);
-		put(Function.DIVIDE.toString(), Function.DIVIDE);
+		for (final FunckyNumber number : new FunckyNumber[] {FunckyNumber.INFINITY, FunckyNumber.NAN}) {
+			put(number.toString(), number);
+		}
+		for (final FunckyBoolean bool : new FunckyBoolean[] {FunckyBoolean.FALSE, FunckyBoolean.TRUE}) {
+			put(bool.toString(), bool);
+		}
+		for (final Function function : new Function[] {Function.FUNCTION, Function.TYPE_OF, Function.IF, Function.ADD, Function.SUBTRACT, Function.MULTIPLY, Function.DIVIDE}) {
+			put(function.toString(), function);
+		}
 	}
 }

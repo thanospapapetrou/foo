@@ -42,20 +42,12 @@
 # return the function type corresponding to functions from the given domain type to the given range type
 # function = ...  
 
-# Generate an error using the given error message.
-# function string <type>
-# error message
-# message the error message to use
-# return bottom
-# error = ... TODO
-
-# Check two values for equality.
-# function <type> (function <type> boolean)
-# equal x y
-# x the first value to check
-# y the second value to check
-# return true if x and y are equal, false if not
-# equal = ... TODO
+# Get the type of an expression.
+# function <type> type
+# typeOf argument
+# argument the argument whose type to get
+# return the type of the given argument
+# typeOf = ...
 
 # Return then if condition is true or else if condition is false. 
 # function boolean (function <type> (function <type> <type>))
@@ -104,45 +96,3 @@
 # number the number to negate
 # return the negation of number (-number)
 minus = subtract 0
-
-# Calculate the integer quotient of the division of two numbers.
-# function number (function number number)
-# quotient dividend divisor
-# dividend the dividend to divide
-# divisor the divisor to divide by
-# return the integer quotient of dividend divided by divisor (dividend / divisor)
-# quotient = ... TODO
-
-# Calculate the remainder of the division of two numbers.
-# function number (function number number)
-# modulo dividend divisor
-# dividend the dividend to divide
-# divisor the divisor to divide by
-# return the remainder of dividend divided by divisor (dividend / divisor)
-# modulo = ... TODO
-
-# lessThan
-# greaterThan
-# lessEqual x y = or (lessThan x y) (equal x y)
-# greaterEqual x y = or (lessThan x y) (equal x y)
-# abs
-# round
-# ceil
-# floor
-# min x y = if (le x y) x y 
-# max x y = if (ge x y) x y
-# sin
-# cos
-# tan
-# asin
-# acos
-# atan
-# pow
-# sqrt x = pow x (div 1 2)
-# ln
-# log x y = ln y / ln y 
-# Boolean functions
-# not
-# and
-# or
-# xor
