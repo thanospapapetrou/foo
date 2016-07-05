@@ -58,7 +58,7 @@ public class Application extends Expression {
 		}
 		final FunctionType functionType = (FunctionType) function.getType(context);
 		final FunckyType argumentType = argument.getType(context);
-		if (!argumentType.equals(functionType.getDomain())) {
+		if ((!(functionType.getDomain() instanceof TypeVariable)) && (!functionType.getDomain().equals(argumentType))) {
 			throw new InvalidArgumentException(function, functionType.getDomain(), argument, argumentType);
 		}
 	}

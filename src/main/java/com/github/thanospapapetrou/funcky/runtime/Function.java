@@ -75,11 +75,21 @@ public abstract class Function extends Literal {
 	};
 
 	private static final TypeVariable TYPE = new TypeVariable("type");
+	
+	/**
+	 * Get the type of an expression.
+	 */
+	public static final Function TYPE_OF = new Function("typeOf", TYPE, SimpleType.TYPE) {
+		@Override
+		public Literal apply(final Expression argument, final ScriptContext context) throws UndefinedReferenceException {
+			return argument.getType(context);
+		}
+	};
 
 	/**
 	 * Ternary operator.
 	 */
-	public static final Function IF = new Functor("if", SimpleType.BOOLEAN, new FunctionType(TYPE, new FunctionType(TYPE, TYPE))) {
+	public static final Function IF = new Functor("if", SimpleType.BOOLEAN, TYPE, TYPE, TYPE) {
 		@Override
 		public Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedReferenceException {
 			return ((FunckyBoolean) arguments[0].eval(context)).equals(FunckyBoolean.TRUE) ? arguments[1].eval(context) : arguments[2].eval(context);

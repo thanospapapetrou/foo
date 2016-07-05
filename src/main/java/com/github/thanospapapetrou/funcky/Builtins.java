@@ -17,6 +17,7 @@ public class Builtins extends SimpleBindings {
 	private static final String E = "e";
 
 	Builtins() {
+		
 		put(SimpleType.TYPE.toString(), SimpleType.TYPE);
 		put(SimpleType.NUMBER.toString(), SimpleType.NUMBER);
 		put(SimpleType.BOOLEAN.toString(), SimpleType.BOOLEAN);
@@ -27,6 +28,7 @@ public class Builtins extends SimpleBindings {
 		put(FunckyBoolean.TRUE.toString(), FunckyBoolean.TRUE);
 		put(FunckyBoolean.FALSE.toString(), FunckyBoolean.FALSE);
 		put(Function.FUNCTION.toString(), Function.FUNCTION);
+		put(Function.TYPE_OF.toString(), Function.TYPE_OF);
 		put(Function.IF.toString(), Function.IF);
 		put(Function.ADD.toString(), Function.ADD);
 		put(Function.SUBTRACT.toString(), Function.SUBTRACT);
