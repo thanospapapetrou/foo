@@ -3,7 +3,7 @@ package com.github.thanospapapetrou.funcky.runtime;
 import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 
 /**
  * Abstract class representing a Funcky expression.
@@ -26,7 +26,7 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	}
 
 	@Override
-	public abstract Literal eval(final ScriptContext context) throws UndefinedReferenceException;
+	public abstract Literal eval(final ScriptContext context) throws UndefinedSymbolException;
 
 	/**
 	 * Get the type of this expression.
@@ -34,8 +34,8 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	 * @param context
 	 *            the script context in which to evaluate the type of this expression
 	 * @return the type of this expression
-	 * @throws UndefinedReferenceException
+	 * @throws UndefinedSymbolException
 	 *             if any undefined reference is encountered during type evaluation
 	 */
-	public abstract FunckyType getType(final ScriptContext context) throws UndefinedReferenceException;
+	public abstract FunckyType getType(final ScriptContext context) throws UndefinedSymbolException;
 }

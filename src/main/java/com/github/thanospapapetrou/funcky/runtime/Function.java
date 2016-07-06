@@ -5,7 +5,7 @@ import java.util.Objects;
 
 import javax.script.ScriptContext;
 
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 
 /**
  * Abstract class representing a Funcky function.
@@ -45,13 +45,13 @@ public abstract class Function extends Literal {
 		}
 
 		@Override
-		public Literal apply(final Expression argument, final ScriptContext context) throws UndefinedReferenceException {
+		public Literal apply(final Expression argument, final ScriptContext context) throws UndefinedSymbolException {
 			Objects.requireNonNull(argument, NULL_ARGUMENT);
 			Objects.requireNonNull(context, NULL_CONTEXT);
 			final Functor that = this;
 			return (types.length == 2) ? apply(context, argument) : new Functor(new Application(that, argument).toString(), Arrays.copyOfRange(types, 1, types.length)) {
 				@Override
-				protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedReferenceException {
+				protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
 					final Expression[] newArguments = new Expression[Objects.requireNonNull(arguments, NULL_ARGUMENTS).length + 1];
 					newArguments[0] = argument;
 					System.arraycopy(arguments, 0, newArguments, 1, arguments.length);
@@ -60,7 +60,7 @@ public abstract class Function extends Literal {
 			};
 		}
 
-		protected abstract Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedReferenceException;
+		protected abstract Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException;
 	}
 
 	private abstract static class TwoArgumentArithmeticOperator extends Functor {
@@ -69,11 +69,11 @@ public abstract class Function extends Literal {
 		}
 
 		@Override
-		protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedReferenceException {
+		protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
 			return apply((FunckyNumber) arguments[0].eval(context), (FunckyNumber) arguments[1].eval(context), context);
 		}
 
-		protected abstract Literal apply(final FunckyNumber argument1, final FunckyNumber argument2, final ScriptContext context) throws UndefinedReferenceException;
+		protected abstract Literal apply(final FunckyNumber argument1, final FunckyNumber argument2, final ScriptContext context) throws UndefinedSymbolException;
 	}
 
 	/**
@@ -81,7 +81,7 @@ public abstract class Function extends Literal {
 	 */
 	public static final Function FUNCTION = new Functor("function", SimpleType.TYPE, SimpleType.TYPE, SimpleType.TYPE) {
 		@Override
-		protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedReferenceException {
+		protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
 			return new FunctionType((FunckyType) arguments[0].eval(context), (FunckyType) arguments[1].eval(context));
 		}
 	};
@@ -93,7 +93,7 @@ public abstract class Function extends Literal {
 	 */
 	public static final Function TYPE_OF = new Function("typeOf", TYPE, SimpleType.TYPE) {
 		@Override
-		public Literal apply(final Expression argument, final ScriptContext context) throws UndefinedReferenceException {
+		public Literal apply(final Expression argument, final ScriptContext context) throws UndefinedSymbolException {
 			return argument.getType(context);
 		}
 	};
@@ -103,7 +103,7 @@ public abstract class Function extends Literal {
 	 */
 	public static final Function IF = new Functor("if", SimpleType.BOOLEAN, TYPE, TYPE, TYPE) {
 		@Override
-		public Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedReferenceException {
+		public Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
 			return ((FunckyBoolean) arguments[0].eval(context)).equals(FunckyBoolean.TRUE) ? arguments[1].eval(context) : arguments[2].eval(context);
 		}
 	};
@@ -113,7 +113,7 @@ public abstract class Function extends Literal {
 	 */
 	public static final Function ADD = new TwoArgumentArithmeticOperator("add") {
 		@Override
-		protected Literal apply(final FunckyNumber term1, final FunckyNumber term2, final ScriptContext context) throws UndefinedReferenceException {
+		protected Literal apply(final FunckyNumber term1, final FunckyNumber term2, final ScriptContext context) throws UndefinedSymbolException {
 			return new FunckyNumber(term1.getValue() + term2.getValue());
 		}
 	};
@@ -123,7 +123,7 @@ public abstract class Function extends Literal {
 	 */
 	public static final Function SUBTRACT = new TwoArgumentArithmeticOperator("subtract") {
 		@Override
-		protected Literal apply(final FunckyNumber minuend, final FunckyNumber subtrahend, final ScriptContext context) throws UndefinedReferenceException {
+		protected Literal apply(final FunckyNumber minuend, final FunckyNumber subtrahend, final ScriptContext context) throws UndefinedSymbolException {
 			return new FunckyNumber(minuend.getValue() - subtrahend.getValue());
 		}
 	};
@@ -133,7 +133,7 @@ public abstract class Function extends Literal {
 	 */
 	public static final Function MULTIPLY = new TwoArgumentArithmeticOperator("multiply") {
 		@Override
-		protected Literal apply(final FunckyNumber factor1, final FunckyNumber factor2, final ScriptContext context) throws UndefinedReferenceException {
+		protected Literal apply(final FunckyNumber factor1, final FunckyNumber factor2, final ScriptContext context) throws UndefinedSymbolException {
 			return new FunckyNumber(factor1.getValue() * factor2.getValue());
 		}
 	};
@@ -143,7 +143,7 @@ public abstract class Function extends Literal {
 	 */
 	public static final Function DIVIDE = new TwoArgumentArithmeticOperator("divide") {
 		@Override
-		protected Literal apply(final FunckyNumber dividend, final FunckyNumber divisor, final ScriptContext context) throws UndefinedReferenceException {
+		protected Literal apply(final FunckyNumber dividend, final FunckyNumber divisor, final ScriptContext context) throws UndefinedSymbolException {
 			return new FunckyNumber(dividend.getValue() / divisor.getValue());
 		}
 	};
@@ -180,10 +180,10 @@ public abstract class Function extends Literal {
 	 * @param context
 	 *            the script context in which to apply this function to the given argument
 	 * @return the result of the application of this function to the given argument in the given context
-	 * @throws UndefinedReferenceException
+	 * @throws UndefinedSymbolException
 	 *             if any errors occur during the evaluation of the application
 	 */
-	public abstract Literal apply(final Expression argument, final ScriptContext context) throws UndefinedReferenceException;
+	public abstract Literal apply(final Expression argument, final ScriptContext context) throws UndefinedSymbolException;
 
 	@Override
 	protected FunckyType getType() {

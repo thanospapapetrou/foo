@@ -5,7 +5,8 @@ import java.util.Objects;
 import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 
 /**
  * Class representing a Funcky definition.
@@ -41,16 +42,24 @@ public class Definition extends AbstractSyntaxTreeNode {
 	}
 
 	@Override
-	public Void eval(final ScriptContext context) throws UndefinedReferenceException {
-		Objects.requireNonNull(context, NULL_CONTEXT).setAttribute(name, expression.eval(context), ScriptContext.ENGINE_SCOPE); // TODO already defined?
-		return null;
+	public Void eval(final ScriptContext context) throws AlreadyDefinedSymbolException, UndefinedSymbolException {
+		if (Objects.requireNonNull(context, NULL_CONTEXT).getAttribute(name) == null) {
+			context.setAttribute(name, expression.eval(context), ScriptContext.ENGINE_SCOPE);
+			return null;
+		}
+		throw new AlreadyDefinedSymbolException(this);
+	}
+
+	/**
+	 * Get the name.
+	 * 
+	 * @return the name of this definition
+	 */
+	public String getName() {
+		return name;
 	}
 
 	Expression getExpression() {
 		return expression;
-	}
-
-	String getName() {
-		return name;
 	}
 }

@@ -5,7 +5,7 @@ import java.util.Objects;
 import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 
 /**
  * Class representing a Funcky reference.
@@ -41,16 +41,16 @@ public class Reference extends Expression {
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws UndefinedReferenceException {
+	public Literal eval(final ScriptContext context) throws UndefinedSymbolException {
 		final Object object = Objects.requireNonNull(context, NULL_CONTEXT).getAttribute(name);
 		if (object instanceof Literal) {
 			return (Literal) object;
 		}
-		throw new UndefinedReferenceException(this);
+		throw new UndefinedSymbolException(this);
 	}
 
 	@Override
-	public FunckyType getType(final ScriptContext context) throws UndefinedReferenceException {
+	public FunckyType getType(final ScriptContext context) throws UndefinedSymbolException {
 		return eval(Objects.requireNonNull(context, NULL_CONTEXT)).getType();
 	}
 

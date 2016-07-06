@@ -7,7 +7,7 @@ import javax.script.ScriptContext;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 
 /**
  * Class representing a Funcky application.
@@ -41,10 +41,10 @@ public class Application extends Expression {
 	 *             if the type of the argument does not match the domain of the function
 	 * @throws InvalidFunctionException
 	 *             if function is not actually a function
-	 * @throws UndefinedReferenceException
+	 * @throws UndefinedSymbolException
 	 *             if any undefined reference is encountered during type evaluations
 	 */
-	public Application(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final Expression function, final Expression argument) throws InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
+	public Application(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final Expression function, final Expression argument) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 		super(requireNonNullEngine(engine), requireValidFileName(fileName), requirePositiveLineNumber(lineNumber));
 		this.function = Objects.requireNonNull(function, NULL_FUNCTION);
 		this.argument = Objects.requireNonNull(argument, NULL_ARGUMENT);
@@ -66,12 +66,12 @@ public class Application extends Expression {
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws UndefinedReferenceException {
+	public Literal eval(final ScriptContext context) throws UndefinedSymbolException {
 		return ((Function) function.eval(Objects.requireNonNull(context, NULL_CONTEXT))).apply(argument, context);
 	}
 
 	@Override
-	public FunckyType getType(final ScriptContext context) throws UndefinedReferenceException {
+	public FunckyType getType(final ScriptContext context) throws UndefinedSymbolException {
 		return ((FunctionType) function.getType(Objects.requireNonNull(context, NULL_CONTEXT))).getRange();
 	}
 

@@ -20,7 +20,7 @@ import com.github.thanospapapetrou.funcky.runtime.FunckyScript;
 import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 
 /**
  * Class implementing a Funcky parser. This parser is based on the following BNF:
@@ -220,7 +220,7 @@ public class Parser {
 		}
 	}
 
-	private Definition parseDefinition() throws IOException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException, UnexpectedTokenException, UnparsableInputException {
+	private Definition parseDefinition() throws IOException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException, UnexpectedTokenException, UnparsableInputException {
 		switch (tokenizer.nextToken()) {
 		case SYMBOL:
 			final String name = tokenizer.sval;
@@ -229,7 +229,7 @@ public class Parser {
 				final Expression expression = _parseExpression();
 				switch (tokenizer.nextToken()) {
 				case EOL:
-					return new Definition(engine, fileName, tokenizer.lineno(), name, expression);
+					return new Definition(engine, fileName, tokenizer.lineno() - 1, name, expression);
 				case EQUALS:
 				case LEFT_PARENTHESIS:
 				case RIGHT_PARENTHESIS:
@@ -266,7 +266,7 @@ public class Parser {
 		}
 	}
 
-	private Expression _parseExpression() throws IOException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException, UnexpectedTokenException, UnparsableInputException {
+	private Expression _parseExpression() throws IOException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException, UnexpectedTokenException, UnparsableInputException {
 		Expression expression = null;
 		while (true) {
 			switch (tokenizer.nextToken()) {

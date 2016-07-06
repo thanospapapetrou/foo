@@ -6,7 +6,8 @@ import javax.script.CompiledScript;
 import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 
 /**
  * Class representing an abstract syntax tree node.
@@ -80,7 +81,7 @@ public abstract class AbstractSyntaxTreeNode extends CompiledScript {
 	}
 
 	@Override
-	public abstract Object eval(final ScriptContext context) throws UndefinedReferenceException;
+	public abstract Object eval(final ScriptContext context) throws AlreadyDefinedSymbolException, UndefinedSymbolException;
 
 	@Override
 	public FunckyScriptEngine getEngine() {
