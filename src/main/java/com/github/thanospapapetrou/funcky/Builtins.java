@@ -28,7 +28,7 @@ public class Builtins extends SimpleBindings {
 		for (final FunckyBoolean bool : new FunckyBoolean[] {FunckyBoolean.FALSE, FunckyBoolean.TRUE}) {
 			put(bool.toString(), bool);
 		}
-		for (final Function function : new Function[] {Function.FUNCTION, Function.TYPE_OF, Function.IF, Function.ADD, Function.SUBTRACT, Function.MULTIPLY, Function.DIVIDE}) {
+		for (final Function function : new Function[] {Function.FUNCTION, Function.TYPE_OF, Function.FLIP, Function.IF, Function.ADD, Function.SUBTRACT, Function.MULTIPLY, Function.DIVIDE}) {
 			put(function.toString(), function);
 		}
 	}

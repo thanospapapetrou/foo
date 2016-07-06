@@ -86,22 +86,36 @@ public abstract class Function extends Literal {
 		}
 	};
 
-	private static final TypeVariable TYPE = new TypeVariable("type");
+	private static final TypeVariable EXPRESSION = new TypeVariable("expression");
 
 	/**
 	 * Get the type of an expression.
 	 */
-	public static final Function TYPE_OF = new Function("typeOf", TYPE, SimpleType.TYPE) {
+	public static final Function TYPE_OF = new Function("typeOf", EXPRESSION, SimpleType.TYPE) {
 		@Override
 		public Literal apply(final Expression argument, final ScriptContext context) throws UndefinedSymbolException {
 			return argument.getType(context);
 		}
 	};
 
+	private static final TypeVariable DOMAIN1 = new TypeVariable("domain1");
+	private static final TypeVariable DOMAIN2 = new TypeVariable("domain2");
+	private static final TypeVariable RANGE = new TypeVariable("range");
+
+	/**
+	 * Flip the arguments of a function.
+	 */
+	public static final Function FLIP = new Functor("flip", new FunctionType(DOMAIN1, new FunctionType(DOMAIN2, RANGE)), DOMAIN2, DOMAIN1) {
+		@Override
+		protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
+			return ((Function) ((Function) arguments[0].eval(context)).apply(arguments[2], context)).apply(arguments[1], context);
+		}
+	};
+
 	/**
 	 * Ternary operator.
 	 */
-	public static final Function IF = new Functor("if", SimpleType.BOOLEAN, TYPE, TYPE, TYPE) {
+	public static final Function IF = new Functor("if", SimpleType.BOOLEAN, EXPRESSION, EXPRESSION, EXPRESSION) {
 		@Override
 		public Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
 			return ((FunckyBoolean) arguments[0].eval(context)).equals(FunckyBoolean.TRUE) ? arguments[1].eval(context) : arguments[2].eval(context);
