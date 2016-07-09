@@ -42,4 +42,9 @@ public class FunckyBoolean extends Literal {
 	public String toString() {
 		return Boolean.toString(value);
 	}
+
+	@Override
+	Expression toExpression() {
+		return new Reference(toString());
+	}
 }

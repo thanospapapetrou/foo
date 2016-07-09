@@ -54,4 +54,9 @@ public class SimpleType extends FunckyType {
 	public String toString() {
 		return name;
 	}
+
+	@Override
+	Expression toExpression() {
+		return new Reference(toString());
+	}
 }

@@ -15,6 +15,7 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolExce
 public abstract class Function extends Literal {
 	private abstract static class Functor extends Function {
 		private static final int MIN_TYPES = 2;
+		private static final String ANONYMOUS = "_anonymous_";
 		private static final String NULL_TYPES = "Types must not be null";
 		private static final String TYPES_CONTAINS_LESS_THAN_TWO_ELEMENTS = "Types must contain at least two elements";
 		private static final String NULL_TYPE = "Types must not be null";
@@ -49,13 +50,23 @@ public abstract class Function extends Literal {
 			Objects.requireNonNull(argument, NULL_ARGUMENT);
 			Objects.requireNonNull(context, NULL_CONTEXT);
 			final Functor that = this;
-			return (types.length == 2) ? apply(context, argument) : new Functor(new Application(that, argument).toString(), Arrays.copyOfRange(types, 1, types.length)) {
+			return (types.length == MIN_TYPES) ? apply(context, argument) : new Functor(ANONYMOUS, Arrays.copyOfRange(types, 1, types.length)) {
 				@Override
 				protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
 					final Expression[] newArguments = new Expression[Objects.requireNonNull(arguments, NULL_ARGUMENTS).length + 1];
 					newArguments[0] = argument;
 					System.arraycopy(arguments, 0, newArguments, 1, arguments.length);
 					return that.apply(Objects.requireNonNull(context, NULL_CONTEXT), newArguments);
+				}
+
+				@Override
+				public String toString() {
+					return toExpression().toString();
+				}
+				
+				@Override
+				Expression toExpression() {
+					return new Application(that, argument);
 				}
 			};
 		}
@@ -200,12 +211,17 @@ public abstract class Function extends Literal {
 	public abstract Literal apply(final Expression argument, final ScriptContext context) throws UndefinedSymbolException;
 
 	@Override
+	public String toString() {
+		return name;
+	}
+
+	@Override
 	protected FunckyType getType() {
 		return new FunctionType(domain, range);
 	}
 
 	@Override
-	public String toString() {
-		return name;
+	Expression toExpression() {
+		return new Reference(name);
 	}
 }

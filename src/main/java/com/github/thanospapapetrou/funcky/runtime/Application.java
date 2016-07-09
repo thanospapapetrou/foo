@@ -77,6 +77,7 @@ public class Application extends Expression {
 
 	@Override
 	public String toString() {
-		return String.format(APPLICATION, function, (argument instanceof Application) ? String.format(NESTED_APPLICATION, argument) : argument);
+		final Expression argumentExpression = (argument instanceof Literal) ? ((Literal) argument).toExpression() : argument;
+		return String.format(APPLICATION, function, (argumentExpression instanceof Application) ? String.format(NESTED_APPLICATION, argumentExpression) : argumentExpression);
 	}
 }

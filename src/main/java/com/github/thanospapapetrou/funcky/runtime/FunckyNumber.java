@@ -71,15 +71,25 @@ public class FunckyNumber extends Literal {
 
 	@Override
 	public String toString() {
-		if (value == Double.POSITIVE_INFINITY) {
-			return Double.toString(Double.POSITIVE_INFINITY).toLowerCase();
-		} else if (value == Double.NEGATIVE_INFINITY) {
-			return new Application(MINUS, INFINITY).toString();
+		if ((value == Double.POSITIVE_INFINITY) || (value == Double.NEGATIVE_INFINITY) || (value == Double.NaN)) {
+			return toExpression().toString();
 		}
 		return Double.toString(value);
 	}
 
 	double getValue() {
 		return value;
+	}
+
+	@Override
+	Expression toExpression() {
+		if ((value == Double.POSITIVE_INFINITY)) {
+			return new Reference(Double.toString(value).toLowerCase());
+		} else if ((value == Double.NEGATIVE_INFINITY)) {
+			return new Application(MINUS, INFINITY.toExpression());
+		} else if (value == Double.NaN) {
+			return new Reference(Double.toString(value));
+		}
+		return this;
 	}
 }

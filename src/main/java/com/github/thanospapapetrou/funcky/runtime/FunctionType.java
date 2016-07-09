@@ -35,7 +35,7 @@ public class FunctionType extends FunckyType {
 
 	@Override
 	public String toString() {
-		return new Application(new Application(Function.FUNCTION, domain), range).toString();
+		return toExpression().toString();
 	}
 
 	FunckyType getDomain() {
@@ -44,5 +44,10 @@ public class FunctionType extends FunckyType {
 
 	FunckyType getRange() {
 		return range;
+	}
+
+	@Override
+	Expression toExpression() {
+		return new Application(new Application(Function.FUNCTION, domain), range);
 	}
 }

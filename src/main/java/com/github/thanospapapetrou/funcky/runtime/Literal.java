@@ -7,7 +7,7 @@ import javax.script.ScriptContext;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 
 /**
- * Abstract class representing a Funcky literal.
+ * Abstract class representing a Funcky literal. A literal can not be evaluated further, however it may not be directly representable, so it has to be converted to an expression to be displayed.
  * 
  * @author thanos
  */
@@ -46,4 +46,6 @@ public abstract class Literal extends Expression {
 	 * @return the type of this literal
 	 */
 	protected abstract FunckyType getType();
+
+	abstract Expression toExpression();
 }

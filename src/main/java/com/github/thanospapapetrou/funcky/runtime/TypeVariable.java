@@ -21,4 +21,9 @@ public class TypeVariable extends FunckyType {
 	public String toString() {
 		return String.format(TYPE_VARIABLE, name);
 	}
+
+	@Override
+	Expression toExpression() {
+		return this;
+	}
 }
