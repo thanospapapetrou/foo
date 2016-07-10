@@ -3,6 +3,7 @@ cast
 error
 if true 1 false
 flip add
+flip add 1
 
 # Generate an error using the given error message.
 # function string <type>

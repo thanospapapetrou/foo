@@ -1,5 +1,7 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -17,6 +19,11 @@ class FunctionType extends FunckyType {
 	}
 
 	@Override
+	public FunckyType bind(final Map<TypeVariable, FunckyType> bindings) {
+		return new FunctionType(domain.bind(bindings), range.bind(bindings));
+	}
+
+	@Override
 	public boolean equals(final Object object) {
 		if (object instanceof FunctionType) {
 			final FunctionType functionType = (FunctionType) object;
@@ -25,17 +32,34 @@ class FunctionType extends FunckyType {
 		return false;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(domain, range);
-	}
-
 	public FunckyType getDomain() {
 		return domain;
 	}
 
 	public FunckyType getRange() {
 		return range;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(domain, range);
+	}
+
+	@Override
+	public Map<TypeVariable, FunckyType> inferGenericBindings(final FunckyType type) {
+		if (type instanceof FunctionType) {
+			final FunctionType functionType = (FunctionType) type;
+			final Map<TypeVariable, FunckyType> domainBindings = domain.inferGenericBindings(functionType.domain);
+			final Map<TypeVariable, FunckyType> rangeBindings = range.inferGenericBindings(functionType.range);
+			return ((domainBindings == null) || (rangeBindings == null)) ? null : new HashMap<TypeVariable, FunckyType>(domainBindings) {
+				private static final long serialVersionUID = 1L;
+
+				{
+					putAll(rangeBindings); // TODO may domain bindings and range bindings be conflicting?
+				}
+			};
+		}
+		return null;
 	}
 
 	@Override

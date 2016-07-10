@@ -53,7 +53,7 @@ public class Application extends Expression {
 		}
 		final FunctionType functionType = (FunctionType) function.getType(engine.getContext());
 		final FunckyType argumentType = argument.getType(engine.getContext());
-		if ((!(functionType.getDomain() instanceof TypeVariable)) && (!functionType.getDomain().equals(argumentType))) {
+		if (functionType.getDomain().inferGenericBindings(argumentType) == null) {
 			throw new InvalidArgumentException(function, functionType.getDomain(), argument, argumentType);
 		}
 
@@ -72,7 +72,8 @@ public class Application extends Expression {
 
 	@Override
 	public FunckyType getType(final ScriptContext context) throws UndefinedSymbolException {
-		return ((FunctionType) function.getType(Objects.requireNonNull(context, NULL_CONTEXT))).getRange();
+		final FunctionType functionType = (FunctionType) function.getType(Objects.requireNonNull(context, NULL_CONTEXT));
+		return functionType.getRange().bind(functionType.getDomain().inferGenericBindings(argument.getType(context)));
 	}
 
 	@Override

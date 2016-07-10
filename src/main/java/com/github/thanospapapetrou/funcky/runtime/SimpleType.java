@@ -1,5 +1,9 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+
 /**
  * Class representing a Funcky simple type.
  * 
@@ -21,10 +25,17 @@ public class SimpleType extends FunckyType {
 	 */
 	public static final SimpleType BOOLEAN = new SimpleType("boolean");
 
+	private static final String NULL_TYPE = "Type must not be null";
+
 	private final String name;
 
 	private SimpleType(final String name) {
 		this.name = name;
+	}
+
+	@Override
+	public FunckyType bind(final Map<TypeVariable, FunckyType> bindings) {
+		return this;
 	}
 
 	@Override
@@ -35,6 +46,11 @@ public class SimpleType extends FunckyType {
 	@Override
 	public int hashCode() {
 		return name.hashCode();
+	}
+
+	@Override
+	public Map<TypeVariable, FunckyType> inferGenericBindings(final FunckyType type) {
+		return equals(Objects.requireNonNull(type, NULL_TYPE)) ? Collections.<TypeVariable, FunckyType> emptyMap() : null;
 	}
 
 	@Override

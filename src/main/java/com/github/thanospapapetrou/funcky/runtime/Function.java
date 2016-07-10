@@ -80,36 +80,38 @@ public abstract class Function extends Literal {
 		}
 	};
 
-	private static final TypeVariable EXPRESSION = new TypeVariable("expression");
+	private static final TypeVariable TYPE_OF_TYPE = new TypeVariable("type");
 
 	/**
 	 * Get the type of an expression.
 	 */
-	public static final Function TYPE_OF = new Function("typeOf", EXPRESSION, SimpleType.TYPE) {
+	public static final Function TYPE_OF = new Function("typeOf", TYPE_OF_TYPE, SimpleType.TYPE) {
 		@Override
 		public Literal apply(final Expression argument, final ScriptContext context) throws UndefinedSymbolException {
 			return Objects.requireNonNull(argument, NULL_ARGUMENT).getType(Objects.requireNonNull(context, NULL_CONTEXT));
 		}
 	};
 
-	private static final TypeVariable DOMAIN1 = new TypeVariable("domain1");
-	private static final TypeVariable DOMAIN2 = new TypeVariable("domain2");
-	private static final TypeVariable RANGE = new TypeVariable("range");
+	private static final TypeVariable FLIP_TYPE_1 = new TypeVariable("type1");
+	private static final TypeVariable FLIP_TYPE_2 = new TypeVariable("type2");
+	private static final TypeVariable FLIP_TYPE_3 = new TypeVariable("type3");
 
 	/**
 	 * Flip the arguments of a function.
 	 */
-	public static final Function FLIP = new Functor("flip", new FunctionType(DOMAIN1, new FunctionType(DOMAIN2, RANGE)), DOMAIN2, DOMAIN1) {
+	public static final Function FLIP = new Functor("flip", new FunctionType(FLIP_TYPE_1, new FunctionType(FLIP_TYPE_2, FLIP_TYPE_3)), FLIP_TYPE_2, FLIP_TYPE_1) {
 		@Override
 		protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
 			return ((Function) ((Function) arguments[0].eval(context)).apply(arguments[2], context)).apply(arguments[1], context);
 		}
 	};
 
+	private static final TypeVariable IF_TYPE = new TypeVariable("type");
+
 	/**
 	 * Ternary operator.
 	 */
-	public static final Function IF = new Functor("if", SimpleType.BOOLEAN, EXPRESSION, EXPRESSION, EXPRESSION) {
+	public static final Function IF = new Functor("if", SimpleType.BOOLEAN, IF_TYPE, IF_TYPE, IF_TYPE) {
 		@Override
 		public Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
 			return ((FunckyBoolean) arguments[0].eval(context)).equals(FunckyBoolean.TRUE) ? arguments[1].eval(context) : arguments[2].eval(context);
