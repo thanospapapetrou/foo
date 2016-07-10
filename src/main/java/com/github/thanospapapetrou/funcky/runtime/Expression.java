@@ -32,10 +32,10 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	 * Get the type of this expression.
 	 * 
 	 * @param context
-	 *            the script context in which to evaluate the type of this expression
-	 * @return the type of this expression
+	 *            the context in which to evaluate the type
+	 * @return the type of this expression as evaluated in the given context
 	 * @throws UndefinedSymbolException
-	 *             if any undefined reference is encountered during type evaluation
+	 *             if any reference to an undefined symbol is encountered
 	 */
 	public abstract FunckyType getType(final ScriptContext context) throws UndefinedSymbolException;
 }

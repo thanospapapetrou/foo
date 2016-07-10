@@ -29,7 +29,7 @@ public class FunckyBoolean extends Literal {
 	}
 
 	@Override
-	protected SimpleType getType() {
+	public SimpleType getType() {
 		return SimpleType.BOOLEAN;
 	}
 
@@ -39,12 +39,12 @@ public class FunckyBoolean extends Literal {
 	}
 
 	@Override
-	public String toString() {
-		return Boolean.toString(value);
+	public Expression toExpression() {
+		return new Reference(toString());
 	}
 
 	@Override
-	Expression toExpression() {
-		return new Reference(toString());
+	public String toString() {
+		return Boolean.toString(value);
 	}
 }

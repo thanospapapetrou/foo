@@ -60,8 +60,17 @@ public class FunckyNumber extends Literal {
 	}
 
 	@Override
-	protected SimpleType getType() {
+	public SimpleType getType() {
 		return SimpleType.NUMBER;
+	}
+
+	/**
+	 * Get the value of this number.
+	 * 
+	 * @return the value of this number
+	 */
+	public double getValue() {
+		return value;
 	}
 
 	@Override
@@ -77,12 +86,8 @@ public class FunckyNumber extends Literal {
 		return Double.toString(value);
 	}
 
-	double getValue() {
-		return value;
-	}
-
 	@Override
-	Expression toExpression() {
+	public Expression toExpression() {
 		if ((value == Double.POSITIVE_INFINITY)) {
 			return new Reference(Double.toString(value).toLowerCase());
 		} else if ((value == Double.NEGATIVE_INFINITY)) {

@@ -1,10 +1,8 @@
 define compare and use it to define equals
-find a better way for minus infinity
-application package private constructor is a hack
 cast
 error
-typeOf if
 if true 1 false
+flip add
 
 # Generate an error using the given error message.
 # function string <type>

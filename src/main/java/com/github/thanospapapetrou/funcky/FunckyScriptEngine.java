@@ -32,7 +32,6 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	private static final String PRELUDE = "/Prelude.funcky";
 	private static final String PRELUDE_FILE_NAME = "<prelude>";
 	private static final String UNKNOWN = "<unknown>";
-	private static final String NULL_FACTORY = "Factory must not be null";
 	private static final String ERROR_LOADING_PRELUDE = "Error loading prelude";
 	private static final String NULL_SCRIPT = "Script must not be null";
 	private static final String NULL_CONTEXT = "Context must not be null";
@@ -43,7 +42,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	private final FunckyScriptEngineFactory factory;
 
 	FunckyScriptEngine(final FunckyScriptEngineFactory factory) {
-		this.factory = Objects.requireNonNull(factory, NULL_FACTORY);
+		this.factory = factory;
 		setBindings(new Builtins(), ScriptContext.ENGINE_SCOPE);
 		try {
 			for (final Definition definition : compile(new InputStreamReader(getClass().getResourceAsStream(PRELUDE), StandardCharsets.UTF_8), PRELUDE_FILE_NAME).getDefinitions()) {

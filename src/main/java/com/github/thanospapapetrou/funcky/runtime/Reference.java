@@ -37,7 +37,7 @@ public class Reference extends Expression {
 
 	Reference(final String name) {
 		super(null, null, 0);
-		this.name = Objects.requireNonNull(name, NULL_NAME);
+		this.name = name;
 	}
 
 	@Override

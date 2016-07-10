@@ -14,35 +14,18 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolExce
  */
 public abstract class Function extends Literal {
 	private abstract static class Functor extends Function {
-		private static final int MIN_TYPES = 2;
+		private static final int FUNCTION_TYPES = 2;
 		private static final String ANONYMOUS = "_anonymous_";
-		private static final String NULL_TYPES = "Types must not be null";
-		private static final String TYPES_CONTAINS_LESS_THAN_TWO_ELEMENTS = "Types must contain at least two elements";
-		private static final String NULL_TYPE = "Types must not be null";
-		private static final String EMPTY_TYPES = "Types must not be empty";
-		private static final String NULL_ARGUMENT = "Argument must not be null";
-		private static final String NULL_CONTEXT = "Context must not be null";
-		private static final String NULL_ARGUMENTS = "Arguments must not be null";
 
 		private final FunckyType[] types;
 
 		private Functor(final String name, final FunckyType... types) {
-			super(name, requireValidTypes(types, MIN_TYPES, TYPES_CONTAINS_LESS_THAN_TWO_ELEMENTS)[0], getFunctionType(Arrays.copyOfRange(types, 1, types.length)));
+			super(name, types[0], getFunctionType(Arrays.copyOfRange(types, 1, types.length)));
 			this.types = types;
 		}
 
-		private static FunckyType[] requireValidTypes(final FunckyType[] types, final int minTypes, final String lessThanMinMessage) {
-			if (Objects.requireNonNull(types, NULL_TYPES).length < minTypes) {
-				throw new IllegalArgumentException(lessThanMinMessage);
-			}
-			for (final FunckyType type : types) {
-				Objects.requireNonNull(type, NULL_TYPE);
-			}
-			return types;
-		}
-
 		private static FunckyType getFunctionType(final FunckyType... types) {
-			return (requireValidTypes(types, 1, EMPTY_TYPES).length == 1) ? types[0] : new FunctionType(types[0], getFunctionType(Arrays.copyOfRange(types, 1, types.length)));
+			return (types.length == 1) ? types[0] : new FunctionType(types[0], getFunctionType(Arrays.copyOfRange(types, 1, types.length)));
 		}
 
 		@Override
@@ -50,23 +33,23 @@ public abstract class Function extends Literal {
 			Objects.requireNonNull(argument, NULL_ARGUMENT);
 			Objects.requireNonNull(context, NULL_CONTEXT);
 			final Functor that = this;
-			return (types.length == MIN_TYPES) ? apply(context, argument) : new Functor(ANONYMOUS, Arrays.copyOfRange(types, 1, types.length)) {
+			return (types.length == FUNCTION_TYPES) ? apply(context, argument) : new Functor(ANONYMOUS, Arrays.copyOfRange(types, 1, types.length)) {
 				@Override
-				protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
-					final Expression[] newArguments = new Expression[Objects.requireNonNull(arguments, NULL_ARGUMENTS).length + 1];
-					newArguments[0] = argument;
-					System.arraycopy(arguments, 0, newArguments, 1, arguments.length);
-					return that.apply(Objects.requireNonNull(context, NULL_CONTEXT), newArguments);
+				public Expression toExpression() {
+					return new Application(that, argument);
 				}
 
 				@Override
 				public String toString() {
 					return toExpression().toString();
 				}
-				
+
 				@Override
-				Expression toExpression() {
-					return new Application(that, argument);
+				protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
+					final Expression[] newArguments = new Expression[arguments.length + 1];
+					newArguments[0] = argument;
+					System.arraycopy(arguments, 0, newArguments, 1, arguments.length);
+					return that.apply(context, newArguments);
 				}
 			};
 		}
@@ -105,7 +88,7 @@ public abstract class Function extends Literal {
 	public static final Function TYPE_OF = new Function("typeOf", EXPRESSION, SimpleType.TYPE) {
 		@Override
 		public Literal apply(final Expression argument, final ScriptContext context) throws UndefinedSymbolException {
-			return argument.getType(context);
+			return Objects.requireNonNull(argument, NULL_ARGUMENT).getType(Objects.requireNonNull(context, NULL_CONTEXT));
 		}
 	};
 
@@ -173,10 +156,8 @@ public abstract class Function extends Literal {
 		}
 	};
 
-	private static final String NULL_NAME = "Name must not be null";
-	private static final String EMPTY_NAME = "Name must not be empty";
-	private static final String NULL_DOMAIN = "Domain must not be null";
-	private static final String NULL_RANGE = "Range must not be null";
+	private static final String NULL_ARGUMENT = "Argument must not be null";
+	private static final String NULL_CONTEXT = "Context must not be null";
 
 	private final String name;
 	private final FunckyType domain;
@@ -184,44 +165,36 @@ public abstract class Function extends Literal {
 
 	private Function(final String name, final FunckyType domain, final FunckyType range) {
 		super(null, null, 0);
-		this.name = requireValidName(name);
-		this.domain = Objects.requireNonNull(domain, NULL_DOMAIN);
-		this.range = Objects.requireNonNull(range, NULL_RANGE);
-	}
-
-	private static String requireValidName(final String name) {
-		Objects.requireNonNull(name, NULL_NAME);
-		if (name.isEmpty()) {
-			throw new IllegalArgumentException(EMPTY_NAME);
-		}
-		return name;
+		this.name = name;
+		this.domain = domain;
+		this.range = range;
 	}
 
 	/**
-	 * Apply this function to the given argument in the given script context.
+	 * Apply this function to an argument.
 	 * 
 	 * @param argument
-	 *            the argument to apply the function to
+	 *            the argument to apply this function to
 	 * @param context
-	 *            the script context in which to apply this function to the given argument
-	 * @return the result of the application of this function to the given argument in the given context
+	 *            the context in which to evaluate the application
+	 * @return the literal result of applying this function to the given argument
 	 * @throws UndefinedSymbolException
-	 *             if any errors occur during the evaluation of the application
+	 *             if any reference to an undefined symbol is encountered
 	 */
 	public abstract Literal apply(final Expression argument, final ScriptContext context) throws UndefinedSymbolException;
 
 	@Override
-	public String toString() {
-		return name;
-	}
-
-	@Override
-	protected FunckyType getType() {
+	public FunckyType getType() {
 		return new FunctionType(domain, range);
 	}
 
 	@Override
-	Expression toExpression() {
+	public Expression toExpression() {
 		return new Reference(name);
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 }

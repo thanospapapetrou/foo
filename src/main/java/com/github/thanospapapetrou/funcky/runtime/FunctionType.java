@@ -7,16 +7,13 @@ import java.util.Objects;
  * 
  * @author thanos
  */
-public class FunctionType extends FunckyType {
-	private static final String NULL_DOMAIN = "Domain must not be null";
-	private static final String NULL_RANGE = "Range must not be null";
-
+class FunctionType extends FunckyType {
 	private final FunckyType domain;
 	private final FunckyType range;
 
 	FunctionType(final FunckyType domain, final FunckyType range) {
-		this.domain = Objects.requireNonNull(domain, NULL_DOMAIN);
-		this.range = Objects.requireNonNull(range, NULL_RANGE);
+		this.domain = domain;
+		this.range = range;
 	}
 
 	@Override
@@ -33,21 +30,21 @@ public class FunctionType extends FunckyType {
 		return Objects.hash(domain, range);
 	}
 
-	@Override
-	public String toString() {
-		return toExpression().toString();
-	}
-
-	FunckyType getDomain() {
+	public FunckyType getDomain() {
 		return domain;
 	}
 
-	FunckyType getRange() {
+	public FunckyType getRange() {
 		return range;
 	}
 
 	@Override
-	Expression toExpression() {
+	public Expression toExpression() {
 		return new Application(new Application(Function.FUNCTION, domain), range);
+	}
+
+	@Override
+	public String toString() {
+		return toExpression().toString();
 	}
 }

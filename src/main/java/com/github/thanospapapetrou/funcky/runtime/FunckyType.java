@@ -14,7 +14,7 @@ public abstract class FunckyType extends Literal {
 	}
 
 	@Override
-	protected SimpleType getType() {
+	public SimpleType getType() {
 		return SimpleType.TYPE;
 	}
 }

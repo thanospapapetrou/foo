@@ -34,6 +34,13 @@ public abstract class Literal extends Expression {
 		return this;
 	}
 
+	/**
+	 * Get the type of this literal.
+	 * 
+	 * @return the type of this literal
+	 */
+	public abstract FunckyType getType();
+
 	@Override
 	public FunckyType getType(final ScriptContext context) {
 		Objects.requireNonNull(context, NULL_CONTEXT);
@@ -41,11 +48,9 @@ public abstract class Literal extends Expression {
 	}
 
 	/**
-	 * Get the type of this literal.
+	 * Get the expression used to display this literal.
 	 * 
-	 * @return the type of this literal
+	 * @return the expression used to display this literal
 	 */
-	protected abstract FunckyType getType();
-
-	abstract Expression toExpression();
+	public abstract Expression toExpression();
 }

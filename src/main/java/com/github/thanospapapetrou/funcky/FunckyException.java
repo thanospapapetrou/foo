@@ -28,7 +28,7 @@ public abstract class FunckyException extends ScriptException {
 	 * @param lineNumber
 	 *            the line of the file in which the error occurred
 	 */
-	public FunckyException(final String message, final String fileName, final int lineNumber) {
+	protected FunckyException(final String message, final String fileName, final int lineNumber) {
 		super(requireValidString(message, NULL_MESSAGE, EMPTY_MESSAGE), requireValidString(fileName, NULL_FILE_NAME, EMPTY_FILE_NAME), AbstractSyntaxTreeNode.requirePositiveLineNumber(lineNumber));
 	}
 

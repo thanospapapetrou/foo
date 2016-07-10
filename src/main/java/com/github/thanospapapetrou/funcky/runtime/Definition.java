@@ -58,8 +58,4 @@ public class Definition extends AbstractSyntaxTreeNode {
 	public String getName() {
 		return name;
 	}
-
-	Expression getExpression() {
-		return expression;
-	}
 }
