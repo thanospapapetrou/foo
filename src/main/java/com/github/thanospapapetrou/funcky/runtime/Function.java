@@ -99,7 +99,7 @@ public abstract class Function extends Literal {
 	/**
 	 * Flip the arguments of a function.
 	 */
-	public static final Function FLIP = new Functor("flip", new FunctionType(FLIP_TYPE_1, new FunctionType(FLIP_TYPE_2, FLIP_TYPE_3)), FLIP_TYPE_2, FLIP_TYPE_1) {
+	public static final Function FLIP = new Functor("flip", new FunctionType(FLIP_TYPE_1, new FunctionType(FLIP_TYPE_2, FLIP_TYPE_3)), FLIP_TYPE_2, FLIP_TYPE_1, FLIP_TYPE_3) {
 		@Override
 		protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
 			return ((Function) ((Function) arguments[0].eval(context)).apply(arguments[2], context)).apply(arguments[1], context);

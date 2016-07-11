@@ -5,6 +5,12 @@ if true 1 false
 flip add
 flip add 1
 
+compose
+flip
+duplicate
+discard
+
+
 # Generate an error using the given error message.
 # function string <type>
 # error message
