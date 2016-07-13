@@ -33,7 +33,11 @@ public abstract class Function extends Literal {
 			Objects.requireNonNull(argument, NULL_ARGUMENT);
 			Objects.requireNonNull(context, NULL_CONTEXT);
 			final Functor that = this;
-			return (types.length == FUNCTION_TYPES) ? apply(context, argument) : new Functor(ANONYMOUS, Arrays.copyOfRange(types, 1, types.length)) {
+			final FunckyType[] newTypes = new FunckyType[types.length - 1];
+			for (int i = 0; i < newTypes.length; i++) {
+				newTypes[i] = types[i + 1].bind(types[0].inferGenericBindings(argument.getType(context))); // TODO unbind unbound type variables
+			}
+			return (types.length == FUNCTION_TYPES) ? apply(context, argument) : new Functor(ANONYMOUS, newTypes) {
 				@Override
 				public Expression toExpression() {
 					return new Application(that, argument);

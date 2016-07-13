@@ -117,7 +117,7 @@ not = flip (flip if false) true
 # boolean1 the first operand
 # boolean2 the second operand
 # return true if both operands are true or false if either of the two is false
-and = flip (flip if false) true
+# and = if x y false
 
 # Logical inclusive disjunction.
 # function boolean (function boolean boolean)
@@ -125,7 +125,7 @@ and = flip (flip if false) true
 # boolean1 the first operand
 # boolean2 the second operand
 # return true if either of the two operands is true or false if both are false
-or = (flip if true)
+or = flip if true
 
 # Logical exclusive disjunction.
 # function boolean (function boolean boolean)
