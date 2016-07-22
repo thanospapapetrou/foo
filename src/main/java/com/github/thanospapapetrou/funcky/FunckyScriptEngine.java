@@ -52,13 +52,8 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 		defineBuiltinNumbers();
 		defineBuiltinBooleans();
 		defineBuiltinFunctions();
-		// set
-		// setBindings(new Builtins(), ScriptContext.ENGINE_SCOPE);
 		try {
 			compile(new InputStreamReader(getClass().getResourceAsStream(PRELUDE), StandardCharsets.UTF_8), PRELUDE_FILE_NAME).eval(context);
-			// for (final Definition definition : compile(new InputStreamReader(getClass().getResourceAsStream(PRELUDE), StandardCharsets.UTF_8), PRELUDE_FILE_NAME).getDefinitions()) {
-			// definition.eval(context);
-			// }
 		} catch (final ScriptException e) {
 			Logger.getLogger(FunckyScriptEngine.class.getName()).log(Level.WARNING, ERROR_LOADING_PRELUDE, e);
 		}

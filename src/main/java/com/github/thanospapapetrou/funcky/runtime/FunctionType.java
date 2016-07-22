@@ -1,5 +1,6 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -10,6 +11,8 @@ import java.util.Objects;
  * @author thanos
  */
 class FunctionType extends FunckyType {
+	private static final String NULL_TYPE = "Type must not be null";
+
 	private final FunckyType domain;
 	private final FunckyType range;
 
@@ -47,7 +50,9 @@ class FunctionType extends FunckyType {
 
 	@Override
 	public Map<TypeVariable, FunckyType> inferGenericBindings(final FunckyType type) {
-		if (type instanceof FunctionType) {
+		if (Objects.requireNonNull(type, NULL_TYPE) instanceof TypeVariable) {
+			return Collections.<TypeVariable, FunckyType> singletonMap((TypeVariable) type, this);
+		} else if (type instanceof FunctionType) {
 			final FunctionType functionType = (FunctionType) type;
 			final Map<TypeVariable, FunckyType> domainBindings = domain.inferGenericBindings(functionType.domain);
 			final Map<TypeVariable, FunckyType> rangeBindings = range.inferGenericBindings(functionType.range);
@@ -56,6 +61,7 @@ class FunctionType extends FunckyType {
 
 				{
 					putAll(rangeBindings); // TODO may domain bindings and range bindings be conflicting?
+					putAll(domainBindings);
 				}
 			};
 		}

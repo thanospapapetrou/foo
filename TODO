@@ -1,3 +1,5 @@
+infer arguments correctly (compensate for binding type to type variable)
+
 define compare and use it to define equals
 cast
 error

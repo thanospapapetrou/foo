@@ -7,6 +7,8 @@ import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 
 /**
@@ -81,7 +83,7 @@ public abstract class AbstractSyntaxTreeNode extends CompiledScript {
 	}
 
 	@Override
-	public abstract Object eval(final ScriptContext context) throws AlreadyDefinedSymbolException, UndefinedSymbolException;
+	public abstract Object eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException;
 
 	@Override
 	public FunckyScriptEngine getEngine() {

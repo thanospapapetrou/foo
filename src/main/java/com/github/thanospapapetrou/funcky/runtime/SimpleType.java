@@ -50,7 +50,12 @@ public class SimpleType extends FunckyType {
 
 	@Override
 	public Map<TypeVariable, FunckyType> inferGenericBindings(final FunckyType type) {
-		return equals(Objects.requireNonNull(type, NULL_TYPE)) ? Collections.<TypeVariable, FunckyType> emptyMap() : null;
+		if (Objects.requireNonNull(type, NULL_TYPE) instanceof TypeVariable) {
+			return Collections.<TypeVariable, FunckyType> singletonMap((TypeVariable) type, this);
+		} else if (type instanceof SimpleType) {
+			return equals(type) ? Collections.<TypeVariable, FunckyType> emptyMap() : null;
+		}
+		return null;
 	}
 
 	@Override

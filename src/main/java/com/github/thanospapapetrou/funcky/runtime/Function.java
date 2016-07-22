@@ -5,6 +5,8 @@ import java.util.Objects;
 
 import javax.script.ScriptContext;
 
+import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 
 /**
@@ -29,7 +31,7 @@ public abstract class Function extends Literal {
 		}
 
 		@Override
-		public Literal apply(final Expression argument, final ScriptContext context) throws UndefinedSymbolException {
+		public Literal apply(final Expression argument, final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 			Objects.requireNonNull(argument, NULL_ARGUMENT);
 			Objects.requireNonNull(context, NULL_CONTEXT);
 			final Functor that = this;
@@ -49,7 +51,7 @@ public abstract class Function extends Literal {
 				}
 
 				@Override
-				protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
+				protected Literal apply(final ScriptContext context, final Expression... arguments) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 					final Expression[] newArguments = new Expression[arguments.length + 1];
 					newArguments[0] = argument;
 					System.arraycopy(arguments, 0, newArguments, 1, arguments.length);
@@ -58,7 +60,7 @@ public abstract class Function extends Literal {
 			};
 		}
 
-		protected abstract Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException;
+		protected abstract Literal apply(final ScriptContext context, final Expression... arguments) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException;
 	}
 
 	private abstract static class TwoArgumentArithmeticOperator extends Functor {
@@ -67,7 +69,7 @@ public abstract class Function extends Literal {
 		}
 
 		@Override
-		protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
+		protected Literal apply(final ScriptContext context, final Expression... arguments) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 			return apply((FunckyNumber) arguments[0].eval(context), (FunckyNumber) arguments[1].eval(context), context);
 		}
 
@@ -81,7 +83,7 @@ public abstract class Function extends Literal {
 	 */
 	public static Function IDENTITY = new Function("identity", IDENTITY_TYPE, IDENTITY_TYPE) {
 		@Override
-		public Literal apply(final Expression argument, final ScriptContext context) throws UndefinedSymbolException {
+		public Literal apply(final Expression argument, final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 			return Objects.requireNonNull(argument, NULL_ARGUMENT).eval(context);
 		}
 	};
@@ -95,7 +97,7 @@ public abstract class Function extends Literal {
 	 */
 	public static final Function COMPOSE = new Functor("compose", new FunctionType(COMPOSE_TYPE_1, COMPOSE_TYPE_2), new FunctionType(COMPOSE_TYPE_3, COMPOSE_TYPE_1), COMPOSE_TYPE_3, COMPOSE_TYPE_2) {
 		@Override
-		protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
+		protected Literal apply(final ScriptContext context, final Expression... arguments) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 			return ((Function) arguments[0].eval(context)).apply(((Function) arguments[1].eval(context)).apply(arguments[2], context), context);
 		}
 	};
@@ -109,7 +111,7 @@ public abstract class Function extends Literal {
 	 */
 	public static final Function FLIP = new Functor("flip", new FunctionType(FLIP_TYPE_1, new FunctionType(FLIP_TYPE_2, FLIP_TYPE_3)), FLIP_TYPE_2, FLIP_TYPE_1, FLIP_TYPE_3) {
 		@Override
-		protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
+		protected Literal apply(final ScriptContext context, final Expression... arguments) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 			return ((Function) ((Function) arguments[0].eval(context)).apply(arguments[2], context)).apply(arguments[1], context);
 		}
 	};
@@ -119,7 +121,7 @@ public abstract class Function extends Literal {
 	 */
 	public static final Function FUNCTION = new Functor("function", SimpleType.TYPE, SimpleType.TYPE, SimpleType.TYPE) {
 		@Override
-		protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
+		protected Literal apply(final ScriptContext context, final Expression... arguments) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 			return new FunctionType((FunckyType) arguments[0].eval(context), (FunckyType) arguments[1].eval(context));
 		}
 	};
@@ -131,7 +133,7 @@ public abstract class Function extends Literal {
 	 */
 	public static final Function TYPE_OF = new Function("typeOf", TYPE_OF_TYPE, SimpleType.TYPE) {
 		@Override
-		public Literal apply(final Expression argument, final ScriptContext context) throws UndefinedSymbolException {
+		public Literal apply(final Expression argument, final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 			return Objects.requireNonNull(argument, NULL_ARGUMENT).getType(Objects.requireNonNull(context, NULL_CONTEXT));
 		}
 	};
@@ -143,7 +145,7 @@ public abstract class Function extends Literal {
 	 */
 	public static final Function IF = new Functor("if", SimpleType.BOOLEAN, IF_TYPE, IF_TYPE, IF_TYPE) {
 		@Override
-		public Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
+		public Literal apply(final ScriptContext context, final Expression... arguments) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 			return ((FunckyBoolean) arguments[0].eval(context)).equals(FunckyBoolean.TRUE) ? arguments[1].eval(context) : arguments[2].eval(context);
 		}
 	};
@@ -210,10 +212,14 @@ public abstract class Function extends Literal {
 	 * @param context
 	 *            the context in which to evaluate the application
 	 * @return the literal result of applying this function to the given argument
+	 * @throws InvalidArgumentException
+	 *             if the type of the argument does not match the domain of the function
+	 * @throws InvalidFunctionException
+	 *             if function is not actually a function
 	 * @throws UndefinedSymbolException
 	 *             if any reference to an undefined symbol is encountered
 	 */
-	public abstract Literal apply(final Expression argument, final ScriptContext context) throws UndefinedSymbolException;
+	public abstract Literal apply(final Expression argument, final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException;
 
 	@Override
 	public FunckyType getType() {

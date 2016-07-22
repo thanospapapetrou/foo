@@ -3,6 +3,8 @@ package com.github.thanospapapetrou.funcky.runtime;
 import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 
 /**
@@ -26,7 +28,7 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	}
 
 	@Override
-	public abstract Literal eval(final ScriptContext context) throws UndefinedSymbolException;
+	public abstract Literal eval(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException;
 
 	/**
 	 * Get the type of this expression.
@@ -34,8 +36,12 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	 * @param context
 	 *            the context in which to evaluate the type
 	 * @return the type of this expression as evaluated in the given context
+	 * @throws InvalidArgumentException
+	 *             if the type of the argument does not match the domain of the function
+	 * @throws InvalidFunctionException
+	 *             if function is not actually a function
 	 * @throws UndefinedSymbolException
 	 *             if any reference to an undefined symbol is encountered
 	 */
-	public abstract FunckyType getType(final ScriptContext context) throws UndefinedSymbolException;
+	public abstract FunckyType getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException;
 }

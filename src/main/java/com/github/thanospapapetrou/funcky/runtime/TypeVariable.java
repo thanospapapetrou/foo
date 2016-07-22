@@ -22,7 +22,7 @@ public class TypeVariable extends FunckyType {
 
 	@Override
 	public FunckyType bind(final Map<TypeVariable, FunckyType> bindings) {
-		return bindings.containsKey(this) ? bindings.get(this) : this;
+		return bindings.containsKey(this) ? bindings.get(this).bind(bindings) : this;
 	}
 
 	@Override

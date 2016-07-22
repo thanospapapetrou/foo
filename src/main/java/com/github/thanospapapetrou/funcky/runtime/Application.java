@@ -37,26 +37,12 @@ public class Application extends Expression {
 	 *            the function of this application
 	 * @param argument
 	 *            the argument of this application
-	 * @throws InvalidArgumentException
-	 *             if the type of the argument does not match the domain of the function
-	 * @throws InvalidFunctionException
-	 *             if function is not actually a function
-	 * @throws UndefinedSymbolException
-	 *             if any undefined reference is encountered during type evaluations
 	 */
-	public Application(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final Expression function, final Expression argument) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public Application(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final Expression function, final Expression argument) {
 		super(requireNonNullEngine(engine), requireValidFileName(fileName), requirePositiveLineNumber(lineNumber));
+		// TODO is engine needed any more in super()?
 		this.function = Objects.requireNonNull(function, NULL_FUNCTION);
 		this.argument = Objects.requireNonNull(argument, NULL_ARGUMENT);
-		if (!(function.getType(engine.getContext()) instanceof FunctionType)) {
-			throw new InvalidFunctionException(function);
-		}
-		final FunctionType functionType = (FunctionType) function.getType(engine.getContext());
-		final FunckyType argumentType = argument.getType(engine.getContext());
-		if (functionType.getDomain().inferGenericBindings(argumentType) == null) {
-			throw new InvalidArgumentException(function, functionType.getDomain(), argument, argumentType);
-		}
-
 	}
 
 	Application(final Expression function, final Expression argument) {
@@ -66,13 +52,15 @@ public class Application extends Expression {
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws UndefinedSymbolException {
-		return ((Function) function.eval(Objects.requireNonNull(context, NULL_CONTEXT))).apply(argument, context);
+	public Literal eval(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+		checkType(Objects.requireNonNull(context, NULL_CONTEXT));
+		return ((Function) function.eval(context)).apply(argument, context);
 	}
 
 	@Override
-	public FunckyType getType(final ScriptContext context) throws UndefinedSymbolException {
-		final FunctionType functionType = (FunctionType) function.getType(Objects.requireNonNull(context, NULL_CONTEXT));
+	public FunckyType getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+		checkType(Objects.requireNonNull(context, NULL_CONTEXT));
+		final FunctionType functionType = (FunctionType) function.getType(context);
 		return functionType.getRange().bind(functionType.getDomain().inferGenericBindings(argument.getType(context)));
 	}
 
@@ -80,5 +68,16 @@ public class Application extends Expression {
 	public String toString() {
 		final Expression argumentExpression = (argument instanceof Literal) ? ((Literal) argument).toExpression() : argument;
 		return String.format(APPLICATION, function, (argumentExpression instanceof Application) ? String.format(NESTED_APPLICATION, argumentExpression) : argumentExpression);
+	}
+
+	private void checkType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+		if (!(function.getType(context) instanceof FunctionType)) {
+			throw new InvalidFunctionException(function);
+		}
+		final FunctionType functionType = (FunctionType) function.getType(context);
+		final FunckyType argumentType = argument.getType(context);
+		if (functionType.getDomain().inferGenericBindings(argumentType) == null) {
+			throw new InvalidArgumentException(function, functionType.getDomain(), argument, argumentType);
+		}
 	}
 }
