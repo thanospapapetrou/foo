@@ -18,10 +18,13 @@ import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
 import com.github.thanospapapetrou.funcky.parser.Parser;
-import com.github.thanospapapetrou.funcky.runtime.Definition;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
+import com.github.thanospapapetrou.funcky.runtime.FunckyBoolean;
+import com.github.thanospapapetrou.funcky.runtime.FunckyNumber;
 import com.github.thanospapapetrou.funcky.runtime.FunckyScript;
+import com.github.thanospapapetrou.funcky.runtime.Function;
 import com.github.thanospapapetrou.funcky.runtime.Literal;
+import com.github.thanospapapetrou.funcky.runtime.SimpleType;
 
 /**
  * Class implementing a Funcky script engine.
@@ -29,6 +32,8 @@ import com.github.thanospapapetrou.funcky.runtime.Literal;
  * @author thanos
  */
 public class FunckyScriptEngine extends AbstractScriptEngine implements Compilable, Invocable {
+	private static final String PI = "pi";
+	private static final String E = "e";
 	private static final String PRELUDE = "/Prelude.funcky";
 	private static final String PRELUDE_FILE_NAME = "<prelude>";
 	private static final String UNKNOWN = "<unknown>";
@@ -43,11 +48,17 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	FunckyScriptEngine(final FunckyScriptEngineFactory factory) {
 		this.factory = factory;
-		setBindings(new Builtins(), ScriptContext.ENGINE_SCOPE);
+		defineBuiltinTypes();
+		defineBuiltinNumbers();
+		defineBuiltinBooleans();
+		defineBuiltinFunctions();
+		// set
+		// setBindings(new Builtins(), ScriptContext.ENGINE_SCOPE);
 		try {
-			for (final Definition definition : compile(new InputStreamReader(getClass().getResourceAsStream(PRELUDE), StandardCharsets.UTF_8), PRELUDE_FILE_NAME).getDefinitions()) {
-				definition.eval(context);
-			}
+			compile(new InputStreamReader(getClass().getResourceAsStream(PRELUDE), StandardCharsets.UTF_8), PRELUDE_FILE_NAME).eval(context);
+			// for (final Definition definition : compile(new InputStreamReader(getClass().getResourceAsStream(PRELUDE), StandardCharsets.UTF_8), PRELUDE_FILE_NAME).getDefinitions()) {
+			// definition.eval(context);
+			// }
 		} catch (final ScriptException e) {
 			Logger.getLogger(FunckyScriptEngine.class.getName()).log(Level.WARNING, ERROR_LOADING_PRELUDE, e);
 		}
@@ -110,5 +121,31 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	private Expression compile(final String script, final String fileName) throws ScriptException {
 		return new Parser(this, new StringReader(script), fileName).parseExpression();
+	}
+
+	private void defineBuiltinTypes() {
+		for (final SimpleType simpleType : new SimpleType[] {SimpleType.TYPE, SimpleType.NUMBER, SimpleType.BOOLEAN}) {
+			put(simpleType.toString(), simpleType);
+		}
+	}
+
+	private void defineBuiltinNumbers() {
+		put(PI, FunckyNumber.PI);
+		put(E, FunckyNumber.E);
+		for (final FunckyNumber number : new FunckyNumber[] {FunckyNumber.INFINITY, FunckyNumber.NAN}) {
+			put(number.toString(), number);
+		}
+	}
+
+	private void defineBuiltinBooleans() {
+		for (final FunckyBoolean bool : new FunckyBoolean[] {FunckyBoolean.FALSE, FunckyBoolean.TRUE}) {
+			put(bool.toString(), bool);
+		}
+	}
+
+	private void defineBuiltinFunctions() {
+		for (final Function function : new Function[] {Function.FLIP, Function.FUNCTION, Function.TYPE_OF, Function.IF, Function.ADD, Function.SUBTRACT, Function.MULTIPLY, Function.DIVIDE}) {
+			put(function.toString(), function);
+		}
 	}
 }
