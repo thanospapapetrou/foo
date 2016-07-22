@@ -74,6 +74,46 @@ public abstract class Function extends Literal {
 		protected abstract Literal apply(final FunckyNumber argument1, final FunckyNumber argument2, final ScriptContext context) throws UndefinedSymbolException;
 	}
 
+	private static final TypeVariable IDENTITY_TYPE = new TypeVariable("type");
+
+	/**
+	 * Identity function.
+	 */
+	public static Function IDENTITY = new Function("identity", IDENTITY_TYPE, IDENTITY_TYPE) {
+		@Override
+		public Literal apply(final Expression argument, final ScriptContext context) throws UndefinedSymbolException {
+			return Objects.requireNonNull(argument, NULL_ARGUMENT).eval(context);
+		}
+	};
+
+	private static final TypeVariable COMPOSE_TYPE_1 = new TypeVariable("type1");
+	private static final TypeVariable COMPOSE_TYPE_2 = new TypeVariable("type2");
+	private static final TypeVariable COMPOSE_TYPE_3 = new TypeVariable("type3");
+
+	/**
+	 * Compose two functions.
+	 */
+	public static final Function COMPOSE = new Functor("compose", new FunctionType(COMPOSE_TYPE_1, COMPOSE_TYPE_2), new FunctionType(COMPOSE_TYPE_3, COMPOSE_TYPE_1), COMPOSE_TYPE_3, COMPOSE_TYPE_2) {
+		@Override
+		protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
+			return ((Function) arguments[0].eval(context)).apply(((Function) arguments[1].eval(context)).apply(arguments[2], context), context);
+		}
+	};
+
+	private static final TypeVariable FLIP_TYPE_1 = new TypeVariable("type1");
+	private static final TypeVariable FLIP_TYPE_2 = new TypeVariable("type2");
+	private static final TypeVariable FLIP_TYPE_3 = new TypeVariable("type3");
+
+	/**
+	 * Flip the arguments of a function.
+	 */
+	public static final Function FLIP = new Functor("flip", new FunctionType(FLIP_TYPE_1, new FunctionType(FLIP_TYPE_2, FLIP_TYPE_3)), FLIP_TYPE_2, FLIP_TYPE_1, FLIP_TYPE_3) {
+		@Override
+		protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
+			return ((Function) ((Function) arguments[0].eval(context)).apply(arguments[2], context)).apply(arguments[1], context);
+		}
+	};
+
 	/**
 	 * Construct a function type.
 	 */
@@ -93,20 +133,6 @@ public abstract class Function extends Literal {
 		@Override
 		public Literal apply(final Expression argument, final ScriptContext context) throws UndefinedSymbolException {
 			return Objects.requireNonNull(argument, NULL_ARGUMENT).getType(Objects.requireNonNull(context, NULL_CONTEXT));
-		}
-	};
-
-	private static final TypeVariable FLIP_TYPE_1 = new TypeVariable("type1");
-	private static final TypeVariable FLIP_TYPE_2 = new TypeVariable("type2");
-	private static final TypeVariable FLIP_TYPE_3 = new TypeVariable("type3");
-
-	/**
-	 * Flip the arguments of a function.
-	 */
-	public static final Function FLIP = new Functor("flip", new FunctionType(FLIP_TYPE_1, new FunctionType(FLIP_TYPE_2, FLIP_TYPE_3)), FLIP_TYPE_2, FLIP_TYPE_1, FLIP_TYPE_3) {
-		@Override
-		protected Literal apply(final ScriptContext context, final Expression... arguments) throws UndefinedSymbolException {
-			return ((Function) ((Function) arguments[0].eval(context)).apply(arguments[2], context)).apply(arguments[1], context);
 		}
 	};
 

@@ -34,8 +34,33 @@
 # boolean
 # false = ...
 
+# Identity function.
+# function <type> <type>
+# identity argument
+# argument the value to return
+# return the given argument
+# identity = ...
+
+# Compose two functions.
+# function (function <type1> <type2>) (function (function <type3> <type1>) (function <type3> <type2>))
+# compose function1 function2 argument
+# function1 the outer function to compose
+# function2 the inner function to compose
+# argument the argument to apply the composition to
+# return the composition of the given functions applied to the given argument (function1 (function2 argument))
+# compose = ...
+
+# Flip the arguments of a function.
+# function (function <type1> (function <type2> <type3>)) (function <type2> (function <type1> <type3>))
+# flip function argument1 argument2
+# function the function whose arguments to flip
+# argument1 the second argument to pass to the function
+# argument2 the first argument to pass to the function
+# return a new function corresponding to applying the given function to the given arguments in reverse order (function argument2 argument1)
+# flip = ... 
+
 # Construct a function type.
-# function type function type type
+# function type (function type type)
 # function domain range
 # domain the function domain type
 # range the function range type
@@ -56,7 +81,7 @@
 # then the value to return if condition is true
 # else the value to return if condition is false
 # return then if condition is true or else if condition is false
-# if = ... TODO
+# if = ...
 
 # Add two numbers.
 # function number (function number number)
@@ -117,7 +142,7 @@ not = flip (flip if false) true
 # boolean1 the first operand
 # boolean2 the second operand
 # return true if both operands are true or false if either of the two is false
-# and = if x y false
+# and = if x y false TODO
 
 # Logical inclusive disjunction.
 # function boolean (function boolean boolean)
@@ -133,4 +158,4 @@ or = flip if true
 # boolean1 the first operand
 # boolean2 the second operand
 # return true if one of the two operands is true or false if they are both true or false
-# xor = x or y and not (x and y) 
+# xor = x or y and not (x and y) TODO 
