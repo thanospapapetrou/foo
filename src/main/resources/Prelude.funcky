@@ -120,6 +120,7 @@
 # minus number
 # number the number to negate
 # return the negation of number (-number)
+# minus x = subtract 0 x
 minus = subtract 0
 
 # Invert a number.
@@ -127,6 +128,7 @@ minus = subtract 0
 # invert number
 # number the number to invert
 # return the inverse of the number (1 / number)
+# inverse x = divide 1 x
 inverse = divide 1
 
 # Logical negation.
@@ -134,6 +136,7 @@ inverse = divide 1
 # not boolean
 # boolean the boolean to negate
 # return true if the given boolean is false or false if it is true
+# not x = if x false true
 not = flip (flip if false) true
 
 # Logical conjunction.
@@ -141,15 +144,26 @@ not = flip (flip if false) true
 # and boolean1 boolean2
 # boolean1 the first operand
 # boolean2 the second operand
-# return true if both operands are true or false if either of the two is false
-# and = if x y false TODO
+# return true if both operands are true or false if either of them is false
+# and = if x y false
+and = flip (compose flip (compose if identity)) false 
+
+# Logical alternative denial.
+# function boolean (function boolean boolean)
+# nand boolean1 boolean2
+# boolean1 the first operand
+# boolean2 the second operand
+# return true if either of the two operands is false or false if both of them are true
+# nand x y = not (and x y)
+nand = compose (compose not) (compose and identity)
 
 # Logical inclusive disjunction.
 # function boolean (function boolean boolean)
 # or boolean1 boolean2
 # boolean1 the first operand
 # boolean2 the second operand
-# return true if either of the two operands is true or false if both are false
+# return true if either of the two operands is true or false if both of them are false
+# or x y = if x true y
 or = flip if true
 
 # Logical joint denial.
@@ -157,7 +171,8 @@ or = flip if true
 # or boolean1 boolean2
 # boolean1 the first operand
 # boolean2 the second operand
-# return false if either of the two operands is true or true if both are false
+# return true if both operands are false or false if either of them is true
+# nor x y = not (or x y)
 nor = compose (compose not) (compose or identity)
 
 # Logical exclusive disjunction.
@@ -165,5 +180,31 @@ nor = compose (compose not) (compose or identity)
 # xor boolean1 boolean2
 # boolean1 the first operand
 # boolean2 the second operand
-# return true if one of the two operands is true or false if they are both true or false
-# xor = x or y and not (x and y) TODO 
+# return true if the two operands have different value or false if they have the same
+# xor x y = and (or x y) (nand x y)
+#xor x y = and (or x y) (nand x y) =
+#((and ((or x1) y1)) ((nand x2) y2)) =
+#((((compose (compose (and ((or x1) y1)))) nand) x2) y2) =
+#((compose (compose (and ((or x1) y1)))) nand) =
+#((compose (compose ((((compose (compose and)) or) x1) y1))) nand) =
+#((compose ((((compose (compose compose)) ((compose (compose and)) or)) x1) y1)) nand)
+
+#(identity x) = x
+#(((compose f) g) x) = (f (g x))
+#(((flip f) x) y) = ((f y) x)
+#((duplicate f) x) = ((f x) x)
+#((duplicate f) x) = ((f x) x)
+
+#((duplicate ((duplicate f) x)) y) = ((((f x) x) y) y)
+#((((f x) x) y) y) = ((((compose duplicate) (duplicate f)) x) y)
+
+# Logical equality.
+# function boolean (function boolean boolean)
+# xnor boolean1 boolean2
+# boolean1 the first operand
+# boolean2 the second operand
+# return true if the two operands have the same value or false if they have different
+# xnor x y = not (xor x y)
+#xnor = compose (compose not) (compose xor identity) 
+
+
