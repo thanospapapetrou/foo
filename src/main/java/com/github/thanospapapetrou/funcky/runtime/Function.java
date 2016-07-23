@@ -115,7 +115,20 @@ public abstract class Function extends Literal {
 			return ((Function) ((Function) arguments[0].eval(context)).apply(arguments[2], context)).apply(arguments[1], context);
 		}
 	};
-
+	
+	private static final TypeVariable DUPLICATE_TYPE_1 = new TypeVariable("type1");
+	private static final TypeVariable DUPLICATE_TYPE_2 = new TypeVariable("type2");
+	
+	/**
+	 * Duplicate the argument of a function.
+	 */
+	public static final Function DUPLICATE = new Functor("duplicate", new FunctionType(DUPLICATE_TYPE_1, new FunctionType(DUPLICATE_TYPE_1, DUPLICATE_TYPE_2)), DUPLICATE_TYPE_1, DUPLICATE_TYPE_2) {
+		@Override
+		protected Literal apply(final ScriptContext context, final Expression... arguments) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+			return ((Function) ((Function) arguments[0].eval(context)).apply(arguments[1], context)).apply(arguments[1], context);
+		}
+	};
+	
 	/**
 	 * Construct a function type.
 	 */

@@ -139,7 +139,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	}
 
 	private void defineBuiltinFunctions() {
-		for (final Function function : new Function[] {Function.IDENTITY, Function.COMPOSE, Function.FLIP, Function.FUNCTION, Function.TYPE_OF, Function.IF, Function.ADD, Function.SUBTRACT, Function.MULTIPLY, Function.DIVIDE}) {
+		for (final Function function : new Function[] {Function.IDENTITY, Function.COMPOSE, Function.FLIP, Function.DUPLICATE, Function.FUNCTION, Function.TYPE_OF, Function.IF, Function.ADD, Function.SUBTRACT, Function.MULTIPLY, Function.DIVIDE}) {
 			put(function.toString(), function);
 		}
 	}
