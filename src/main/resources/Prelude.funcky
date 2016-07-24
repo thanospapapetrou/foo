@@ -181,22 +181,8 @@ nor = compose (compose not) (compose or identity)
 # boolean1 the first operand
 # boolean2 the second operand
 # return true if the two operands have different value or false if they have the same
-# xor x y = and (or x y) (nand x y)
-#xor x y = and (or x y) (nand x y) =
-#((and ((or x1) y1)) ((nand x2) y2)) =
-#((((compose (compose (and ((or x1) y1)))) nand) x2) y2) =
-#((compose (compose (and ((or x1) y1)))) nand) =
-#((compose (compose ((((compose (compose and)) or) x1) y1))) nand) =
-#((compose ((((compose (compose compose)) ((compose (compose and)) or)) x1) y1)) nand)
-
-#(identity x) = x
-#(((compose f) g) x) = (f (g x))
-#(((flip f) x) y) = ((f y) x)
-#((duplicate f) x) = ((f x) x)
-#((duplicate f) x) = ((f x) x)
-
-#((duplicate ((duplicate f) x)) y) = ((((f x) x) y) y)
-#((((f x) x) y) y) = ((((compose duplicate) (duplicate f)) x) y)
+# xor x y = if x (not y) y
+xor = ((compose duplicate) ((flip ((compose compose) if)) not))
 
 # Logical equality.
 # function boolean (function boolean boolean)
@@ -205,6 +191,4 @@ nor = compose (compose not) (compose or identity)
 # boolean2 the second operand
 # return true if the two operands have the same value or false if they have different
 # xnor x y = not (xor x y)
-#xnor = compose (compose not) (compose xor identity) 
-
-
+xnor = compose (compose not) (compose xor identity) 

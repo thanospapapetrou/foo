@@ -3,15 +3,6 @@ infer arguments correctly (compensate for binding type to type variable)
 define compare and use it to define equals
 cast
 error
-if true 1 false
-flip add
-flip add 1
-
-compose
-flip
-duplicate
-discard
-
 
 # Generate an error using the given error message.
 # function string <type>
@@ -64,9 +55,3 @@ discard
 # sqrt x = pow x (div 1 2)
 # ln
 # log x y = ln y / ln y 
-# Boolean functions
-# not
-# and
-# or
-# xor
-

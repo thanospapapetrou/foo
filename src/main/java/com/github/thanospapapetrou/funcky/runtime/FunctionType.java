@@ -60,7 +60,7 @@ class FunctionType extends FunckyType {
 				private static final long serialVersionUID = 1L;
 
 				{
-					putAll(rangeBindings); // TODO may domain bindings and range bindings be conflicting?
+					putAll(rangeBindings);
 					putAll(domainBindings);
 				}
 			};
