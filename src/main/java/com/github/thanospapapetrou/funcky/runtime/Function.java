@@ -81,7 +81,7 @@ public abstract class Function extends Literal {
 	/**
 	 * Identity function.
 	 */
-	public static Function IDENTITY = new Function("identity", IDENTITY_TYPE, IDENTITY_TYPE) {
+	public static final Function IDENTITY = new Function("identity", IDENTITY_TYPE, IDENTITY_TYPE) {
 		@Override
 		public Literal apply(final Expression argument, final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 			return Objects.requireNonNull(argument, NULL_ARGUMENT).eval(context);

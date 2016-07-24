@@ -1,57 +1,45 @@
-infer arguments correctly (compensate for binding type to type variable)
-
 define compare and use it to define equals
 cast
 error
+equal
+quotient
+modulo
+lessThan
+greaterThan
+lessEqual
+greaterEqual
+abs
+round
+ceil
+floor
+min
+max
+sin
+cos
+tan
+asin
+acos
+atan
+pow
+sqrt x = pow x (div 1 2)
+ln
+log x y = ln y / ln y 
 
-# Generate an error using the given error message.
-# function string <type>
-# error message
-# message the error message to use
-# return bottom
-# error = ... TODO
+pair
+first
+last
 
-# Check two values for equality.
-# function <type> (function <type> boolean)
-# equal x y
-# x the first value to check
-# y the second value to check
-# return true if x and y are equal, false if not
-# equal = ... TODO
+list
+empty
+head
+tail
+repeat
+take
+map
+foldRight
+foldLeft
+sum
+product
+all
+any
 
-# Calculate the integer quotient of the division of two numbers.
-# function number (function number number)
-# quotient dividend divisor
-# dividend the dividend to divide
-# divisor the divisor to divide by
-# return the integer quotient of dividend divided by divisor (dividend / divisor)
-# quotient = ... TODO
-
-# Calculate the remainder of the division of two numbers.
-# function number (function number number)
-# modulo dividend divisor
-# dividend the dividend to divide
-# divisor the divisor to divide by
-# return the remainder of dividend divided by divisor (dividend / divisor)
-# modulo = ... TODO
-
-# lessThan
-# greaterThan
-# lessEqual x y = or (lessThan x y) (equal x y)
-# greaterEqual x y = or (lessThan x y) (equal x y)
-# abs
-# round
-# ceil
-# floor
-# min x y = if (le x y) x y 
-# max x y = if (ge x y) x y
-# sin
-# cos
-# tan
-# asin
-# acos
-# atan
-# pow
-# sqrt x = pow x (div 1 2)
-# ln
-# log x y = ln y / ln y 
