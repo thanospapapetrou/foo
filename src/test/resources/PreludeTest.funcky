@@ -1,0 +1,25 @@
+equal (add 0 0) 0
+equal (add 0 1) 1
+equal (add 0 infinity) infinity
+equal (add 0 (minus infinity)) (minus infinity)
+equal (add 0 NaN) NaN
+equal (add 1 0) 1
+equal (add 1 1) 2
+equal (add 1 infinity) infinity
+equal (add 1 (minus infinity)) (minus infinity)
+equal (add 1 NaN) NaN
+equal (add infinity 0) infinity
+equal (add infinity 1) infinity
+equal (add infinity infinity) infinity
+equal (add infinity (minus infinity)) NaN
+equal (add infinity NaN) NaN
+equal (add (minus infinity) 0) (minus infinity)
+equal (add (minus infinity) 1) (minus infinity)
+equal (add (minus infinity) infinity) NaN
+equal (add (minus infinity) (minus infinity)) (minus infinity)
+equal (add (minus infinity) NaN) NaN
+equal (add NaN 0) NaN
+equal (add NaN 1) NaN
+equal (add NaN infinity) NaN
+equal (add NaN (minus infinity)) NaN
+equal (add NaN NaN) NaN
