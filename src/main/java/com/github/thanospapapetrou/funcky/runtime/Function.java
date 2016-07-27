@@ -129,25 +129,15 @@ public abstract class Function extends Literal {
 		}
 	};
 	
+	private static final TypeVariable EQUAL_TYPE = new TypeVariable("type");
+	
 	/**
-	 * Construct a function type.
+	 * Equality check operator.
 	 */
-	public static final Function FUNCTION = new Functor("function", SimpleType.TYPE, SimpleType.TYPE, SimpleType.TYPE) {
+	public static final Function EQUAL = new Functor("equal", EQUAL_TYPE, EQUAL_TYPE, SimpleType.BOOLEAN) {
 		@Override
-		protected Literal apply(final ScriptContext context, final Expression... arguments) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
-			return new FunctionType((FunckyType) arguments[0].eval(context), (FunckyType) arguments[1].eval(context));
-		}
-	};
-
-	private static final TypeVariable TYPE_OF_TYPE = new TypeVariable("type");
-
-	/**
-	 * Get the type of an expression.
-	 */
-	public static final Function TYPE_OF = new Function("typeOf", TYPE_OF_TYPE, SimpleType.TYPE) {
-		@Override
-		public Literal apply(final Expression argument, final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
-			return Objects.requireNonNull(argument, NULL_ARGUMENT).getType(Objects.requireNonNull(context, NULL_CONTEXT));
+		public Literal apply(final ScriptContext context, final Expression... arguments) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+			return arguments[0].eval(context).equals(arguments[1].eval(context)) ? FunckyBoolean.TRUE : FunckyBoolean.FALSE;
 		}
 	};
 
@@ -160,6 +150,28 @@ public abstract class Function extends Literal {
 		@Override
 		public Literal apply(final ScriptContext context, final Expression... arguments) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 			return ((FunckyBoolean) arguments[0].eval(context)).equals(FunckyBoolean.TRUE) ? arguments[1].eval(context) : arguments[2].eval(context);
+		}
+	};
+	
+	private static final TypeVariable TYPE_OF_TYPE = new TypeVariable("type");
+
+	/**
+	 * Get the type of an expression.
+	 */
+	public static final Function TYPE_OF = new Function("typeOf", TYPE_OF_TYPE, SimpleType.TYPE) {
+		@Override
+		public Literal apply(final Expression argument, final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+			return Objects.requireNonNull(argument, NULL_ARGUMENT).getType(Objects.requireNonNull(context, NULL_CONTEXT));
+		}
+	};
+
+	/**
+	 * Construct a function type.
+	 */
+	public static final Function FUNCTION = new Functor("function", SimpleType.TYPE, SimpleType.TYPE, SimpleType.TYPE) {
+		@Override
+		protected Literal apply(final ScriptContext context, final Expression... arguments) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+			return new FunctionType((FunckyType) arguments[0].eval(context), (FunckyType) arguments[1].eval(context));
 		}
 	};
 
