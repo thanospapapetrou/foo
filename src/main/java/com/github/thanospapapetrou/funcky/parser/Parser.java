@@ -147,8 +147,7 @@ public class Parser {
 	}
 
 	private static String requireValidFileName(final String fileName) {
-		Objects.requireNonNull(fileName, NULL_FILE_NAME);
-		if (fileName.isEmpty()) {
+		if (Objects.requireNonNull(fileName, NULL_FILE_NAME).isEmpty()) {
 			throw new IllegalArgumentException(EMPTY_FILE_NAME);
 		}
 		return fileName;

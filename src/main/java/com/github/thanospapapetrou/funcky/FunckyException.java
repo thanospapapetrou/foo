@@ -33,8 +33,7 @@ public abstract class FunckyException extends ScriptException {
 	}
 
 	private static final String requireValidString(final String string, final String nullMessage, final String emptyMessage) {
-		Objects.requireNonNull(string, nullMessage);
-		if (string.isEmpty()) {
+		if (Objects.requireNonNull(string, nullMessage).isEmpty()) {
 			throw new IllegalArgumentException(emptyMessage);
 		}
 		return string;
