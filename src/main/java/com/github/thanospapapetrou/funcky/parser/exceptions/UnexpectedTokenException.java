@@ -58,8 +58,7 @@ public class UnexpectedTokenException extends FunckyException {
 	}
 
 	private static final int[] requireValidExpectedTokens(final int[] expectedTokens) {
-		Objects.requireNonNull(expectedTokens, NULL_EXPECTED_TOKENS);
-		if (expectedTokens.length == 0) {
+		if (Objects.requireNonNull(expectedTokens, NULL_EXPECTED_TOKENS).length == 0) {
 			throw new IllegalArgumentException(EMPTY_EXPECTED_TOKENS);
 		}
 		for (final int expectedToken : expectedTokens) {
