@@ -1,25 +1,144 @@
-equal (add 0 0) 0
-equal (add 0 1) 1
-equal (add 0 infinity) infinity
-equal (add 0 (minus infinity)) (minus infinity)
-equal (add 0 NaN) NaN
-equal (add 1 0) 1
-equal (add 1 1) 2
-equal (add 1 infinity) infinity
-equal (add 1 (minus infinity)) (minus infinity)
-equal (add 1 NaN) NaN
-equal (add infinity 0) infinity
-equal (add infinity 1) infinity
-equal (add infinity infinity) infinity
-equal (add infinity (minus infinity)) NaN
-equal (add infinity NaN) NaN
+equal (add (minus infinity) (minus infinity)) (minus infinity)
+equal (add (minus infinity) -1) (minus infinity)
 equal (add (minus infinity) 0) (minus infinity)
 equal (add (minus infinity) 1) (minus infinity)
 equal (add (minus infinity) infinity) NaN
-equal (add (minus infinity) (minus infinity)) (minus infinity)
 equal (add (minus infinity) NaN) NaN
+equal (add -1 (minus infinity)) (minus infinity)
+equal (add -1 -1) -2
+equal (add -1 0) -1
+equal (add -1 1) 0
+equal (add -1 infinity) infinity
+equal (add -1 NaN) NaN
+equal (add 0 (minus infinity)) (minus infinity)
+equal (add 0 -1) -1
+equal (add 0 0) 0
+equal (add 0 1) 1
+equal (add 0 infinity) infinity
+equal (add 0 NaN) NaN
+equal (add 1 (minus infinity)) (minus infinity)
+equal (add 1 -1) 0
+equal (add 1 0) 1
+equal (add 1 1) 2
+equal (add 1 infinity) infinity
+equal (add 1 NaN) NaN
+equal (add infinity (minus infinity)) NaN
+equal (add infinity -1) infinity
+equal (add infinity 0) infinity
+equal (add infinity 1) infinity
+equal (add infinity infinity) infinity
+equal (add infinity NaN) NaN
+equal (add NaN (minus infinity)) NaN
+equal (add NaN -1) NaN
 equal (add NaN 0) NaN
 equal (add NaN 1) NaN
 equal (add NaN infinity) NaN
-equal (add NaN (minus infinity)) NaN
 equal (add NaN NaN) NaN
+equal (subtract (minus infinity) (minus infinity)) NaN
+equal (subtract (minus infinity) -1) (minus infinity)
+equal (subtract (minus infinity) 0) (minus infinity)
+equal (subtract (minus infinity) 1) (minus infinity)
+equal (subtract (minus infinity) infinity) (minus infinity)
+equal (subtract (minus infinity) NaN) NaN
+equal (subtract -1 (minus infinity)) infinity
+equal (subtract -1 -1) 0
+equal (subtract -1 0) -1
+equal (subtract -1 1) -2
+equal (subtract -1 infinity) (minus infinity)
+equal (subtract -1 NaN) NaN
+equal (subtract 0 (minus infinity)) infinity
+equal (subtract 0 -1) 1
+equal (subtract 0 0) 0
+equal (subtract 0 1) -1
+equal (subtract 0 infinity) (minus infinity)
+equal (subtract 0 NaN) NaN
+equal (subtract 1 (minus infinity)) infinity
+equal (subtract 1 -1) 2
+equal (subtract 1 0) 1
+equal (subtract 1 1) 0
+equal (subtract 1 infinity) (minus infinity)
+equal (subtract 1 NaN) NaN
+equal (subtract infinity (minus infinity)) infinity
+equal (subtract infinity -1) infinity
+equal (subtract infinity 0) infinity
+equal (subtract infinity 1) infinity
+equal (subtract infinity infinity) NaN
+equal (subtract infinity NaN) NaN
+equal (subtract NaN (minus infinity)) NaN
+equal (subtract NaN -1) NaN
+equal (subtract NaN 0) NaN
+equal (subtract NaN 1) NaN
+equal (subtract NaN infinity) NaN
+equal (subtract NaN NaN) NaN
+equal (multiply (minus infinity) (minus infinity)) infinity
+equal (multiply (minus infinity) -1) infinity
+equal (multiply (minus infinity) 0) NaN
+equal (multiply (minus infinity) 1) (minus infinity)
+equal (multiply (minus infinity) infinity) (minus infinity)
+equal (multiply (minus infinity) NaN) NaN
+equal (multiply -1 (minus infinity)) infinity
+equal (multiply -1 -1) 1
+equal (multiply -1 0) 0
+equal (multiply -1 1) -1
+equal (multiply -1 infinity) (minus infinity)
+equal (multiply -1 NaN) NaN
+equal (multiply 0 (minus infinity)) NaN
+equal (multiply 0 -1) 0
+equal (multiply 0 0) 0
+equal (multiply 0 1) 0
+equal (multiply 0 infinity) NaN
+equal (multiply 0 NaN) NaN
+equal (multiply 1 (minus infinity)) (minus infinity)
+equal (multiply 1 -1) -1
+equal (multiply 1 0) 0
+equal (multiply 1 1) 1
+equal (multiply 1 infinity) infinity
+equal (multiply 1 NaN) NaN
+equal (multiply infinity (minus infinity)) (minus infinity)
+equal (multiply infinity -1) (minus infinity)
+equal (multiply infinity 0) NaN
+equal (multiply infinity 1) infinity
+equal (multiply infinity infinity) infinity
+equal (multiply infinity NaN) NaN
+equal (multiply NaN (minus infinity)) NaN
+equal (multiply NaN -1) NaN
+equal (multiply NaN 0) NaN
+equal (multiply NaN 1) NaN
+equal (multiply NaN infinity) NaN
+equal (multiply NaN NaN) NaN
+equal (divide (minus infinity) (minus infinity)) NaN
+equal (divide (minus infinity) -1) infinity
+equal (divide (minus infinity) 0) (minus infinity)
+equal (divide (minus infinity) 1) (minus infinity)
+equal (divide (minus infinity) infinity) NaN
+equal (divide (minus infinity) NaN) NaN
+equal (divide -1 (minus infinity)) 0
+equal (divide -1 -1) 1
+equal (divide -1 0) (minus infinity)
+equal (divide -1 1) -1
+equal (divide -1 infinity) 0
+equal (divide -1 NaN) NaN
+equal (divide 0 (minus infinity)) 0
+equal (divide 0 -1) 0
+equal (divide 0 0) NaN
+equal (divide 0 1) 0
+equal (divide 0 infinity) 0
+equal (divide 0 NaN) NaN
+equal (divide 1 (minus infinity)) 0
+equal (divide 1 -1) -1
+equal (divide 1 0) infinity
+equal (divide 1 1) 1
+equal (divide 1 infinity) 0
+equal (divide 1 NaN) NaN
+equal (divide infinity (minus infinity)) NaN
+equal (divide infinity -1) (minus infinity)
+equal (divide infinity 0) infinity
+equal (divide infinity 1) infinity
+equal (divide infinity infinity) NaN
+equal (divide infinity NaN) NaN
+equal (divide NaN (minus infinity)) NaN
+equal (divide NaN -1) NaN
+equal (divide NaN 0) NaN
+equal (divide NaN 1) NaN
+equal (divide NaN infinity) NaN
+equal (divide NaN NaN) NaN
