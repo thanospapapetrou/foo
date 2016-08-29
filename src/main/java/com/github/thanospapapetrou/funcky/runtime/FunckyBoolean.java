@@ -1,25 +1,34 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
+import java.net.URI;
+
+import javax.script.ScriptContext;
+
+import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
+
 /**
  * Class representing a Funcky boolean.
  * 
  * @author thanos
  */
 public class FunckyBoolean extends Literal {
-	/**
-	 * Funcky boolean representing true.
-	 */
-	public static final FunckyBoolean TRUE = new FunckyBoolean(true);
-
-	/**
-	 * Funcky boolean representing false.
-	 */
-	public static final FunckyBoolean FALSE = new FunckyBoolean(false);
-
 	private final boolean value;
 
-	private FunckyBoolean(final boolean value) {
-		super(null, null, 0);
+	/**
+	 * Construct a new number.
+	 * 
+	 * @param engine
+	 *            the engine that parsed this boolean
+	 * @param script
+	 *            the URI of the script from which this boolean was parsed
+	 * @param value
+	 *            the value of this boolean
+	 */
+	public FunckyBoolean(final FunckyScriptEngine engine, final URI script, final boolean value) {
+		super(engine, script, 0);
 		this.value = value;
 	}
 
@@ -29,8 +38,9 @@ public class FunckyBoolean extends Literal {
 	}
 
 	@Override
-	public SimpleType getType() {
-		return SimpleType.BOOLEAN;
+	public SimpleType getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+		super.getType(context);
+		return engine.getPrelude().getBoolean();
 	}
 
 	@Override
@@ -40,7 +50,7 @@ public class FunckyBoolean extends Literal {
 
 	@Override
 	public Expression toExpression() {
-		return new Reference(toString());
+		return value ? engine.getPrelude().getTrue() : engine.getPrelude().getFalse();
 	}
 
 	@Override

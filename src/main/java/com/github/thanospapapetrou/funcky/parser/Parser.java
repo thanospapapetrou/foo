@@ -3,6 +3,7 @@ package com.github.thanospapapetrou.funcky.parser;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StreamTokenizer;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,9 +19,6 @@ import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.FunckyNumber;
 import com.github.thanospapapetrou.funcky.runtime.FunckyScript;
 import com.github.thanospapapetrou.funcky.runtime.Reference;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 
 /**
  * Class implementing a Funcky parser. This parser is based on the following BNF:
@@ -56,9 +54,24 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolExce
  */
 public class Parser {
 	/**
+	 * Character
+	 */
+	public static final int CHARACTER = '\'';
+
+	/**
 	 * Comment
 	 */
 	public static final int COMMENT = '#';
+
+	/**
+	 * End of input
+	 */
+	public static final int EOF = StreamTokenizer.TT_EOF;
+
+	/**
+	 * End of line
+	 */
+	public static final int EOL = StreamTokenizer.TT_EOL;
 
 	/**
 	 * Equals ('=')
@@ -71,24 +84,14 @@ public class Parser {
 	public static final int LEFT_PARENTHESIS = '(';
 
 	/**
-	 * Right parenthesis (')')
-	 */
-	public static final int RIGHT_PARENTHESIS = ')';
-
-	/**
-	 * Symbol
-	 */
-	public static final int SYMBOL = StreamTokenizer.TT_WORD;
-
-	/**
 	 * Number
 	 */
 	public static final int NUMBER = StreamTokenizer.TT_NUMBER;
 
 	/**
-	 * Character
+	 * Right parenthesis (')')
 	 */
-	public static final int CHARACTER = '\'';
+	public static final int RIGHT_PARENTHESIS = ')';
 
 	/**
 	 * String
@@ -96,24 +99,19 @@ public class Parser {
 	public static final int STRING = '"';
 
 	/**
-	 * End of line
+	 * Symbol
 	 */
-	public static final int EOL = StreamTokenizer.TT_EOL;
+	public static final int SYMBOL = StreamTokenizer.TT_WORD;
 
-	/**
-	 * End of input
-	 */
-	public static final int EOF = StreamTokenizer.TT_EOF;
-	private static final String WHITESPACE = "\t\n\f\r ";
-	private static final String WORD = "ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
 	private static final String NULL_ENGINE = "Engine must not be null";
 	private static final String NULL_READER = "Reader must not be null";
-	private static final String NULL_FILE_NAME = "File name must not be null";
-	private static final String EMPTY_FILE_NAME = "File name must not be empty";
+	private static final String NULL_SCRIPT = "Script must not be null";
+	private static final String WHITESPACE = "\t\n\f\r ";
+	private static final String WORD = "ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
 
 	private final FunckyScriptEngine engine;
 	private final StreamTokenizer tokenizer;
-	private final String fileName;
+	private final URI script;
 
 	/**
 	 * Construct a new parser.
@@ -122,10 +120,10 @@ public class Parser {
 	 *            the engine of this parser
 	 * @param reader
 	 *            the reader to parse script from
-	 * @param fileName
-	 *            the name of the file to use for error reporting
+	 * @param script
+	 *            the URI of the script to use for error reporting
 	 */
-	public Parser(final FunckyScriptEngine engine, final Reader reader, final String fileName) {
+	public Parser(final FunckyScriptEngine engine, final Reader reader, final URI script) {
 		this.engine = Objects.requireNonNull(engine, NULL_ENGINE);
 		tokenizer = new StreamTokenizer(Objects.requireNonNull(reader, NULL_READER));
 		tokenizer.resetSyntax();
@@ -143,14 +141,7 @@ public class Parser {
 		for (final char word : WORD.toCharArray()) {
 			tokenizer.wordChars(word, word);
 		}
-		this.fileName = requireValidFileName(fileName);
-	}
-
-	private static String requireValidFileName(final String fileName) {
-		if (Objects.requireNonNull(fileName, NULL_FILE_NAME).isEmpty()) {
-			throw new IllegalArgumentException(EMPTY_FILE_NAME);
-		}
-		return fileName;
+		this.script = Objects.requireNonNull(script, NULL_SCRIPT);
 	}
 
 	/**
@@ -165,14 +156,14 @@ public class Parser {
 			final List<Definition> definitions = new ArrayList<>();
 			while (true) {
 				switch (tokenizer.nextToken()) {
-				case SYMBOL:
+				case SYMBOL: // TODO sort
 					tokenizer.pushBack();
 					definitions.add(parseDefinition());
 					break;
 				case EOL:
 					break;
 				case EOF:
-					return new FunckyScript(engine, fileName, tokenizer.lineno(), definitions);
+					return new FunckyScript(engine, script, tokenizer.lineno(), definitions);
 				case EQUALS:
 				case LEFT_PARENTHESIS:
 				case RIGHT_PARENTHESIS:
@@ -219,7 +210,7 @@ public class Parser {
 		}
 	}
 
-	private Definition parseDefinition() throws IOException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException, UnexpectedTokenException, UnparsableInputException {
+	private Definition parseDefinition() throws IOException, UnexpectedTokenException, UnparsableInputException {
 		switch (tokenizer.nextToken()) {
 		case SYMBOL:
 			final String name = tokenizer.sval;
@@ -228,7 +219,7 @@ public class Parser {
 				final Expression expression = _parseExpression();
 				switch (tokenizer.nextToken()) {
 				case EOL:
-					return new Definition(engine, fileName, tokenizer.lineno() - 1, name, expression);
+					return new Definition(engine, script, tokenizer.lineno() - 1, name, expression);
 				case EQUALS:
 				case LEFT_PARENTHESIS:
 				case RIGHT_PARENTHESIS:
@@ -265,7 +256,7 @@ public class Parser {
 		}
 	}
 
-	private Expression _parseExpression() throws IOException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException, UnexpectedTokenException, UnparsableInputException {
+	private Expression _parseExpression() throws IOException, UnexpectedTokenException, UnparsableInputException {
 		Expression expression = null;
 		while (true) {
 			switch (tokenizer.nextToken()) {
@@ -273,7 +264,7 @@ public class Parser {
 				final Expression nestedExpression = _parseExpression();
 				switch (tokenizer.nextToken()) {
 				case RIGHT_PARENTHESIS:
-					expression = (expression == null) ? nestedExpression : new Application(engine, fileName, tokenizer.lineno(), expression, nestedExpression);
+					expression = (expression == null) ? nestedExpression : new Application(engine, script, tokenizer.lineno(), expression, nestedExpression);
 					break;
 				case EQUALS:
 				case LEFT_PARENTHESIS:
@@ -289,12 +280,12 @@ public class Parser {
 				}
 				break;
 			case SYMBOL:
-				final Reference reference = new Reference(engine, fileName, tokenizer.lineno(), tokenizer.sval);
-				expression = (expression == null) ? reference : new Application(engine, fileName, tokenizer.lineno(), expression, reference);
+				final Reference reference = new Reference(engine, script, tokenizer.lineno(), tokenizer.sval);
+				expression = (expression == null) ? reference : new Application(engine, script, tokenizer.lineno(), expression, reference);
 				break;
 			case NUMBER:
-				final FunckyNumber number = new FunckyNumber(engine, fileName, tokenizer.lineno(), tokenizer.nval);
-				expression = (expression == null) ? number : new Application(engine, fileName, tokenizer.lineno(), expression, number);
+				final FunckyNumber number = new FunckyNumber(engine, script, tokenizer.lineno(), tokenizer.nval);
+				expression = (expression == null) ? number : new Application(engine, script, tokenizer.lineno(), expression, number);
 				break;
 			case EQUALS:
 			case RIGHT_PARENTHESIS:
@@ -315,10 +306,10 @@ public class Parser {
 	}
 
 	private <T> T throwUnexpectedTokenException(final int... expectedTokens) throws UnexpectedTokenException {
-		throw new UnexpectedTokenException(tokenizer.ttype, fileName, tokenizer.lineno(), expectedTokens);
+		throw new UnexpectedTokenException(tokenizer.ttype, script, tokenizer.lineno(), expectedTokens);
 	}
 
 	private <T> T throwUnparsableInputException() throws UnparsableInputException {
-		throw new UnparsableInputException((char) tokenizer.ttype, fileName, tokenizer.lineno());
+		throw new UnparsableInputException((char) tokenizer.ttype, script, tokenizer.lineno());
 	}
 }

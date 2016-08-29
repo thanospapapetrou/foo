@@ -1,10 +1,13 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
+import java.net.URI;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 
 /**
@@ -13,8 +16,9 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolExce
  * @author thanos
  */
 public class Reference extends Expression {
-	private static final String NULL_NAME = "Name must not be null";
+	private static final String EMPTY_NAME = "Name must not be empty";
 	private static final String NULL_CONTEXT = "Context must not be null";
+	private static final String NULL_NAME = "Name must not be null";
 
 	private final String name;
 
@@ -23,21 +27,18 @@ public class Reference extends Expression {
 	 * 
 	 * @param engine
 	 *            the Funcky script engine that parsed this reference
-	 * @param fileName
-	 *            the name of the file from which this reference was parsed
+	 * @param script
+	 *            the URI of the script from which this reference was parsed
 	 * @param lineNumber
-	 *            the number of the line from which this reference was parsed
+	 *            the number of the line from which this reference was parsed or <code>0</code> if this reference was not parsed from any line (is a builtin)
 	 * @param name
 	 *            the name of this reference
 	 */
-	public Reference(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final String name) {
-		super(requireNonNullEngine(engine), requireValidFileName(fileName), requirePositiveLineNumber(lineNumber));
-		this.name = Objects.requireNonNull(name, NULL_NAME);
-	}
-
-	Reference(final String name) {
-		super(null, null, 0);
-		this.name = name;
+	public Reference(final FunckyScriptEngine engine, final URI script, final int lineNumber, final String name) {
+		super(engine, script, lineNumber);
+		if ((this.name = Objects.requireNonNull(name, NULL_NAME)).isEmpty()) {
+			throw new IllegalArgumentException(EMPTY_NAME);
+		}
 	}
 
 	@Override
@@ -50,8 +51,8 @@ public class Reference extends Expression {
 	}
 
 	@Override
-	public FunckyType getType(final ScriptContext context) throws UndefinedSymbolException {
-		return eval(Objects.requireNonNull(context, NULL_CONTEXT)).getType();
+	public FunckyType getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+		return eval(Objects.requireNonNull(context, NULL_CONTEXT)).getType(context);
 	}
 
 	@Override

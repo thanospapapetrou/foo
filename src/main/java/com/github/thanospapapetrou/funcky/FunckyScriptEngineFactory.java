@@ -15,12 +15,12 @@ import javax.script.ScriptEngineFactory;
  * @author thanos
  */
 public class FunckyScriptEngineFactory implements ScriptEngineFactory {
-	private static final String NAME = "Funcky";
-	private static final String VERSION = "1.0.0-SNAPSHOT";
 	private static final String DELIMITER = "\n";
+	private static final String NAME = "Funcky";
+	private static final String NULL_STATEMENTS = "Statements must not be null";
 	private static final String UNSUPPORTED_GET_METHOD_CALL_SYNTAX = "getMethodCallSyntax() is not supported";
 	private static final String UNSUPPORTED_GET_OUTPUT_STATEMENT = "getOutputStatement() is not supported";
-	private static final String NULL_STATEMENTS = "Statements must not be null";
+	private static final String VERSION = "1.0.0-SNAPSHOT";
 
 	@Override
 	public String getEngineName() {

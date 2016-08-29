@@ -1,6 +1,13 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
+import java.net.URI;
+
+import javax.script.ScriptContext;
+
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 
 /**
  * Class representing a Funcky number.
@@ -8,27 +15,7 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
  * @author thanos
  */
 public class FunckyNumber extends Literal {
-	/**
-	 * Funcky number representing π.
-	 */
-	public static final FunckyNumber PI = new FunckyNumber(Math.PI);
-
-	/**
-	 * Funcky number representing e.
-	 */
-	public static final FunckyNumber E = new FunckyNumber(Math.E);
-
-	/**
-	 * Funcky number representing ∞.
-	 */
-	public static final FunckyNumber INFINITY = new FunckyNumber(Double.POSITIVE_INFINITY);
-
-	/**
-	 * Funcky number representing NaN.
-	 */
-	public static final FunckyNumber NAN = new FunckyNumber(Double.NaN);
-
-	private static final Reference MINUS = new Reference("minus");
+	private static final String MINUS = "minus";
 
 	private final double value;
 
@@ -36,22 +23,27 @@ public class FunckyNumber extends Literal {
 	 * Construct a new number.
 	 * 
 	 * @param engine
-	 *            the engine that parsed this number or <code>null</code> if this number was not parsed by any engine
-	 * @param fileName
-	 *            the name of the file from which this number was parsed or <code>null</code> if this number was not parsed from any file
+	 *            the engine that parsed this number
+	 * @param script
+	 *            the URI of the script from which this number was parsed
 	 * @param lineNumber
-	 *            the number of the line from which this number was parsed or <code>0</code> if this number was not parsed from any line
+	 *            the number of the line from which this number was parsed or <code>0</code> if this number was not parsed from any line (it is builtin)
 	 * @param value
 	 *            the value of this number
 	 */
-	public FunckyNumber(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final double value) {
-		super(requireNonNullEngine(engine), requireValidFileName(fileName), requirePositiveLineNumber(lineNumber));
+	public FunckyNumber(final FunckyScriptEngine engine, final URI script, final int lineNumber, final double value) {
+		super(engine, script, lineNumber);
 		this.value = value;
 	}
 
-	FunckyNumber(final double value) {
-		super(null, null, 0);
-		this.value = value;
+	/**
+	 * Construct a new number at runtime.
+	 * 
+	 * @param engine the engine that constructed this number
+	 * @param value the value of this number
+	 */
+	public FunckyNumber(final FunckyScriptEngine engine, final double value) {
+		this(engine, FunckyScriptEngine.RUNTIME, 0, value);
 	}
 
 	@Override
@@ -60,8 +52,9 @@ public class FunckyNumber extends Literal {
 	}
 
 	@Override
-	public SimpleType getType() {
-		return SimpleType.NUMBER;
+	public SimpleType getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+		super.getType(context);
+		return engine.getPrelude().getNumber();
 	}
 
 	/**
@@ -79,22 +72,22 @@ public class FunckyNumber extends Literal {
 	}
 
 	@Override
+	public Expression toExpression() {
+		if ((value == Double.POSITIVE_INFINITY)) {
+			return new Reference(engine, script, lineNumber, Double.toString(Double.POSITIVE_INFINITY).toLowerCase());
+		} else if ((value == Double.NEGATIVE_INFINITY)) {
+			return new Application(engine, script, lineNumber, new Reference(engine, script, lineNumber, MINUS), new Reference(engine, script, lineNumber, Double.toString(Double.POSITIVE_INFINITY).toLowerCase()));
+		} else if (value == Double.NaN) {
+			return new Reference(engine, script, lineNumber, Double.toString(Double.NaN));
+		}
+		return this;
+	}
+
+	@Override
 	public String toString() {
 		if ((value == Double.POSITIVE_INFINITY) || (value == Double.NEGATIVE_INFINITY) || (value == Double.NaN)) {
 			return toExpression().toString();
 		}
 		return Double.toString(value);
-	}
-
-	@Override
-	public Expression toExpression() {
-		if ((value == Double.POSITIVE_INFINITY)) {
-			return new Reference(Double.toString(value).toLowerCase());
-		} else if ((value == Double.NEGATIVE_INFINITY)) {
-			return new Application(MINUS, INFINITY.toExpression());
-		} else if (value == Double.NaN) {
-			return new Reference(Double.toString(value));
-		}
-		return this;
 	}
 }

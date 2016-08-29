@@ -1,5 +1,6 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
+import java.net.URI;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
@@ -16,9 +17,9 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolExce
  * @author thanos
  */
 public class Definition extends AbstractSyntaxTreeNode {
-	private static final String NULL_NAME = "Name must not be null";
+	private static final String EMPTY_NAME = "Name must not be empty";
 	private static final String NULL_EXPRESSION = "Expression must not be null";
-	private static final String NULL_CONTEXT = "Context must not be null";
+	private static final String NULL_NAME = "Name must not be null";
 
 	private final String name;
 	private final Expression expression;
@@ -28,24 +29,27 @@ public class Definition extends AbstractSyntaxTreeNode {
 	 * 
 	 * @param engine
 	 *            the Funcky script engine that parsed this definition
-	 * @param fileName
-	 *            the name of the file from which this definition was parsed
+	 * @param script
+	 *            the URI of the script from which this definition was parsed
 	 * @param lineNumber
-	 *            the number of the line from which this definition was parsed
+	 *            the number of the line from which this definition was parsed or <code>0</code> if this expression was not parsed from any line (is a builtin)
 	 * @param name
 	 *            the name of this definition.
 	 * @param expression
 	 *            the expression of this definition
 	 */
-	public Definition(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final String name, final Expression expression) {
-		super(requireNonNullEngine(engine), requireValidFileName(fileName), requirePositiveLineNumber(lineNumber));
-		this.name = Objects.requireNonNull(name, NULL_NAME);
+	public Definition(final FunckyScriptEngine engine, final URI script, final int lineNumber, final String name, final Expression expression) {
+		super(engine, script, lineNumber);
+		if ((this.name = Objects.requireNonNull(name, NULL_NAME)).isEmpty()) {
+			throw new IllegalArgumentException(EMPTY_NAME);
+		}
 		this.expression = Objects.requireNonNull(expression, NULL_EXPRESSION);
 	}
 
 	@Override
 	public Void eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
-		if (Objects.requireNonNull(context, NULL_CONTEXT).getAttribute(name) == null) {
+		super.eval(context);
+		if (context.getAttribute(name) == null) {
 			context.setAttribute(name, expression.eval(context), ScriptContext.ENGINE_SCOPE);
 			return null;
 		}
@@ -59,5 +63,14 @@ public class Definition extends AbstractSyntaxTreeNode {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Get the expression.
+	 * 
+	 * @return the expression of this definition
+	 */
+	public Expression getExpression() {
+		return expression;
 	}
 }

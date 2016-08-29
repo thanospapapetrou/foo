@@ -1,8 +1,10 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
+
+import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 
 /**
  * Class representing a Funcky simple type.
@@ -10,31 +12,26 @@ import java.util.Objects;
  * @author thanos
  */
 public class SimpleType extends FunckyType {
-	/**
-	 * Simple type representing a type.
-	 */
-	public static final SimpleType TYPE = new SimpleType("type");
-
-	/**
-	 * Simple type representing a number.
-	 */
-	public static final SimpleType NUMBER = new SimpleType("number");
-
-	/**
-	 * Simple type representing a boolean.
-	 */
-	public static final SimpleType BOOLEAN = new SimpleType("boolean");
-
-	private static final String NULL_TYPE = "Type must not be null";
-
 	private final String name;
 
-	private SimpleType(final String name) {
+	/**
+	 * Construct a new simple type.
+	 * 
+	 * @param engine
+	 *            the engine that constructed this type variable
+	 * @param script
+	 *            the URI of the script from which this type variable was defined
+	 * @param name
+	 *            the name of this type variable
+	 */
+	public SimpleType(final FunckyScriptEngine engine, final URI script, final String name) {
+		super(engine, script, 0);
 		this.name = name;
 	}
 
 	@Override
 	public FunckyType bind(final Map<TypeVariable, FunckyType> bindings) {
+		super.bind(bindings);
 		return this;
 	}
 
@@ -50,7 +47,8 @@ public class SimpleType extends FunckyType {
 
 	@Override
 	public Map<TypeVariable, FunckyType> inferGenericBindings(final FunckyType type) {
-		if (Objects.requireNonNull(type, NULL_TYPE) instanceof TypeVariable) {
+		super.inferGenericBindings(type);
+		if (type instanceof TypeVariable) {
 			return Collections.<TypeVariable, FunckyType> singletonMap((TypeVariable) type, this);
 		} else if (type instanceof SimpleType) {
 			return equals(type) ? Collections.<TypeVariable, FunckyType> emptyMap() : null;
@@ -60,7 +58,7 @@ public class SimpleType extends FunckyType {
 
 	@Override
 	public Expression toExpression() {
-		return new Reference(toString());
+		return new Reference(engine, script, lineNumber, toString());
 	}
 
 	@Override

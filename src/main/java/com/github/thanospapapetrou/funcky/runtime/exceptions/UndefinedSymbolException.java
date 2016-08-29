@@ -11,9 +11,9 @@ import com.github.thanospapapetrou.funcky.runtime.Reference;
  * @author thanos
  */
 public class UndefinedSymbolException extends FunckyException {
-	private static final long serialVersionUID = 1L;
-	private static final String UNDEFINED_SYMBOL = "Symbol %1$s is undefined";
 	private static final String NULL_REFERENCE = "Reference must not be null";
+	private static final String UNDEFINED_SYMBOL = "Symbol %1$s is undefined";
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Construct a new undefined symbol exception.
@@ -22,6 +22,6 @@ public class UndefinedSymbolException extends FunckyException {
 	 *            the reference to an undefined symbol
 	 */
 	public UndefinedSymbolException(final Reference reference) {
-		super(String.format(UNDEFINED_SYMBOL, Objects.requireNonNull(reference, NULL_REFERENCE)), reference.getFileName(), reference.getLineNumber());
+		super(String.format(UNDEFINED_SYMBOL, Objects.requireNonNull(reference, NULL_REFERENCE)), reference.getScript(), reference.getLineNumber());
 	}
 }

@@ -1,5 +1,7 @@
 package com.github.thanospapapetrou.funcky.parser.exceptions;
 
+import java.net.URI;
+
 import com.github.thanospapapetrou.funcky.FunckyException;
 
 /**
@@ -8,20 +10,20 @@ import com.github.thanospapapetrou.funcky.FunckyException;
  * @author thanos
  */
 public class UnparsableInputException extends FunckyException {
-	private static final long serialVersionUID = 1L;
 	private static final String UNPARSABLE_INPUT = "Unparsable input %1$s";
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Construct a new unparsable input exception.
 	 * 
 	 * @param unparsableInput
 	 *            the unparsable input
-	 * @param fileName
-	 *            the name of the file in which the unparsable input was encountered
+	 * @param script
+	 *            the URI of the script in which the error occurred
 	 * @param lineNumber
 	 *            the line of the file in which the unparsable input was encountered
 	 */
-	public UnparsableInputException(final char unparsableInput, final String fileName, final int lineNumber) {
-		super(String.format(UNPARSABLE_INPUT, unparsableInput), fileName, lineNumber);
+	public UnparsableInputException(final char unparsableInput, final URI script, final int lineNumber) {
+		super(String.format(UNPARSABLE_INPUT, unparsableInput), script, lineNumber);
 	}
 }

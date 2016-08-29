@@ -5,25 +5,39 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+
 /**
  * Class representing a Funcky function type.
  * 
  * @author thanos
  */
-class FunctionType extends FunckyType {
+public class FunctionType extends FunckyType {
+	private static final String FUNCTION = "function";
 	private static final String NULL_TYPE = "Type must not be null";
 
 	private final FunckyType domain;
 	private final FunckyType range;
 
-	FunctionType(final FunckyType domain, final FunckyType range) {
+	/**
+	 * Construct a new function type.
+	 * 
+	 * @param engine
+	 *            the engine that created this function type
+	 * @param domain
+	 *            the domain of this function type
+	 * @param range
+	 *            the range of this function type
+	 */
+	public FunctionType(final FunckyScriptEngine engine, final FunckyType domain, final FunckyType range) {
+		super(engine, FunckyScriptEngine.RUNTIME, 0);
 		this.domain = domain;
 		this.range = range;
 	}
 
 	@Override
 	public FunckyType bind(final Map<TypeVariable, FunckyType> bindings) {
-		return new FunctionType(domain.bind(bindings), range.bind(bindings));
+		return new FunctionType(engine, domain.bind(bindings), range.bind(bindings));
 	}
 
 	@Override
@@ -35,10 +49,20 @@ class FunctionType extends FunckyType {
 		return false;
 	}
 
+	/**
+	 * Get the domain of this function type.
+	 * 
+	 * @return the domain
+	 */
 	public FunckyType getDomain() {
 		return domain;
 	}
 
+	/**
+	 * Get the range of this function type.
+	 * 
+	 * @return the range
+	 */
 	public FunckyType getRange() {
 		return range;
 	}
@@ -70,7 +94,7 @@ class FunctionType extends FunckyType {
 
 	@Override
 	public Expression toExpression() {
-		return new Application(new Application(Function.FUNCTION, domain), range);
+		return new Application(engine, script, lineNumber, new Application(engine, script, lineNumber, new Reference(engine, script, lineNumber, FUNCTION), domain), range);
 	}
 
 	@Override

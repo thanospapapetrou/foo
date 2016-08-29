@@ -1,8 +1,12 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
+import java.net.URI;
+import java.util.Objects;
+
 import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
@@ -13,22 +17,27 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolExce
  * @author thanos
  */
 public abstract class Expression extends AbstractSyntaxTreeNode {
+	private static final String NULL_CONTEXT = "Context must not be null";
+
 	/**
 	 * Construct a new expression.
 	 * 
 	 * @param engine
-	 *            the Funcky script engine that parsed this expression or <code>null</code> if this expression was not parsed by any engine
-	 * @param fileName
-	 *            the name of the file from which this expression was parsed or <code>null</code> if this expression was not parsed from any file
+	 *            the Funcky script engine that parsed this expression
+	 * @param script
+	 *            the URI of the script from which this expression was parsed
 	 * @param lineNumber
-	 *            the number of the line from which this expression was parsed or <code>null</code> if this expression was not parsed from any line
+	 *            the number of the line from which this expression was parsed or <code>0</code> if this expression was not parsed from any line (is a builtin)
 	 */
-	protected Expression(final FunckyScriptEngine engine, final String fileName, final int lineNumber) {
-		super(engine, fileName, lineNumber);
+	protected Expression(final FunckyScriptEngine engine, final URI script, final int lineNumber) {
+		super(engine, script, lineNumber);
 	}
 
 	@Override
-	public abstract Literal eval(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException;
+	public Literal eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+		super.eval(context);
+		return null;
+	}
 
 	/**
 	 * Get the type of this expression.
@@ -43,5 +52,8 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	 * @throws UndefinedSymbolException
 	 *             if any reference to an undefined symbol is encountered
 	 */
-	public abstract FunckyType getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException;
+	public FunckyType getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+		Objects.requireNonNull(context, NULL_CONTEXT);
+		return null;
+	}
 }

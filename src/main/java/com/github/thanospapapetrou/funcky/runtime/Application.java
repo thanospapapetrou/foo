@@ -1,10 +1,12 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
+import java.net.URI;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
@@ -19,7 +21,6 @@ public class Application extends Expression {
 	private static final String NESTED_APPLICATION = "(%1$s)";
 	private static final String NULL_FUNCTION = "Function must not be null";
 	private static final String NULL_ARGUMENT = "Argument must not be null";
-	private static final String NULL_CONTEXT = "Context must not be null";
 
 	private final Expression function;
 	private final Expression argument;
@@ -29,7 +30,7 @@ public class Application extends Expression {
 	 * 
 	 * @param engine
 	 *            the engine that parsed this application
-	 * @param fileName
+	 * @param script
 	 *            the name of the file from which this application was parsed
 	 * @param lineNumber
 	 *            the number of the line from which this application was parsed
@@ -38,28 +39,55 @@ public class Application extends Expression {
 	 * @param argument
 	 *            the argument of this application
 	 */
-	public Application(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final Expression function, final Expression argument) {
-		super(requireNonNullEngine(engine), requireValidFileName(fileName), requirePositiveLineNumber(lineNumber));
-		// TODO is engine needed any more in super()?
+	public Application(final FunckyScriptEngine engine, final URI script, final int lineNumber, final Expression function, final Expression argument) {
+		super(engine, script, lineNumber);
 		this.function = Objects.requireNonNull(function, NULL_FUNCTION);
 		this.argument = Objects.requireNonNull(argument, NULL_ARGUMENT);
 	}
 
-	Application(final Expression function, final Expression argument) {
-		super(null, null, 0);
-		this.function = Objects.requireNonNull(function, NULL_FUNCTION);
-		this.argument = Objects.requireNonNull(argument, NULL_ARGUMENT);
+	/**
+	 * Construct a new application at runtime.
+	 * 
+	 * @param engine
+	 *            the engine that constructed this application
+	 * @param function
+	 *            the function of this application
+	 * @param argument
+	 *            the argument of this application
+	 */
+	public Application(final FunckyScriptEngine engine, final Expression function, final Expression argument) {
+		this(engine, FunckyScriptEngine.RUNTIME, 0, function, argument);
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
-		checkType(Objects.requireNonNull(context, NULL_CONTEXT));
+	public Literal eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+		super.eval(context);
+		checkTypes(context);
 		return ((Function) function.eval(context)).apply(argument, context);
+	}
+
+	/**
+	 * Get the argument of this application.
+	 * 
+	 * @return the argument of this application
+	 */
+	public Expression getArgument() {
+		return argument;
+	}
+
+	/**
+	 * Get the function of this application.
+	 * 
+	 * @return the function of this application
+	 */
+	public Expression getFunction() {
+		return function;
 	}
 
 	@Override
 	public FunckyType getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
-		checkType(Objects.requireNonNull(context, NULL_CONTEXT));
+		super.getType(context);
+		checkTypes(context);
 		final FunctionType functionType = (FunctionType) function.getType(context);
 		return functionType.getRange().bind(functionType.getDomain().inferGenericBindings(argument.getType(context)));
 	}
@@ -70,14 +98,12 @@ public class Application extends Expression {
 		return String.format(APPLICATION, function, (argumentExpression instanceof Application) ? String.format(NESTED_APPLICATION, argumentExpression) : argumentExpression);
 	}
 
-	private void checkType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	private void checkTypes(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 		if (!(function.getType(context) instanceof FunctionType)) {
 			throw new InvalidFunctionException(function);
 		}
-		final FunctionType functionType = (FunctionType) function.getType(context);
-		final FunckyType argumentType = argument.getType(context);
-		if (functionType.getDomain().inferGenericBindings(argumentType) == null) {
-			throw new InvalidArgumentException(function, functionType.getDomain(), argument, argumentType);
+		if (((FunctionType) function.getType(context)).getDomain().inferGenericBindings(argument.getType(context)) == null) {
+			throw new InvalidArgumentException(context, this);
 		}
 	}
 }

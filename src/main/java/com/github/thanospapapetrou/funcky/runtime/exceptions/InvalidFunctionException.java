@@ -11,9 +11,9 @@ import com.github.thanospapapetrou.funcky.runtime.Expression;
  * @author thanos
  */
 public class InvalidFunctionException extends FunckyException {
-	private static final long serialVersionUID = 1L;
 	private static final String INVALID_FUNCTION = "%1$s is not a function";
 	private static final String NULL_INVALID_FUNCTION = "Invalid function must not be null";
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Construct a new invalid function exception.
@@ -22,6 +22,6 @@ public class InvalidFunctionException extends FunckyException {
 	 *            the invalid function expression
 	 */
 	public InvalidFunctionException(final Expression invalidFunction) {
-		super(String.format(INVALID_FUNCTION, Objects.requireNonNull(invalidFunction, NULL_INVALID_FUNCTION)), invalidFunction.getFileName(), invalidFunction.getLineNumber());
+		super(String.format(INVALID_FUNCTION, Objects.requireNonNull(invalidFunction, NULL_INVALID_FUNCTION)), invalidFunction.getScript(), invalidFunction.getLineNumber());
 	}
 }

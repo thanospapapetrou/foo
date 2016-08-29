@@ -1,10 +1,14 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
-import java.util.Objects;
+import java.net.URI;
 
 import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 
 /**
  * Abstract class representing a Funcky literal. A literal can not be evaluated further, however it may not be directly representable, so it has to be converted to an expression to be displayed.
@@ -12,39 +16,24 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
  * @author thanos
  */
 public abstract class Literal extends Expression {
-	private static final String NULL_CONTEXT = "Context must not be null";
-
 	/**
 	 * Construct a new literal.
 	 * 
 	 * @param engine
-	 *            the Funcky script engine that parsed this literal or <code>null</code> if this literal was not parsed by any engine
-	 * @param fileName
-	 *            the name of the file from which this literal was parsed or <code>null</code> if this literal was not parsed from any file
+	 *            the Funcky script engine that parsed this literal
+	 * @param script
+	 *            the URI of the script from which this literal was parsed
 	 * @param lineNumber
-	 *            the number of the line from which this literal was parsed or <code>0</code> if this literal was not parsed from any line
+	 *            the number of the line from which this literal was parsed or <code>0</code> if this literal was not parsed from any line (is a builtin)
 	 */
-	protected Literal(final FunckyScriptEngine engine, final String fileName, final int lineNumber) {
-		super(engine, fileName, lineNumber);
+	protected Literal(final FunckyScriptEngine engine, final URI script, final int lineNumber) {
+		super(engine, script, lineNumber);
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) {
-		Objects.requireNonNull(context, NULL_CONTEXT);
+	public Literal eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+		super.eval(context);
 		return this;
-	}
-
-	/**
-	 * Get the type of this literal.
-	 * 
-	 * @return the type of this literal
-	 */
-	public abstract FunckyType getType();
-
-	@Override
-	public FunckyType getType(final ScriptContext context) {
-		Objects.requireNonNull(context, NULL_CONTEXT);
-		return getType();
 	}
 
 	/**

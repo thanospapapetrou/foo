@@ -19,8 +19,6 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.github.thanospapapetrou.funcky.runtime.FunckyBoolean;
-
 public class FunckyTest implements FileFilter {
 	private static final String CLASSPATH_ROOT = "/";
 
@@ -59,10 +57,10 @@ public class FunckyTest implements FileFilter {
 	@Test(dataProvider = "tests")
 	public void test(final File test) throws IOException, ScriptException {
 		try (final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(test), StandardCharsets.UTF_8))) {
-			engine.getContext().setAttribute(ScriptEngine.FILENAME, test.getName(), ScriptContext.ENGINE_SCOPE);
+			engine.getContext().setAttribute(ScriptEngine.FILENAME, test.getCanonicalPath(), ScriptContext.ENGINE_SCOPE);
 			String line = null;
 			while ((line = reader.readLine()) != null) {
-				Assert.assertEquals(engine.eval(line), FunckyBoolean.TRUE, line);
+				Assert.assertEquals(engine.eval(line), engine.getPrelude().getTrue(), line);
 			}
 		}
 	}

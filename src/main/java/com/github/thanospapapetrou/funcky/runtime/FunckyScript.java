@@ -1,5 +1,6 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,31 +19,34 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolExce
  */
 public class FunckyScript extends AbstractSyntaxTreeNode {
 	private static final String NULL_DEFINITIONS = "Definitions must not be null";
-	private static final String NULL_CONTEXT = "Context must not be null";
 
-	private final List<Definition> definitions;
+	/**
+	 * The definitions of this script.
+	 */
+	protected final List<Definition> definitions;
 
 	/**
 	 * Construct a new script.
 	 * 
 	 * @param engine
 	 *            the engine that parsed this script
-	 * @param fileName
-	 *            the name of the file from which this script was parsed
+	 * @param script
+	 *            the URI of this script
 	 * @param lineNumber
 	 *            the number of the line from which this script was parsed
 	 * @param definitions
 	 *            the definitions of this script
 	 */
-	public FunckyScript(final FunckyScriptEngine engine, final String fileName, final int lineNumber, final List<Definition> definitions) {
-		super(requireNonNullEngine(engine), requireValidFileName(fileName), requirePositiveLineNumber(lineNumber));
+	public FunckyScript(final FunckyScriptEngine engine, final URI script, final int lineNumber, final List<Definition> definitions) {
+		super(engine, script, lineNumber);
 		this.definitions = Objects.requireNonNull(definitions, NULL_DEFINITIONS);
 	}
 
 	@Override
 	public Void eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+		super.eval(context);
 		for (final Definition definition : definitions) {
-			definition.eval(Objects.requireNonNull(context, NULL_CONTEXT));
+			definition.eval(context);
 		}
 		return null;
 	}
