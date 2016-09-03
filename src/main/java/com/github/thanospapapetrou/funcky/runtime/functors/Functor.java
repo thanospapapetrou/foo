@@ -52,11 +52,11 @@ public abstract class Functor extends Function {
 	/**
 	 * Construct a new functor.
 	 * 
-	 * @param engine
-	 * @param script
-	 * @param lineNumber
-	 * @param name
-	 * @param types
+	 * @param engine the engine that generated this functor
+	 * @param script the URI of the script from which this functor was generated
+	 * @param lineNumber // TODO do we need this here?
+	 * @param name the name of this functor
+	 * @param types the types of this functor
 	 */
 	public Functor(final FunckyScriptEngine engine, final URI script, final int lineNumber, final String name, final FunckyType... types) {
 		super(engine, script, lineNumber, name, getFunctionType(engine, script, requireValidTypes(types)));
