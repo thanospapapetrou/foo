@@ -38,6 +38,8 @@ public class Prelude extends Library {
 	private static final String FUNCTION = "function";
 	private static final String IDENTITY = "identity";
 	private static final String IF = "if";
+	private static final String INTEGER = "integer";
+	private static final String IS_NAN = "isNaN";
 	private static final String FLIP = "flip";
 	private static final String MULTIPLY = "multiply";
 	private static final String NUMBER = "number";
@@ -59,7 +61,7 @@ public class Prelude extends Library {
 	/**
 	 * Construct a new prelude.
 	 * 
-	 * @param engine
+	 * @param engine the engine that generated this prelude
 	 * @throws IOException
 	 * @throws ScriptException
 	 */
@@ -147,6 +149,21 @@ public class Prelude extends Library {
 			protected Literal apply(final ScriptContext context, final Expression... arguments) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 				super.apply(context, arguments);
 				return new FunctionType(engine, (FunckyType) arguments[0].eval(context), (FunckyType) arguments[1].eval(context));
+			}
+		});
+		addDefinition(new Function(engine, PRELUDE, 0, IS_NAN, generateFunctionType(numberType, booleanType)) {
+			@Override
+			public Literal apply(final Expression argument, final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+				super.apply(argument, context);
+				return Double.isNaN(((FunckyNumber) argument.eval(context)).getValue()) ? booleanTrue : booleanFalse;
+			}
+		});
+		addDefinition(new Function(engine, PRELUDE, 0, INTEGER, generateFunctionType(numberType, numberType)) {
+			@Override
+			public Literal apply(final Expression argument, final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+				super.apply(argument, context);
+				final double value = ((FunckyNumber) argument.eval(context)).getValue();
+				return new FunckyNumber(engine, (Double.isInfinite(value) || Double.isNaN(value)) ? value : (int) value);
 			}
 		});
 		addDefinition(new TwoArgumentArithmeticOperator(engine, PRELUDE, 0, ADD, numberType) {

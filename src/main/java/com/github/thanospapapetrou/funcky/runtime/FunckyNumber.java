@@ -48,7 +48,7 @@ public class FunckyNumber extends Literal {
 
 	@Override
 	public boolean equals(final Object object) {
-		return (object instanceof FunckyNumber) && ((value == ((FunckyNumber) object).value) || (Double.isNaN(value) && Double.isNaN(((FunckyNumber) object).value)));
+		return (object instanceof FunckyNumber) && (value == ((FunckyNumber) object).value);
 	}
 
 	@Override
