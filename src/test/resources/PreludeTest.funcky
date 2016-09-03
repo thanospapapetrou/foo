@@ -4,6 +4,20 @@ not (isNaN 0)
 not (isNaN 1)
 not (isNaN infinity)
 isNaN NaN
+equal (integer (minus infinity)) (minus infinity)
+equal (integer -1.9) -1
+equal (integer -1.1) -1
+equal (integer -1.0) -1
+equal (integer -0.9) 0
+equal (integer -0.1) 0
+equal (integer 0) 0
+equal (integer 0.1) 0
+equal (integer 0.9) 0
+equal (integer 1) 1
+equal (integer 1.1) 1
+equal (integer 1.9) 1
+equal (integer infinity) infinity
+isNaN (integer NaN)
 equal (add (minus infinity) (minus infinity)) (minus infinity)
 equal (add (minus infinity) -1) (minus infinity)
 equal (add (minus infinity) 0) (minus infinity)
