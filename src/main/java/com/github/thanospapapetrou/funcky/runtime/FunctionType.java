@@ -23,9 +23,9 @@ public class FunctionType extends FunckyType {
 	 * Construct a new function type.
 	 * 
 	 * @param engine
-	 *            the engine that created this function type
+	 *            the engine that generated this function type
 	 * @param domain
-	 *            the domain of this function type
+	 *            the domain of this function type // TODO do we need script and line here?
 	 * @param range
 	 *            the range of this function type
 	 */

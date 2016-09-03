@@ -29,7 +29,7 @@ public class FunckyScript extends AbstractSyntaxTreeNode {
 	 * Construct a new script.
 	 * 
 	 * @param engine
-	 *            the engine that parsed this script
+	 *            the engine that generated this script
 	 * @param script
 	 *            the URI of this script
 	 * @param lineNumber

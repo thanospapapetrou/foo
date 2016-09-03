@@ -23,11 +23,11 @@ public class FunckyNumber extends Literal {
 	 * Construct a new number.
 	 * 
 	 * @param engine
-	 *            the engine that parsed this number
+	 *            the engine that generated this number
 	 * @param script
-	 *            the URI of the script from which this number was parsed
+	 *            the URI of the script from which this number was generated
 	 * @param lineNumber
-	 *            the number of the line from which this number was parsed or <code>0</code> if this number was not parsed from any line (it is builtin)
+	 *            the number of the line from which this number was parsed or <code>0</code> if this number was not parsed (is builtin or generated at runtime)
 	 * @param value
 	 *            the value of this number
 	 */

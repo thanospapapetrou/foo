@@ -29,11 +29,11 @@ public class TypeVariable extends FunckyType {
 	 * Construct a new type variable.
 	 * 
 	 * @param engine
-	 *            the engine that parsed this type variable
+	 *            the engine that generated this type variable
 	 * @param script
-	 *            the URI of the script from which this type variable was parsed
+	 *            the URI of the script from which this type variable was generated
 	 * @param lineNumber
-	 *            the number of the line from which this type variable was parsed or <code>0</code> if this type was not parsed from any line (it is builtin)
+	 *            the number of the line from which this type variable was parsed or <code>0</code> if this type was not parsed (is builtin or generated at runtime)
 	 * @param name
 	 *            the name of this type variable
 	 */

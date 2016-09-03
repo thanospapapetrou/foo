@@ -23,11 +23,11 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	 * Construct a new expression.
 	 * 
 	 * @param engine
-	 *            the Funcky script engine that parsed this expression
+	 *            the engine that generated this expression
 	 * @param script
-	 *            the URI of the script from which this expression was parsed
+	 *            the URI of the script from which this expression was generated
 	 * @param lineNumber
-	 *            the number of the line from which this expression was parsed or <code>0</code> if this expression was not parsed from any line (is a builtin)
+	 *            the number of the line from which this expression was parsed or <code>0</code> if this expression was not parsed (is builtin or generated at runtime)
 	 */
 	protected Expression(final FunckyScriptEngine engine, final URI script, final int lineNumber) {
 		super(engine, script, lineNumber);

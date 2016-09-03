@@ -23,19 +23,30 @@ public abstract class AbstractSyntaxTreeNode extends CompiledScript {
 	private static final String NULL_ENGINE = "Engine must not be null";
 	private static final String NULL_SCRIPT = "Script must not be null";
 
+	/**
+	 * The engine that generated this node.
+	 */
 	protected final FunckyScriptEngine engine;
+	
+	/**
+	 * The URI of the script from which this node was generated.
+	 */
 	protected final URI script;
+	
+	/**
+	 * The number of the script line from which this node was generated. 
+	 */
 	protected final int lineNumber;
 
 	/**
-	 * Construct a new abstract syntax tree node.
+	 * Construct a new node.
 	 * 
 	 * @param engine
-	 *            the engine that parsed this abstract syntax tree node
+	 *            the engine that generated this node
 	 * @param script
-	 *            the URI of the script from which this abstract syntax tree node was generated
+	 *            the URI of the script from which this node was generated
 	 * @param lineNumber
-	 *            the number of the line from which this abstract syntax tree node was parsed or <code>0</code> if this abstract syntax tree node was not parsed from any line (is a builtin)
+	 *            the number of the line from which this node was parsed or <code>0</code> if this node was not parsed (is builtin or generated at runtime)
 	 */
 	protected AbstractSyntaxTreeNode(final FunckyScriptEngine engine, final URI script, final int lineNumber) {
 		this.engine = Objects.requireNonNull(engine, NULL_ENGINE);

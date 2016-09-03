@@ -28,11 +28,11 @@ public class Definition extends AbstractSyntaxTreeNode {
 	 * Construct a new definition.
 	 * 
 	 * @param engine
-	 *            the Funcky script engine that parsed this definition
+	 *            the engine that generated this definition
 	 * @param script
-	 *            the URI of the script from which this definition was parsed
+	 *            the URI of the script from which this definition was generated
 	 * @param lineNumber
-	 *            the number of the line from which this definition was parsed or <code>0</code> if this expression was not parsed from any line (is a builtin)
+	 *            the number of the line from which this definition was parsed or <code>0</code> if this expression was not parsed (is builtin or generated at runtime)
 	 * @param name
 	 *            the name of this definition.
 	 * @param expression

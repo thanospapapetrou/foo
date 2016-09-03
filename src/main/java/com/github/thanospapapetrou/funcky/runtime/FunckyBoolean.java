@@ -18,12 +18,12 @@ public class FunckyBoolean extends Literal {
 	private final boolean value;
 
 	/**
-	 * Construct a new number.
+	 * Construct a new boolean.
 	 * 
 	 * @param engine
-	 *            the engine that parsed this boolean
+	 *            the engine that generated this boolean
 	 * @param script
-	 *            the URI of the script from which this boolean was parsed
+	 *            the URI of the script from which this boolean was generated
 	 * @param value
 	 *            the value of this boolean
 	 */

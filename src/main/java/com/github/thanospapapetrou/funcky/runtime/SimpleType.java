@@ -18,11 +18,11 @@ public class SimpleType extends FunckyType {
 	 * Construct a new simple type.
 	 * 
 	 * @param engine
-	 *            the engine that constructed this type variable
+	 *            the engine that generated this simple type
 	 * @param script
-	 *            the URI of the script from which this type variable was defined
+	 *            the URI of the script from which this simple type was generated
 	 * @param name
-	 *            the name of this type variable
+	 *            the name of this simple type
 	 */
 	public SimpleType(final FunckyScriptEngine engine, final URI script, final String name) {
 		super(engine, script, 0);

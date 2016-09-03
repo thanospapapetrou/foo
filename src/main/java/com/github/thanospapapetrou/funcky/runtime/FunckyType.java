@@ -25,11 +25,11 @@ public abstract class FunckyType extends Literal {
 	 * Construct a new type.
 	 * 
 	 * @param engine
-	 *            the engine that parsed this type
+	 *            the engine that generated this type
 	 * @param script
-	 *            the URI of the script from which this type was parsed
+	 *            the URI of the script from which this type was generated
 	 * @param lineNumber
-	 *            the number of the line from which this type was parsed or <code>0</code> if this type was not parsed from any line (it is builtin)
+	 *            the number of the line from which this type was parsed or <code>0</code> if this type was not parsed (is builtin or generated at runtime)
 	 */
 	protected FunckyType(final FunckyScriptEngine engine, final URI script, final int lineNumber) {
 		super(engine, script, lineNumber);

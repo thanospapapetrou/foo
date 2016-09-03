@@ -26,11 +26,11 @@ public class Reference extends Expression {
 	 * Construct a new reference.
 	 * 
 	 * @param engine
-	 *            the Funcky script engine that parsed this reference
+	 *            the engine that generated this reference
 	 * @param script
-	 *            the URI of the script from which this reference was parsed
+	 *            the URI of the script from which this reference was generated
 	 * @param lineNumber
-	 *            the number of the line from which this reference was parsed or <code>0</code> if this reference was not parsed from any line (is a builtin)
+	 *            the number of the line from which this reference was parsed or <code>0</code> if this reference was not parsed (is builtin or generated at runtime)
 	 * @param name
 	 *            the name of this reference
 	 */

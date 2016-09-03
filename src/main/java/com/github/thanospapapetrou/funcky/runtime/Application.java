@@ -29,11 +29,11 @@ public class Application extends Expression {
 	 * Construct a new application.
 	 * 
 	 * @param engine
-	 *            the engine that parsed this application
+	 *            the engine that generated this application
 	 * @param script
-	 *            the name of the file from which this application was parsed
+	 *            the URI of the script from which this application was generated
 	 * @param lineNumber
-	 *            the number of the line from which this application was parsed
+	 *            the number of the line from which this application was parsed or <code>0</code> if this application was not parsed (is builtin or generated at runtime)
 	 * @param function
 	 *            the function of this application
 	 * @param argument

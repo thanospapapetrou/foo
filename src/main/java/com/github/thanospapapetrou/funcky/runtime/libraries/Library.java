@@ -23,6 +23,11 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentExce
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 
+/**
+ * Class representing a Funcky library.
+ * @author thanos
+ *
+ */
 public abstract class Library extends FunckyScript {
 	private static final String EMPTY_NAME = "Name must not be empty";
 	private static final String NULL_DOMAIN = "Domain must not be null";

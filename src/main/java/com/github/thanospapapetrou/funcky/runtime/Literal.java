@@ -20,11 +20,11 @@ public abstract class Literal extends Expression {
 	 * Construct a new literal.
 	 * 
 	 * @param engine
-	 *            the Funcky script engine that parsed this literal
+	 *            the engine that generated this literal
 	 * @param script
-	 *            the URI of the script from which this literal was parsed
+	 *            the URI of the script from which this literal was generated
 	 * @param lineNumber
-	 *            the number of the line from which this literal was parsed or <code>0</code> if this literal was not parsed from any line (is a builtin)
+	 *            the number of the line from which this literal was parsed or <code>0</code> if this literal was not parsed (is builtin or generated at runtime)
 	 */
 	protected Literal(final FunckyScriptEngine engine, final URI script, final int lineNumber) {
 		super(engine, script, lineNumber);
