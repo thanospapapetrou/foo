@@ -162,3 +162,45 @@ isNaN (divide NaN 0)
 isNaN (divide NaN 1)
 isNaN (divide NaN infinity)
 isNaN (divide NaN NaN)
+equal (minus (minus infinity)) infinity
+equal (minus -1)  1
+equal (minus 0) 0
+equal (minus 1) -1
+equal (minus infinity) (minus infinity)
+isNaN (minus NaN)
+equal (inverse (minus infinity)) 0
+equal (inverse -2) -0.5
+equal (inverse -1) -1
+equal (inverse -0.5) -2
+equal (inverse 0) infinity
+equal (inverse 0.5) 2
+equal (inverse 1) 1
+equal (inverse 2) 0.5
+equal (inverse infinity) 0
+isNaN (inverse NaN)
+not false
+not (not true)
+not (and false false)
+not (and false true)
+not (and true false)
+and true true
+nand false false
+nand false true
+nand true false
+not (nand true true)
+not (or false false)
+or false true
+or true false
+or true true
+nor false false
+not (nor false true)
+not (nor true false)
+not (nor true true)
+not (xor false false)
+xor false true
+xor true false
+not (xor true true)
+xnor false false
+not (xnor false true)
+not (xnor true false)
+xnor true true
