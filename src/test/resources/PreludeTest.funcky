@@ -178,6 +178,96 @@ equal (inverse 1) 1
 equal (inverse 2) 0.5
 equal (inverse infinity) 0
 isNaN (inverse NaN)
+isNaN (quotient (minus infinity) (minus infinity))
+equal (quotient (minus infinity) -2) infinity
+equal (quotient (minus infinity) -1) infinity
+equal (quotient (minus infinity) -0.5) infinity
+equal (quotient (minus infinity) 0) (minus infinity)
+equal (quotient (minus infinity) 0.5) (minus infinity)
+equal (quotient (minus infinity) 1) (minus infinity)
+equal (quotient (minus infinity) 2) (minus infinity)
+isNaN (quotient (minus infinity) infinity)
+isNaN (quotient (minus infinity) NaN)
+equal (quotient -2 (minus infinity)) 0
+equal (quotient -2 -2) 1
+equal (quotient -2 -1) 2
+equal (quotient -2 -0.5) 4
+equal (quotient -2 0) (minus infinity)
+equal (quotient -2 0.5) -4
+equal (quotient -2 1) -2
+equal (quotient -2 2) -1
+equal (quotient -2 infinity) 0
+isNaN (quotient -2 NaN)
+equal (quotient -1 (minus infinity)) 0
+equal (quotient -1 -2) 0
+equal (quotient -1 -1) 1
+equal (quotient -1 -0.5) 2
+equal (quotient -1 0) (minus infinity)
+equal (quotient -1 0.5) -2
+equal (quotient -1 1) -1
+equal (quotient -1 2) 0
+equal (quotient -1 infinity) 0
+isNaN (quotient -1 NaN)
+equal (quotient -0.5 (minus infinity)) 0
+equal (quotient -0.5 -2) 0
+equal (quotient -0.5 -1) 0
+equal (quotient -0.5 -0.5) 1
+equal (quotient -0.5 0) (minus infinity)
+equal (quotient -0.5 0.5) -1
+equal (quotient -0.5 1) 0
+equal (quotient -0.5 2) 0
+equal (quotient -0.5 infinity) 0
+isNaN (quotient -0.5 NaN)
+equal (quotient 0 (minus infinity)) 0
+equal (quotient 0 -2) 0
+equal (quotient 0 -1) 0
+equal (quotient 0 -0.5) 0
+isNaN (quotient 0 0)
+equal (quotient 0 0.5) 0
+equal (quotient 0 1) 0
+equal (quotient 0 2) 0
+equal (quotient 0 infinity) 0
+isNaN (quotient 0 NaN)
+equal (quotient 0.5 (minus infinity)) 0
+equal (quotient 0.5 -2) 0
+equal (quotient 0.5 -1) 0
+equal (quotient 0.5 -0.5) -1
+equal (quotient 0.5 0) infinity
+equal (quotient 0.5 0.5) 1
+equal (quotient 0.5 1) 0
+equal (quotient 0.5 2) 0
+equal (quotient 0.5 infinity) 0
+isNaN (quotient 0.5 NaN)
+equal (quotient 1 (minus infinity)) 0
+equal (quotient 1 -2) 0
+equal (quotient 1 -1) -1
+equal (quotient 1 -0.5) -2
+equal (quotient 1 0) infinity
+equal (quotient 1 0.5) 2
+equal (quotient 1 1) 1
+equal (quotient 1 2) 0
+equal (quotient 1 infinity) 0
+isNaN (quotient 1 NaN)
+equal (quotient 2 (minus infinity)) 0
+equal (quotient 2 -2) -1
+equal (quotient 2 -1) -2
+equal (quotient 2 -0.5) -4
+equal (quotient 2 0) infinity
+equal (quotient 2 0.5) 4
+equal (quotient 2 1) 2
+equal (quotient 2 2) 1
+equal (quotient 2 infinity) 0
+isNaN (quotient 2 NaN)
+isNaN (quotient infinity (minus infinity))
+equal (quotient infinity -2) (minus infinity)
+equal (quotient infinity -1) (minus infinity)
+equal (quotient infinity -0.5) (minus infinity)
+equal (quotient infinity 0) infinity
+equal (quotient infinity 0.5) infinity
+equal (quotient infinity 1) infinity
+equal (quotient infinity 2) infinity
+isNaN (quotient infinity infinity)
+isNaN (quotient infinity NaN)
 not false
 not (not true)
 not (and false false)

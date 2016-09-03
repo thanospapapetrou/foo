@@ -145,6 +145,14 @@ minus = subtract 0
 # inverse value = divide 1 value
 inverse = divide 1
 
+# Calculate the integer quotient of two numbers.
+# function number (function number number)
+# quotient dividend divisor
+# dividend the dividend to divide
+# divisor the divisor to divide by
+# return the integer quotient of dividend divided by divisor (integer (dividend / divisor))
+quotient = compose (compose integer) divide
+
 # Logical negation.
 # function boolean boolean
 # not value
