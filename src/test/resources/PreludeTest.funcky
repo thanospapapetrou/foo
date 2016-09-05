@@ -268,6 +268,96 @@ equal (quotient infinity 1) infinity
 equal (quotient infinity 2) infinity
 isNaN (quotient infinity infinity)
 isNaN (quotient infinity NaN)
+isNaN (modulo (minus infinity) (minus infinity))
+isNaN (modulo (minus infinity) -2)
+isNaN (modulo (minus infinity) -1)
+isNaN (modulo (minus infinity) -0.5)
+isNaN (modulo (minus infinity) 0)
+isNaN (modulo (minus infinity) 0.5)
+isNaN (modulo (minus infinity) 1)
+isNaN (modulo (minus infinity) 2)
+isNaN (modulo (minus infinity) infinity)
+isNaN (modulo (minus infinity) NaN)
+isNaN (modulo -2 (minus infinity))
+equal (modulo -2 -2) 0
+equal (modulo -2 -1) 0
+equal (modulo -2 -0.5) 0
+isNaN (modulo -2 0)
+equal (modulo -2 0.5) 0
+equal (modulo -2 1) 0
+equal (modulo -2 2) 0
+isNaN (modulo -2 infinity)
+isNaN (modulo -2 NaN)
+isNaN (modulo -1 (minus infinity))
+equal (modulo -1 -2) -1
+equal (modulo -1 -1) 0
+equal (modulo -1 -0.5) 0
+isNaN (modulo -1 0)
+equal (modulo -1 0.5) 0
+equal (modulo -1 1) 0
+equal (modulo -1 2) -1
+isNaN (modulo -1 infinity)
+isNaN (modulo -1 NaN)
+isNaN (modulo -0.5 (minus infinity))
+equal (modulo -0.5 -2) -0.5
+equal (modulo -0.5 -1) -0.5
+equal (modulo -0.5 -0.5) 0
+isNaN (modulo -0.5 0)
+equal (modulo -0.5 0.5) 0
+equal (modulo -0.5 1) -0.5
+equal (modulo -0.5 2) -0.5
+isNaN (modulo -0.5 infinity)
+isNaN (modulo -0.5 NaN)
+isNaN (modulo 0 (minus infinity))
+equal (modulo 0 -2) 0
+equal (modulo 0 -1) 0
+equal (modulo 0 -0.5) 0
+isNaN (modulo 0 0)
+equal (modulo 0 0.5) 0
+equal (modulo 0 1) 0
+equal (modulo 0 2) 0
+isNaN (modulo 0 infinity)
+isNaN (modulo 0 NaN)
+isNaN (modulo 0.5 (minus infinity))
+equal (modulo 0.5 -2) 0.5
+equal (modulo 0.5 -1) 0.5
+equal (modulo 0.5 -0.5) 0
+isNaN (modulo 0.5 0)
+equal (modulo 0.5 0.5) 0
+equal (modulo 0.5 1) 0.5
+equal (modulo 0.5 2) 0.5
+isNaN (modulo 0.5 infinity)
+isNaN (modulo 0.5 NaN)
+isNaN (modulo 1 (minus infinity))
+equal (modulo 1 -2) 1
+equal (modulo 1 -1) 0
+equal (modulo 1 -0.5) 0
+isNaN (modulo 1 0)
+equal (modulo 1 0.5) 0
+equal (modulo 1 1) 0
+equal (modulo 1 2) 1
+isNaN (modulo 1 infinity)
+isNaN (modulo 1 NaN)
+isNaN (modulo 2 (minus infinity))
+equal (modulo 2 -2) 0
+equal (modulo 2 -1) 0
+equal (modulo 2 -0.5) 0
+isNaN (modulo 2 0)
+equal (modulo 2 0.5) 0
+equal (modulo 2 1) 0
+equal (modulo 2 2) 0
+isNaN (modulo 2 infinity)
+isNaN (modulo 2 NaN)
+isNaN (modulo infinity (minus infinity))
+isNaN (modulo infinity -2)
+isNaN (modulo infinity -1)
+isNaN (modulo infinity -0.5)
+isNaN (modulo infinity 0)
+isNaN (modulo infinity 0.5)
+isNaN (modulo infinity 2)
+isNaN (modulo infinity 2)
+isNaN (modulo infinity infinity)
+isNaN (modulo infinity NaN)
 not false
 not (not true)
 not (and false false)

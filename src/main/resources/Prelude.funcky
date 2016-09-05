@@ -151,7 +151,17 @@ inverse = divide 1
 # dividend the dividend to divide
 # divisor the divisor to divide by
 # return the integer quotient of dividend divided by divisor (integer (dividend / divisor))
+# quotient dividend divisor = integer (divide dividend divisor)
 quotient = compose (compose integer) divide
+
+# Calculate the modulo of two numbers.
+# function number (function number number)
+# modulo dividend divisor
+# dividend the dividend to divide
+# divisor the divisor to divide by
+# return the modulo of dividend divided by divisor (dividend - ((integer (dividend / divisor)) * divisor))
+# modulo dividend divisor = subtract dividend (multiply (quotient dividend divisor) divisor)
+modulo = compose duplicate (duplicate (flip (compose compose (compose compose (compose compose subtract))) (compose (compose multiply) quotient)))
 
 # Logical negation.
 # function boolean boolean
