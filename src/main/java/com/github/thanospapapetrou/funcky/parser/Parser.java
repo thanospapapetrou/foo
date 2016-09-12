@@ -17,13 +17,13 @@ import com.github.thanospapapetrou.funcky.parser.exceptions.UnparsableInputExcep
 import com.github.thanospapapetrou.funcky.runtime.Application;
 import com.github.thanospapapetrou.funcky.runtime.Definition;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.FunckyCharacter;
-import com.github.thanospapapetrou.funcky.runtime.FunckyNumber;
 import com.github.thanospapapetrou.funcky.runtime.FunckyScript;
 import com.github.thanospapapetrou.funcky.runtime.Import;
-import com.github.thanospapapetrou.funcky.runtime.Pair;
 import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.TypeVariable;
+import com.github.thanospapapetrou.funcky.runtime.literals.FunckyCharacter;
+import com.github.thanospapapetrou.funcky.runtime.literals.FunckyNumber;
+import com.github.thanospapapetrou.funcky.runtime.literals.Pair;
 
 /**
  * Class implementing a Funcky parser. This parser is based on the following BNF:

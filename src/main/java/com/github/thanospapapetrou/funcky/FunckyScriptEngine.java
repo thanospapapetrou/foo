@@ -21,8 +21,8 @@ import javax.script.SimpleBindings;
 import com.github.thanospapapetrou.funcky.parser.Parser;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.FunckyScript;
-import com.github.thanospapapetrou.funcky.runtime.Literal;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
+import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 
 /**
  * Class implementing a Funcky script engine.

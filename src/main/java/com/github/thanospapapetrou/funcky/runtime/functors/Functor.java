@@ -9,14 +9,14 @@ import javax.script.ScriptContext;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Application;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.FunckyType;
-import com.github.thanospapapetrou.funcky.runtime.Function;
-import com.github.thanospapapetrou.funcky.runtime.FunctionType;
-import com.github.thanospapapetrou.funcky.runtime.Literal;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.literals.Function;
+import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.FunckyType;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
 
 /**
  * Abstract class representing a functor.

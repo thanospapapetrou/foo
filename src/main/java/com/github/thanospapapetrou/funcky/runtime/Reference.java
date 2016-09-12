@@ -9,6 +9,8 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.FunckyType;
 
 /**
  * Class representing a Funcky reference.

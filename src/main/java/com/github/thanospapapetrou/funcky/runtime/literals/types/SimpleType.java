@@ -1,10 +1,13 @@
-package com.github.thanospapapetrou.funcky.runtime;
+package com.github.thanospapapetrou.funcky.runtime.literals.types;
 
 import java.net.URI;
 import java.util.Collections;
 import java.util.Map;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.Expression;
+import com.github.thanospapapetrou.funcky.runtime.Reference;
+import com.github.thanospapapetrou.funcky.runtime.TypeVariable;
 
 /**
  * Class representing a Funcky simple type.

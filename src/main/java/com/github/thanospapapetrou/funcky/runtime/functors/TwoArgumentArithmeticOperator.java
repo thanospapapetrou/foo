@@ -7,13 +7,13 @@ import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.FunckyNumber;
-import com.github.thanospapapetrou.funcky.runtime.FunckyType;
-import com.github.thanospapapetrou.funcky.runtime.Literal;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.literals.FunckyNumber;
+import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.FunckyType;
 
 /**
  * Abstract class representing a two argument arithmetic operator.

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.FunckyType;
 
 /**
  * Class representing a Funcky type variable.

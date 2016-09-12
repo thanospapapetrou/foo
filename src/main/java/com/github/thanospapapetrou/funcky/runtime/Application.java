@@ -10,6 +10,10 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbo
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.literals.Function;
+import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.FunckyType;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
 
 /**
  * Class representing a Funcky application.

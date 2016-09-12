@@ -1,4 +1,4 @@
-package com.github.thanospapapetrou.funcky.runtime;
+package com.github.thanospapapetrou.funcky.runtime.literals;
 
 import java.net.URI;
 import java.util.Objects;
@@ -6,10 +6,13 @@ import java.util.Objects;
 import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.Expression;
+import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
 
 /**
  * Abstract class representing a Funcky function.

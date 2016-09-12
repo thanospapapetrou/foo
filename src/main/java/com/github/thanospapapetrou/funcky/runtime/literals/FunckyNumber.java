@@ -1,13 +1,17 @@
-package com.github.thanospapapetrou.funcky.runtime;
+package com.github.thanospapapetrou.funcky.runtime.literals;
 
 import java.net.URI;
 
 import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.Application;
+import com.github.thanospapapetrou.funcky.runtime.Expression;
+import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 
 /**
  * Class representing a Funcky number.

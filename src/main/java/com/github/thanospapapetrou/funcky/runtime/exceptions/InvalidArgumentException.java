@@ -6,7 +6,7 @@ import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.runtime.Application;
-import com.github.thanospapapetrou.funcky.runtime.FunctionType;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
 
 /**
  * Exception thrown when encountering an invalid argument.

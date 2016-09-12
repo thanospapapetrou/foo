@@ -15,14 +15,14 @@ import com.github.thanospapapetrou.funcky.parser.Parser;
 import com.github.thanospapapetrou.funcky.runtime.Definition;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.FunckyScript;
-import com.github.thanospapapetrou.funcky.runtime.FunckyType;
-import com.github.thanospapapetrou.funcky.runtime.FunctionType;
 import com.github.thanospapapetrou.funcky.runtime.Import;
 import com.github.thanospapapetrou.funcky.runtime.TypeVariable;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.FunckyType;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
 
 /**
  * Class representing a Funcky library.
