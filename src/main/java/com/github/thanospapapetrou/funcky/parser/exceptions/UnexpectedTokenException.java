@@ -25,12 +25,22 @@ public class UnexpectedTokenException extends FunckyException {
 
 	static {
 		TOKEN_NAMES.put(Parser.CHARACTER, "character");
+		TOKEN_NAMES.put(Parser.COMMA, "comma");
+		TOKEN_NAMES.put(Parser.COMMENT, "comment");
 		TOKEN_NAMES.put(Parser.EOF, "end of input");
 		TOKEN_NAMES.put(Parser.EOL, "end of line");
 		TOKEN_NAMES.put(Parser.EQUALS, "equals");
+		TOKEN_NAMES.put(Parser.LEFT_ANGLE_BRACKET, "left angle bracket");
+		TOKEN_NAMES.put(Parser.LEFT_CURLY_BRACKET, "left curly bracket");
 		TOKEN_NAMES.put(Parser.LEFT_PARENTHESIS, "left parenthesis");
+		TOKEN_NAMES.put(Parser.LEFT_SQUARE_BRACKET, "left square bracket");
 		TOKEN_NAMES.put(Parser.NUMBER, "number");
+		TOKEN_NAMES.put(Parser.PERCENT, "percent");
+		TOKEN_NAMES.put(Parser.PERIOD, "period");
+		TOKEN_NAMES.put(Parser.RIGHT_ANGLE_BRACKET, "right angle bracket");
+		TOKEN_NAMES.put(Parser.RIGHT_CURLY_BRACKET, "right curly bracket");
 		TOKEN_NAMES.put(Parser.RIGHT_PARENTHESIS, "right parenthesis");
+		TOKEN_NAMES.put(Parser.RIGHT_SQUARE_BRACKET, "right square bracket");
 		TOKEN_NAMES.put(Parser.STRING, "string");
 		TOKEN_NAMES.put(Parser.SYMBOL, "symbol");
 	}
@@ -66,9 +76,9 @@ public class UnexpectedTokenException extends FunckyException {
 	 * @param unexpectedToken
 	 *            the unexpected token
 	 * @param script
-	 *            the URI of the script in which the error occurred
+	 *            the URI of the script in which the unexpected token was encountered
 	 * @param lineNumber
-	 *            the line of the file in which the unexpected token was encountered
+	 *            the line of the script in which the unexpected token was encountered
 	 * @param expectedTokens
 	 *            the tokens normally expected
 	 */

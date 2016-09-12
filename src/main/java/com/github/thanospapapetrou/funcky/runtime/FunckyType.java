@@ -40,14 +40,14 @@ public abstract class FunckyType extends Literal {
 		return null;
 	};
 
-	public Map<TypeVariable, FunckyType> inferGenericBindings(final FunckyType type) {
-		Objects.requireNonNull(type, NULL_TYPE);
-		return null;
-	}
-
 	@Override
 	public SimpleType getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 		super.getType(context);
-		return (SimpleType) new Reference(engine, script, lineNumber, TYPE).eval(context);
+		return (SimpleType) new Reference(engine, TYPE).eval(context);
+	}
+
+	public Map<TypeVariable, FunckyType> inferGenericBindings(final FunckyType type) {
+		Objects.requireNonNull(type, NULL_TYPE);
+		return null;
 	}
 }

@@ -18,7 +18,13 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolExce
  * @author thanos
  */
 public class FunckyScript extends AbstractSyntaxTreeNode {
+	private static final String NULL_IMPORTS = "Imports must not be null";
 	private static final String NULL_DEFINITIONS = "Definitions must not be null";
+
+	/**
+	 * The imports of this script.
+	 */
+	protected final List<Import> imports;
 
 	/**
 	 * The definitions of this script.
@@ -34,17 +40,23 @@ public class FunckyScript extends AbstractSyntaxTreeNode {
 	 *            the URI of this script
 	 * @param lineNumber
 	 *            the number of the line from which this script was parsed
+	 * @param imports
+	 *            the imports of this script
 	 * @param definitions
 	 *            the definitions of this script
 	 */
-	public FunckyScript(final FunckyScriptEngine engine, final URI script, final int lineNumber, final List<Definition> definitions) {
+	public FunckyScript(final FunckyScriptEngine engine, final URI script, final int lineNumber, final List<Import> imports, final List<Definition> definitions) {
 		super(engine, script, lineNumber);
+		this.imports = Objects.requireNonNull(imports, NULL_IMPORTS);
 		this.definitions = Objects.requireNonNull(definitions, NULL_DEFINITIONS);
 	}
 
 	@Override
 	public Void eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 		super.eval(context);
+		for (final Import _import : imports) {
+			_import.eval(context);
+		}
 		for (final Definition definition : definitions) {
 			definition.eval(context);
 		}
@@ -58,5 +70,14 @@ public class FunckyScript extends AbstractSyntaxTreeNode {
 	 */
 	public List<Definition> getDefinitions() {
 		return definitions;
+	}
+
+	/**
+	 * Get the imports.
+	 * 
+	 * @return the imports of this script
+	 */
+	public List<Import> getImports() {
+		return imports;
 	}
 }

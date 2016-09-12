@@ -46,10 +46,10 @@ public class Application extends Expression {
 	}
 
 	/**
-	 * Construct a new application at runtime.
+	 * Construct a new application generated at runtime.
 	 * 
 	 * @param engine
-	 *            the engine that constructed this application
+	 *            the engine that generated this application
 	 * @param function
 	 *            the function of this application
 	 * @param argument

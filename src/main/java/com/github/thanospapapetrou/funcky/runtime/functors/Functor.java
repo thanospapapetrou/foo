@@ -52,11 +52,16 @@ public abstract class Functor extends Function {
 	/**
 	 * Construct a new functor.
 	 * 
-	 * @param engine the engine that generated this functor
-	 * @param script the URI of the script from which this functor was generated
-	 * @param lineNumber // TODO do we need this here?
-	 * @param name the name of this functor
-	 * @param types the types of this functor
+	 * @param engine
+	 *            the engine that generated this functor
+	 * @param script
+	 *            the URI of the script from which this functor was generated
+	 * @param lineNumber
+	 *            // TODO do we need this here?
+	 * @param name
+	 *            the name of this functor
+	 * @param types
+	 *            the types of this functor
 	 */
 	public Functor(final FunckyScriptEngine engine, final URI script, final int lineNumber, final String name, final FunckyType... types) {
 		super(engine, script, lineNumber, name, getFunctionType(engine, script, requireValidTypes(types)));
@@ -74,7 +79,7 @@ public abstract class Functor extends Function {
 		return (types.length == FUNCTION_TYPES) ? apply(context, argument) : new Functor(engine, script, lineNumber, toString(), newTypes) {
 			@Override
 			public Expression toExpression() {
-				return new Application(engine, script, 0, that, argument); // TODO
+				return new Application(engine, that, argument);
 			}
 
 			@Override

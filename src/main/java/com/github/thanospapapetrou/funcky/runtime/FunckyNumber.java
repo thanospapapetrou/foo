@@ -37,13 +37,29 @@ public class FunckyNumber extends Literal {
 	}
 
 	/**
-	 * Construct a new number at runtime.
+	 * Construct a new builtin number.
 	 * 
-	 * @param engine the engine that constructed this number
-	 * @param value the value of this number
+	 * @param engine
+	 *            the engine that generated this number
+	 * @param script
+	 *            the URI of the script from which this number was generated
+	 * @param value
+	 *            the value of this number
+	 */
+	public FunckyNumber(final FunckyScriptEngine engine, final URI script, final double value) {
+		this(engine, script, 0, value);
+	}
+
+	/**
+	 * Construct a new number generated at runtime.
+	 * 
+	 * @param engine
+	 *            the engine that constructed this number
+	 * @param value
+	 *            the value of this number
 	 */
 	public FunckyNumber(final FunckyScriptEngine engine, final double value) {
-		this(engine, FunckyScriptEngine.RUNTIME, 0, value);
+		this(engine, FunckyScriptEngine.RUNTIME, value);
 	}
 
 	@Override
@@ -74,11 +90,11 @@ public class FunckyNumber extends Literal {
 	@Override
 	public Expression toExpression() {
 		if ((value == Double.POSITIVE_INFINITY)) {
-			return new Reference(engine, script, lineNumber, Double.toString(Double.POSITIVE_INFINITY).toLowerCase());
+			return new Reference(engine, Double.toString(Double.POSITIVE_INFINITY).toLowerCase());
 		} else if ((value == Double.NEGATIVE_INFINITY)) {
-			return new Application(engine, script, lineNumber, new Reference(engine, script, lineNumber, MINUS), new Reference(engine, script, lineNumber, Double.toString(Double.POSITIVE_INFINITY).toLowerCase()));
+			return new Application(engine, new Reference(engine, MINUS), new Reference(engine, Double.toString(Double.POSITIVE_INFINITY).toLowerCase()));
 		} else if (value == Double.NaN) {
-			return new Reference(engine, script, lineNumber, Double.toString(Double.NaN));
+			return new Reference(engine, Double.toString(Double.NaN));
 		}
 		return this;
 	}

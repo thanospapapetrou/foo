@@ -74,7 +74,7 @@ public abstract class Function extends Literal {
 
 	@Override
 	public Expression toExpression() {
-		return new Reference(engine, script, lineNumber, name);
+		return new Reference(engine, name);
 	}
 
 	@Override

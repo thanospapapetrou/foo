@@ -17,6 +17,7 @@ import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.FunckyScript;
 import com.github.thanospapapetrou.funcky.runtime.FunckyType;
 import com.github.thanospapapetrou.funcky.runtime.FunctionType;
+import com.github.thanospapapetrou.funcky.runtime.Import;
 import com.github.thanospapapetrou.funcky.runtime.TypeVariable;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
@@ -46,7 +47,7 @@ public abstract class Library extends FunckyScript {
 
 	public Library(final FunckyScriptEngine engine, final URI uri, final String resource) throws IOException, ScriptException { // TODO validate arguemnts, maybe replace IOException with some kind of ScriptException
 		// super(engine, uri, 0, load(engine, uri, resource));
-		super(engine, uri, 0, new ArrayList<Definition>());
+		super(engine, uri, 0, new ArrayList<Import>(), new ArrayList<Definition>());
 		try (final InputStreamReader reader = new InputStreamReader(Library.class.getResourceAsStream(resource), StandardCharsets.UTF_8)) {
 			s = new Parser(engine, reader, uri).parseScript();
 		}

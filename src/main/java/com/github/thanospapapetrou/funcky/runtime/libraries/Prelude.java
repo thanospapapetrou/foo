@@ -31,6 +31,7 @@ import com.github.thanospapapetrou.funcky.runtime.functors.TwoArgumentArithmetic
 public class Prelude extends Library {
 	private static final String ADD = "add";
 	private static final String BOOLEAN = "boolean";
+	private static final String CHARACTER = "character";
 	private static final String COMPOSE = "compose";
 	private static final String DIVIDE = "divide";
 	private static final String DUPLICATE = "duplicate";
@@ -55,13 +56,15 @@ public class Prelude extends Library {
 	private final SimpleType typeType;
 	private final SimpleType numberType;
 	private final SimpleType booleanType;
+	private final SimpleType characterType;
 	private final FunckyBoolean booleanTrue;
 	private final FunckyBoolean booleanFalse;
 
 	/**
 	 * Construct a new prelude.
 	 * 
-	 * @param engine the engine that generated this prelude
+	 * @param engine
+	 *            the engine that generated this prelude
 	 * @throws IOException
 	 * @throws ScriptException
 	 */
@@ -74,6 +77,8 @@ public class Prelude extends Library {
 		addDefinition(numberType);
 		booleanType = generateSimpleType(BOOLEAN);
 		addDefinition(booleanType);
+		characterType = generateSimpleType(CHARACTER);
+		addDefinition(characterType);
 		// numbers
 		addDefinition(generateNumber(Double.POSITIVE_INFINITY));
 		addDefinition(generateNumber(Double.NaN));
@@ -193,12 +198,30 @@ public class Prelude extends Library {
 	}
 
 	/**
-	 * Get the type type defined by this prelude.
+	 * Get the boolean type defined by this prelude.
 	 * 
-	 * @return the type type
+	 * @return the boolean type
 	 */
-	public SimpleType getType() {
-		return typeType;
+	public SimpleType getBoolean() {
+		return booleanType;
+	}
+
+	/**
+	 * Get the character type defined by this prelude.
+	 * 
+	 * @return the character type
+	 */
+	public SimpleType getCharacter() {
+		return characterType;
+	}
+
+	/**
+	 * Get the boolean false defined by this prelude.
+	 * 
+	 * @return the boolean false
+	 */
+	public FunckyBoolean getFalse() {
+		return booleanFalse;
 	}
 
 	/**
@@ -211,15 +234,6 @@ public class Prelude extends Library {
 	}
 
 	/**
-	 * Get the boolean type defined by this prelude.
-	 * 
-	 * @return the boolean type
-	 */
-	public SimpleType getBoolean() {
-		return booleanType;
-	}
-
-	/**
 	 * Get the boolean true defined by this prelude.
 	 * 
 	 * @return the boolean true
@@ -229,12 +243,12 @@ public class Prelude extends Library {
 	}
 
 	/**
-	 * Get the boolean false defined by this prelude.
+	 * Get the type type defined by this prelude.
 	 * 
-	 * @return the boolean false
+	 * @return the type type
 	 */
-	public FunckyBoolean getFalse() {
-		return booleanFalse;
+	public SimpleType getType() {
+		return typeType;
 	}
 
 	private FunckyBoolean generateBoolean(final boolean value) {
@@ -242,7 +256,7 @@ public class Prelude extends Library {
 	}
 
 	private FunckyNumber generateNumber(final double value) {
-		return new FunckyNumber(engine, PRELUDE, 0, value);
+		return new FunckyNumber(engine, PRELUDE, value);
 	}
 
 	private SimpleType generateSimpleType(final String name) {

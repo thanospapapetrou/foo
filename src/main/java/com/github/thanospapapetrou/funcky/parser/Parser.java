@@ -11,52 +11,72 @@ import java.util.Objects;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.parser.exceptions.InvalidCharacterLiteralException;
 import com.github.thanospapapetrou.funcky.parser.exceptions.UnexpectedTokenException;
 import com.github.thanospapapetrou.funcky.parser.exceptions.UnparsableInputException;
 import com.github.thanospapapetrou.funcky.runtime.Application;
 import com.github.thanospapapetrou.funcky.runtime.Definition;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
+import com.github.thanospapapetrou.funcky.runtime.FunckyCharacter;
 import com.github.thanospapapetrou.funcky.runtime.FunckyNumber;
 import com.github.thanospapapetrou.funcky.runtime.FunckyScript;
+import com.github.thanospapapetrou.funcky.runtime.Import;
+import com.github.thanospapapetrou.funcky.runtime.Pair;
 import com.github.thanospapapetrou.funcky.runtime.Reference;
+import com.github.thanospapapetrou.funcky.runtime.TypeVariable;
 
 /**
  * Class implementing a Funcky parser. This parser is based on the following BNF:
  * 
  * <pre>
  * {@code
- * <script>			::= <definition>\n<script>
- * 					  | ε
- * <definition>		::= <symbol>=<expression>
- * <expression>		::= (<expression>)
- * 					  | <application>
- * 					  | <literal>
- * 					  | <symbol>
- * 					  | <pair>
- * 					  | <list>
- * 					  | <string>
- * <application>	::= <expression> <expression>
- * <literal>		::= <number>
- * 					  | <character>
- * <symbol>			::= [\w&&\D]\w*
- * <pair>			::= &#123;<expression>, <expression>&#125;
- * <list>			::= [<expressions>]
- * <string>			::= "..." TODO
- * 					  | ε
- * <number>			::= \-?\d(\.\d*)?
- * 					  | \-?.\d*
- * <character> 		::= '...' TODO
- * <expressions>	::= <expression>, <expressions>
+ * <script>           ::= <import>\n<script>
+ *                      | <definition>\n<script>
+ *                      | ε
+ * <import>           ::= % <symbol> <string>
+ * <definition>       ::= <symbol> = <expression>
+ * <expression>       ::= <simpleExpression>
+ *                      | <application>
+ * <simpleExpression> ::= <nestedExpression>
+ *                      | <literal>
+ *                      | <reference>
+ * <application>      ::= <expression> <simpleExpression>
+ * <nestedExpression  ::= (<expression>)
+ * <literal>          ::= <number>
+ *                      | <character>
+ *                      | <pair>
+ *                      | <list>
+ *                      | <string>
+ *                      | <typeVariable>
+ * <reference>        ::= <symbol>.<symbol>
+ *                      | <symbol>
+ * <number>           ::= \-?\d(\.\d*)?
+ *                      | \-?.\d*
+ * <character>        ::= '[^\\']|(\\[tbnrf'\"\\])'
+ * <pair>             ::= {<expression>, <expression>}
+ * <list>             ::= [<elements>]
+ *                      | []
+ * <string>           ::= "([^\\\"]|(\\[tbnrf'\"\\]))*"
+ * <typeVariable>     ::= \<<symbol>\>
+ * <symbol>           ::= [\w&&\D]\w*
+ * <elements>         ::= <expression>, <elements>
+ *                      | <expression>
  * }
  * </pre>
  * 
  * @author thanos
  */
+@SuppressWarnings("javadoc")
 public class Parser {
 	/**
 	 * Character
 	 */
 	public static final int CHARACTER = '\'';
+
+	/**
+	 * Comma
+	 */
+	public static final int COMMA = ',';
 
 	/**
 	 * Comment
@@ -79,9 +99,24 @@ public class Parser {
 	public static final int EQUALS = '=';
 
 	/**
+	 * Left angle bracket ('<')
+	 */
+	public static final int LEFT_ANGLE_BRACKET = '<';
+
+	/**
+	 * Left curly bracket ('{')
+	 */
+	public static final int LEFT_CURLY_BRACKET = '{';
+
+	/**
 	 * Left parenthesis ('(')
 	 */
 	public static final int LEFT_PARENTHESIS = '(';
+
+	/**
+	 * Left square bracket ('[')
+	 */
+	public static final int LEFT_SQUARE_BRACKET = '[';
 
 	/**
 	 * Number
@@ -89,9 +124,34 @@ public class Parser {
 	public static final int NUMBER = StreamTokenizer.TT_NUMBER;
 
 	/**
+	 * Percent ('%')
+	 */
+	public static final int PERCENT = '%';
+
+	/**
+	 * Period ('.')
+	 */
+	public static final int PERIOD = '.';
+
+	/**
+	 * Right angle bracket ('>')
+	 */
+	public static final int RIGHT_ANGLE_BRACKET = '>';
+
+	/**
+	 * Right curly bracket
+	 */
+	public static final int RIGHT_CURLY_BRACKET = '}';
+
+	/**
 	 * Right parenthesis (')')
 	 */
 	public static final int RIGHT_PARENTHESIS = ')';
+
+	/**
+	 * Right square bracket (']')
+	 */
+	public static final int RIGHT_SQUARE_BRACKET = ']';
 
 	/**
 	 * String
@@ -106,7 +166,7 @@ public class Parser {
 	private static final String NULL_ENGINE = "Engine must not be null";
 	private static final String NULL_READER = "Reader must not be null";
 	private static final String NULL_SCRIPT = "Script must not be null";
-	private static final String WHITESPACE = "\t\n\f\r ";
+	private static final String WHITESPACE = " \t\n\u000b\f\r";
 	private static final String WORD = "ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
 
 	private final FunckyScriptEngine engine;
@@ -145,42 +205,6 @@ public class Parser {
 	}
 
 	/**
-	 * Parse a Funcky script.
-	 * 
-	 * @return the Funcky script parsed
-	 * @throws ScriptException
-	 *             if any errors occur
-	 */
-	public FunckyScript parseScript() throws ScriptException {
-		try {
-			final List<Definition> definitions = new ArrayList<>();
-			while (true) {
-				switch (tokenizer.nextToken()) {
-				case SYMBOL: // TODO sort
-					tokenizer.pushBack();
-					definitions.add(parseDefinition());
-					break;
-				case EOL:
-					break;
-				case EOF:
-					return new FunckyScript(engine, script, tokenizer.lineno(), definitions);
-				case EQUALS:
-				case LEFT_PARENTHESIS:
-				case RIGHT_PARENTHESIS:
-				case NUMBER:
-				case CHARACTER:
-				case STRING:
-					return throwUnexpectedTokenException(SYMBOL, EOL, EOF);
-				default:
-					return throwUnparsableInputException();
-				}
-			}
-		} catch (final IOException e) {
-			throw new ScriptException(e);
-		}
-	}
-
-	/**
 	 * Parse a Funcky expression.
 	 * 
 	 * @return the Funcky expression parsed
@@ -189,127 +213,232 @@ public class Parser {
 	 */
 	public Expression parseExpression() throws ScriptException {
 		try {
-			final Expression expression = _parseExpression();
-			switch (tokenizer.nextToken()) {
-			case EOF:
-				return expression;
-			case EQUALS:
-			case LEFT_PARENTHESIS:
-			case RIGHT_PARENTHESIS:
-			case SYMBOL:
-			case NUMBER:
-			case CHARACTER:
-			case STRING:
-			case EOL:
-				return throwUnexpectedTokenException(EOF);
-			default:
-				return throwUnparsableInputException();
+			final Expression expression = parseExpression(EOF);
+			parseExpectedTokens(EOF);
+			return expression;
+		} catch (final IOException e) {
+			throw new ScriptException(e);
+		}
+	}
+
+	/**
+	 * Parse a Funcky script.
+	 * 
+	 * @return the Funcky script parsed
+	 * @throws ScriptException
+	 *             if any errors occur
+	 */
+	public FunckyScript parseScript() throws ScriptException {
+		try {
+			final List<Import> imports = new ArrayList<>();
+			final List<Definition> definitions = new ArrayList<>();
+			while (true) {
+				switch (parseExpectedTokens(EOF, EOL, PERCENT, SYMBOL)) {
+				case EOF:
+					return new FunckyScript(engine, script, tokenizer.lineno(), imports, definitions);
+				case EOL:
+					break;
+				case PERCENT:
+					tokenizer.pushBack();
+					imports.add(parseImport());
+					break;
+				case SYMBOL:
+					tokenizer.pushBack();
+					definitions.add(parseDefinition());
+					break;
+				}
 			}
 		} catch (final IOException e) {
 			throw new ScriptException(e);
 		}
 	}
 
-	private Definition parseDefinition() throws IOException, UnexpectedTokenException, UnparsableInputException {
-		switch (tokenizer.nextToken()) {
-		case SYMBOL:
-			final String name = tokenizer.sval;
-			switch (tokenizer.nextToken()) {
-			case EQUALS:
-				final Expression expression = _parseExpression();
-				switch (tokenizer.nextToken()) {
-				case EOL:
-					return new Definition(engine, script, tokenizer.lineno() - 1, name, expression);
-				case EQUALS:
-				case LEFT_PARENTHESIS:
-				case RIGHT_PARENTHESIS:
-				case NUMBER:
-				case CHARACTER:
-				case STRING:
-				case EOF:
-					return throwUnexpectedTokenException(EOL);
-				default:
-					return throwUnparsableInputException();
-				}
-			case LEFT_PARENTHESIS:
-			case RIGHT_PARENTHESIS:
-			case SYMBOL:
-			case NUMBER:
-			case CHARACTER:
-			case STRING:
-			case EOL:
-			case EOF:
-				return throwUnexpectedTokenException(EQUALS);
-			default:
-				return throwUnparsableInputException();
-			}
-		case LEFT_PARENTHESIS:
-		case RIGHT_PARENTHESIS:
-		case NUMBER:
-		case CHARACTER:
-		case STRING:
-		case EOL:
-		case EOF:
-			return throwUnexpectedTokenException(SYMBOL);
-		default:
-			return throwUnparsableInputException();
+	private FunckyCharacter parseCharacter() throws InvalidCharacterLiteralException, IOException, UnexpectedTokenException, UnparsableInputException {
+		parseExpectedTokens(CHARACTER);
+		if (tokenizer.sval.length() != 1) {
+			throw new InvalidCharacterLiteralException(tokenizer.sval, script, tokenizer.lineno());
 		}
+		return new FunckyCharacter(engine, script, tokenizer.lineno(), tokenizer.sval.charAt(0));
 	}
 
-	private Expression _parseExpression() throws IOException, UnexpectedTokenException, UnparsableInputException {
-		Expression expression = null;
+	private Definition parseDefinition() throws InvalidCharacterLiteralException, IOException, UnexpectedTokenException, UnparsableInputException {
+		parseExpectedTokens(SYMBOL);
+		final String name = tokenizer.sval;
+		parseExpectedTokens(EQUALS);
+		final Expression expression = parseExpression(EOL);
+		parseExpectedTokens(EOL);
+		return new Definition(engine, script, tokenizer.lineno(), name, expression);
+	}
+
+	private List<Expression> parseElements() throws InvalidCharacterLiteralException, IOException, UnexpectedTokenException, UnparsableInputException {
+		final List<Expression> expressions = new ArrayList<>();
 		while (true) {
-			switch (tokenizer.nextToken()) {
-			case LEFT_PARENTHESIS:
-				final Expression nestedExpression = _parseExpression();
-				switch (tokenizer.nextToken()) {
-				case RIGHT_PARENTHESIS:
-					expression = (expression == null) ? nestedExpression : new Application(engine, script, tokenizer.lineno(), expression, nestedExpression);
-					break;
-				case EQUALS:
-				case LEFT_PARENTHESIS:
-				case SYMBOL:
-				case NUMBER:
-				case CHARACTER:
-				case STRING:
-				case EOL:
-				case EOF:
-					return throwUnexpectedTokenException(RIGHT_PARENTHESIS);
-				default:
-					return throwUnparsableInputException();
-				}
-				break;
-			case SYMBOL:
-				final Reference reference = new Reference(engine, script, tokenizer.lineno(), tokenizer.sval);
-				expression = (expression == null) ? reference : new Application(engine, script, tokenizer.lineno(), expression, reference);
-				break;
-			case NUMBER:
-				final FunckyNumber number = new FunckyNumber(engine, script, tokenizer.lineno(), tokenizer.nval);
-				expression = (expression == null) ? number : new Application(engine, script, tokenizer.lineno(), expression, number);
-				break;
-			case EQUALS:
-			case RIGHT_PARENTHESIS:
-			case CHARACTER:
-			case STRING:
-			case EOL:
-			case EOF:
-				if (expression == null) {
-					return throwUnexpectedTokenException(LEFT_PARENTHESIS, SYMBOL, NUMBER);
-				} else {
-					tokenizer.pushBack();
-					return expression;
-				}
-			default:
-				return throwUnparsableInputException();
+			expressions.add(parseExpression(COMMA, RIGHT_SQUARE_BRACKET));
+			if (parseExpectedTokens(COMMA, RIGHT_SQUARE_BRACKET) == RIGHT_SQUARE_BRACKET) {
+				return expressions;
 			}
 		}
 	}
 
-	private <T> T throwUnexpectedTokenException(final int... expectedTokens) throws UnexpectedTokenException {
-		throw new UnexpectedTokenException(tokenizer.ttype, script, tokenizer.lineno(), expectedTokens);
+	private Import parseImport() throws IOException, UnexpectedTokenException, UnparsableInputException {
+		parseExpectedTokens(PERCENT);
+		parseExpectedTokens(SYMBOL);
+		final String prefix = tokenizer.sval;
+		parseExpectedTokens(STRING);
+		final String uri = tokenizer.sval;
+		parseExpectedTokens(EOL);
+		return new Import(engine, script, tokenizer.lineno(), prefix, uri);
 	}
 
-	private <T> T throwUnparsableInputException() throws UnparsableInputException {
+	private int parseExpectedTokens(final int... expectedTokens) throws IOException, UnexpectedTokenException, UnparsableInputException {
+		final int token = tokenizer.nextToken();
+		for (final int expectedToken : expectedTokens) {
+			if (token == expectedToken) {
+				return token;
+			}
+		}
+		for (final int unexpectedToken : new int[] {CHARACTER, COMMA, COMMENT, EOF, EOL, EQUALS, LEFT_ANGLE_BRACKET, LEFT_CURLY_BRACKET, LEFT_PARENTHESIS, LEFT_SQUARE_BRACKET, NUMBER, PERCENT, PERIOD, RIGHT_ANGLE_BRACKET, RIGHT_CURLY_BRACKET, RIGHT_PARENTHESIS, RIGHT_SQUARE_BRACKET, STRING, SYMBOL}) {
+			if (token == unexpectedToken) {
+				throw new UnexpectedTokenException(tokenizer.ttype, script, tokenizer.lineno(), expectedTokens);
+			}
+		}
 		throw new UnparsableInputException((char) tokenizer.ttype, script, tokenizer.lineno());
+	}
+
+	private Expression parseExpression(final int... expectedTerminators) throws InvalidCharacterLiteralException, IOException, UnexpectedTokenException, UnparsableInputException {
+		switch (parseExpectedTokens(CHARACTER, LEFT_ANGLE_BRACKET, LEFT_CURLY_BRACKET, LEFT_PARENTHESIS, LEFT_SQUARE_BRACKET, NUMBER, STRING, SYMBOL)) {
+		case CHARACTER:
+		case LEFT_ANGLE_BRACKET:
+		case LEFT_CURLY_BRACKET:
+		case LEFT_PARENTHESIS:
+		case LEFT_SQUARE_BRACKET:
+		case NUMBER:
+		case STRING:
+		case SYMBOL:
+			tokenizer.pushBack();
+			Expression expression = parseSimpleExpression();
+			while (true) {
+				final int token = parseExpectedTokens(CHARACTER, COMMA, EOF, EOL, LEFT_ANGLE_BRACKET, LEFT_CURLY_BRACKET, LEFT_PARENTHESIS, LEFT_SQUARE_BRACKET, NUMBER, RIGHT_ANGLE_BRACKET, RIGHT_CURLY_BRACKET, RIGHT_PARENTHESIS, RIGHT_SQUARE_BRACKET, STRING, SYMBOL);
+				switch (token) {
+				case CHARACTER:
+				case LEFT_ANGLE_BRACKET:
+				case LEFT_CURLY_BRACKET:
+				case LEFT_PARENTHESIS:
+				case LEFT_SQUARE_BRACKET:
+				case NUMBER:
+				case STRING:
+				case SYMBOL:
+					tokenizer.pushBack();
+					expression = new Application(engine, script, tokenizer.lineno(), expression, parseSimpleExpression());
+					break;
+				case COMMA:
+				case EOF:
+				case EOL:
+				case RIGHT_ANGLE_BRACKET:
+				case RIGHT_CURLY_BRACKET:
+				case RIGHT_PARENTHESIS:
+				case RIGHT_SQUARE_BRACKET:
+					for (final int expectedTerminator : expectedTerminators) {
+						if (token == expectedTerminator) {
+							tokenizer.pushBack();
+							return expression;
+						}
+					}
+					throw new UnexpectedTokenException(token, script, tokenizer.lineno(), expectedTerminators);
+				}
+			}
+		default:
+			throw new IllegalStateException();
+		}
+	}
+
+	private Expression parseList() throws InvalidCharacterLiteralException, IOException, UnexpectedTokenException, UnparsableInputException { // TODO change return type
+		parseExpectedTokens(LEFT_SQUARE_BRACKET);
+		if (parseExpectedTokens(CHARACTER, LEFT_ANGLE_BRACKET, LEFT_CURLY_BRACKET, LEFT_PARENTHESIS, LEFT_SQUARE_BRACKET, NUMBER, RIGHT_SQUARE_BRACKET, SYMBOL) == RIGHT_SQUARE_BRACKET) {
+			// TODO return empty list
+			return null;
+		}
+		tokenizer.pushBack();
+		final List<Expression> elements = parseElements();
+		parseExpectedTokens(RIGHT_SQUARE_BRACKET);
+		// TODO return elements
+		return null;
+	}
+
+	private Expression parseNestedExpression() throws InvalidCharacterLiteralException, IOException, UnexpectedTokenException, UnparsableInputException {
+		parseExpectedTokens(LEFT_PARENTHESIS);
+		final Expression expression = parseExpression(RIGHT_PARENTHESIS);
+		parseExpectedTokens(RIGHT_PARENTHESIS);
+		return expression;
+	}
+
+	private FunckyNumber parseNumber() throws IOException, UnexpectedTokenException, UnparsableInputException {
+		parseExpectedTokens(NUMBER);
+		return new FunckyNumber(engine, script, tokenizer.lineno(), tokenizer.nval);
+	}
+
+	private Pair parsePair() throws InvalidCharacterLiteralException, IOException, UnexpectedTokenException, UnparsableInputException {
+		parseExpectedTokens(LEFT_CURLY_BRACKET);
+		final Expression first = parseExpression(COMMA);
+		parseExpectedTokens(COMMA);
+		final Expression second = parseExpression(RIGHT_CURLY_BRACKET);
+		parseExpectedTokens(RIGHT_CURLY_BRACKET);
+		return new Pair(engine, script, tokenizer.lineno(), first, second);
+	}
+
+	private Reference parseReference() throws IOException, UnexpectedTokenException, UnparsableInputException {
+		parseExpectedTokens(SYMBOL);
+		final String prefix = tokenizer.sval;
+		if (parseExpectedTokens(CHARACTER, COMMA, EOF, EOL, LEFT_ANGLE_BRACKET, LEFT_CURLY_BRACKET, LEFT_PARENTHESIS, LEFT_SQUARE_BRACKET, NUMBER, PERIOD, RIGHT_ANGLE_BRACKET, RIGHT_CURLY_BRACKET, RIGHT_PARENTHESIS, RIGHT_SQUARE_BRACKET, STRING, SYMBOL) == PERIOD) {
+			final String name = tokenizer.sval;
+			return new Reference(engine, script, tokenizer.lineno(), prefix, name);
+		}
+		tokenizer.pushBack();
+		return new Reference(engine, script, tokenizer.lineno(), prefix);
+	}
+
+	private Expression parseSimpleExpression() throws InvalidCharacterLiteralException, IOException, UnexpectedTokenException, UnparsableInputException {
+		switch (parseExpectedTokens(CHARACTER, LEFT_ANGLE_BRACKET, LEFT_CURLY_BRACKET, LEFT_PARENTHESIS, LEFT_SQUARE_BRACKET, NUMBER, STRING, SYMBOL)) {
+		case CHARACTER:
+			tokenizer.pushBack();
+			return parseCharacter();
+		case LEFT_ANGLE_BRACKET:
+			tokenizer.pushBack();
+			return parseTypeVariable();
+		case LEFT_CURLY_BRACKET:
+			tokenizer.pushBack();
+			return parsePair();
+		case LEFT_PARENTHESIS:
+			tokenizer.pushBack();
+			return parseNestedExpression();
+		case LEFT_SQUARE_BRACKET:
+			tokenizer.pushBack();
+			return parseList();
+		case NUMBER:
+			tokenizer.pushBack();
+			return parseNumber();
+		case STRING:
+			tokenizer.pushBack();
+			return parseString();
+		case SYMBOL:
+			tokenizer.pushBack();
+			return parseReference();
+		default:
+			throw new IllegalStateException();
+		}
+	}
+
+	private Expression parseString() throws IOException, UnexpectedTokenException, UnparsableInputException {
+		parseExpectedTokens(STRING);
+		// return new List(tokenizer.sval,... TODO retun new list of chars
+		return null;
+	}
+
+	private TypeVariable parseTypeVariable() throws IOException, UnexpectedTokenException, UnparsableInputException {
+		parseExpectedTokens(LEFT_ANGLE_BRACKET);
+		parseExpectedTokens(SYMBOL);
+		final String name = tokenizer.sval;
+		parseExpectedTokens(RIGHT_ANGLE_BRACKET);
+		return new TypeVariable(engine, script, tokenizer.lineno(), name);
 	}
 }

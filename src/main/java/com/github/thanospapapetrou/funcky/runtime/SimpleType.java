@@ -58,7 +58,7 @@ public class SimpleType extends FunckyType {
 
 	@Override
 	public Expression toExpression() {
-		return new Reference(engine, script, lineNumber, toString());
+		return new Reference(engine, toString());
 	}
 
 	@Override

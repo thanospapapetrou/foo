@@ -14,7 +14,6 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
  */
 public class FunctionType extends FunckyType {
 	private static final String FUNCTION = "function";
-	private static final String NULL_TYPE = "Type must not be null";
 
 	private final FunckyType domain;
 	private final FunckyType range;
@@ -25,7 +24,7 @@ public class FunctionType extends FunckyType {
 	 * @param engine
 	 *            the engine that generated this function type
 	 * @param domain
-	 *            the domain of this function type // TODO do we need script and line here?
+	 *            the domain of this function type
 	 * @param range
 	 *            the range of this function type
 	 */
@@ -37,6 +36,7 @@ public class FunctionType extends FunckyType {
 
 	@Override
 	public FunckyType bind(final Map<TypeVariable, FunckyType> bindings) {
+		super.bind(bindings);
 		return new FunctionType(engine, domain.bind(bindings), range.bind(bindings));
 	}
 
@@ -74,7 +74,8 @@ public class FunctionType extends FunckyType {
 
 	@Override
 	public Map<TypeVariable, FunckyType> inferGenericBindings(final FunckyType type) {
-		if (Objects.requireNonNull(type, NULL_TYPE) instanceof TypeVariable) {
+		super.inferGenericBindings(type);
+		if (type instanceof TypeVariable) {
 			return Collections.<TypeVariable, FunckyType> singletonMap((TypeVariable) type, this);
 		} else if (type instanceof FunctionType) {
 			final FunctionType functionType = (FunctionType) type;
@@ -94,7 +95,7 @@ public class FunctionType extends FunckyType {
 
 	@Override
 	public Expression toExpression() {
-		return new Application(engine, script, lineNumber, new Application(engine, script, lineNumber, new Reference(engine, script, lineNumber, FUNCTION), domain), range);
+		return new Application(engine, new Application(engine, new Reference(engine, FUNCTION), domain), range);
 	}
 
 	@Override

@@ -3,7 +3,6 @@ package com.github.thanospapapetrou.funcky.runtime;
 import java.net.URI;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
@@ -14,9 +13,8 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
  * @author thanos
  */
 public class TypeVariable extends FunckyType {
-	private static final String RANDOM_NAME = "type_$%1$s%2$s";
+	private static final String RANDOM_NAME = "type$%1$s%2$s";
 	private static final String TYPE_VARIABLE = "<%1$s>";
-	private static final String NULL_TYPE = "Type must not be null";
 
 	private final String name;
 
@@ -58,12 +56,14 @@ public class TypeVariable extends FunckyType {
 
 	@Override
 	public FunckyType bind(final Map<TypeVariable, FunckyType> bindings) {
+		super.bind(bindings);
 		return bindings.containsKey(this) ? bindings.get(this) : this;
 	}
 
 	@Override
 	public Map<TypeVariable, FunckyType> inferGenericBindings(final FunckyType type) {
-		return Collections.singletonMap(this, Objects.requireNonNull(type, NULL_TYPE).bind(Collections.<TypeVariable, FunckyType> singletonMap(this, new TypeVariable(engine, script, lineNumber))));
+		super.inferGenericBindings(type);
+		return Collections.singletonMap(this, type.bind(Collections.<TypeVariable, FunckyType> singletonMap(this, new TypeVariable(engine, script, lineNumber))));
 	}
 
 	@Override
