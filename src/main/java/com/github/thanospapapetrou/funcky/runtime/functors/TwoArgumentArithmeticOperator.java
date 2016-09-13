@@ -29,7 +29,9 @@ public abstract class TwoArgumentArithmeticOperator extends Functor {
 	 * Construct a new operator.
 	 * 
 	 * @param engine
+	 *            the engine that generated this operator
 	 * @param script
+	 *            the URI of the script from which this operator was generated
 	 * @param name
 	 *            the name of this operator
 	 * @param numberType
