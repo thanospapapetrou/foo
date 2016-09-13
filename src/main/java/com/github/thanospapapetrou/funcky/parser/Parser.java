@@ -23,7 +23,6 @@ import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.TypeVariable;
 import com.github.thanospapapetrou.funcky.runtime.literals.FunckyCharacter;
 import com.github.thanospapapetrou.funcky.runtime.literals.FunckyNumber;
-import com.github.thanospapapetrou.funcky.runtime.literals.Pair;
 
 /**
  * Class implementing a Funcky parser. This parser is based on the following BNF:
@@ -166,6 +165,7 @@ public class Parser {
 	private static final String NULL_ENGINE = "Engine must not be null";
 	private static final String NULL_READER = "Reader must not be null";
 	private static final String NULL_SCRIPT = "Script must not be null";
+	private static final String PRODUCT = "product";
 	private static final String WHITESPACE = " \t\n\u000b\f\r";
 	private static final String WORD = "ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
 
@@ -377,13 +377,13 @@ public class Parser {
 		return new FunckyNumber(engine, script, tokenizer.lineno(), tokenizer.nval);
 	}
 
-	private Pair parsePair() throws InvalidCharacterLiteralException, IOException, UnexpectedTokenException, UnparsableInputException {
+	private Application parsePair() throws InvalidCharacterLiteralException, IOException, UnexpectedTokenException, UnparsableInputException {
 		parseExpectedTokens(LEFT_CURLY_BRACKET);
 		final Expression first = parseExpression(COMMA);
 		parseExpectedTokens(COMMA);
 		final Expression second = parseExpression(RIGHT_CURLY_BRACKET);
 		parseExpectedTokens(RIGHT_CURLY_BRACKET);
-		return new Pair(engine, script, tokenizer.lineno(), first, second);
+		return new Application(engine, script, tokenizer.lineno(), new Application(engine, script, tokenizer.lineno(), new Reference(engine, PRODUCT), first), second);
 	}
 
 	private Reference parseReference() throws IOException, UnexpectedTokenException, UnparsableInputException {

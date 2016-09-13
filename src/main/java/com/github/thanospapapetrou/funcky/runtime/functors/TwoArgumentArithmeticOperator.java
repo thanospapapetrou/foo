@@ -30,14 +30,13 @@ public abstract class TwoArgumentArithmeticOperator extends Functor {
 	 * 
 	 * @param engine
 	 * @param script
-	 * @param lineNumber
 	 * @param name
 	 *            the name of this operator
 	 * @param numberType
 	 *            the number type used to define the type of this operator
 	 */
-	public TwoArgumentArithmeticOperator(final FunckyScriptEngine engine, final URI script, final int lineNumber, final String name, final FunckyType numberType) {
-		super(engine, script, lineNumber, name, numberType, numberType, numberType);
+	public TwoArgumentArithmeticOperator(final FunckyScriptEngine engine, final URI script, final String name, final FunckyType numberType) {
+		super(engine, script, name, numberType, numberType, numberType);
 	}
 
 	@Override

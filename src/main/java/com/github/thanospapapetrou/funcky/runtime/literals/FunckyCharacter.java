@@ -5,7 +5,6 @@ import java.net.URI;
 import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
@@ -13,18 +12,23 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 
 /**
  * Class representing a Funcky character.
+ * 
  * @author thanos
- *
  */
 public class FunckyCharacter extends Literal {
 	private final char value;
 
 	/**
 	 * Construct a new character.
-	 * @param engine the engine that generated this character 
-	 * @param script the URI of the script from which this character was generated
-	 * @param lineNumber the number of the line from which this character was parsed or <code>0</code> if this number was not parsed (is builtin or generated at runtime)
-	 * @param value the value of this character
+	 * 
+	 * @param engine
+	 *            the engine that generated this character
+	 * @param script
+	 *            the URI of the script from which this character was generated
+	 * @param lineNumber
+	 *            the number of the line from which this character was parsed or <code>0</code> if this number was not parsed (is builtin or generated at runtime)
+	 * @param value
+	 *            the value of this character
 	 */
 	public FunckyCharacter(final FunckyScriptEngine engine, final URI script, final int lineNumber, final char value) {
 		super(engine, script, lineNumber);
@@ -54,11 +58,6 @@ public class FunckyCharacter extends Literal {
 	@Override
 	public int hashCode() {
 		return Character.valueOf(value).hashCode();
-	}
-
-	@Override
-	public Expression toExpression() {
-		return this;
 	}
 
 	@Override

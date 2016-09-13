@@ -68,11 +68,6 @@ public class TypeVariable extends FunckyType {
 	}
 
 	@Override
-	public Expression toExpression() {
-		return this;
-	}
-
-	@Override
 	public String toString() {
 		return String.format(TYPE_VARIABLE, name);
 	}

@@ -42,5 +42,7 @@ public abstract class Literal extends Expression {
 	 * 
 	 * @return the expression used to display this literal
 	 */
-	public abstract Expression toExpression();
+	public Expression toExpression() {
+		return this;
+	}
 }

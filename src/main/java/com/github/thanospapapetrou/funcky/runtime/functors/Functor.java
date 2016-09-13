@@ -56,15 +56,13 @@ public abstract class Functor extends Function {
 	 *            the engine that generated this functor
 	 * @param script
 	 *            the URI of the script from which this functor was generated
-	 * @param lineNumber
-	 *            // TODO do we need this here?
 	 * @param name
 	 *            the name of this functor
 	 * @param types
 	 *            the types of this functor
 	 */
-	public Functor(final FunckyScriptEngine engine, final URI script, final int lineNumber, final String name, final FunckyType... types) {
-		super(engine, script, lineNumber, name, getFunctionType(engine, script, requireValidTypes(types)));
+	public Functor(final FunckyScriptEngine engine, final URI script, final String name, final FunckyType... types) {
+		super(engine, script, name, getFunctionType(engine, script, requireValidTypes(types)));
 		this.types = types;
 	}
 
@@ -76,7 +74,7 @@ public abstract class Functor extends Function {
 		for (int i = 0; i < newTypes.length; i++) {
 			newTypes[i] = types[i + 1].bind(types[0].inferGenericBindings(argument.getType(context))); // TODO unbind unbound type variables
 		}
-		return (types.length == FUNCTION_TYPES) ? apply(context, argument) : new Functor(engine, script, lineNumber, toString(), newTypes) {
+		return (types.length == FUNCTION_TYPES) ? apply(context, argument) : new Functor(engine, script, toString(), newTypes) {
 			@Override
 			public Expression toExpression() {
 				return new Application(engine, that, argument);

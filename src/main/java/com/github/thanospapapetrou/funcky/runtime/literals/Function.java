@@ -7,7 +7,6 @@ import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
@@ -33,15 +32,13 @@ public abstract class Function extends Literal {
 	 *            the engine that defined this function
 	 * @param script
 	 *            the URI of the script that this function was parsed from
-	 * @param lineNumber
-	 *            the number of the line of the script that this function was parsed from
 	 * @param name
 	 *            the name of this function
 	 * @param type
 	 *            the type of this function
 	 */
-	public Function(final FunckyScriptEngine engine, final URI script, final int lineNumber, final String name, final FunctionType type) {
-		super(engine, script, lineNumber);
+	public Function(final FunckyScriptEngine engine, final URI script, final String name, final FunctionType type) {
+		super(engine, script, 0);
 		this.name = name;
 		this.type = type;
 	}
@@ -73,11 +70,6 @@ public abstract class Function extends Literal {
 	public FunctionType getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 		super.getType(context);
 		return type;
-	}
-
-	@Override
-	public Expression toExpression() {
-		return new Reference(engine, name);
 	}
 
 	@Override

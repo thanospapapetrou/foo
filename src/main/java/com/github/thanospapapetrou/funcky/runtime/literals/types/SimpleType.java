@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.Map;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.TypeVariable;
 
 /**
@@ -57,11 +55,6 @@ public class SimpleType extends FunckyType {
 			return equals(type) ? Collections.<TypeVariable, FunckyType> emptyMap() : null;
 		}
 		return null;
-	}
-
-	@Override
-	public Expression toExpression() {
-		return new Reference(engine, toString());
 	}
 
 	@Override

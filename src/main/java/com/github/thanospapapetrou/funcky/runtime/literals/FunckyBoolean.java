@@ -5,7 +5,6 @@ import java.net.URI;
 import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
@@ -48,11 +47,6 @@ public class FunckyBoolean extends Literal {
 	@Override
 	public int hashCode() {
 		return Boolean.valueOf(value).hashCode();
-	}
-
-	@Override
-	public Expression toExpression() {
-		return value ? engine.getPrelude().getTrue() : engine.getPrelude().getFalse();
 	}
 
 	@Override

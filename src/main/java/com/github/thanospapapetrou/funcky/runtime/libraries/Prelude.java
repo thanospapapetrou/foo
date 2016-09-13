@@ -19,8 +19,10 @@ import com.github.thanospapapetrou.funcky.runtime.literals.FunckyBoolean;
 import com.github.thanospapapetrou.funcky.runtime.literals.FunckyNumber;
 import com.github.thanospapapetrou.funcky.runtime.literals.Function;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.literals.Pair;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.FunckyType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.PairType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 
 /**
@@ -45,6 +47,7 @@ public class Prelude extends Library {
 	private static final String MULTIPLY = "multiply";
 	private static final String NUMBER = "number";
 	private static final URI PRELUDE = URI.create("funcky:prelude");
+	private static final String PRODUCT = "product";
 	private static final String RESOURCE = "/Prelude.funcky";
 	private static final String SUBTRACT = "subtract";
 	private static final String TYPE = "type";
@@ -89,7 +92,7 @@ public class Prelude extends Library {
 		addDefinition(booleanFalse);
 		// functions
 		final TypeVariable identityType = generateTypeVariable(TYPE);
-		addDefinition(new Functor(engine, PRELUDE, 0, IDENTITY, identityType, identityType) {
+		addDefinition(new Functor(engine, PRELUDE, IDENTITY, identityType, identityType) {
 			@Override
 			protected Literal apply(final ScriptContext context, final Expression... arguments) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 				super.apply(context, arguments);
@@ -99,7 +102,7 @@ public class Prelude extends Library {
 		final TypeVariable composeType1 = generateTypeVariable(TYPE_1);
 		final TypeVariable composeType2 = generateTypeVariable(TYPE_2);
 		final TypeVariable composeType3 = generateTypeVariable(TYPE_3);
-		addDefinition(new Functor(engine, PRELUDE, 0, COMPOSE, generateFunctionType(composeType1, composeType2), generateFunctionType(composeType3, composeType1), composeType3, composeType2) {
+		addDefinition(new Functor(engine, PRELUDE, COMPOSE, generateFunctionType(composeType1, composeType2), generateFunctionType(composeType3, composeType1), composeType3, composeType2) {
 			@Override
 			protected Literal apply(final ScriptContext context, final Expression... arguments) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 				super.apply(context, arguments);
@@ -109,7 +112,7 @@ public class Prelude extends Library {
 		final TypeVariable flipType1 = generateTypeVariable(TYPE_1);
 		final TypeVariable flipType2 = generateTypeVariable(TYPE_2);
 		final TypeVariable flipType3 = generateTypeVariable(TYPE_3);
-		addDefinition(new Functor(engine, PRELUDE, 0, FLIP, generateFunctionType(flipType1, generateFunctionType(flipType2, flipType3)), flipType2, flipType1, flipType3) {
+		addDefinition(new Functor(engine, PRELUDE, FLIP, generateFunctionType(flipType1, generateFunctionType(flipType2, flipType3)), flipType2, flipType1, flipType3) {
 			@Override
 			protected Literal apply(final ScriptContext context, final Expression... arguments) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 				super.apply(context, arguments);
@@ -118,7 +121,7 @@ public class Prelude extends Library {
 		});
 		final TypeVariable duplicateType1 = generateTypeVariable(TYPE_1);
 		final TypeVariable duplicateType2 = generateTypeVariable(TYPE_2);
-		addDefinition(new Functor(engine, PRELUDE, 0, DUPLICATE, generateFunctionType(duplicateType1, generateFunctionType(duplicateType1, duplicateType2)), duplicateType1, duplicateType2) {
+		addDefinition(new Functor(engine, PRELUDE, DUPLICATE, generateFunctionType(duplicateType1, generateFunctionType(duplicateType1, duplicateType2)), duplicateType1, duplicateType2) {
 			@Override
 			protected Literal apply(final ScriptContext context, final Expression... arguments) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 				super.apply(context, arguments);
@@ -126,7 +129,7 @@ public class Prelude extends Library {
 			}
 		});
 		final TypeVariable equalType = generateTypeVariable(TYPE);
-		addDefinition(new Functor(engine, PRELUDE, 0, EQUAL, equalType, equalType, booleanType) {
+		addDefinition(new Functor(engine, PRELUDE, EQUAL, equalType, equalType, booleanType) {
 			@Override
 			protected Literal apply(final ScriptContext context, final Expression... arguments) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 				super.apply(context, arguments);
@@ -134,7 +137,7 @@ public class Prelude extends Library {
 			}
 		});
 		final TypeVariable ifType = generateTypeVariable(TYPE);
-		addDefinition(new Functor(engine, PRELUDE, 0, IF, booleanType, ifType, ifType, ifType) {
+		addDefinition(new Functor(engine, PRELUDE, IF, booleanType, ifType, ifType, ifType) {
 			@Override
 			protected Literal apply(final ScriptContext context, final Expression... arguments) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 				super.apply(context, arguments);
@@ -142,28 +145,28 @@ public class Prelude extends Library {
 			}
 		});
 		final TypeVariable typeOfType = generateTypeVariable(TYPE);
-		addDefinition(new Function(engine, PRELUDE, 0, TYPE_OF, generateFunctionType(typeOfType, typeType)) {
+		addDefinition(new Function(engine, PRELUDE, TYPE_OF, generateFunctionType(typeOfType, typeType)) {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException, AlreadyDefinedSymbolException {
 				super.apply(argument, context);
 				return argument.getType(context); // TODO use special constructor for this
 			}
 		});
-		addDefinition(new Functor(engine, PRELUDE, 0, FUNCTION, typeType, typeType, typeType) {
+		addDefinition(new Functor(engine, PRELUDE, FUNCTION, typeType, typeType, typeType) {
 			@Override
 			protected Literal apply(final ScriptContext context, final Expression... arguments) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 				super.apply(context, arguments);
 				return new FunctionType(engine, (FunckyType) arguments[0].eval(context), (FunckyType) arguments[1].eval(context));
 			}
 		});
-		addDefinition(new Function(engine, PRELUDE, 0, IS_NAN, generateFunctionType(numberType, booleanType)) {
+		addDefinition(new Function(engine, PRELUDE, IS_NAN, generateFunctionType(numberType, booleanType)) {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 				super.apply(argument, context);
 				return Double.isNaN(((FunckyNumber) argument.eval(context)).getValue()) ? booleanTrue : booleanFalse;
 			}
 		});
-		addDefinition(new Function(engine, PRELUDE, 0, INTEGER, generateFunctionType(numberType, numberType)) {
+		addDefinition(new Function(engine, PRELUDE, INTEGER, generateFunctionType(numberType, numberType)) {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 				super.apply(argument, context);
@@ -171,28 +174,41 @@ public class Prelude extends Library {
 				return new FunckyNumber(engine, (Double.isInfinite(value) || Double.isNaN(value)) ? value : (int) value);
 			}
 		});
-		addDefinition(new TwoArgumentArithmeticOperator(engine, PRELUDE, 0, ADD, numberType) {
+		addDefinition(new TwoArgumentArithmeticOperator(engine, PRELUDE, ADD, numberType) {
 			@Override
 			protected Literal apply(final FunckyNumber term1, final FunckyNumber term2, final ScriptContext context) {
+				super.apply(term1, term2, context);
 				return new FunckyNumber(engine, term1.getValue() + term2.getValue());
 			}
 		});
-		addDefinition(new TwoArgumentArithmeticOperator(engine, PRELUDE, 0, SUBTRACT, numberType) {
+		addDefinition(new TwoArgumentArithmeticOperator(engine, PRELUDE, SUBTRACT, numberType) {
 			@Override
 			protected Literal apply(final FunckyNumber minuend, final FunckyNumber subtrahend, final ScriptContext context) {
+				super.apply(minuend, subtrahend, context);
 				return new FunckyNumber(engine, minuend.getValue() - subtrahend.getValue());
 			}
 		});
-		addDefinition(new TwoArgumentArithmeticOperator(engine, PRELUDE, 0, MULTIPLY, numberType) {
+		addDefinition(new TwoArgumentArithmeticOperator(engine, PRELUDE, MULTIPLY, numberType) {
 			@Override
 			protected Literal apply(final FunckyNumber factor1, final FunckyNumber factor2, final ScriptContext context) {
+				super.apply(factor1, factor2, context);
 				return new FunckyNumber(engine, factor1.getValue() * factor2.getValue());
 			}
 		});
-		addDefinition(new TwoArgumentArithmeticOperator(engine, PRELUDE, 0, DIVIDE, numberType) {
+		addDefinition(new TwoArgumentArithmeticOperator(engine, PRELUDE, DIVIDE, numberType) {
 			@Override
 			protected Literal apply(final FunckyNumber dividend, final FunckyNumber divisor, final ScriptContext context) {
+				super.apply(dividend, divisor, context);
 				return new FunckyNumber(engine, dividend.getValue() / divisor.getValue());
+			}
+		});
+		final TypeVariable productType1 = generateTypeVariable(TYPE_1);
+		final TypeVariable productType2 = generateTypeVariable(TYPE_2);
+		addDefinition(new Functor(engine, PRELUDE, PRODUCT, productType1, productType2, new PairType(engine, productType1, productType2)) {
+			@Override
+			public Literal apply(final ScriptContext context, final Expression... arguments) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+				super.apply(context, arguments);
+				return new Pair(engine, arguments[0].eval(context), arguments[1].eval(context));
 			}
 		});
 	}

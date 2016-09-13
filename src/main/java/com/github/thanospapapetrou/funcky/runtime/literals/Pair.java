@@ -1,12 +1,10 @@
 package com.github.thanospapapetrou.funcky.runtime.literals;
 
-import java.net.URI;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
@@ -22,25 +20,21 @@ public class Pair extends Literal {
 	private static final String NULL_SECOND = "Second must not be null";
 	private static final String PAIR = "{%1$s, %2$s}";
 
-	private final Expression first;
-	private final Expression second;
+	private final Literal first;
+	private final Literal second;
 
 	/**
 	 * Construct a new pair.
 	 * 
 	 * @param engine
 	 *            the engine that generated this pair
-	 * @param script
-	 *            the URI of the script from which this pair was generated
-	 * @param lineNumber
-	 *            the number of the line from which this pair was parsed or <code>0</code> if this pair was not parsed (is builtin or generated at runtime)
 	 * @param first
 	 *            the first value of this pair
 	 * @param second
 	 *            the second value of this pair
 	 */
-	public Pair(final FunckyScriptEngine engine, final URI script, final int lineNumber, final Expression first, final Expression second) {
-		super(engine, script, lineNumber);
+	public Pair(final FunckyScriptEngine engine, final Literal first, final Literal second) {
+		super(engine, FunckyScriptEngine.RUNTIME, 0);
 		this.first = Objects.requireNonNull(first, NULL_FIRST);
 		this.second = Objects.requireNonNull(second, NULL_SECOND);
 	}
@@ -59,7 +53,7 @@ public class Pair extends Literal {
 	 * 
 	 * @return the first value of this pair
 	 */
-	public Expression getFirst() {
+	public Literal getFirst() {
 		return first;
 	}
 
@@ -68,7 +62,7 @@ public class Pair extends Literal {
 	 * 
 	 * @return the second value of this pair
 	 */
-	public Expression getSecond() {
+	public Literal getSecond() {
 		return second;
 	}
 
@@ -81,11 +75,6 @@ public class Pair extends Literal {
 	@Override
 	public int hashCode() {
 		return Objects.hash(first, second);
-	}
-
-	@Override
-	public Expression toExpression() {
-		return this;
 	}
 
 	@Override
