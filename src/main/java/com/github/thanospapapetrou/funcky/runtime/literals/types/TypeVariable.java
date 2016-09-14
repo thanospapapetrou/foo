@@ -41,17 +41,13 @@ public class TypeVariable extends FunckyType {
 	}
 
 	/**
-	 * Construct a new type variable with a random name.
+	 * Construct a new type variable with a random name generated at runtime.
 	 * 
 	 * @param engine
 	 *            the engine that parsed this type variable
-	 * @param script
-	 *            the URI of the script from which this type variable was parsed
-	 * @param lineNumber
-	 *            the number of the line from which this type variable was parsed or <code>0</code> if this type was not parsed from any line (it is builtin)
 	 */
-	public TypeVariable(final FunckyScriptEngine engine, final URI script, final int lineNumber) {
-		this(engine, script, lineNumber, generateRandomName());
+	public TypeVariable(final FunckyScriptEngine engine) {
+		this(engine, FunckyScriptEngine.RUNTIME, 0, generateRandomName());
 	}
 
 	@Override
@@ -63,7 +59,7 @@ public class TypeVariable extends FunckyType {
 	@Override
 	public Map<TypeVariable, FunckyType> inferGenericBindings(final FunckyType type) {
 		super.inferGenericBindings(type);
-		return Collections.singletonMap(this, type.bind(Collections.<TypeVariable, FunckyType> singletonMap(this, new TypeVariable(engine, script, lineNumber))));
+		return Collections.singletonMap(this, type.bind(Collections.<TypeVariable, FunckyType> singletonMap(this, new TypeVariable(engine))));
 	}
 
 	@Override

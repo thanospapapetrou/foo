@@ -70,10 +70,7 @@ public abstract class Library extends FunckyScript {
 		return new FunctionType(engine, Objects.requireNonNull(domain, NULL_DOMAIN), Objects.requireNonNull(range, NULL_RANGE)); // TODO do we need to define this in script instead of at runtime?
 	}
 
-	protected TypeVariable generateTypeVariable(final String name) {
-		if (Objects.requireNonNull(name, NULL_NAME).isEmpty()) {
-			throw new IllegalArgumentException(EMPTY_NAME);
-		}
-		return new TypeVariable(engine, script, 0, name);
+	protected TypeVariable generateTypeVariable() {
+		return new TypeVariable(engine);
 	}
 }
