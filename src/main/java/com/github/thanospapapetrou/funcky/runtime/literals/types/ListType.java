@@ -8,7 +8,6 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Application;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.Reference;
-import com.github.thanospapapetrou.funcky.runtime.TypeVariable;
 
 /**
  * Class representing a Funcky list type.

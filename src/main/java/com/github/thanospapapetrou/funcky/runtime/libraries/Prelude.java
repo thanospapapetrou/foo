@@ -8,7 +8,6 @@ import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.TypeVariable;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
@@ -24,6 +23,7 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.FunckyType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.PairType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
 
 /**
  * Class representing a Funcky prelude.

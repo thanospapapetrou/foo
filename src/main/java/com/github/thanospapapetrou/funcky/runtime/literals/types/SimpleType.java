@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Map;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.TypeVariable;
 
 /**
  * Class representing a Funcky simple type.

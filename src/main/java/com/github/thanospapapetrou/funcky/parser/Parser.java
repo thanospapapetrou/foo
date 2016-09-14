@@ -20,9 +20,9 @@ import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.FunckyScript;
 import com.github.thanospapapetrou.funcky.runtime.Import;
 import com.github.thanospapapetrou.funcky.runtime.Reference;
-import com.github.thanospapapetrou.funcky.runtime.TypeVariable;
 import com.github.thanospapapetrou.funcky.runtime.literals.FunckyCharacter;
 import com.github.thanospapapetrou.funcky.runtime.literals.FunckyNumber;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
 
 /**
  * Class implementing a Funcky parser. This parser is based on the following BNF:
