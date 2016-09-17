@@ -37,7 +37,7 @@ public class SimpleType extends FunckyType {
 
 	@Override
 	public boolean equals(final Object object) {
-		return (object instanceof SimpleType) && name.endsWith(((SimpleType) object).name);
+		return (object instanceof SimpleType) && name.equals(((SimpleType) object).name);
 	}
 
 	@Override

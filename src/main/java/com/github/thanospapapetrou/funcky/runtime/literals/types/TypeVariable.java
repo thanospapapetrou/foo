@@ -13,14 +13,14 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
  * @author thanos
  */
 public class TypeVariable extends FunckyType {
-	private static final String RANDOM_NAME = "type$%1$s%2$s";
+	private static final String NAME = "type$%1$s%2$s";
 	private static final String TYPE_VARIABLE = "<%1$s>";
 
 	private final String name;
 
 	private static final String generateRandomName() {
 		final UUID uuid = UUID.randomUUID();
-		return String.format(RANDOM_NAME, Long.toHexString(uuid.getMostSignificantBits()), Long.toHexString(uuid.getLeastSignificantBits()));
+		return String.format(NAME, Long.toHexString(uuid.getMostSignificantBits()), Long.toHexString(uuid.getLeastSignificantBits()));
 	}
 
 	/**
@@ -54,6 +54,16 @@ public class TypeVariable extends FunckyType {
 	public FunckyType bind(final Map<TypeVariable, FunckyType> bindings) {
 		super.bind(bindings);
 		return bindings.containsKey(this) ? bindings.get(this) : this;
+	}
+
+	@Override
+	public boolean equals(final Object object) {
+		return (object instanceof TypeVariable) && name.equals(((TypeVariable) object).name);
+	}
+
+	@Override
+	public int hashCode() {
+		return name.hashCode();
 	}
 
 	@Override
