@@ -1,5 +1,5 @@
 package com.github.thanospapapetrou.funcky.runtime.literals;
 
-public class FunckyList {
+public class List {
 
 }

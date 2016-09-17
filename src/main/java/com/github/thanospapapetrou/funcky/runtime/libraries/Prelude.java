@@ -14,8 +14,8 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionExce
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.functors.Functor;
 import com.github.thanospapapetrou.funcky.runtime.functors.TwoArgumentArithmeticOperator;
-import com.github.thanospapapetrou.funcky.runtime.literals.FunckyBoolean;
-import com.github.thanospapapetrou.funcky.runtime.literals.FunckyNumber;
+import com.github.thanospapapetrou.funcky.runtime.literals.Boolean;
+import com.github.thanospapapetrou.funcky.runtime.literals.Number;
 import com.github.thanospapapetrou.funcky.runtime.literals.Function;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 import com.github.thanospapapetrou.funcky.runtime.literals.Pair;
@@ -57,8 +57,8 @@ public class Prelude extends Library {
 	private final SimpleType numberType;
 	private final SimpleType booleanType;
 	private final SimpleType characterType;
-	private final FunckyBoolean booleanTrue;
-	private final FunckyBoolean booleanFalse;
+	private final Boolean booleanTrue;
+	private final Boolean booleanFalse;
 
 	/**
 	 * Construct a new prelude.
@@ -138,7 +138,7 @@ public class Prelude extends Library {
 			@Override
 			protected Literal apply(final ScriptContext context, final Expression... arguments) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 				super.apply(context, arguments);
-				return ((FunckyBoolean) arguments[0].eval(context)).equals(booleanTrue) ? arguments[1].eval(context) : arguments[2].eval(context);
+				return ((Boolean) arguments[0].eval(context)).equals(booleanTrue) ? arguments[1].eval(context) : arguments[2].eval(context);
 			}
 		});
 		final TypeVariable typeOfType = generateTypeVariable();
@@ -160,43 +160,43 @@ public class Prelude extends Library {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 				super.apply(argument, context);
-				return Double.isNaN(((FunckyNumber) argument.eval(context)).getValue()) ? booleanTrue : booleanFalse;
+				return Double.isNaN(((Number) argument.eval(context)).getValue()) ? booleanTrue : booleanFalse;
 			}
 		});
 		addDefinition(new Function(engine, PRELUDE, INTEGER, generateFunctionType(numberType, numberType)) {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 				super.apply(argument, context);
-				final double value = ((FunckyNumber) argument.eval(context)).getValue();
-				return new FunckyNumber(engine, (Double.isInfinite(value) || Double.isNaN(value)) ? value : (int) value);
+				final double value = ((Number) argument.eval(context)).getValue();
+				return new Number(engine, (Double.isInfinite(value) || Double.isNaN(value)) ? value : (int) value);
 			}
 		});
 		addDefinition(new TwoArgumentArithmeticOperator(engine, PRELUDE, ADD, numberType) {
 			@Override
-			protected Literal apply(final FunckyNumber term1, final FunckyNumber term2, final ScriptContext context) {
+			protected Literal apply(final Number term1, final Number term2, final ScriptContext context) {
 				super.apply(term1, term2, context);
-				return new FunckyNumber(engine, term1.getValue() + term2.getValue());
+				return new Number(engine, term1.getValue() + term2.getValue());
 			}
 		});
 		addDefinition(new TwoArgumentArithmeticOperator(engine, PRELUDE, SUBTRACT, numberType) {
 			@Override
-			protected Literal apply(final FunckyNumber minuend, final FunckyNumber subtrahend, final ScriptContext context) {
+			protected Literal apply(final Number minuend, final Number subtrahend, final ScriptContext context) {
 				super.apply(minuend, subtrahend, context);
-				return new FunckyNumber(engine, minuend.getValue() - subtrahend.getValue());
+				return new Number(engine, minuend.getValue() - subtrahend.getValue());
 			}
 		});
 		addDefinition(new TwoArgumentArithmeticOperator(engine, PRELUDE, MULTIPLY, numberType) {
 			@Override
-			protected Literal apply(final FunckyNumber factor1, final FunckyNumber factor2, final ScriptContext context) {
+			protected Literal apply(final Number factor1, final Number factor2, final ScriptContext context) {
 				super.apply(factor1, factor2, context);
-				return new FunckyNumber(engine, factor1.getValue() * factor2.getValue());
+				return new Number(engine, factor1.getValue() * factor2.getValue());
 			}
 		});
 		addDefinition(new TwoArgumentArithmeticOperator(engine, PRELUDE, DIVIDE, numberType) {
 			@Override
-			protected Literal apply(final FunckyNumber dividend, final FunckyNumber divisor, final ScriptContext context) {
+			protected Literal apply(final Number dividend, final Number divisor, final ScriptContext context) {
 				super.apply(dividend, divisor, context);
-				return new FunckyNumber(engine, dividend.getValue() / divisor.getValue());
+				return new Number(engine, dividend.getValue() / divisor.getValue());
 			}
 		});
 		final TypeVariable productType1 = generateTypeVariable();
@@ -233,7 +233,7 @@ public class Prelude extends Library {
 	 * 
 	 * @return the boolean false
 	 */
-	public FunckyBoolean getFalse() {
+	public Boolean getFalse() {
 		return booleanFalse;
 	}
 
@@ -251,7 +251,7 @@ public class Prelude extends Library {
 	 * 
 	 * @return the boolean true
 	 */
-	public FunckyBoolean getTrue() {
+	public Boolean getTrue() {
 		return booleanTrue;
 	}
 
@@ -264,12 +264,12 @@ public class Prelude extends Library {
 		return typeType;
 	}
 
-	private FunckyBoolean generateBoolean(final boolean value) {
-		return new FunckyBoolean(engine, PRELUDE, value);
+	private Boolean generateBoolean(final boolean value) {
+		return new Boolean(engine, PRELUDE, value);
 	}
 
-	private FunckyNumber generateNumber(final double value) {
-		return new FunckyNumber(engine, PRELUDE, value);
+	private Number generateNumber(final double value) {
+		return new Number(engine, PRELUDE, value);
 	}
 
 	private SimpleType generateSimpleType(final String name) {

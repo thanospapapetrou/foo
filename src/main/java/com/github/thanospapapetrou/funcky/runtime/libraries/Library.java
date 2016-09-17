@@ -14,7 +14,7 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.parser.Parser;
 import com.github.thanospapapetrou.funcky.runtime.Definition;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.FunckyScript;
+import com.github.thanospapapetrou.funcky.runtime.Script;
 import com.github.thanospapapetrou.funcky.runtime.Import;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
@@ -29,14 +29,14 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
  * @author thanos
  *
  */
-public abstract class Library extends FunckyScript {
+public abstract class Library extends Script {
 	private static final String EMPTY_NAME = "Name must not be empty";
 	private static final String NULL_DOMAIN = "Domain must not be null";
 	private static final String NULL_EXPRESSION = "Expression must not be null";
 	private static final String NULL_NAME = "Name must not be null";
 	private static final String NULL_RANGE = "Range must not be null";
 
-	private final FunckyScript s;
+	private final Script s;
 
 	// TODO fix this mess
 	// private static List<Definition> load(final FunckyScriptEngine engine, final URI uri, final String resource) throws IOException, ScriptException {

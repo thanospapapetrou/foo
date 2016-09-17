@@ -20,7 +20,7 @@ import javax.script.SimpleBindings;
 
 import com.github.thanospapapetrou.funcky.parser.Parser;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.FunckyScript;
+import com.github.thanospapapetrou.funcky.runtime.Script;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 
@@ -64,7 +64,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	}
 
 	@Override
-	public FunckyScript compile(final Reader script) throws ScriptException {
+	public Script compile(final Reader script) throws ScriptException {
 		try {
 			return compile(Objects.requireNonNull(script, NULL_SCRIPT), Paths.get(Objects.requireNonNull(context, NULL_CONTEXT).getAttribute(ScriptEngine.FILENAME).toString()).toRealPath().toUri());
 		} catch (final IOException e) {
@@ -131,7 +131,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 		throw new UnsupportedOperationException(UNSUPPORTED_INVOKE_METHOD);
 	}
 
-	private FunckyScript compile(final Reader script, final URI scriptUri) throws ScriptException {
+	private Script compile(final Reader script, final URI scriptUri) throws ScriptException {
 		return new Parser(this, script, scriptUri).parseScript();
 	}
 

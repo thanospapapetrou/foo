@@ -18,10 +18,10 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
  * 
  * @author thanos
  */
-public class FunckyCharacter extends Literal {
+public class Character extends Literal {
 	private static final String CHARACTER = "'%1$s'";
 	private static final Pattern CONTROL = Pattern.compile("\\p{C}");
-	private static final Map<Character, String> ESCAPES = new HashMap<Character, String>();
+	private static final Map<java.lang.Character, String> ESCAPES = new HashMap<>();
 	private static final String OCTAL = "\\%1$o";
 
 	private final char value;
@@ -38,7 +38,7 @@ public class FunckyCharacter extends Literal {
 	}
 
 	private static String escape(final char character) {
-		return ESCAPES.containsKey(character) ? ESCAPES.get(character) : (CONTROL.matcher(Character.toString(character)).matches() ? String.format(OCTAL, (int) character) : Character.toString(character));
+		return ESCAPES.containsKey(character) ? ESCAPES.get(character) : (CONTROL.matcher(java.lang.Character.toString(character)).matches() ? String.format(OCTAL, (int) character) : java.lang.Character.toString(character));
 	}
 
 	/**
@@ -53,14 +53,14 @@ public class FunckyCharacter extends Literal {
 	 * @param value
 	 *            the value of this character
 	 */
-	public FunckyCharacter(final FunckyScriptEngine engine, final URI script, final int lineNumber, final char value) {
+	public Character(final FunckyScriptEngine engine, final URI script, final int lineNumber, final char value) {
 		super(engine, script, lineNumber);
 		this.value = value;
 	}
 
 	@Override
 	public boolean equals(final Object object) {
-		return (object instanceof FunckyCharacter) && (value == ((FunckyCharacter) object).value);
+		return (object instanceof Character) && (value == ((Character) object).value);
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class FunckyCharacter extends Literal {
 
 	@Override
 	public int hashCode() {
-		return Character.valueOf(value).hashCode();
+		return java.lang.Character.valueOf(value).hashCode();
 	}
 
 	@Override

@@ -11,7 +11,7 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbo
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
-import com.github.thanospapapetrou.funcky.runtime.literals.FunckyNumber;
+import com.github.thanospapapetrou.funcky.runtime.literals.Number;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.FunckyType;
 
@@ -44,7 +44,7 @@ public abstract class TwoArgumentArithmeticOperator extends Functor {
 	@Override
 	protected Literal apply(final ScriptContext context, final Expression... arguments) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 		super.apply(context, arguments);
-		return apply((FunckyNumber) arguments[0].eval(context), (FunckyNumber) arguments[1].eval(context), context);
+		return apply((Number) arguments[0].eval(context), (Number) arguments[1].eval(context), context);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public abstract class TwoArgumentArithmeticOperator extends Functor {
 	 *            the context in which to evaluate the application
 	 * @return the literal result of applying this operator to the given arguments
 	 */
-	protected Literal apply(final FunckyNumber argument1, final FunckyNumber argument2, final ScriptContext context) {
+	protected Literal apply(final Number argument1, final Number argument2, final ScriptContext context) {
 		Objects.requireNonNull(argument1, NULL_ARGUMENT_1);
 		Objects.requireNonNull(argument2, NULL_ARGUMENT_2);
 		Objects.requireNonNull(context, NULL_CONTEXT);

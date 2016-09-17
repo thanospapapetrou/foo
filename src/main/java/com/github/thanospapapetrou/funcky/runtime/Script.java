@@ -17,7 +17,7 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolExce
  * 
  * @author thanos
  */
-public class FunckyScript extends AbstractSyntaxTreeNode {
+public class Script extends AbstractSyntaxTreeNode {
 	private static final String NULL_IMPORTS = "Imports must not be null";
 	private static final String NULL_DEFINITIONS = "Definitions must not be null";
 
@@ -45,7 +45,7 @@ public class FunckyScript extends AbstractSyntaxTreeNode {
 	 * @param definitions
 	 *            the definitions of this script
 	 */
-	public FunckyScript(final FunckyScriptEngine engine, final URI script, final int lineNumber, final List<Import> imports, final List<Definition> definitions) {
+	public Script(final FunckyScriptEngine engine, final URI script, final int lineNumber, final List<Import> imports, final List<Definition> definitions) {
 		super(engine, script, lineNumber);
 		this.imports = Objects.requireNonNull(imports, NULL_IMPORTS);
 		this.definitions = Objects.requireNonNull(definitions, NULL_DEFINITIONS);

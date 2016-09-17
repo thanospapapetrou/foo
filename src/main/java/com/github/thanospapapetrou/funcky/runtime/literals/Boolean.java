@@ -15,7 +15,7 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
  * 
  * @author thanos
  */
-public class FunckyBoolean extends Literal {
+public class Boolean extends Literal {
 	private final boolean value;
 
 	/**
@@ -28,14 +28,14 @@ public class FunckyBoolean extends Literal {
 	 * @param value
 	 *            the value of this boolean
 	 */
-	public FunckyBoolean(final FunckyScriptEngine engine, final URI script, final boolean value) {
+	public Boolean(final FunckyScriptEngine engine, final URI script, final boolean value) {
 		super(engine, script, 0);
 		this.value = value;
 	}
 
 	@Override
 	public boolean equals(final Object object) {
-		return (object instanceof FunckyBoolean) && (value == ((FunckyBoolean) object).value);
+		return (object instanceof Boolean) && (value == ((Boolean) object).value);
 	}
 
 	@Override
@@ -46,11 +46,11 @@ public class FunckyBoolean extends Literal {
 
 	@Override
 	public int hashCode() {
-		return Boolean.valueOf(value).hashCode();
+		return java.lang.Boolean.valueOf(value).hashCode();
 	}
 
 	@Override
 	public String toString() {
-		return Boolean.toString(value);
+		return java.lang.Boolean.toString(value);
 	}
 }

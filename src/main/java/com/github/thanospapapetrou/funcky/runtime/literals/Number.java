@@ -18,7 +18,7 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
  * 
  * @author thanos
  */
-public class FunckyNumber extends Literal {
+public class Number extends Literal {
 	private static final String MINUS = "minus";
 
 	private final double value;
@@ -35,7 +35,7 @@ public class FunckyNumber extends Literal {
 	 * @param value
 	 *            the value of this number
 	 */
-	public FunckyNumber(final FunckyScriptEngine engine, final URI script, final int lineNumber, final double value) {
+	public Number(final FunckyScriptEngine engine, final URI script, final int lineNumber, final double value) {
 		super(engine, script, lineNumber);
 		this.value = value;
 	}
@@ -50,7 +50,7 @@ public class FunckyNumber extends Literal {
 	 * @param value
 	 *            the value of this number
 	 */
-	public FunckyNumber(final FunckyScriptEngine engine, final URI script, final double value) {
+	public Number(final FunckyScriptEngine engine, final URI script, final double value) {
 		this(engine, script, 0, value);
 	}
 
@@ -62,13 +62,13 @@ public class FunckyNumber extends Literal {
 	 * @param value
 	 *            the value of this number
 	 */
-	public FunckyNumber(final FunckyScriptEngine engine, final double value) {
+	public Number(final FunckyScriptEngine engine, final double value) {
 		this(engine, FunckyScriptEngine.RUNTIME, value);
 	}
 
 	@Override
 	public boolean equals(final Object object) {
-		return (object instanceof FunckyNumber) && (value == ((FunckyNumber) object).value);
+		return (object instanceof Number) && (value == ((Number) object).value);
 	}
 
 	@Override

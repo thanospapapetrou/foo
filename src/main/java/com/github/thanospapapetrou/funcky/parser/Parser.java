@@ -17,11 +17,11 @@ import com.github.thanospapapetrou.funcky.parser.exceptions.UnparsableInputExcep
 import com.github.thanospapapetrou.funcky.runtime.Application;
 import com.github.thanospapapetrou.funcky.runtime.Definition;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.FunckyScript;
+import com.github.thanospapapetrou.funcky.runtime.Script;
 import com.github.thanospapapetrou.funcky.runtime.Import;
 import com.github.thanospapapetrou.funcky.runtime.Reference;
-import com.github.thanospapapetrou.funcky.runtime.literals.FunckyCharacter;
-import com.github.thanospapapetrou.funcky.runtime.literals.FunckyNumber;
+import com.github.thanospapapetrou.funcky.runtime.literals.Character;
+import com.github.thanospapapetrou.funcky.runtime.literals.Number;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
 
 /**
@@ -228,14 +228,14 @@ public class Parser {
 	 * @throws ScriptException
 	 *             if any errors occur
 	 */
-	public FunckyScript parseScript() throws ScriptException {
+	public Script parseScript() throws ScriptException {
 		try {
 			final List<Import> imports = new ArrayList<>();
 			final List<Definition> definitions = new ArrayList<>();
 			while (true) {
 				switch (parseExpectedTokens(EOF, EOL, PERCENT, SYMBOL)) {
 				case EOF:
-					return new FunckyScript(engine, script, tokenizer.lineno(), imports, definitions);
+					return new Script(engine, script, tokenizer.lineno(), imports, definitions);
 				case EOL:
 					break;
 				case PERCENT:
@@ -253,12 +253,12 @@ public class Parser {
 		}
 	}
 
-	private FunckyCharacter parseCharacter() throws InvalidCharacterLiteralException, IOException, UnexpectedTokenException, UnparsableInputException {
+	private Character parseCharacter() throws InvalidCharacterLiteralException, IOException, UnexpectedTokenException, UnparsableInputException {
 		parseExpectedTokens(CHARACTER);
 		if (tokenizer.sval.length() != 1) {
 			throw new InvalidCharacterLiteralException(tokenizer.sval, script, tokenizer.lineno());
 		}
-		return new FunckyCharacter(engine, script, tokenizer.lineno(), tokenizer.sval.charAt(0));
+		return new Character(engine, script, tokenizer.lineno(), tokenizer.sval.charAt(0));
 	}
 
 	private Definition parseDefinition() throws InvalidCharacterLiteralException, IOException, UnexpectedTokenException, UnparsableInputException {
@@ -372,9 +372,9 @@ public class Parser {
 		return expression;
 	}
 
-	private FunckyNumber parseNumber() throws IOException, UnexpectedTokenException, UnparsableInputException {
+	private Number parseNumber() throws IOException, UnexpectedTokenException, UnparsableInputException {
 		parseExpectedTokens(NUMBER);
-		return new FunckyNumber(engine, script, tokenizer.lineno(), tokenizer.nval);
+		return new Number(engine, script, tokenizer.lineno(), tokenizer.nval);
 	}
 
 	private Application parsePair() throws InvalidCharacterLiteralException, IOException, UnexpectedTokenException, UnparsableInputException {
