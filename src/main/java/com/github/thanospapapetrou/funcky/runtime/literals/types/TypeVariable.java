@@ -12,7 +12,7 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
  * 
  * @author thanos
  */
-public class TypeVariable extends FunckyType {
+public class TypeVariable extends Type {
 	private static final String NAME = "type$%1$s%2$s";
 	private static final String TYPE_VARIABLE = "<%1$s>";
 
@@ -51,7 +51,7 @@ public class TypeVariable extends FunckyType {
 	}
 
 	@Override
-	public FunckyType bind(final Map<TypeVariable, FunckyType> bindings) {
+	public Type bind(final Map<TypeVariable, Type> bindings) {
 		super.bind(bindings);
 		return bindings.containsKey(this) ? bindings.get(this) : this;
 	}
@@ -67,13 +67,22 @@ public class TypeVariable extends FunckyType {
 	}
 
 	@Override
-	public Map<TypeVariable, FunckyType> inferGenericBindings(final FunckyType type) {
+	public Map<TypeVariable, Type> inferGenericBindings(final Type type) {
 		super.inferGenericBindings(type);
-		return Collections.singletonMap(this, type.bind(Collections.<TypeVariable, FunckyType> singletonMap(this, new TypeVariable(engine))));
+		return Collections.singletonMap(this, type);
 	}
 
 	@Override
 	public String toString() {
 		return String.format(TYPE_VARIABLE, name);
+	}
+
+	@Override
+	protected TypeVariable free(final Map<TypeVariable, TypeVariable> free) {
+		super.free(free);
+		if (!free.containsKey(this)) {
+			free.put(this, new TypeVariable(engine));
+		}
+		return free.get(this);
 	}
 }

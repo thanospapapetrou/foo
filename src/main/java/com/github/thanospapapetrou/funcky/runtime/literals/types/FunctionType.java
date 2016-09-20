@@ -15,11 +15,11 @@ import com.github.thanospapapetrou.funcky.runtime.Reference;
  * 
  * @author thanos
  */
-public class FunctionType extends FunckyType {
+public class FunctionType extends Type {
 	private static final String FUNCTION = "function";
 
-	private final FunckyType domain;
-	private final FunckyType range;
+	private final Type domain;
+	private final Type range;
 
 	/**
 	 * Construct a new function type.
@@ -31,14 +31,14 @@ public class FunctionType extends FunckyType {
 	 * @param range
 	 *            the range of this function type
 	 */
-	public FunctionType(final FunckyScriptEngine engine, final FunckyType domain, final FunckyType range) {
+	public FunctionType(final FunckyScriptEngine engine, final Type domain, final Type range) {
 		super(engine, FunckyScriptEngine.RUNTIME, 0);
 		this.domain = domain;
 		this.range = range;
 	}
 
 	@Override
-	public FunckyType bind(final Map<TypeVariable, FunckyType> bindings) {
+	public Type bind(final Map<TypeVariable, Type> bindings) {
 		super.bind(bindings);
 		return new FunctionType(engine, domain.bind(bindings), range.bind(bindings));
 	}
@@ -57,7 +57,7 @@ public class FunctionType extends FunckyType {
 	 * 
 	 * @return the domain
 	 */
-	public FunckyType getDomain() {
+	public Type getDomain() {
 		return domain;
 	}
 
@@ -66,7 +66,7 @@ public class FunctionType extends FunckyType {
 	 * 
 	 * @return the range
 	 */
-	public FunckyType getRange() {
+	public Type getRange() {
 		return range;
 	}
 
@@ -76,22 +76,24 @@ public class FunctionType extends FunckyType {
 	}
 
 	@Override
-	public Map<TypeVariable, FunckyType> inferGenericBindings(final FunckyType type) {
+	public Map<TypeVariable, Type> inferGenericBindings(final Type type) {
 		super.inferGenericBindings(type);
 		if (type instanceof TypeVariable) {
-			return Collections.<TypeVariable, FunckyType> singletonMap((TypeVariable) type, this);
+			return Collections.<TypeVariable, Type> singletonMap((TypeVariable) type, this);
 		} else if (type instanceof FunctionType) {
 			final FunctionType functionType = (FunctionType) type;
-			final Map<TypeVariable, FunckyType> domainBindings = domain.inferGenericBindings(functionType.domain);
-			final Map<TypeVariable, FunckyType> rangeBindings = range.inferGenericBindings(functionType.range);
-			return ((domainBindings == null) || (rangeBindings == null)) ? null : new HashMap<TypeVariable, FunckyType>(domainBindings) {
-				private static final long serialVersionUID = 1L;
-
-				{
-					putAll(rangeBindings);
-					putAll(domainBindings);
-				}
-			};
+			final Map<TypeVariable, Type> domainBindings = domain.inferGenericBindings(functionType.domain);
+			if (domainBindings == null) {
+				return null;
+			}
+			final Map<TypeVariable, Type> rangeBindings = range.inferGenericBindings(functionType.range);
+			if (rangeBindings == null) {
+				return null;
+			}
+			final Map<TypeVariable, Type> bindings = new HashMap<>();
+			bindings.putAll(domainBindings);
+			bindings.putAll(rangeBindings);
+			return bindings;
 		}
 		return null;
 	}
@@ -104,5 +106,11 @@ public class FunctionType extends FunckyType {
 	@Override
 	public String toString() {
 		return toExpression().toString();
+	}
+
+	@Override
+	protected FunctionType free(final Map<TypeVariable, TypeVariable> free) {
+		super.free(free);
+		return new FunctionType(engine, domain.free(free), range.free(free));
 	}
 }

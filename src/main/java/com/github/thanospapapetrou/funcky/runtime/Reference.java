@@ -10,7 +10,7 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentExce
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.FunckyType;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 
 /**
  * Class representing a Funcky reference.
@@ -89,7 +89,7 @@ public class Reference extends Expression {
 	}
 
 	@Override
-	public FunckyType getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public Type getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 		return eval(Objects.requireNonNull(context, NULL_CONTEXT)).getType(context);
 	}
 

@@ -12,8 +12,8 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionExce
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.literals.Function;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.FunckyType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 
 /**
  * Class representing a Funcky application.
@@ -89,11 +89,11 @@ public class Application extends Expression {
 	}
 
 	@Override
-	public FunckyType getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public Type getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 		super.getType(context);
 		checkTypes(context);
 		final FunctionType functionType = (FunctionType) function.getType(context);
-		return functionType.getRange().bind(functionType.getDomain().inferGenericBindings(argument.getType(context)));
+		return functionType.getRange().bind(functionType.getDomain().inferGenericBindings(argument.getType(context).free()));
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class Application extends Expression {
 		if (!(function.getType(context) instanceof FunctionType)) {
 			throw new InvalidFunctionException(function);
 		}
-		if (((FunctionType) function.getType(context)).getDomain().inferGenericBindings(argument.getType(context)) == null) {
+		if (((FunctionType) function.getType(context)).getDomain().inferGenericBindings(argument.getType(context).free()) == null) {
 			throw new InvalidArgumentException(context, this);
 		}
 	}

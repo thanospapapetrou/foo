@@ -19,7 +19,7 @@ import com.github.thanospapapetrou.funcky.runtime.literals.Number;
 import com.github.thanospapapetrou.funcky.runtime.literals.Function;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 import com.github.thanospapapetrou.funcky.runtime.literals.Pair;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.FunckyType;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.PairType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
@@ -153,7 +153,7 @@ public class Prelude extends Library {
 			@Override
 			protected Literal apply(final ScriptContext context, final Expression... arguments) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 				super.apply(context, arguments);
-				return new FunctionType(engine, (FunckyType) arguments[0].eval(context), (FunckyType) arguments[1].eval(context));
+				return new FunctionType(engine, (Type) arguments[0].eval(context), (Type) arguments[1].eval(context));
 			}
 		});
 		addDefinition(new Function(engine, PRELUDE, IS_NAN, generateFunctionType(numberType, booleanType)) {

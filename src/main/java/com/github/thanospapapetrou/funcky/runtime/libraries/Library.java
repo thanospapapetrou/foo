@@ -20,7 +20,7 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbo
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.FunckyType;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
 
@@ -66,7 +66,7 @@ public abstract class Library extends Script {
 		definitions.add(new Definition(engine, script, 0, Objects.requireNonNull(expression, NULL_EXPRESSION).toString(), expression));
 	}
 
-	protected FunctionType generateFunctionType(final FunckyType domain, final FunckyType range) {
+	protected FunctionType generateFunctionType(final Type domain, final Type range) {
 		return new FunctionType(engine, Objects.requireNonNull(domain, NULL_DOMAIN), Objects.requireNonNull(range, NULL_RANGE)); // TODO do we need to define this in script instead of at runtime?
 	}
 

@@ -11,7 +11,7 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
  * 
  * @author thanos
  */
-public class SimpleType extends FunckyType {
+public class SimpleType extends Type {
 	private final String name;
 
 	/**
@@ -30,7 +30,7 @@ public class SimpleType extends FunckyType {
 	}
 
 	@Override
-	public FunckyType bind(final Map<TypeVariable, FunckyType> bindings) {
+	public Type bind(final Map<TypeVariable, Type> bindings) {
 		super.bind(bindings);
 		return this;
 	}
@@ -46,12 +46,12 @@ public class SimpleType extends FunckyType {
 	}
 
 	@Override
-	public Map<TypeVariable, FunckyType> inferGenericBindings(final FunckyType type) {
+	public Map<TypeVariable, Type> inferGenericBindings(final Type type) {
 		super.inferGenericBindings(type);
 		if (type instanceof TypeVariable) {
-			return Collections.<TypeVariable, FunckyType> singletonMap((TypeVariable) type, this);
+			return Collections.<TypeVariable, Type> singletonMap((TypeVariable) type, this);
 		} else if (type instanceof SimpleType) {
-			return equals(type) ? Collections.<TypeVariable, FunckyType> emptyMap() : null;
+			return equals(type) ? Collections.<TypeVariable, Type> emptyMap() : null;
 		}
 		return null;
 	}
@@ -59,5 +59,11 @@ public class SimpleType extends FunckyType {
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	@Override
+	protected SimpleType free(final Map<TypeVariable, TypeVariable> free) {
+		super.free(free);
+		return this;
 	}
 }

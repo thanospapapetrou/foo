@@ -15,8 +15,8 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionExce
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.literals.Function;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.FunckyType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 
 /**
  * Abstract class representing a functor.
@@ -33,13 +33,13 @@ public abstract class Functor extends Function {
 	private static final String NULL_TYPE = "Type %1$d must not be null";
 	private static final String NULL_TYPES = "Types must not be null";
 
-	private final FunckyType[] types;
+	private final Type[] types;
 
-	private static FunctionType getFunctionType(final FunckyScriptEngine engine, final URI script, final FunckyType... types) {
+	private static FunctionType getFunctionType(final FunckyScriptEngine engine, final URI script, final Type... types) {
 		return new FunctionType(engine, types[0], (types.length == FUNCTION_TYPES) ? types[1] : getFunctionType(engine, script, Arrays.copyOfRange(types, 1, types.length)));
 	}
 
-	private static FunckyType[] requireValidTypes(final FunckyType[] types) {
+	private static Type[] requireValidTypes(final Type[] types) {
 		if ((Objects.requireNonNull(types, NULL_TYPES)).length < FUNCTION_TYPES) {
 			throw new IllegalArgumentException(String.format(LESS_TYPES, FUNCTION_TYPES));
 		}
@@ -61,7 +61,7 @@ public abstract class Functor extends Function {
 	 * @param types
 	 *            the types of this functor
 	 */
-	public Functor(final FunckyScriptEngine engine, final URI script, final String name, final FunckyType... types) {
+	public Functor(final FunckyScriptEngine engine, final URI script, final String name, final Type... types) {
 		super(engine, script, name, getFunctionType(engine, script, requireValidTypes(types)));
 		this.types = types;
 	}
@@ -70,9 +70,9 @@ public abstract class Functor extends Function {
 	public Literal apply(final Expression argument, final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException, AlreadyDefinedSymbolException {
 		super.apply(argument, context);
 		final Functor that = this;
-		final FunckyType[] newTypes = new FunckyType[types.length - 1];
+		final Type[] newTypes = new Type[types.length - 1];
 		for (int i = 0; i < newTypes.length; i++) {
-			newTypes[i] = types[i + 1].bind(types[0].inferGenericBindings(argument.getType(context))); // TODO unbind unbound type variables
+			newTypes[i] = types[i + 1].bind(types[0].inferGenericBindings(argument.getType(context).free()));
 		}
 		return (types.length == FUNCTION_TYPES) ? apply(context, argument) : new Functor(engine, script, toString(), newTypes) {
 			@Override

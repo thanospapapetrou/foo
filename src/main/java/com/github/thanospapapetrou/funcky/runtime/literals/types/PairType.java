@@ -15,13 +15,13 @@ import com.github.thanospapapetrou.funcky.runtime.Reference;
  * 
  * @author thanos
  */
-public class PairType extends FunckyType {
+public class PairType extends Type {
 	private static final String NULL_FIRST = "First must not be null";
 	private static final String NULL_SECOND = "Second must not be null";
 	private static final String PAIR = "pair";
 
-	private final FunckyType first;
-	private final FunckyType second;
+	private final Type first;
+	private final Type second;
 
 	/**
 	 * Construct a new pair type.
@@ -33,14 +33,14 @@ public class PairType extends FunckyType {
 	 * @param second
 	 *            the second type of this pair type
 	 */
-	public PairType(final FunckyScriptEngine engine, final FunckyType first, final FunckyType second) {
+	public PairType(final FunckyScriptEngine engine, final Type first, final Type second) {
 		super(engine, FunckyScriptEngine.RUNTIME, 0);
 		this.first = Objects.requireNonNull(first, NULL_FIRST);
 		this.second = Objects.requireNonNull(second, NULL_SECOND);
 	}
 
 	@Override
-	public FunckyType bind(final Map<TypeVariable, FunckyType> bindings) {
+	public Type bind(final Map<TypeVariable, Type> bindings) {
 		super.bind(bindings);
 		return new PairType(engine, first.bind(bindings), second.bind(bindings));
 	}
@@ -59,7 +59,7 @@ public class PairType extends FunckyType {
 	 * 
 	 * @return the first type
 	 */
-	public FunckyType getFirst() {
+	public Type getFirst() {
 		return first;
 	}
 
@@ -68,7 +68,7 @@ public class PairType extends FunckyType {
 	 * 
 	 * @return the second type
 	 */
-	public FunckyType getSecond() {
+	public Type getSecond() {
 		return second;
 	}
 
@@ -78,22 +78,24 @@ public class PairType extends FunckyType {
 	}
 
 	@Override
-	public Map<TypeVariable, FunckyType> inferGenericBindings(final FunckyType type) {
+	public Map<TypeVariable, Type> inferGenericBindings(final Type type) {
 		super.inferGenericBindings(type);
 		if (type instanceof TypeVariable) {
-			return Collections.<TypeVariable, FunckyType> singletonMap((TypeVariable) type, this);
+			return Collections.<TypeVariable, Type> singletonMap((TypeVariable) type, this);
 		} else if (type instanceof PairType) {
 			final PairType pairType = (PairType) type;
-			final Map<TypeVariable, FunckyType> firstBindings = first.inferGenericBindings(pairType.first);
-			final Map<TypeVariable, FunckyType> secondBindings = second.inferGenericBindings(pairType.second);
-			return ((firstBindings == null) || (secondBindings == null)) ? null : new HashMap<TypeVariable, FunckyType>(firstBindings) {
-				private static final long serialVersionUID = 1L;
-
-				{
-					putAll(secondBindings);
-					putAll(firstBindings);
-				}
-			};
+			final Map<TypeVariable, Type> firstBindings = first.inferGenericBindings(pairType.first);
+			if (firstBindings == null) {
+				return null;
+			}
+			final Map<TypeVariable, Type> secondBindings = second.inferGenericBindings(pairType.second);
+			if (secondBindings == null) {
+				return null;
+			}
+			final Map<TypeVariable, Type> bindings = new HashMap<>();
+			bindings.putAll(firstBindings);
+			bindings.putAll(secondBindings);
+			return bindings;
 		}
 		return null;
 	}
@@ -106,5 +108,11 @@ public class PairType extends FunckyType {
 	@Override
 	public String toString() {
 		return toExpression().toString();
+	}
+
+	@Override
+	protected PairType free(final Map<TypeVariable, TypeVariable> free) {
+		super.free(free);
+		return new PairType(engine, first.free(free), second.free(free));
 	}
 }

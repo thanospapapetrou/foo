@@ -11,7 +11,7 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentExce
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.FunckyType;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 
 /**
  * Abstract class representing a Funcky expression.
@@ -54,7 +54,7 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	 * @throws UndefinedSymbolException
 	 *             if any reference to an undefined symbol is encountered
 	 */
-	public FunckyType getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public Type getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 		Objects.requireNonNull(context, NULL_CONTEXT);
 		return null;
 	}

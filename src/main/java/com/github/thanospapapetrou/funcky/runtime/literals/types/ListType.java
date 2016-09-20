@@ -14,11 +14,11 @@ import com.github.thanospapapetrou.funcky.runtime.Reference;
  * 
  * @author thanos
  */
-public class ListType extends FunckyType {
+public class ListType extends Type {
 	private static final String LIST = "List";
 	private static final String NULL_ELEMENT = "Element must not be null";
 
-	private final FunckyType element;
+	private final Type element;
 
 	/**
 	 * Construct a new list type.
@@ -28,13 +28,13 @@ public class ListType extends FunckyType {
 	 * @param element
 	 *            the type of the element of this list type
 	 */
-	public ListType(final FunckyScriptEngine engine, final FunckyType element) {
+	public ListType(final FunckyScriptEngine engine, final Type element) {
 		super(engine, FunckyScriptEngine.RUNTIME, 0);
 		this.element = Objects.requireNonNull(element, NULL_ELEMENT);
 	}
 
 	@Override
-	public FunckyType bind(final Map<TypeVariable, FunckyType> bindings) {
+	public Type bind(final Map<TypeVariable, Type> bindings) {
 		super.bind(bindings);
 		return new ListType(engine, element.bind(bindings));
 	}
@@ -49,7 +49,7 @@ public class ListType extends FunckyType {
 	 * 
 	 * @return the element type
 	 */
-	public FunckyType getElement() {
+	public Type getElement() {
 		return element;
 	}
 
@@ -59,10 +59,10 @@ public class ListType extends FunckyType {
 	}
 
 	@Override
-	public Map<TypeVariable, FunckyType> inferGenericBindings(final FunckyType type) {
+	public Map<TypeVariable, Type> inferGenericBindings(final Type type) {
 		super.inferGenericBindings(type);
 		if (type instanceof TypeVariable) {
-			return Collections.<TypeVariable, FunckyType> singletonMap((TypeVariable) type, this);
+			return Collections.<TypeVariable, Type> singletonMap((TypeVariable) type, this);
 		} else if (type instanceof ListType) {
 			return element.inferGenericBindings(((ListType) type).element);
 		}
@@ -77,5 +77,11 @@ public class ListType extends FunckyType {
 	@Override
 	public String toString() {
 		return toExpression().toString();
+	}
+
+	@Override
+	protected ListType free(final Map<TypeVariable, TypeVariable> free) {
+		super.free(free);
+		return new ListType(engine, element.free(free));
 	}
 }

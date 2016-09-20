@@ -13,7 +13,7 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionExce
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.literals.Number;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.FunckyType;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 
 /**
  * Abstract class representing a two argument arithmetic operator.
@@ -37,7 +37,7 @@ public abstract class TwoArgumentArithmeticOperator extends Functor {
 	 * @param numberType
 	 *            the number type used to define the type of this operator
 	 */
-	public TwoArgumentArithmeticOperator(final FunckyScriptEngine engine, final URI script, final String name, final FunckyType numberType) {
+	public TwoArgumentArithmeticOperator(final FunckyScriptEngine engine, final URI script, final String name, final Type numberType) {
 		super(engine, script, name, numberType, numberType, numberType);
 	}
 
