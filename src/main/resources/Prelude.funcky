@@ -35,7 +35,7 @@
 # false = ...
 
 # Bottom function.
-# bottom <argument> <result>
+# bottom <type1> <type2>
 # bottom argument
 # return never return any value
 # bottom = ...

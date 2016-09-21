@@ -89,9 +89,9 @@ public class Prelude extends Library {
 		booleanFalse = generateBoolean(false);
 		addDefinition(booleanFalse);
 		// functions
-		final TypeVariable bottomArgumentType = generateTypeVariable();
-		final TypeVariable bottomResultType = generateTypeVariable();
-		addDefinition(new Function(engine, PRELUDE, BOTTOM, generateFunctionType(bottomArgumentType, bottomResultType)) {
+		final TypeVariable bottomType1 = generateTypeVariable();
+		final TypeVariable bottomType2 = generateTypeVariable();
+		addDefinition(new Function(engine, PRELUDE, BOTTOM, generateFunctionType(bottomType1, bottomType2)) {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException, AlreadyDefinedSymbolException {
 				super.apply(argument, context);
