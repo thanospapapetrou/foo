@@ -6,6 +6,7 @@ import java.util.Objects;
 import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
@@ -80,16 +81,16 @@ public class Reference extends Expression {
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws UndefinedSymbolException {
+	public Literal eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 		final Object object = Objects.requireNonNull(context, NULL_CONTEXT).getAttribute(name);
-		if (object instanceof Literal) {
-			return (Literal) object;
+		if (object instanceof Expression) {
+			return ((Expression) object).eval(context);
 		}
 		throw new UndefinedSymbolException(this);
 	}
 
 	@Override
-	public Type getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public Type getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 		return eval(Objects.requireNonNull(context, NULL_CONTEXT)).getType(context);
 	}
 

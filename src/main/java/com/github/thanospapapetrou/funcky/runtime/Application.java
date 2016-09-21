@@ -89,7 +89,7 @@ public class Application extends Expression {
 	}
 
 	@Override
-	public Type getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public Type getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 		super.getType(context);
 		checkTypes(context);
 		final FunctionType functionType = (FunctionType) function.getType(context);
@@ -102,7 +102,7 @@ public class Application extends Expression {
 		return String.format(APPLICATION, function, (argumentExpression instanceof Application) ? String.format(NESTED_APPLICATION, argumentExpression) : argumentExpression);
 	}
 
-	private void checkTypes(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	private void checkTypes(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 		if (!(function.getType(context) instanceof FunctionType)) {
 			throw new InvalidFunctionException(function);
 		}

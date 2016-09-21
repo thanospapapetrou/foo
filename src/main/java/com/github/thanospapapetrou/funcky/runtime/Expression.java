@@ -47,6 +47,8 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	 * @param context
 	 *            the context in which to evaluate the type
 	 * @return the type of this expression as evaluated in the given context
+	 * @throws AlreadyDefinedSymbolException
+	 *             if any definition for an already defined symbol is encountered
 	 * @throws InvalidArgumentException
 	 *             if the type of the argument does not match the domain of the function
 	 * @throws InvalidFunctionException
@@ -54,7 +56,7 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	 * @throws UndefinedSymbolException
 	 *             if any reference to an undefined symbol is encountered
 	 */
-	public Type getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public Type getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 		Objects.requireNonNull(context, NULL_CONTEXT);
 		return null;
 	}

@@ -34,6 +34,12 @@
 # boolean
 # false = ...
 
+# Bottom function.
+# bottom <argument> <result>
+# bottom argument
+# return never return any value
+# bottom = ...
+
 # Identity function.
 # function <type> <type>
 # identity argument

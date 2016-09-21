@@ -5,6 +5,7 @@ import java.net.URI;
 import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
@@ -39,7 +40,7 @@ public class Boolean extends Literal {
 	}
 
 	@Override
-	public SimpleType getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public SimpleType getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 		super.getType(context);
 		return engine.getPrelude().getBoolean();
 	}

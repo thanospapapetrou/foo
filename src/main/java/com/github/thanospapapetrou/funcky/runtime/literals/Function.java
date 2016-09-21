@@ -67,7 +67,7 @@ public abstract class Function extends Literal {
 	}
 
 	@Override
-	public FunctionType getType(final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public FunctionType getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 		super.getType(context);
 		return type;
 	}

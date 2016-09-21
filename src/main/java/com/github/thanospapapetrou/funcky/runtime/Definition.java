@@ -50,7 +50,7 @@ public class Definition extends AbstractSyntaxTreeNode {
 	public Void eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
 		super.eval(context);
 		if (context.getAttribute(name) == null) {
-			context.setAttribute(name, expression.eval(context), ScriptContext.ENGINE_SCOPE);
+			context.setAttribute(name, expression, ScriptContext.ENGINE_SCOPE);
 			return null;
 		}
 		throw new AlreadyDefinedSymbolException(this);

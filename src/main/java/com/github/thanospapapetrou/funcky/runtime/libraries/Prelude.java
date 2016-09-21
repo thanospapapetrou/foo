@@ -15,14 +15,14 @@ import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolExce
 import com.github.thanospapapetrou.funcky.runtime.functors.Functor;
 import com.github.thanospapapetrou.funcky.runtime.functors.TwoArgumentArithmeticOperator;
 import com.github.thanospapapetrou.funcky.runtime.literals.Boolean;
-import com.github.thanospapapetrou.funcky.runtime.literals.Number;
 import com.github.thanospapapetrou.funcky.runtime.literals.Function;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.literals.Number;
 import com.github.thanospapapetrou.funcky.runtime.literals.Pair;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.PairType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
 
 /**
@@ -33,6 +33,7 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
 public class Prelude extends Library {
 	private static final String ADD = "add";
 	private static final String BOOLEAN = "boolean";
+	private static final String BOTTOM = "bottom";
 	private static final String CHARACTER = "character";
 	private static final String COMPOSE = "compose";
 	private static final String DIVIDE = "divide";
@@ -88,6 +89,15 @@ public class Prelude extends Library {
 		booleanFalse = generateBoolean(false);
 		addDefinition(booleanFalse);
 		// functions
+		final TypeVariable bottomArgumentType = generateTypeVariable();
+		final TypeVariable bottomResultType = generateTypeVariable();
+		addDefinition(new Function(engine, PRELUDE, BOTTOM, generateFunctionType(bottomArgumentType, bottomResultType)) {
+			@Override
+			public Literal apply(final Expression argument, final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException, AlreadyDefinedSymbolException {
+				super.apply(argument, context);
+				return apply(argument, context);
+			}
+		});
 		final TypeVariable identityType = generateTypeVariable();
 		addDefinition(new Functor(engine, PRELUDE, IDENTITY, identityType, identityType) {
 			@Override
