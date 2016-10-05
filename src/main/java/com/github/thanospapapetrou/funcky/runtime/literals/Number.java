@@ -11,7 +11,8 @@ import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
+import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 
 /**
@@ -73,7 +74,7 @@ public class Number extends Literal {
 	}
 
 	@Override
-	public SimpleType getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public SimpleType getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
 		super.getType(context);
 		return engine.getPrelude().getNumber();
 	}
@@ -94,21 +95,18 @@ public class Number extends Literal {
 
 	@Override
 	public Expression toExpression() {
-		if ((value == Double.POSITIVE_INFINITY)) {
-			return new Reference(engine, Double.toString(Double.POSITIVE_INFINITY).toLowerCase());
+		if ((value == Double.POSITIVE_INFINITY)) { // TODO use Prelude.INFINITY
+			return new Reference(engine, Prelude.PRELUDE, Double.toString(Double.POSITIVE_INFINITY).toLowerCase());
 		} else if ((value == Double.NEGATIVE_INFINITY)) {
-			return new Application(engine, new Reference(engine, MINUS), new Reference(engine, Double.toString(Double.POSITIVE_INFINITY).toLowerCase()));
-		} else if (value == Double.NaN) {
-			return new Reference(engine, Double.toString(Double.NaN));
+			return new Application(engine, new Reference(engine, Prelude.PRELUDE, MINUS), new Reference(engine, Prelude.PRELUDE, Double.toString(Double.POSITIVE_INFINITY).toLowerCase()));
+		} else if (Double.isNaN(value)) {
+			return new Reference(engine, Prelude.PRELUDE, Double.toString(Double.NaN));
 		}
 		return this;
 	}
 
 	@Override
 	public String toString() {
-		if ((value == Double.POSITIVE_INFINITY) || (value == Double.NEGATIVE_INFINITY) || (value == Double.NaN)) {
-			return toExpression().toString();
-		}
-		return Double.toString(value);
+		return ((value == Double.POSITIVE_INFINITY) || (value == Double.NEGATIVE_INFINITY) || (value == Double.NaN)) ? super.toString() : Double.toString(value);
 	}
 }

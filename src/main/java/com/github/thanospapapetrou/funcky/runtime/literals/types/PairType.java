@@ -9,6 +9,7 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Application;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.Reference;
+import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
 
 /**
  * Class representing a Funcky pair type.
@@ -101,13 +102,8 @@ public class PairType extends Type {
 	}
 
 	@Override
-	public Expression toExpression() {
-		return new Application(engine, new Application(engine, new Reference(engine, PAIR), first), second);
-	}
-
-	@Override
-	public String toString() {
-		return toExpression().toString();
+	public Application toExpression() {
+		return new Application(engine, new Application(engine, new Reference(engine, Prelude.PRELUDE, PAIR), first), second); // TODO use Prelude.PAIR
 	}
 
 	@Override

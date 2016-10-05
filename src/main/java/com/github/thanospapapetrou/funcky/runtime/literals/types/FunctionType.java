@@ -9,6 +9,7 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Application;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.Reference;
+import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
 
 /**
  * Class representing a Funcky function type.
@@ -99,13 +100,8 @@ public class FunctionType extends Type {
 	}
 
 	@Override
-	public Expression toExpression() {
-		return new Application(engine, new Application(engine, new Reference(engine, FUNCTION), domain), range);
-	}
-
-	@Override
-	public String toString() {
-		return toExpression().toString();
+	public Application toExpression() {
+		return new Application(engine, new Application(engine, new Reference(engine, Prelude.PRELUDE, FUNCTION), domain), range); // TODO use Prelude.FUNCTION
 	}
 
 	@Override

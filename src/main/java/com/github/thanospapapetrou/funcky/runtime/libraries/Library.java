@@ -13,9 +13,10 @@ import javax.script.ScriptException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.parser.Parser;
 import com.github.thanospapapetrou.funcky.runtime.Definition;
-import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.Import;
+import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.Script;
+import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
@@ -27,7 +28,7 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
  */
 public abstract class Library extends Script {
 	private static final String NULL_DOMAIN = "Domain must not be null";
-	private static final String NULL_EXPRESSION = "Expression must not be null";
+	private static final String NULL_LITERAL = "Literal must not be null";
 	private static final String NULL_RANGE = "Range must not be null";
 
 	private static List<Definition> load(final FunckyScriptEngine engine, final URI uri, final String resource) throws IOException, ScriptException {
@@ -40,8 +41,8 @@ public abstract class Library extends Script {
 		super(engine, uri, 0, new ArrayList<Import>(), load(engine, uri, resource));
 	}
 
-	protected void addDefinition(final Expression expression) {
-		definitions.add(new Definition(engine, script, 0, Objects.requireNonNull(expression, NULL_EXPRESSION).toString(), expression));
+	protected void addDefinition(final Literal literal) {
+		definitions.add(new Definition(engine, script, 0, ((Reference) Objects.requireNonNull(literal, NULL_LITERAL).toExpression()).getName(), literal));
 	}
 
 	protected FunctionType generateFunctionType(final Type domain, final Type range) {

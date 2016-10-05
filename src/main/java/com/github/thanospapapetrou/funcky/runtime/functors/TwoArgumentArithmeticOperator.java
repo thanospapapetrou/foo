@@ -10,7 +10,7 @@ import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 import com.github.thanospapapetrou.funcky.runtime.literals.Number;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
@@ -42,7 +42,7 @@ public abstract class TwoArgumentArithmeticOperator extends Functor {
 	}
 
 	@Override
-	protected Literal apply(final ScriptContext context, final Expression... arguments) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	protected Literal apply(final ScriptContext context, final Expression... arguments) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
 		super.apply(context, arguments);
 		return apply((Number) arguments[0].eval(context), (Number) arguments[1].eval(context), context);
 	}

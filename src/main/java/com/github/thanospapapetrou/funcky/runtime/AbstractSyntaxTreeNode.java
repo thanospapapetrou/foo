@@ -10,7 +10,7 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 
 /**
  * Class representing an abstract syntax tree node.
@@ -58,7 +58,7 @@ public abstract class AbstractSyntaxTreeNode extends CompiledScript {
 	}
 
 	@Override
-	public Object eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public Object eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
 		Objects.requireNonNull(context, NULL_CONTEXT);
 		return null;
 	}

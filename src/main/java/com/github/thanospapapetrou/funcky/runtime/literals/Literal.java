@@ -9,7 +9,7 @@ import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 
 /**
  * Abstract class representing a Funcky literal. A literal can not be evaluated further, however it may not be directly representable, so it has to be converted to an expression to be displayed.
@@ -32,7 +32,7 @@ public abstract class Literal extends Expression {
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public Literal eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
 		super.eval(context);
 		return this;
 	}
@@ -44,5 +44,10 @@ public abstract class Literal extends Expression {
 	 */
 	public Expression toExpression() {
 		return this;
+	}
+
+	@Override
+	public String toString() {
+		return toExpression().toString();
 	}
 }

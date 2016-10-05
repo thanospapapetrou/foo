@@ -7,10 +7,11 @@ import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
+import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
 
 /**
@@ -55,25 +56,35 @@ public abstract class Function extends Literal {
 	 *             if the type of the argument does not match the domain of the function
 	 * @throws InvalidFunctionException
 	 *             if function is not actually a function
-	 * @throws UndefinedSymbolException
-	 *             if any reference to an undefined symbol is encountered
+	 * @throws UndefinedReferenceException
+	 *             if any undefined reference is encountered
 	 * @throws AlreadyDefinedSymbolException
 	 *             if a definition for an already defined symbol is encountered
 	 */
-	public Literal apply(final Expression argument, final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException, AlreadyDefinedSymbolException {
+	public Literal apply(final Expression argument, final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException, AlreadyDefinedSymbolException {
 		Objects.requireNonNull(argument, NULL_ARGUMENT);
 		Objects.requireNonNull(context, NULL_CONTEXT);
 		return null;
 	}
 
 	@Override
-	public FunctionType getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public boolean equals(final Object object) {
+		return (object instanceof Function) && toExpression().equals(((Function) object).toExpression());
+	}
+
+	@Override
+	public FunctionType getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
 		super.getType(context);
 		return type;
 	}
 
 	@Override
-	public String toString() {
-		return name;
+	public int hashCode() {
+		return toExpression().hashCode();
+	}
+
+	@Override
+	public Expression toExpression() {
+		return new Reference(engine, script, name);
 	}
 }

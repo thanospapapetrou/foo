@@ -8,6 +8,7 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Application;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.Reference;
+import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
 
 /**
  * Class representing a Funcky list type.
@@ -70,13 +71,8 @@ public class ListType extends Type {
 	}
 
 	@Override
-	public Expression toExpression() {
-		return new Application(engine, new Reference(engine, LIST), element);
-	}
-
-	@Override
-	public String toString() {
-		return toExpression().toString();
+	public Application toExpression() {
+		return new Application(engine, new Reference(engine, Prelude.PRELUDE, LIST), element); // TODO use Prelude.LIST
 	}
 
 	@Override

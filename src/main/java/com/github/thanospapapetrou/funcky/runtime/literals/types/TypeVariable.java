@@ -13,8 +13,8 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
  * @author thanos
  */
 public class TypeVariable extends Type {
-	private static final String NAME = "type$%1$s%2$s";
-	private static final String TYPE_VARIABLE = "<%1$s>";
+	private static final String NAME = "_%1$s%2$s";
+	private static final String TYPE_VARIABLE = "$%1$s";
 
 	private final String name;
 

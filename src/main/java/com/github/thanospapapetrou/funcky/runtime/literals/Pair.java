@@ -8,7 +8,7 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.PairType;
 
 /**
@@ -19,7 +19,7 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.PairType;
 public class Pair extends Literal {
 	private static final String NULL_FIRST = "First must not be null";
 	private static final String NULL_SECOND = "Second must not be null";
-	private static final String PAIR = "{%1$s, %2$s}";
+	private static final String PAIR = "<%1$s, %2$s>";
 
 	private final Literal first;
 	private final Literal second;
@@ -68,7 +68,7 @@ public class Pair extends Literal {
 	}
 
 	@Override
-	public PairType getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public PairType getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
 		super.getType(context);
 		return new PairType(engine, first.getType(context), second.getType(context));
 	}

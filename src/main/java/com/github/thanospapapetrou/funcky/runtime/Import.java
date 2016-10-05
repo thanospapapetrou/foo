@@ -8,13 +8,13 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 
 public class Import extends AbstractSyntaxTreeNode {
 	private final String prefix;
-	private final String uri;
+	private final URI uri;
 
-	public Import(final FunckyScriptEngine engine, final URI script, final int lineNumber, final String prefix, final String uri) {
+	public Import(final FunckyScriptEngine engine, final URI script, final int lineNumber, final String prefix, final URI uri) {
 		super(engine, script, lineNumber);
 		// TODO check prefix and URI
 		this.prefix = prefix;
@@ -22,7 +22,7 @@ public class Import extends AbstractSyntaxTreeNode {
 	}
 
 	@Override
-	public Void eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public Void eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
 		super.eval(context);
 		// TODO implement
 		return null;
@@ -32,7 +32,7 @@ public class Import extends AbstractSyntaxTreeNode {
 		return prefix;
 	}
 
-	public String getUri() {
+	public URI getUri() {
 		return uri;
 	}
 }

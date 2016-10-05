@@ -9,7 +9,7 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 
@@ -36,7 +36,7 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public Literal eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
 		super.eval(context);
 		return null;
 	}
@@ -53,10 +53,10 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	 *             if the type of the argument does not match the domain of the function
 	 * @throws InvalidFunctionException
 	 *             if function is not actually a function
-	 * @throws UndefinedSymbolException
-	 *             if any reference to an undefined symbol is encountered
+	 * @throws UndefinedReferenceException
+	 *             if any undefined reference is encountered
 	 */
-	public Type getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public Type getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
 		Objects.requireNonNull(context, NULL_CONTEXT);
 		return null;
 	}

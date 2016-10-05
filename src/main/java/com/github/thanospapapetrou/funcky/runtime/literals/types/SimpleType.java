@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.Reference;
 
 /**
  * Class representing a Funcky simple type.
@@ -55,10 +56,10 @@ public class SimpleType extends Type {
 		}
 		return null;
 	}
-
+	
 	@Override
-	public String toString() {
-		return name;
+	public Reference toExpression() {
+		return new Reference(engine, script, name);
 	}
 
 	@Override

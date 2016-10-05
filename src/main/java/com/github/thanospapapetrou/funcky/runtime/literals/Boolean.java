@@ -5,10 +5,11 @@ import java.net.URI;
 import javax.script.ScriptContext;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 
 /**
@@ -40,7 +41,7 @@ public class Boolean extends Literal {
 	}
 
 	@Override
-	public SimpleType getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public SimpleType getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
 		super.getType(context);
 		return engine.getPrelude().getBoolean();
 	}
@@ -49,9 +50,9 @@ public class Boolean extends Literal {
 	public int hashCode() {
 		return java.lang.Boolean.valueOf(value).hashCode();
 	}
-
+	
 	@Override
-	public String toString() {
-		return java.lang.Boolean.toString(value);
+	public Reference toExpression() {
+		return new Reference(engine, script, java.lang.Boolean.toString(value));
 	}
 }

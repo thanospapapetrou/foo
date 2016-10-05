@@ -32,10 +32,10 @@ public class InvalidArgumentException extends FunckyException {
 	 *             if any invalid argument is encountered while evaluating types
 	 * @throws InvalidFunctionException
 	 *             if any invalid function is encountered while evaluating types
-	 * @throws UndefinedSymbolException
-	 *             if any reference to an undefined symbol is encountered while evaluating types
+	 * @throws UndefinedReferenceException
+	 *             if any undefined reference is encountered while evaluating types
 	 */
-	public InvalidArgumentException(final ScriptContext context, final Application application) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedSymbolException {
+	public InvalidArgumentException(final ScriptContext context, final Application application) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
 		super(String.format(INVALID_ARGUMENT, Objects.requireNonNull(application, NULL_APPLICATION).getFunction(), ((FunctionType) application.getFunction().getType(Objects.requireNonNull(context, NULL_CONTEXT))).getDomain(), application.getArgument(), application.getArgument().getType(context)), application.getScript(), application.getLineNumber());
 	}
 }
