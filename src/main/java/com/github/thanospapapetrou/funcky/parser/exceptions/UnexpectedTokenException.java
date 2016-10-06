@@ -9,7 +9,7 @@ import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.parser.Parser;
 
 /**
- * Expression thrown by parser when encountering an unexpected token.
+ * Exception thrown by parser when encountering an unexpected token.
  * 
  * @author thanos
  */

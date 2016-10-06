@@ -109,14 +109,29 @@ public class Reference extends Expression {
 		throw new UndefinedReferenceException(this);
 	}
 
+	/**
+	 * Get the name of this reference.
+	 * 
+	 * @return the name of this reference
+	 */
 	public String getName() {
 		return name.getLocalPart();
 	}
 
+	/**
+	 * Get the namespace of this reference.
+	 * 
+	 * @return the namespace of this reference (the URI of the script that this reference refers to) or <code>null</code> if this reference has no namespace (has a prefix)
+	 */
 	public URI getNamespace() {
 		return name.getNamespaceURI().equals(XMLConstants.NULL_NS_URI) ? null : URI.create(name.getNamespaceURI());
 	}
 
+	/**
+	 * Get the prefix of this reference.
+	 * 
+	 * @return the prefix of this reference or <code>null</code> if this reference has no prefix (is fully qualified or refers to the current script)
+	 */
 	public String getPrefix() {
 		return name.getPrefix().equals(XMLConstants.DEFAULT_NS_PREFIX) ? null : name.getPrefix();
 	}
