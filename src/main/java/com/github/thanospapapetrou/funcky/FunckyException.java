@@ -24,15 +24,15 @@ public abstract class FunckyException extends ScriptException {
 	 *            the message of the exception
 	 * @param script
 	 *            the URI of the script (or library) in which the error occurred
-	 * @param lineNumber
-	 *            the number of the line in which the error occurred or <code>0</code> if this error occured at runtime
+	 * @param line
+	 *            the line in which the error occurred or <code>0</code> if this error occured at runtime
 	 */
-	protected FunckyException(final String message, final URI script, final int lineNumber) {
-		super(Objects.requireNonNull(message, NULL_MESSAGE), Objects.requireNonNull(script, NULL_SCRIPT).toString(), lineNumber);
+	protected FunckyException(final String message, final URI script, final int line) {
+		super(Objects.requireNonNull(message, NULL_MESSAGE), Objects.requireNonNull(script, NULL_SCRIPT).toString(), line);
 		if (message.isEmpty()) {
 			throw new IllegalArgumentException(EMPTY_MESSAGE);
 		}
-		if (lineNumber < 0) {
+		if (line < 0) {
 			throw new IllegalArgumentException(NEGATIVE_LINE_NUMBER);
 		}
 	}

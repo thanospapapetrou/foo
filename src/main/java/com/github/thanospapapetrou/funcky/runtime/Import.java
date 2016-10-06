@@ -14,8 +14,8 @@ public class Import extends AbstractSyntaxTreeNode {
 	private final String prefix;
 	private final URI uri;
 
-	public Import(final FunckyScriptEngine engine, final URI script, final int lineNumber, final String prefix, final URI uri) {
-		super(engine, script, lineNumber);
+	public Import(final FunckyScriptEngine engine, final URI script, final int line, final String prefix, final URI uri) {
+		super(engine, script, line);
 		// TODO check prefix and URI
 		this.prefix = prefix;
 		this.uri = uri;

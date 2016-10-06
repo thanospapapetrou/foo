@@ -49,13 +49,13 @@ public class Character extends Literal {
 	 *            the engine that generated this character
 	 * @param script
 	 *            the URI of the script from which this character was generated
-	 * @param lineNumber
-	 *            the number of the line from which this character was parsed or <code>0</code> if this number was not parsed (is builtin or generated at runtime)
+	 * @param line
+	 *            the line from which this character was parsed or <code>0</code> if this number was not parsed (is builtin or generated at runtime)
 	 * @param value
 	 *            the value of this character
 	 */
-	public Character(final FunckyScriptEngine engine, final URI script, final int lineNumber, final char value) {
-		super(engine, script, lineNumber);
+	public Character(final FunckyScriptEngine engine, final URI script, final int line, final char value) {
+		super(engine, script, line);
 		this.value = value;
 	}
 

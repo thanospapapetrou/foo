@@ -37,15 +37,15 @@ public class Reference extends Expression {
 	 *            the engine that generated this reference
 	 * @param script
 	 *            the URI of the script from which this reference was generated
-	 * @param lineNumber
-	 *            the number of the line from which this reference was parsed or <code>0</code> if this reference was not parsed (is builtin or generated at runtime)
+	 * @param line
+	 *            the line from which this reference was parsed or <code>0</code> if this reference was not parsed (is builtin or generated at runtime)
 	 * @param namespace
 	 *            the namespace of this reference (the URI of the script that this reference refers to)
 	 * @param name
 	 *            the name of this reference
 	 */
-	public Reference(final FunckyScriptEngine engine, final URI script, final int lineNumber, final URI namespace, final String name) {
-		this(engine, script, lineNumber, Objects.requireNonNull(namespace, NULL_NAMESPACE), null, name);
+	public Reference(final FunckyScriptEngine engine, final URI script, final int line, final URI namespace, final String name) {
+		this(engine, script, line, Objects.requireNonNull(namespace, NULL_NAMESPACE), null, name);
 	}
 
 	/**
@@ -55,15 +55,15 @@ public class Reference extends Expression {
 	 *            the engine that generated this reference
 	 * @param script
 	 *            the URI of the script from which this reference was generated
-	 * @param lineNumber
-	 *            the number of the line from which this reference was parsed or <code>0</code> if this reference was not parsed (is builtin or generated at runtime)
+	 * @param line
+	 *            the line from which this reference was parsed or <code>0</code> if this reference was not parsed (is builtin or generated at runtime)
 	 * @param prefix
 	 *            the prefix of this reference
 	 * @param name
 	 *            the name of this reference
 	 */
-	public Reference(final FunckyScriptEngine engine, final URI script, final int lineNumber, final String prefix, final String name) {
-		this(engine, script, lineNumber, null, Objects.requireNonNull(prefix, NULL_PREFIX), name);
+	public Reference(final FunckyScriptEngine engine, final URI script, final int line, final String prefix, final String name) {
+		this(engine, script, line, null, Objects.requireNonNull(prefix, NULL_PREFIX), name);
 		if (prefix.isEmpty()) {
 			throw new IllegalArgumentException(EMPTY_PREFIX);
 		}
@@ -83,8 +83,8 @@ public class Reference extends Expression {
 		this(engine, FunckyScriptEngine.RUNTIME, 0, namespace, name);
 	}
 
-	private Reference(final FunckyScriptEngine engine, final URI script, final int lineNumber, final URI namespace, final String prefix, final String name) {
-		super(engine, script, lineNumber);
+	private Reference(final FunckyScriptEngine engine, final URI script, final int line, final URI namespace, final String prefix, final String name) {
+		super(engine, script, line);
 		if (Objects.requireNonNull(name, NULL_NAME).isEmpty()) {
 			throw new IllegalArgumentException(EMPTY_NAME);
 		}

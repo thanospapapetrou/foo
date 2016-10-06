@@ -27,16 +27,16 @@ public abstract class AbstractSyntaxTreeNode extends CompiledScript {
 	 * The engine that generated this node.
 	 */
 	protected final FunckyScriptEngine engine;
-	
+
 	/**
 	 * The URI of the script from which this node was generated.
 	 */
 	protected final URI script;
-	
+
 	/**
-	 * The number of the script line from which this node was generated. 
+	 * The line of the script from which this node was generated.
 	 */
-	protected final int lineNumber;
+	protected final int line;
 
 	/**
 	 * Construct a new node.
@@ -45,16 +45,16 @@ public abstract class AbstractSyntaxTreeNode extends CompiledScript {
 	 *            the engine that generated this node
 	 * @param script
 	 *            the URI of the script from which this node was generated
-	 * @param lineNumber
-	 *            the number of the line from which this node was parsed or <code>0</code> if this node was not parsed (is builtin or generated at runtime)
+	 * @param line
+	 *            the line from which this node was parsed or <code>0</code> if this node was not parsed (is builtin or generated at runtime)
 	 */
-	protected AbstractSyntaxTreeNode(final FunckyScriptEngine engine, final URI script, final int lineNumber) {
+	protected AbstractSyntaxTreeNode(final FunckyScriptEngine engine, final URI script, final int line) {
 		this.engine = Objects.requireNonNull(engine, NULL_ENGINE);
 		this.script = Objects.requireNonNull(script, NULL_SCRIPT);
-		if (lineNumber < 0) {
+		if (line < 0) {
 			throw new IllegalArgumentException(NEGATIVE_LINE_NUMBER);
 		}
-		this.lineNumber = lineNumber;
+		this.line = line;
 	}
 
 	@Override
@@ -80,9 +80,9 @@ public abstract class AbstractSyntaxTreeNode extends CompiledScript {
 	/**
 	 * Get the line number.
 	 * 
-	 * @return the number of the line from which this abstract syntax tree node was parsed or <code>null</code> if this abstract syntax tree node was not parsed from any line (is a builtin)
+	 * @return the line from which this abstract syntax tree node was parsed or <code>null</code> if this abstract syntax tree node was not parsed from any line (is a builtin)
 	 */
 	public int getLineNumber() {
-		return lineNumber;
+		return line;
 	}
 }

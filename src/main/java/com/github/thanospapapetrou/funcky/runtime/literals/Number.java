@@ -32,13 +32,13 @@ public class Number extends Literal {
 	 *            the engine that generated this number
 	 * @param script
 	 *            the URI of the script from which this number was generated
-	 * @param lineNumber
-	 *            the number of the line from which this number was parsed or <code>0</code> if this number was not parsed (is builtin or generated at runtime)
+	 * @param line
+	 *            the line from which this number was parsed or <code>0</code> if this number was not parsed (is builtin or generated at runtime)
 	 * @param value
 	 *            the value of this number
 	 */
-	public Number(final FunckyScriptEngine engine, final URI script, final int lineNumber, final double value) {
-		super(engine, script, lineNumber);
+	public Number(final FunckyScriptEngine engine, final URI script, final int line, final double value) {
+		super(engine, script, line);
 		this.value = value;
 	}
 

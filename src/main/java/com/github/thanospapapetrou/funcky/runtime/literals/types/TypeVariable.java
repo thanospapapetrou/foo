@@ -30,13 +30,13 @@ public class TypeVariable extends Type {
 	 *            the engine that generated this type variable
 	 * @param script
 	 *            the URI of the script from which this type variable was generated
-	 * @param lineNumber
-	 *            the number of the line from which this type variable was parsed or <code>0</code> if this type was not parsed (is builtin or generated at runtime)
+	 * @param line
+	 *            the line from which this type variable was parsed or <code>0</code> if this type was not parsed (is builtin or generated at runtime)
 	 * @param name
 	 *            the name of this type variable
 	 */
-	public TypeVariable(final FunckyScriptEngine engine, final URI script, final int lineNumber, final String name) {
-		super(engine, script, lineNumber);
+	public TypeVariable(final FunckyScriptEngine engine, final URI script, final int line, final String name) {
+		super(engine, script, line);
 		this.name = name;
 	}
 

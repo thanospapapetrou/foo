@@ -20,10 +20,10 @@ public class UnparsableInputException extends FunckyException {
 	 *            the unparsable input
 	 * @param script
 	 *            the URI of the script in which the unparsable input was encountered
-	 * @param lineNumber
+	 * @param line
 	 *            the line of the script in which the unparsable input was encountered
 	 */
-	public UnparsableInputException(final char unparsableInput, final URI script, final int lineNumber) {
-		super(String.format(UNPARSABLE_INPUT, unparsableInput), script, lineNumber);
+	public UnparsableInputException(final char unparsableInput, final URI script, final int line) {
+		super(String.format(UNPARSABLE_INPUT, unparsableInput), script, line);
 	}
 }

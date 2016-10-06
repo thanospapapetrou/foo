@@ -31,15 +31,15 @@ public class Definition extends AbstractSyntaxTreeNode {
 	 *            the engine that generated this definition
 	 * @param script
 	 *            the URI of the script from which this definition was generated
-	 * @param lineNumber
-	 *            the number of the line from which this definition was parsed or <code>0</code> if this expression was not parsed (is builtin or generated at runtime)
+	 * @param line
+	 *            the line from which this definition was parsed or <code>0</code> if this expression was not parsed (is builtin or generated at runtime)
 	 * @param name
 	 *            the name of this definition.
 	 * @param expression
 	 *            the expression of this definition
 	 */
-	public Definition(final FunckyScriptEngine engine, final URI script, final int lineNumber, final String name, final Expression expression) {
-		super(engine, script, lineNumber);
+	public Definition(final FunckyScriptEngine engine, final URI script, final int line, final String name, final Expression expression) {
+		super(engine, script, line);
 		if ((this.name = Objects.requireNonNull(name, NULL_NAME)).isEmpty()) {
 			throw new IllegalArgumentException(EMPTY_NAME);
 		}

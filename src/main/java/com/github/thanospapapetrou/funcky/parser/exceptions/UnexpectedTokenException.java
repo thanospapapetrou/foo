@@ -77,12 +77,12 @@ public class UnexpectedTokenException extends FunckyException {
 	 *            the unexpected token
 	 * @param script
 	 *            the URI of the script in which the unexpected token was encountered
-	 * @param lineNumber
+	 * @param line
 	 *            the line of the script in which the unexpected token was encountered
 	 * @param expectedTokens
 	 *            the tokens normally expected
 	 */
-	public UnexpectedTokenException(final int unexpectedToken, final URI script, final int lineNumber, final int... expectedTokens) {
-		super(String.format(UNEXPECTED_TOKEN, TOKEN_NAMES.get(requireValidToken(unexpectedToken)), or(requireValidExpectedTokens(expectedTokens))), script, lineNumber);
+	public UnexpectedTokenException(final int unexpectedToken, final URI script, final int line, final int... expectedTokens) {
+		super(String.format(UNEXPECTED_TOKEN, TOKEN_NAMES.get(requireValidToken(unexpectedToken)), or(requireValidExpectedTokens(expectedTokens))), script, line);
 	}
 }

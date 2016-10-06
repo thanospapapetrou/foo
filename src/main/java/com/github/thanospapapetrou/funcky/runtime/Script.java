@@ -38,15 +38,15 @@ public class Script extends AbstractSyntaxTreeNode {
 	 *            the engine that generated this script
 	 * @param script
 	 *            the URI of this script
-	 * @param lineNumber
-	 *            the number of the line from which this script was parsed
+	 * @param line
+	 *            the line from which this script was parsed
 	 * @param imports
 	 *            the imports of this script
 	 * @param definitions
 	 *            the definitions of this script
 	 */
-	public Script(final FunckyScriptEngine engine, final URI script, final int lineNumber, final List<Import> imports, final List<Definition> definitions) {
-		super(engine, script, lineNumber);
+	public Script(final FunckyScriptEngine engine, final URI script, final int line, final List<Import> imports, final List<Definition> definitions) {
+		super(engine, script, line);
 		this.imports = Objects.requireNonNull(imports, NULL_IMPORTS);
 		this.definitions = Objects.requireNonNull(definitions, NULL_DEFINITIONS);
 	}

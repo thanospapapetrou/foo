@@ -36,15 +36,15 @@ public class Application extends Expression {
 	 *            the engine that generated this application
 	 * @param script
 	 *            the URI of the script from which this application was generated
-	 * @param lineNumber
-	 *            the number of the line from which this application was parsed or <code>0</code> if this application was not parsed (is builtin or generated at runtime)
+	 * @param line
+	 *            the line from which this application was parsed or <code>0</code> if this application was not parsed (is builtin or generated at runtime)
 	 * @param function
 	 *            the function of this application
 	 * @param argument
 	 *            the argument of this application
 	 */
-	public Application(final FunckyScriptEngine engine, final URI script, final int lineNumber, final Expression function, final Expression argument) {
-		super(engine, script, lineNumber);
+	public Application(final FunckyScriptEngine engine, final URI script, final int line, final Expression function, final Expression argument) {
+		super(engine, script, line);
 		this.function = Objects.requireNonNull(function, NULL_FUNCTION);
 		this.argument = Objects.requireNonNull(argument, NULL_ARGUMENT);
 	}

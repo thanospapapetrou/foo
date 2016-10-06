@@ -23,10 +23,10 @@ public class InvalidUriException extends FunckyException {
 	 *            the <code>URISyntaxException</code> that caused this invalid URI exception
 	 * @param script
 	 *            the URI of the script in which the invalid URI was encountered
-	 * @param lineNumber
+	 * @param line
 	 *            the line of the script in which the invalid URI was encountered
 	 */
-	public InvalidUriException(final URISyntaxException exception, final URI script, final int lineNumber) {
-		super(String.format(INVALID_URI, Objects.requireNonNull(exception, NULL_EXCEPTION).getInput()), script, lineNumber);
+	public InvalidUriException(final URISyntaxException exception, final URI script, final int line) {
+		super(String.format(INVALID_URI, Objects.requireNonNull(exception, NULL_EXCEPTION).getInput()), script, line);
 	}
 }
