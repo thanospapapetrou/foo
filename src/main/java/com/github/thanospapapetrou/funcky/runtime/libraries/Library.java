@@ -3,14 +3,16 @@ package com.github.thanospapapetrou.funcky.runtime.libraries;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.FunckyScriptEngineFactory;
 import com.github.thanospapapetrou.funcky.parser.Parser;
 import com.github.thanospapapetrou.funcky.runtime.Definition;
 import com.github.thanospapapetrou.funcky.runtime.Import;
@@ -28,17 +30,51 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
  */
 public abstract class Library extends Script {
 	private static final String NULL_DOMAIN = "Domain must not be null";
+	private static final String NULL_ENGINE = "Engine must not be null";
 	private static final String NULL_LITERAL = "Literal must not be null";
 	private static final String NULL_RANGE = "Range must not be null";
+	private static final String SCRIPT = "/%1$s.funcky";
 
-	private static List<Definition> load(final FunckyScriptEngine engine, final URI uri, final String resource) throws IOException, ScriptException {
-		try (final InputStreamReader reader = new InputStreamReader(Library.class.getResourceAsStream(resource), StandardCharsets.UTF_8)) {
-			return new Parser(engine, reader, uri).parseScript().getDefinitions();
+	/**
+	 * Get the namespace URI corresponding to a library.
+	 * 
+	 * @param library
+	 *            the library of which the namespace URI to get
+	 * @return the namespace URI of the library provided
+	 * @throws ScriptException
+	 *             if any errors occur while retrieving the namespace URI of the library provided
+	 */
+	public static URI getUri(final Class<?> library) throws ScriptException {
+		try {
+			return new URI(new FunckyScriptEngineFactory().getLanguageName().toLowerCase(Locale.ROOT), library.getSimpleName().toLowerCase(Locale.ROOT), null);
+		} catch (final URISyntaxException e) {
+			throw new ScriptException(e);
 		}
 	}
 
-	public Library(final FunckyScriptEngine engine, final URI uri, final String resource) throws IOException, ScriptException { // TODO validate arguemnts, maybe replace IOException with some kind of ScriptException
-		super(engine, uri, 0, new ArrayList<Import>(), load(engine, uri, resource));
+	private static Class<?> getCurrentLibrary() throws ScriptException {
+		try {
+			return Class.forName(Thread.currentThread().getStackTrace()[3].getClassName());
+		} catch (final ClassNotFoundException e) {
+			throw new ScriptException(e);
+		}
+	}
+
+	/**
+	 * Construct and load a new library.
+	 * 
+	 * @param engine
+	 *            the engine that is loading this library
+	 * @throws ScriptException
+	 *             if any errors occur while loading this library
+	 */
+	public Library(final FunckyScriptEngine engine) throws ScriptException {
+		super(Objects.requireNonNull(engine, NULL_ENGINE), getUri(getCurrentLibrary()), 0, new ArrayList<Import>(), new ArrayList<Definition>());
+		try (final InputStreamReader reader = new InputStreamReader(Library.class.getResourceAsStream(String.format(SCRIPT, getClass().getSimpleName())), StandardCharsets.UTF_8)) {
+			definitions.addAll(new Parser(engine, reader, getUri(getClass())).parseScript().getDefinitions());
+		} catch (final IOException e) {
+			throw new ScriptException(e);
+		}
 	}
 
 	protected void addDefinition(final Literal literal) {

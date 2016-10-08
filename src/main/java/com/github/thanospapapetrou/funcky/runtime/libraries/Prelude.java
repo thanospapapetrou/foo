@@ -74,7 +74,7 @@ public class Prelude extends Library {
 	 * @throws ScriptException
 	 */
 	public Prelude(final FunckyScriptEngine engine) throws IOException, ScriptException {
-		super(engine, PRELUDE, RESOURCE);
+		super(engine);
 		// types
 		typeType = generateSimpleType(TYPE);
 		addDefinition(typeType);
