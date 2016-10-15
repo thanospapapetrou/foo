@@ -53,7 +53,6 @@ public class Prelude extends Library {
 	private static final String MULTIPLY = "multiply";
 	private static final String NUMBER = "number";
 	private static final String PRODUCT = "product";
-	private static final String RESOURCE = "/Prelude.funcky";
 	private static final String SUBTRACT = "subtract";
 	private static final String TYPE = "type";
 	private static final String TYPE_OF = "typeOf";

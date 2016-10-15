@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import javax.script.Bindings;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
+import javax.script.SimpleBindings;
 
 /**
  * Class implementing a Funcky script engine factory.
@@ -17,10 +19,30 @@ import javax.script.ScriptEngineFactory;
 public class FunckyScriptEngineFactory implements ScriptEngineFactory {
 	private static final String DELIMITER = "\n";
 	private static final String NAME = "Funcky";
+	private static final String NULL_GLOBAL_SCOPE_BINDINGS = "Global scope bindings must not be null";
 	private static final String NULL_STATEMENTS = "Statements must not be null";
 	private static final String UNSUPPORTED_GET_METHOD_CALL_SYNTAX = "getMethodCallSyntax() is not supported";
 	private static final String UNSUPPORTED_GET_OUTPUT_STATEMENT = "getOutputStatement() is not supported";
 	private static final String VERSION = "1.0.0-SNAPSHOT";
+
+	private final Bindings globalScopeBindings;
+
+	/**
+	 * Construct a new script engine factory.
+	 * 
+	 * @param globalScopeBindings
+	 *            the global scope bindings to use
+	 */
+	public FunckyScriptEngineFactory(final Bindings globalScopeBindings) {
+		this.globalScopeBindings = Objects.requireNonNull(globalScopeBindings, NULL_GLOBAL_SCOPE_BINDINGS);
+	}
+
+	/**
+	 * Construct a new script engine factory with empty global scope bindings.
+	 */
+	public FunckyScriptEngineFactory() {
+		this(new SimpleBindings());
+	}
 
 	@Override
 	public String getEngineName() {
@@ -99,6 +121,6 @@ public class FunckyScriptEngineFactory implements ScriptEngineFactory {
 
 	@Override
 	public FunckyScriptEngine getScriptEngine() {
-		return new FunckyScriptEngine(this);
+		return new FunckyScriptEngine(this, globalScopeBindings);
 	}
 }

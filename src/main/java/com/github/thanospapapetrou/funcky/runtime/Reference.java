@@ -23,7 +23,6 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 public class Reference extends Expression {
 	private static final String EMPTY_PREFIX = "Prefix must not be empty";
 	private static final String EMPTY_NAME = "Name must not be empty";
-	private static final String NULL_CONTEXT = "Context must not be null";
 	private static final String NULL_NAME = "Name must not be null";
 	private static final String NULL_NAMESPACE = "Namespace must not be null";
 	private static final String NULL_PREFIX = "Prefix must not be null";
@@ -102,7 +101,8 @@ public class Reference extends Expression {
 
 	@Override
 	public Literal eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
-		final Object object = Objects.requireNonNull(context, NULL_CONTEXT).getAttribute(name.getLocalPart()); // TODO use different bindings?
+		super.eval(context);
+		final Object object = context.getAttribute(name.getLocalPart()); // TODO use different bindings?
 		if (object instanceof Expression) {
 			return ((Expression) object).eval(context);
 		}
@@ -138,7 +138,8 @@ public class Reference extends Expression {
 
 	@Override
 	public Type getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
-		return eval(Objects.requireNonNull(context, NULL_CONTEXT)).getType(context);
+		super.eval(context);
+		return eval(context).getType(context);
 	}
 
 	@Override

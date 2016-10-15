@@ -38,6 +38,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	private static final String ERROR_LOADING_PRELUDE = "Error loading prelude";
 	private static final Logger LOGGER = Logger.getLogger(FunckyScriptEngine.class.getName());
 	private static final String NULL_CONTEXT = "Context must not be null";
+	private static final String NULL_GLOBAL_SCOPE_BINDINGS = "Global scope bindings must not be null";
 	private static final String NULL_FACTORY = "Factory must not be null";
 	private static final String NULL_SCRIPT = "Script must not be null";
 	private static final URI STDIN = URI.create("funcky:stdin");
@@ -53,9 +54,12 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 * 
 	 * @param factory
 	 *            the script engine factory of this script engine
+	 * @param globalScopeBindings
+	 *            the global scope bindings of the initial context of this script engine
 	 */
-	public FunckyScriptEngine(final FunckyScriptEngineFactory factory) {
+	public FunckyScriptEngine(final FunckyScriptEngineFactory factory, final Bindings globalScopeBindings) {
 		this.factory = Objects.requireNonNull(factory, NULL_FACTORY);
+		setContext(new FunckyScriptContext(Objects.requireNonNull(globalScopeBindings, NULL_GLOBAL_SCOPE_BINDINGS)));
 		try {
 			(this.prelude = new Prelude(this)).eval(); // TODO do not eval prelude to load it
 		} catch (final IOException | ScriptException e) {

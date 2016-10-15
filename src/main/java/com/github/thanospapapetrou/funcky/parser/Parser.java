@@ -389,6 +389,7 @@ public class Parser {
 		case SYMBOL:
 			final String symbol = tokenizer.sval;
 			if (parseExpectedTokens(CHARACTER, COLON, COMMA, DOLLAR, EOF, EOL, LEFT_ANGLE_BRACKET, LEFT_CURLY_BRACKET, LEFT_PARENTHESIS, LEFT_SQUARE_BRACKET, NUMBER, RIGHT_ANGLE_BRACKET, RIGHT_PARENTHESIS, RIGHT_SQUARE_BRACKET, STRING, SYMBOL) == COLON) {
+				parseExpectedTokens(SYMBOL);
 				return new Reference(engine, script, tokenizer.lineno(), symbol, tokenizer.sval);
 			}
 			tokenizer.pushBack();

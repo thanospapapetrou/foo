@@ -29,6 +29,7 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
  * @author thanos
  */
 public abstract class Library extends Script {
+	private static final int CURRENT_LIBRARY = 3;
 	private static final String NULL_DOMAIN = "Domain must not be null";
 	private static final String NULL_ENGINE = "Engine must not be null";
 	private static final String NULL_LITERAL = "Literal must not be null";
@@ -54,7 +55,7 @@ public abstract class Library extends Script {
 
 	private static Class<?> getCurrentLibrary() throws ScriptException {
 		try {
-			return Class.forName(Thread.currentThread().getStackTrace()[3].getClassName());
+			return Class.forName(Thread.currentThread().getStackTrace()[CURRENT_LIBRARY].getClassName());
 		} catch (final ClassNotFoundException e) {
 			throw new ScriptException(e);
 		}
