@@ -56,7 +56,7 @@ public class SimpleType extends Type {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public Reference toExpression() {
 		return new Reference(engine, script, name);

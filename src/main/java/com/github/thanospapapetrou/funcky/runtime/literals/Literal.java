@@ -4,12 +4,9 @@ import java.net.URI;
 
 import javax.script.ScriptContext;
 
+import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 
 /**
  * Abstract class representing a Funcky literal. A literal can not be evaluated further, however it may not be directly representable, so it has to be converted to an expression to be displayed.
@@ -32,7 +29,7 @@ public abstract class Literal extends Expression {
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
+	public Literal eval(final ScriptContext context) throws FunckyException {
 		super.eval(context);
 		return this;
 	}

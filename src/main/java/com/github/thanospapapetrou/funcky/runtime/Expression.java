@@ -5,11 +5,8 @@ import java.util.Objects;
 
 import javax.script.ScriptContext;
 
+import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 
@@ -36,7 +33,7 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
+	public Literal eval(final ScriptContext context) throws FunckyException {
 		super.eval(context);
 		return null;
 	}
@@ -47,16 +44,10 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	 * @param context
 	 *            the context in which to evaluate the type
 	 * @return the type of this expression as evaluated in the given context
-	 * @throws AlreadyDefinedSymbolException
-	 *             if any definition for an already defined symbol is encountered
-	 * @throws InvalidArgumentException
-	 *             if the type of the argument does not match the domain of the function
-	 * @throws InvalidFunctionException
-	 *             if function is not actually a function
-	 * @throws UndefinedReferenceException
-	 *             if any undefined reference is encountered
+	 * @throws FunckyException
+	 *             if any errors occur while evaluating the type of this expression in the given context
 	 */
-	public Type getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
+	public Type getType(final ScriptContext context) throws FunckyException {
 		Objects.requireNonNull(context, NULL_CONTEXT);
 		return null;
 	}

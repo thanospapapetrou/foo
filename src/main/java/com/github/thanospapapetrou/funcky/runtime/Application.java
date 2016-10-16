@@ -5,11 +5,10 @@ import java.util.Objects;
 
 import javax.script.ScriptContext;
 
+import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 import com.github.thanospapapetrou.funcky.runtime.literals.Function;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
@@ -62,7 +61,7 @@ public class Application extends Expression {
 	public Application(final FunckyScriptEngine engine, final Expression function, final Expression argument) {
 		this(engine, FunckyScriptEngine.RUNTIME, 0, function, argument);
 	}
-	
+
 	@Override
 	public boolean equals(final Object object) {
 		if (object instanceof Application) {
@@ -73,7 +72,7 @@ public class Application extends Expression {
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
+	public Literal eval(final ScriptContext context) throws FunckyException {
 		super.eval(context);
 		checkTypes(context);
 		return ((Function) function.eval(context)).apply(argument, context);
@@ -98,13 +97,13 @@ public class Application extends Expression {
 	}
 
 	@Override
-	public Type getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
+	public Type getType(final ScriptContext context) throws FunckyException {
 		super.getType(context);
 		checkTypes(context);
 		final FunctionType functionType = (FunctionType) function.getType(context);
 		return functionType.getRange().bind(functionType.getDomain().inferGenericBindings(argument.getType(context).free()));
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(function, argument);
@@ -116,7 +115,7 @@ public class Application extends Expression {
 		return String.format(APPLICATION, function, (argumentExpression instanceof Application) ? String.format(NESTED_APPLICATION, argumentExpression) : argumentExpression);
 	}
 
-	private void checkTypes(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
+	private void checkTypes(final ScriptContext context) throws FunckyException {
 		if (!(function.getType(context) instanceof FunctionType)) {
 			throw new InvalidFunctionException(function);
 		}

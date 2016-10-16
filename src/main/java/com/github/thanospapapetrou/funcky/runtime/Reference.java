@@ -7,10 +7,8 @@ import javax.script.ScriptContext;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 
+import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
@@ -100,7 +98,7 @@ public class Reference extends Expression {
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
+	public Literal eval(final ScriptContext context) throws FunckyException {
 		super.eval(context);
 		final Object object = context.getAttribute(name.getLocalPart()); // TODO use different bindings?
 		if (object instanceof Expression) {
@@ -137,7 +135,7 @@ public class Reference extends Expression {
 	}
 
 	@Override
-	public Type getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
+	public Type getType(final ScriptContext context) throws FunckyException {
 		super.eval(context);
 		return eval(context).getType(context);
 	}

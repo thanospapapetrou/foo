@@ -7,11 +7,8 @@ import java.util.regex.Pattern;
 
 import javax.script.ScriptContext;
 
+import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 
 /**
@@ -65,7 +62,7 @@ public class Character extends Literal {
 	}
 
 	@Override
-	public SimpleType getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
+	public SimpleType getType(final ScriptContext context) throws FunckyException {
 		super.getType(context);
 		return engine.getPrelude().getCharacter();
 	}

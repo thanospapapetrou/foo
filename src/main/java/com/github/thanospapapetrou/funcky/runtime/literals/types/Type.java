@@ -7,12 +7,9 @@ import java.util.Objects;
 
 import javax.script.ScriptContext;
 
+import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Reference;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 
@@ -54,7 +51,7 @@ public abstract class Type extends Literal {
 	};
 
 	@Override
-	public SimpleType getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
+	public SimpleType getType(final ScriptContext context) throws FunckyException {
 		super.getType(context);
 		return (SimpleType) new Reference(engine, Prelude.PRELUDE, TYPE).eval(context); // TODO use Prelude.TYPE
 	}

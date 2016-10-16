@@ -4,11 +4,8 @@ import java.util.Objects;
 
 import javax.script.ScriptContext;
 
+import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.PairType;
 
 /**
@@ -68,7 +65,7 @@ public class Pair extends Literal {
 	}
 
 	@Override
-	public PairType getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
+	public PairType getType(final ScriptContext context) throws FunckyException {
 		super.getType(context);
 		return new PairType(engine, first.getType(context), second.getType(context));
 	}

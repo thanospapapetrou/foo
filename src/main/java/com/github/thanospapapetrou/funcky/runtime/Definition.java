@@ -5,11 +5,9 @@ import java.util.Objects;
 
 import javax.script.ScriptContext;
 
+import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 
 /**
  * Class representing a Funcky definition.
@@ -47,7 +45,7 @@ public class Definition extends AbstractSyntaxTreeNode {
 	}
 
 	@Override
-	public Void eval(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
+	public Void eval(final ScriptContext context) throws FunckyException {
 		super.eval(context);
 		if (context.getAttribute(name) == null) {
 			context.setAttribute(name, expression, ScriptContext.ENGINE_SCOPE);

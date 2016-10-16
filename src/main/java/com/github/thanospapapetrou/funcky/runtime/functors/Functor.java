@@ -6,13 +6,10 @@ import java.util.Objects;
 
 import javax.script.ScriptContext;
 
+import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Application;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 import com.github.thanospapapetrou.funcky.runtime.literals.Function;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
@@ -67,7 +64,7 @@ public abstract class Functor extends Function {
 	}
 
 	@Override
-	public Literal apply(final Expression argument, final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException, AlreadyDefinedSymbolException {
+	public Literal apply(final Expression argument, final ScriptContext context) throws FunckyException {
 		super.apply(argument, context);
 		final Functor that = this;
 		final Type[] newTypes = new Type[types.length - 1];
@@ -81,7 +78,7 @@ public abstract class Functor extends Function {
 			}
 
 			@Override
-			protected Literal apply(final ScriptContext context, final Expression... arguments) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
+			protected Literal apply(final ScriptContext context, final Expression... arguments) throws FunckyException {
 				super.apply(context, arguments);
 				final Expression[] newArguments = new Expression[arguments.length + 1];
 				newArguments[0] = argument;
@@ -99,16 +96,10 @@ public abstract class Functor extends Function {
 	 * @param arguments
 	 *            the arguments to apply this functor to
 	 * @return the literal result of applying this functor to the given arguments
-	 * @throws InvalidArgumentException
-	 *             if any invalid argument is encountered
-	 * @throws InvalidFunctionException
-	 *             if any invalid function is encountered
-	 * @throws UndefinedReferenceException
-	 *             if any undefined reference is encountered
-	 * @throws AlreadyDefinedSymbolException
-	 *             if a definition for an already defined symbol is encountered
+	 * @throws FunckyException
+	 *             if any errors occur while applying this functor to the given arguments
 	 */
-	protected Literal apply(final ScriptContext context, final Expression... arguments) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
+	protected Literal apply(final ScriptContext context, final Expression... arguments) throws FunckyException {
 		Objects.requireNonNull(context, NULL_CONTEXT);
 		if (Objects.requireNonNull(arguments, NULL_ARGUMENTS).length != (types.length - 1)) {
 			throw new IllegalArgumentException(String.format(DIFFERENT_ARGUMENTS, types.length - 1));

@@ -5,13 +5,10 @@ import java.util.Objects;
 
 import javax.script.ScriptContext;
 
+import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.Reference;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
 
 /**
@@ -52,16 +49,10 @@ public abstract class Function extends Literal {
 	 * @param context
 	 *            the context in which to evaluate the application
 	 * @return the literal result of applying this function to the given argument
-	 * @throws InvalidArgumentException
-	 *             if the type of the argument does not match the domain of the function
-	 * @throws InvalidFunctionException
-	 *             if function is not actually a function
-	 * @throws UndefinedReferenceException
-	 *             if any undefined reference is encountered
-	 * @throws AlreadyDefinedSymbolException
-	 *             if a definition for an already defined symbol is encountered
+	 * @throws FunckyException
+	 *             if any errors occur while applying this function to the given argument
 	 */
-	public Literal apply(final Expression argument, final ScriptContext context) throws InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException, AlreadyDefinedSymbolException {
+	public Literal apply(final Expression argument, final ScriptContext context) throws FunckyException {
 		Objects.requireNonNull(argument, NULL_ARGUMENT);
 		Objects.requireNonNull(context, NULL_CONTEXT);
 		return null;
@@ -73,7 +64,7 @@ public abstract class Function extends Literal {
 	}
 
 	@Override
-	public FunctionType getType(final ScriptContext context) throws AlreadyDefinedSymbolException, InvalidArgumentException, InvalidFunctionException, UndefinedReferenceException {
+	public FunctionType getType(final ScriptContext context) throws FunckyException {
 		super.getType(context);
 		return type;
 	}
