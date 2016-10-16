@@ -218,13 +218,9 @@ public class Parser {
 	 *             if any errors occur
 	 */
 	public Expression parseExpression() throws ScriptException {
-		try {
-			final Expression expression = parseExpression(EOF);
-			parseExpectedTokens(EOF);
-			return expression;
-		} catch (final IOException e) {
-			throw new ScriptException(e);
-		}
+		final Expression expression = parseExpression(EOF);
+		parseExpectedTokens(EOF);
+		return expression;
 	}
 
 	/**
@@ -235,36 +231,32 @@ public class Parser {
 	 *             if any errors occur
 	 */
 	public Script parseScript() throws ScriptException {
-		try {
-			final List<Import> imports = new ArrayList<>();
-			final List<Definition> definitions = new ArrayList<>();
-			while (true) {
-				switch (parseExpectedTokens(EOF, EOL, SYMBOL)) {
-				case EOF:
-					return new Script(engine, script, tokenizer.lineno(), imports, definitions);
-				case EOL:
+		final List<Import> imports = new ArrayList<>();
+		final List<Definition> definitions = new ArrayList<>();
+		while (true) {
+			switch (parseExpectedTokens(EOF, EOL, SYMBOL)) {
+			case EOF:
+				return new Script(engine, script, tokenizer.lineno(), imports, definitions);
+			case EOL:
+				break;
+			case SYMBOL:
+				final String symbol = tokenizer.sval;
+				switch (parseExpectedTokens(COLON, EQUALS)) {
+				case COLON:
+					final URI uri = parseUri();
+					parseExpectedTokens(EOL);
+					imports.add(new Import(engine, script, tokenizer.lineno() - 1, symbol, uri));
 					break;
-				case SYMBOL:
-					final String symbol = tokenizer.sval;
-					switch (parseExpectedTokens(COLON, EQUALS)) {
-					case COLON:
-						final URI uri = parseUri();
-						parseExpectedTokens(EOL);
-						imports.add(new Import(engine, script, tokenizer.lineno() - 1, symbol, uri));
-						break;
-					case EQUALS:
-						final Expression expression = parseExpression(EOL);
-						parseExpectedTokens(EOL);
-						definitions.add(new Definition(engine, script, tokenizer.lineno() - 1, symbol, expression));
-					}
+				case EQUALS:
+					final Expression expression = parseExpression(EOL);
+					parseExpectedTokens(EOL);
+					definitions.add(new Definition(engine, script, tokenizer.lineno() - 1, symbol, expression));
 				}
 			}
-		} catch (final IOException e) {
-			throw new ScriptException(e);
 		}
 	}
 
-	private Character parseCharacter() throws InvalidCharacterLiteralException, IOException, UnexpectedTokenException, UnparsableInputException {
+	private Character parseCharacter() throws ScriptException {
 		parseExpectedTokens(CHARACTER);
 		if (tokenizer.sval.length() != 1) {
 			throw new InvalidCharacterLiteralException(tokenizer.sval, script, tokenizer.lineno());
@@ -272,7 +264,7 @@ public class Parser {
 		return new Character(engine, script, tokenizer.lineno(), tokenizer.sval.charAt(0));
 	}
 
-	private List<Expression> parseElements() throws InvalidCharacterLiteralException, InvalidUriException, IOException, UnexpectedTokenException, UnparsableInputException {
+	private List<Expression> parseElements() throws ScriptException {
 		final List<Expression> expressions = new ArrayList<>();
 		while (true) {
 			expressions.add(parseExpression(COMMA, RIGHT_SQUARE_BRACKET));
@@ -282,22 +274,26 @@ public class Parser {
 		}
 	}
 
-	private int parseExpectedTokens(final int... expectedTokens) throws IOException, UnexpectedTokenException, UnparsableInputException {
-		final int token = tokenizer.nextToken();
-		for (final int expectedToken : expectedTokens) {
-			if (token == expectedToken) {
-				return token;
+	private int parseExpectedTokens(final int... expectedTokens) throws ScriptException {
+		try {
+			final int token = tokenizer.nextToken();
+			for (final int expectedToken : expectedTokens) {
+				if (token == expectedToken) {
+					return token;
+				}
 			}
-		}
-		for (final int unexpectedToken : new int[] {CHARACTER, COLON, COMMA, COMMENT, DOLLAR, EOF, EOL, EQUALS, LEFT_ANGLE_BRACKET, LEFT_CURLY_BRACKET, LEFT_PARENTHESIS, LEFT_SQUARE_BRACKET, NUMBER, RIGHT_ANGLE_BRACKET, RIGHT_CURLY_BRACKET, RIGHT_PARENTHESIS, RIGHT_SQUARE_BRACKET, STRING, SYMBOL}) {
-			if (token == unexpectedToken) {
-				throw new UnexpectedTokenException(tokenizer.ttype, script, tokenizer.lineno(), expectedTokens);
+			for (final int unexpectedToken : new int[] {CHARACTER, COLON, COMMA, COMMENT, DOLLAR, EOF, EOL, EQUALS, LEFT_ANGLE_BRACKET, LEFT_CURLY_BRACKET, LEFT_PARENTHESIS, LEFT_SQUARE_BRACKET, NUMBER, RIGHT_ANGLE_BRACKET, RIGHT_CURLY_BRACKET, RIGHT_PARENTHESIS, RIGHT_SQUARE_BRACKET, STRING, SYMBOL}) {
+				if (token == unexpectedToken) {
+					throw new UnexpectedTokenException(tokenizer.ttype, script, tokenizer.lineno(), expectedTokens);
+				}
 			}
+			throw new UnparsableInputException((char) tokenizer.ttype, script, tokenizer.lineno());
+		} catch (final IOException e) {
+			throw new ScriptException(e);
 		}
-		throw new UnparsableInputException((char) tokenizer.ttype, script, tokenizer.lineno());
 	}
 
-	private Expression parseExpression(final int... expectedTerminators) throws InvalidCharacterLiteralException, InvalidUriException, IOException, UnexpectedTokenException, UnparsableInputException {
+	private Expression parseExpression(final int... expectedTerminators) throws ScriptException {
 		switch (parseExpectedTokens(CHARACTER, DOLLAR, LEFT_ANGLE_BRACKET, LEFT_CURLY_BRACKET, LEFT_PARENTHESIS, LEFT_SQUARE_BRACKET, NUMBER, STRING, SYMBOL)) {
 		case CHARACTER:
 		case DOLLAR:
@@ -345,7 +341,7 @@ public class Parser {
 		}
 	}
 
-	private Expression parseList() throws InvalidCharacterLiteralException, InvalidUriException, IOException, UnexpectedTokenException, UnparsableInputException { // TODO change return type
+	private Expression parseList() throws ScriptException { // TODO change return type
 		parseExpectedTokens(LEFT_SQUARE_BRACKET);
 		if (parseExpectedTokens(CHARACTER, DOLLAR, LEFT_ANGLE_BRACKET, LEFT_CURLY_BRACKET, LEFT_PARENTHESIS, LEFT_SQUARE_BRACKET, NUMBER, RIGHT_SQUARE_BRACKET, STRING, SYMBOL) == RIGHT_SQUARE_BRACKET) {
 			// TODO return empty list
@@ -358,19 +354,19 @@ public class Parser {
 		return null;
 	}
 
-	private Expression parseNestedExpression() throws InvalidCharacterLiteralException, InvalidUriException, IOException, UnexpectedTokenException, UnparsableInputException {
+	private Expression parseNestedExpression() throws ScriptException {
 		parseExpectedTokens(LEFT_PARENTHESIS);
 		final Expression expression = parseExpression(RIGHT_PARENTHESIS);
 		parseExpectedTokens(RIGHT_PARENTHESIS);
 		return expression;
 	}
 
-	private Number parseNumber() throws IOException, UnexpectedTokenException, UnparsableInputException {
+	private Number parseNumber() throws ScriptException {
 		parseExpectedTokens(NUMBER);
 		return new Number(engine, script, tokenizer.lineno(), tokenizer.nval);
 	}
 
-	private Application parsePair() throws InvalidCharacterLiteralException, InvalidUriException, IOException, UnexpectedTokenException, UnparsableInputException {
+	private Application parsePair() throws ScriptException {
 		parseExpectedTokens(LEFT_ANGLE_BRACKET);
 		final Expression first = parseExpression(COMMA);
 		parseExpectedTokens(COMMA);
@@ -379,7 +375,7 @@ public class Parser {
 		return new Application(engine, script, tokenizer.lineno(), new Application(engine, script, tokenizer.lineno(), new Reference(engine, Prelude.PRELUDE, PRODUCT), first), second);
 	}
 
-	private Reference parseReference() throws InvalidUriException, IOException, UnexpectedTokenException, UnparsableInputException {
+	private Reference parseReference() throws ScriptException {
 		switch (parseExpectedTokens(LEFT_CURLY_BRACKET, SYMBOL)) {
 		case LEFT_CURLY_BRACKET:
 			final URI uri = parseUri();
@@ -399,7 +395,7 @@ public class Parser {
 		}
 	}
 
-	private Expression parseSimpleExpression() throws InvalidCharacterLiteralException, InvalidUriException, IOException, UnexpectedTokenException, UnparsableInputException {
+	private Expression parseSimpleExpression() throws ScriptException {
 		switch (parseExpectedTokens(CHARACTER, DOLLAR, LEFT_ANGLE_BRACKET, LEFT_CURLY_BRACKET, LEFT_PARENTHESIS, LEFT_SQUARE_BRACKET, NUMBER, STRING, SYMBOL)) {
 		case CHARACTER:
 			tokenizer.pushBack();
@@ -433,20 +429,20 @@ public class Parser {
 		}
 	}
 
-	private Expression parseString() throws IOException, UnexpectedTokenException, UnparsableInputException {
+	private Expression parseString() throws ScriptException {
 		parseExpectedTokens(STRING);
 		// return new List(tokenizer.sval,... TODO retun new list of chars
 		return null;
 	}
 
-	private TypeVariable parseTypeVariable() throws IOException, UnexpectedTokenException, UnparsableInputException {
+	private TypeVariable parseTypeVariable() throws ScriptException {
 		parseExpectedTokens(DOLLAR);
 		parseExpectedTokens(SYMBOL);
 		final String name = tokenizer.sval;
 		return new TypeVariable(engine, script, tokenizer.lineno(), name);
 	}
 
-	private URI parseUri() throws InvalidUriException, IOException, UnexpectedTokenException, UnparsableInputException {
+	private URI parseUri() throws ScriptException {
 		for (final char word : URI.toCharArray()) {
 			tokenizer.wordChars(word, word);
 		}
