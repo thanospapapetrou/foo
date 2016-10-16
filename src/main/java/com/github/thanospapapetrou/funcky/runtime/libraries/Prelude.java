@@ -156,7 +156,7 @@ public class Prelude extends Library {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws FunckyException {
 				super.apply(argument, context);
-				return argument.getType(context);
+				return argument.getType(context).eval(context);
 			}
 		});
 		addDefinition(new Functor(engine, PRELUDE, FUNCTION, typeType, typeType, typeType) {

@@ -69,7 +69,7 @@ public abstract class Functor extends Function {
 		final Functor that = this;
 		final Type[] newTypes = new Type[types.length - 1];
 		for (int i = 0; i < newTypes.length; i++) {
-			newTypes[i] = types[i + 1].bind(types[0].inferGenericBindings(argument.getType(context).free()));
+			newTypes[i] = types[i + 1].bind(((Type) types[0]).inferGenericBindings(((Type) argument.getType(context).eval(context)).free()));
 		}
 		return (types.length == FUNCTION_TYPES) ? apply(context, argument) : new Functor(engine, script, toString(), newTypes) {
 			@Override

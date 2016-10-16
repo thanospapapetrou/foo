@@ -11,7 +11,6 @@ import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 
 /**
  * Class representing a Funcky reference.
@@ -99,12 +98,7 @@ public class Reference extends Expression {
 
 	@Override
 	public Literal eval(final ScriptContext context) throws FunckyException {
-		super.eval(context);
-		final Object object = context.getAttribute(name.getLocalPart()); // TODO use different bindings?
-		if (object instanceof Expression) {
-			return ((Expression) object).eval(context);
-		}
-		throw new UndefinedReferenceException(this);
+		return resolve(context).eval(context);
 	}
 
 	/**
@@ -135,9 +129,9 @@ public class Reference extends Expression {
 	}
 
 	@Override
-	public Type getType(final ScriptContext context) throws FunckyException {
+	public Expression getType(final ScriptContext context) throws FunckyException {
 		super.eval(context);
-		return eval(context).getType(context);
+		return resolve(context).getType(context);
 	}
 
 	@Override
@@ -148,5 +142,13 @@ public class Reference extends Expression {
 	@Override
 	public String toString() {
 		return name.toString(); // TODO what if URI is null?
+	}
+
+	private Expression resolve(final ScriptContext context) throws UndefinedReferenceException {
+		final Object object = context.getAttribute(name.getLocalPart()); // TODO use different bindings?
+		if (object instanceof Expression) {
+			return (Expression) object;
+		}
+		throw new UndefinedReferenceException(this);
 	}
 }

@@ -8,7 +8,6 @@ import javax.script.ScriptContext;
 import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 
 /**
  * Abstract class representing a Funcky expression.
@@ -47,7 +46,7 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	 * @throws FunckyException
 	 *             if any errors occur while evaluating the type of this expression in the given context
 	 */
-	public Type getType(final ScriptContext context) throws FunckyException {
+	public Expression getType(final ScriptContext context) throws FunckyException {
 		Objects.requireNonNull(context, NULL_CONTEXT);
 		return null;
 	}
