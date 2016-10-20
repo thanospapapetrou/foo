@@ -3,12 +3,10 @@ package com.github.thanospapapetrou.funcky.runtime.literals;
 import java.net.URI;
 
 import javax.script.ScriptContext;
+import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.Application;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 
@@ -71,9 +69,9 @@ public class Number extends Literal {
 	}
 
 	@Override
-	public SimpleType getType(final ScriptContext context) throws FunckyException {
+	public SimpleType getType(final ScriptContext context) throws ScriptException {
 		super.getType(context);
-		return engine.getPrelude().getNumber();
+		return (SimpleType) engine.getReference(Prelude.class, Prelude.NUMBER).eval(context);
 	}
 
 	/**
@@ -93,11 +91,11 @@ public class Number extends Literal {
 	@Override
 	public Expression toExpression() {
 		if ((value == Double.POSITIVE_INFINITY)) { // TODO use Prelude.INFINITY
-			return new Reference(engine, Prelude.PRELUDE, Double.toString(Double.POSITIVE_INFINITY).toLowerCase());
+			return engine.getReference(Prelude.class, Prelude.INFINITY);
 		} else if ((value == Double.NEGATIVE_INFINITY)) {
-			return new Application(engine, new Reference(engine, Prelude.PRELUDE, MINUS), new Reference(engine, Prelude.PRELUDE, Double.toString(Double.POSITIVE_INFINITY).toLowerCase()));
+			return engine.getApplication(engine.getReference(Prelude.class, MINUS), engine.getReference(Prelude.class, Prelude.INFINITY));
 		} else if (Double.isNaN(value)) {
-			return new Reference(engine, Prelude.PRELUDE, Double.toString(Double.NaN));
+			return engine.getReference(Prelude.class, Prelude.NAN);
 		}
 		return this;
 	}

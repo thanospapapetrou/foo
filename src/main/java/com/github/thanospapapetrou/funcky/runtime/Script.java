@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
+import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 
 /**
@@ -49,7 +49,7 @@ public class Script extends AbstractSyntaxTreeNode {
 	}
 
 	@Override
-	public Void eval(final ScriptContext context) throws FunckyException {
+	public Void eval(final ScriptContext context) throws ScriptException {
 		super.eval(context);
 		for (final Import _import : imports) {
 			_import.eval(context);

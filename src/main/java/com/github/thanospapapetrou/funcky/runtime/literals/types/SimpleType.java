@@ -59,7 +59,7 @@ public class SimpleType extends Type {
 
 	@Override
 	public Reference toExpression() {
-		return new Reference(engine, script, name);
+		return engine.getReference(script, name);
 	}
 
 	@Override

@@ -4,11 +4,10 @@ import java.net.URI;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
+import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
 
 /**
@@ -17,8 +16,11 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
  * @author thanos
  */
 public abstract class Function extends Literal {
+	private static final String EMPTY_NAME = "Name must not be null";
 	private static final String NULL_ARGUMENT = "Argument must not be null";
 	private static final String NULL_CONTEXT = "Context must not be null";
+	private static final String NULL_NAME = "Name must not be null";
+	private static final String NULL_TYPE = "Type must not be null";
 
 	private final String name;
 	private final FunctionType type;
@@ -37,8 +39,10 @@ public abstract class Function extends Literal {
 	 */
 	public Function(final FunckyScriptEngine engine, final URI script, final String name, final FunctionType type) {
 		super(engine, script, 0);
-		this.name = name;
-		this.type = type;
+		if ((this.name = Objects.requireNonNull(name, NULL_NAME)).isEmpty()) {
+			throw new IllegalArgumentException(EMPTY_NAME);
+		}
+		this.type = Objects.requireNonNull(type, NULL_TYPE);
 	}
 
 	/**
@@ -49,10 +53,10 @@ public abstract class Function extends Literal {
 	 * @param context
 	 *            the context in which to evaluate the application
 	 * @return the literal result of applying this function to the given argument
-	 * @throws FunckyException
+	 * @throws ScriptException
 	 *             if any errors occur while applying this function to the given argument
 	 */
-	public Literal apply(final Expression argument, final ScriptContext context) throws FunckyException {
+	public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 		Objects.requireNonNull(argument, NULL_ARGUMENT);
 		Objects.requireNonNull(context, NULL_CONTEXT);
 		return null;
@@ -64,7 +68,7 @@ public abstract class Function extends Literal {
 	}
 
 	@Override
-	public FunctionType getType(final ScriptContext context) throws FunckyException {
+	public FunctionType getType(final ScriptContext context) throws ScriptException {
 		super.getType(context);
 		return type;
 	}
@@ -76,6 +80,6 @@ public abstract class Function extends Literal {
 
 	@Override
 	public Expression toExpression() {
-		return new Reference(engine, script, name);
+		return engine.getReference(script, name);
 	}
 }

@@ -3,10 +3,11 @@ package com.github.thanospapapetrou.funcky.runtime.literals;
 import java.net.URI;
 
 import javax.script.ScriptContext;
+import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Reference;
+import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 
 /**
@@ -38,9 +39,9 @@ public class Boolean extends Literal {
 	}
 
 	@Override
-	public SimpleType getType(final ScriptContext context) throws FunckyException {
+	public SimpleType getType(final ScriptContext context) throws ScriptException {
 		super.getType(context);
-		return engine.getPrelude().getBoolean();
+		return (SimpleType) engine.getReference(Prelude.class, Prelude.BOOLEAN).eval(context);
 	}
 
 	@Override
@@ -50,6 +51,6 @@ public class Boolean extends Literal {
 
 	@Override
 	public Reference toExpression() {
-		return new Reference(engine, script, java.lang.Boolean.toString(value));
+		return engine.getReference(Prelude.class, java.lang.Boolean.toString(value));
 	}
 }

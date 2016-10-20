@@ -6,9 +6,10 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.script.ScriptContext;
+import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 
 /**
@@ -62,9 +63,9 @@ public class Character extends Literal {
 	}
 
 	@Override
-	public SimpleType getType(final ScriptContext context) throws FunckyException {
+	public SimpleType getType(final ScriptContext context) throws ScriptException {
 		super.getType(context);
-		return engine.getPrelude().getCharacter();
+		return (SimpleType) engine.getReference(Prelude.class, Prelude.CHARACTER).eval(context);
 	}
 
 	/**

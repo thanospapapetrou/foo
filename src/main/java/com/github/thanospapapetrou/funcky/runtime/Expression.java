@@ -4,10 +4,11 @@ import java.net.URI;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
+import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 
 /**
  * Abstract class representing a Funcky expression.
@@ -32,7 +33,7 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws FunckyException {
+	public Literal eval(final ScriptContext context) throws ScriptException {
 		super.eval(context);
 		return null;
 	}
@@ -43,10 +44,10 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	 * @param context
 	 *            the context in which to evaluate the type
 	 * @return the type of this expression as evaluated in the given context
-	 * @throws FunckyException
+	 * @throws ScriptException
 	 *             if any errors occur while evaluating the type of this expression in the given context
 	 */
-	public Expression getType(final ScriptContext context) throws FunckyException {
+	public Type getType(final ScriptContext context) throws ScriptException {
 		Objects.requireNonNull(context, NULL_CONTEXT);
 		return null;
 	}

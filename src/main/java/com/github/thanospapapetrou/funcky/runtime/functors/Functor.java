@@ -5,10 +5,9 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
+import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.Application;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.literals.Function;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
@@ -64,21 +63,21 @@ public abstract class Functor extends Function {
 	}
 
 	@Override
-	public Literal apply(final Expression argument, final ScriptContext context) throws FunckyException {
+	public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 		super.apply(argument, context);
 		final Functor that = this;
 		final Type[] newTypes = new Type[types.length - 1];
 		for (int i = 0; i < newTypes.length; i++) {
-			newTypes[i] = types[i + 1].bind(((Type) types[0]).inferGenericBindings(((Type) argument.getType(context).eval(context)).free()));
+			newTypes[i] = types[i + 1].bind(((Type) types[0]).inferGenericBindings(((Type) argument.getType(context)).free()));
 		}
 		return (types.length == FUNCTION_TYPES) ? apply(context, argument) : new Functor(engine, script, toString(), newTypes) {
 			@Override
 			public Expression toExpression() {
-				return new Application(engine, that, argument);
+				return engine.getApplication(that, argument);
 			}
 
 			@Override
-			protected Literal apply(final ScriptContext context, final Expression... arguments) throws FunckyException {
+			protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				super.apply(context, arguments);
 				final Expression[] newArguments = new Expression[arguments.length + 1];
 				newArguments[0] = argument;
@@ -96,10 +95,10 @@ public abstract class Functor extends Function {
 	 * @param arguments
 	 *            the arguments to apply this functor to
 	 * @return the literal result of applying this functor to the given arguments
-	 * @throws FunckyException
+	 * @throws ScriptException
 	 *             if any errors occur while applying this functor to the given arguments
 	 */
-	protected Literal apply(final ScriptContext context, final Expression... arguments) throws FunckyException {
+	protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 		Objects.requireNonNull(context, NULL_CONTEXT);
 		if (Objects.requireNonNull(arguments, NULL_ARGUMENTS).length != (types.length - 1)) {
 			throw new IllegalArgumentException(String.format(DIFFERENT_ARGUMENTS, types.length - 1));

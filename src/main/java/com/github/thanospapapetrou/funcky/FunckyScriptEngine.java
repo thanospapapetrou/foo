@@ -19,8 +19,11 @@ import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
 import com.github.thanospapapetrou.funcky.parser.Parser;
+import com.github.thanospapapetrou.funcky.runtime.Application;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
+import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.Script;
+import com.github.thanospapapetrou.funcky.runtime.libraries.Library;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 
@@ -47,7 +50,6 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	private static final String UNSUPPORTED_INVOKE_METHOD = "invokeMethod() is not supported";
 
 	private final FunckyScriptEngineFactory factory;
-	private Prelude prelude;
 
 	/**
 	 * Construct a new script engine.
@@ -61,7 +63,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 		this.factory = Objects.requireNonNull(factory, NULL_FACTORY);
 		setContext(new FunckyScriptContext(Objects.requireNonNull(globalScopeBindings, NULL_GLOBAL_SCOPE_BINDINGS)));
 		try {
-			(this.prelude = new Prelude(this)).eval(); // TODO do not eval prelude to load it
+			new Prelude(this).eval(); // TODO do not eval prelude to load it
 		} catch (final IOException | ScriptException e) {
 			LOGGER.log(Level.WARNING, ERROR_LOADING_PRELUDE, e);
 		}
@@ -101,6 +103,10 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 		return compile(Objects.requireNonNull(script, NULL_SCRIPT), STDIN).eval(Objects.requireNonNull(context, NULL_CONTEXT));
 	}
 
+	public Application getApplication(final Expression function, final Expression argument) {
+		return new Application(this, RUNTIME, 0, function, argument);
+	}
+
 	@Override
 	public FunckyScriptEngineFactory getFactory() {
 		return factory;
@@ -116,13 +122,12 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 		throw new UnsupportedOperationException(UNSUPPORTED_GET_INTERFACE);
 	}
 
-	/**
-	 * Get the prelude loaded by this engine.
-	 * 
-	 * @return the prelude
-	 */
-	public Prelude getPrelude() {
-		return prelude;
+	public Reference getReference(final URI namespace, final String name) {
+		return new Reference(this, FunckyScriptEngine.RUNTIME, 0, namespace, name);
+	}
+
+	public Reference getReference(final Class<? extends Library> library, final String name) {
+		return getReference(Library.getUri(library), name);
 	}
 
 	@Override

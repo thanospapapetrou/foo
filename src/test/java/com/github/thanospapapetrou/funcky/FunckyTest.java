@@ -19,6 +19,8 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
+
 public class FunckyTest implements FileFilter {
 	private static final String CLASSPATH_ROOT = "/";
 
@@ -60,7 +62,7 @@ public class FunckyTest implements FileFilter {
 			engine.getContext().setAttribute(ScriptEngine.FILENAME, test.getCanonicalPath(), ScriptContext.ENGINE_SCOPE);
 			String line = null;
 			while ((line = reader.readLine()) != null) {
-				Assert.assertEquals(engine.eval(line), engine.getPrelude().getTrue(), line);
+				Assert.assertEquals(engine.eval(line), engine.getReference(Prelude.class, Prelude.TRUE).eval(), line);
 			}
 		}
 	}

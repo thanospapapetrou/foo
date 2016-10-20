@@ -7,7 +7,6 @@ import java.util.Objects;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Application;
-import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
 
 /**
@@ -100,7 +99,7 @@ public class FunctionType extends Type {
 
 	@Override
 	public Application toExpression() {
-		return new Application(engine, new Application(engine, new Reference(engine, Prelude.PRELUDE, FUNCTION), domain), range); // TODO use Prelude.FUNCTION
+		return engine.getApplication(engine.getApplication(engine.getReference(Prelude.class, Prelude.FUNCTION), domain), range);
 	}
 
 	@Override

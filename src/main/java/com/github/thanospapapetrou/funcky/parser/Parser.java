@@ -372,7 +372,7 @@ public class Parser {
 		parseExpectedTokens(COMMA);
 		final Expression second = parseExpression(RIGHT_ANGLE_BRACKET);
 		parseExpectedTokens(RIGHT_ANGLE_BRACKET);
-		return new Application(engine, script, tokenizer.lineno(), new Application(engine, script, tokenizer.lineno(), new Reference(engine, Prelude.PRELUDE, PRODUCT), first), second);
+		return new Application(engine, script, tokenizer.lineno(), new Application(engine, script, tokenizer.lineno(), engine.getReference(Prelude.class, Prelude.PRODUCT), first), second);
 	}
 
 	private Reference parseReference() throws ScriptException {

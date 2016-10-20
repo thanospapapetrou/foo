@@ -4,13 +4,14 @@ import java.net.URI;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
+import javax.script.ScriptException;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 
-import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 
 /**
  * Class representing a Funcky reference.
@@ -65,20 +66,6 @@ public class Reference extends Expression {
 		}
 	}
 
-	/**
-	 * Construct a new fully qualified reference generated at runtime.
-	 * 
-	 * @param engine
-	 *            the engine that generated this reference
-	 * @param namespace
-	 *            the namespace of this reference (the URI of the script that this reference refers to)
-	 * @param name
-	 *            the name of this reference
-	 */
-	public Reference(final FunckyScriptEngine engine, final URI namespace, final String name) {
-		this(engine, FunckyScriptEngine.RUNTIME, 0, namespace, name);
-	}
-
 	private Reference(final FunckyScriptEngine engine, final URI script, final int line, final URI namespace, final String prefix, final String name) {
 		super(engine, script, line);
 		if (Objects.requireNonNull(name, NULL_NAME).isEmpty()) {
@@ -97,7 +84,7 @@ public class Reference extends Expression {
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws FunckyException {
+	public Literal eval(final ScriptContext context) throws ScriptException {
 		return resolve(context).eval(context);
 	}
 
@@ -129,8 +116,8 @@ public class Reference extends Expression {
 	}
 
 	@Override
-	public Expression getType(final ScriptContext context) throws FunckyException {
-		super.eval(context);
+	public Type getType(final ScriptContext context) throws ScriptException {
+		super.getType(context);
 		return resolve(context).getType(context);
 	}
 

@@ -5,8 +5,8 @@ import java.util.Objects;
 
 import javax.script.CompiledScript;
 import javax.script.ScriptContext;
+import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 
 /**
@@ -55,7 +55,7 @@ public abstract class AbstractSyntaxTreeNode extends CompiledScript {
 	}
 
 	@Override
-	public Object eval(final ScriptContext context) throws FunckyException {
+	public Object eval(final ScriptContext context) throws ScriptException {
 		Objects.requireNonNull(context, NULL_CONTEXT);
 		return null;
 	}

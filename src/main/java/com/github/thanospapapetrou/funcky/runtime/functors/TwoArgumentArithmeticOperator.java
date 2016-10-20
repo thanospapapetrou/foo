@@ -4,8 +4,8 @@ import java.net.URI;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
+import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
@@ -39,7 +39,7 @@ public abstract class TwoArgumentArithmeticOperator extends Functor {
 	}
 
 	@Override
-	protected Literal apply(final ScriptContext context, final Expression... arguments) throws FunckyException {
+	protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 		super.apply(context, arguments);
 		return apply((Number) arguments[0].eval(context), (Number) arguments[1].eval(context), context);
 	}

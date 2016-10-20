@@ -4,8 +4,8 @@ import java.net.URI;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
+import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
 
@@ -45,7 +45,7 @@ public class Definition extends AbstractSyntaxTreeNode {
 	}
 
 	@Override
-	public Void eval(final ScriptContext context) throws FunckyException {
+	public Void eval(final ScriptContext context) throws ScriptException {
 		super.eval(context);
 		if (context.getAttribute(name) == null) {
 			context.setAttribute(name, expression, ScriptContext.ENGINE_SCOPE);

@@ -6,7 +6,6 @@ import java.net.URI;
 import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.functors.Functor;
@@ -33,26 +32,32 @@ public class Prelude extends Library {
 	 */
 	public static final URI PRELUDE = URI.create("funcky:prelude");
 
-	private static final String ADD = "add";
-	private static final String BOOLEAN = "boolean";
-	private static final String BOTTOM = "bottom";
-	private static final String CHARACTER = "character";
-	private static final String COMPOSE = "compose";
-	private static final String DIVIDE = "divide";
-	private static final String DUPLICATE = "duplicate";
-	private static final String EQUAL = "equal";
-	private static final String FUNCTION = "function";
-	private static final String IDENTITY = "identity";
-	private static final String IF = "if";
-	private static final String INTEGER = "integer";
-	private static final String IS_NAN = "isNaN";
-	private static final String FLIP = "flip";
-	private static final String MULTIPLY = "multiply";
-	private static final String NUMBER = "number";
-	private static final String PRODUCT = "product";
-	private static final String SUBTRACT = "subtract";
-	private static final String TYPE = "type";
-	private static final String TYPE_OF = "typeOf";
+	public static final String ADD = "add";
+	public static final String BOOLEAN = "boolean";
+	public static final String BOTTOM = "bottom";
+	public static final String CHARACTER = "character";
+	public static final String COMPOSE = "compose";
+	public static final String DIVIDE = "divide";
+	public static final String DUPLICATE = "duplicate";
+	public static final String EQUAL = "equal";
+	public static final String FALSE = "false";
+	public static final String FLIP = "flip";
+	public static final String FUNCTION = "function";
+	public static final String IDENTITY = "identity";
+	public static final String IF = "if";
+	public static final String INFINITY = "infinity";
+	public static final String INTEGER = "integer";
+	public static final String IS_NAN = "isNaN";
+	public static final String LIST = "list";
+	public static final String MULTIPLY = "multiply";
+	public static final String NAN = "NaN";
+	public static final String NUMBER = "number";
+	public static final String PAIR = "pair";
+	public static final String PRODUCT = "product";
+	public static final String SUBTRACT = "subtract";
+	public static final String TRUE = "true";
+	public static final String TYPE = "type";
+	public static final String TYPE_OF = "typeOf";
 
 	private final SimpleType typeType;
 	private final SimpleType numberType;
@@ -93,7 +98,7 @@ public class Prelude extends Library {
 		final TypeVariable bottomType2 = generateTypeVariable();
 		addDefinition(new Function(engine, PRELUDE, BOTTOM, generateFunctionType(bottomType1, bottomType2)) {
 			@Override
-			public Literal apply(final Expression argument, final ScriptContext context) throws FunckyException {
+			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				super.apply(argument, context);
 				return apply(argument, context);
 			}
@@ -101,7 +106,7 @@ public class Prelude extends Library {
 		final TypeVariable identityType = generateTypeVariable();
 		addDefinition(new Functor(engine, PRELUDE, IDENTITY, identityType, identityType) {
 			@Override
-			protected Literal apply(final ScriptContext context, final Expression... arguments) throws FunckyException {
+			protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				super.apply(context, arguments);
 				return arguments[0].eval(context);
 			}
@@ -111,7 +116,7 @@ public class Prelude extends Library {
 		final TypeVariable composeType3 = generateTypeVariable();
 		addDefinition(new Functor(engine, PRELUDE, COMPOSE, generateFunctionType(composeType1, composeType2), generateFunctionType(composeType3, composeType1), composeType3, composeType2) {
 			@Override
-			protected Literal apply(final ScriptContext context, final Expression... arguments) throws FunckyException {
+			protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				super.apply(context, arguments);
 				return ((Function) arguments[0].eval(context)).apply(((Function) arguments[1].eval(context)).apply(arguments[2], context), context);
 			}
@@ -121,7 +126,7 @@ public class Prelude extends Library {
 		final TypeVariable flipType3 = generateTypeVariable();
 		addDefinition(new Functor(engine, PRELUDE, FLIP, generateFunctionType(flipType1, generateFunctionType(flipType2, flipType3)), flipType2, flipType1, flipType3) {
 			@Override
-			protected Literal apply(final ScriptContext context, final Expression... arguments) throws FunckyException {
+			protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				super.apply(context, arguments);
 				return ((Function) ((Function) arguments[0].eval(context)).apply(arguments[2], context)).apply(arguments[1], context);
 			}
@@ -130,7 +135,7 @@ public class Prelude extends Library {
 		final TypeVariable duplicateType2 = generateTypeVariable();
 		addDefinition(new Functor(engine, PRELUDE, DUPLICATE, generateFunctionType(duplicateType1, generateFunctionType(duplicateType1, duplicateType2)), duplicateType1, duplicateType2) {
 			@Override
-			protected Literal apply(final ScriptContext context, final Expression... arguments) throws FunckyException {
+			protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				super.apply(context, arguments);
 				return ((Function) ((Function) arguments[0].eval(context)).apply(arguments[1], context)).apply(arguments[1], context);
 			}
@@ -138,7 +143,7 @@ public class Prelude extends Library {
 		final TypeVariable equalType = generateTypeVariable();
 		addDefinition(new Functor(engine, PRELUDE, EQUAL, equalType, equalType, booleanType) {
 			@Override
-			protected Literal apply(final ScriptContext context, final Expression... arguments) throws FunckyException {
+			protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				super.apply(context, arguments);
 				return arguments[0].eval(context).equals(arguments[1].eval(context)) ? booleanTrue : booleanFalse;
 			}
@@ -146,7 +151,7 @@ public class Prelude extends Library {
 		final TypeVariable ifType = generateTypeVariable();
 		addDefinition(new Functor(engine, PRELUDE, IF, booleanType, ifType, ifType, ifType) {
 			@Override
-			protected Literal apply(final ScriptContext context, final Expression... arguments) throws FunckyException {
+			protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				super.apply(context, arguments);
 				return ((Boolean) arguments[0].eval(context)).equals(booleanTrue) ? arguments[1].eval(context) : arguments[2].eval(context);
 			}
@@ -154,28 +159,28 @@ public class Prelude extends Library {
 		final TypeVariable typeOfType = generateTypeVariable();
 		addDefinition(new Function(engine, PRELUDE, TYPE_OF, generateFunctionType(typeOfType, typeType)) {
 			@Override
-			public Literal apply(final Expression argument, final ScriptContext context) throws FunckyException {
+			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				super.apply(argument, context);
-				return argument.getType(context).eval(context);
+				return argument.getType(context);
 			}
 		});
 		addDefinition(new Functor(engine, PRELUDE, FUNCTION, typeType, typeType, typeType) {
 			@Override
-			protected Literal apply(final ScriptContext context, final Expression... arguments) throws FunckyException {
+			protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				super.apply(context, arguments);
 				return new FunctionType(engine, (Type) arguments[0].eval(context), (Type) arguments[1].eval(context));
 			}
 		});
 		addDefinition(new Function(engine, PRELUDE, IS_NAN, generateFunctionType(numberType, booleanType)) {
 			@Override
-			public Literal apply(final Expression argument, final ScriptContext context) throws FunckyException {
+			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				super.apply(argument, context);
 				return Double.isNaN(((Number) argument.eval(context)).getValue()) ? booleanTrue : booleanFalse;
 			}
 		});
 		addDefinition(new Function(engine, PRELUDE, INTEGER, generateFunctionType(numberType, numberType)) {
 			@Override
-			public Literal apply(final Expression argument, final ScriptContext context) throws FunckyException {
+			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				super.apply(argument, context);
 				final double value = ((Number) argument.eval(context)).getValue();
 				return new Number(engine, (Double.isInfinite(value) || Double.isNaN(value)) ? value : (int) value);
@@ -213,7 +218,7 @@ public class Prelude extends Library {
 		final TypeVariable productType2 = generateTypeVariable();
 		addDefinition(new Functor(engine, PRELUDE, PRODUCT, productType1, productType2, new PairType(engine, productType1, productType2)) {
 			@Override
-			public Literal apply(final ScriptContext context, final Expression... arguments) throws FunckyException {
+			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				super.apply(context, arguments);
 				return new Pair(engine, arguments[0].eval(context), arguments[1].eval(context));
 			}

@@ -6,10 +6,9 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
+import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 
@@ -22,7 +21,6 @@ public abstract class Type extends Literal {
 	private static final String NULL_BINDINGS = "Bindings must not be null";
 	private static final String NULL_FREE = "Free must not be null";
 	private static final String NULL_TYPE = "Type must not be null";
-	private static final String TYPE = "type";
 
 	/**
 	 * Construct a new type.
@@ -51,9 +49,9 @@ public abstract class Type extends Literal {
 	};
 
 	@Override
-	public SimpleType getType(final ScriptContext context) throws FunckyException {
+	public SimpleType getType(final ScriptContext context) throws ScriptException {
 		super.getType(context);
-		return (SimpleType) new Reference(engine, Prelude.PRELUDE, TYPE).eval(context); // TODO use Prelude.TYPE
+		return (SimpleType) engine.getReference(Prelude.class, Prelude.TYPE).eval(context);
 	}
 
 	/**

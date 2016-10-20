@@ -3,8 +3,8 @@ package com.github.thanospapapetrou.funcky.runtime.literals;
 import java.net.URI;
 
 import javax.script.ScriptContext;
+import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
 
@@ -29,7 +29,7 @@ public abstract class Literal extends Expression {
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws FunckyException {
+	public Literal eval(final ScriptContext context) throws ScriptException {
 		super.eval(context);
 		return this;
 	}

@@ -3,6 +3,7 @@ package com.github.thanospapapetrou.funcky.runtime.exceptions;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
+import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.runtime.Application;
@@ -26,10 +27,10 @@ public class InvalidArgumentException extends FunckyException {
 	 *            the context in which to evaluate the types of the function and the argument
 	 * @param application
 	 *            the application that caused this invalid argument exception
-	 * @throws FunckyException
+	 * @throws ScriptException
 	 *             if any errors occur while evaluating function and argument types
 	 */
-	public InvalidArgumentException(final ScriptContext context, final Application application) throws FunckyException {
+	public InvalidArgumentException(final ScriptContext context, final Application application) throws ScriptException {
 		super(String.format(INVALID_ARGUMENT, Objects.requireNonNull(application, NULL_APPLICATION).getFunction(), ((FunctionType) application.getFunction().getType(Objects.requireNonNull(context, NULL_CONTEXT))).getDomain(), application.getArgument(), application.getArgument().getType(context)), application.getScript(), application.getLineNumber());
 	}
 }

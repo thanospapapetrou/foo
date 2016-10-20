@@ -42,20 +42,18 @@ public abstract class Library extends Script {
 	 * @param library
 	 *            the library of which the namespace URI to get
 	 * @return the namespace URI of the library provided
-	 * @throws ScriptException
-	 *             if any errors occur while retrieving the namespace URI of the library provided
 	 */
-	public static URI getUri(final Class<?> library) throws ScriptException {
+	public static URI getUri(final Class<? extends Library> library) {
 		try {
 			return new URI(new FunckyScriptEngineFactory().getLanguageName().toLowerCase(Locale.ROOT), library.getSimpleName().toLowerCase(Locale.ROOT), null);
 		} catch (final URISyntaxException e) {
-			throw new ScriptException(e);
+			throw new RuntimeException(e); // TODO add message
 		}
 	}
 
-	private static Class<?> getCurrentLibrary() throws ScriptException {
+	private static Class<? extends Library> getCurrentLibrary() throws ScriptException {
 		try {
-			return Class.forName(Thread.currentThread().getStackTrace()[CURRENT_LIBRARY].getClassName());
+			return (Class<? extends Library>) Class.forName(Thread.currentThread().getStackTrace()[CURRENT_LIBRARY].getClassName());
 		} catch (final ClassNotFoundException e) {
 			throw new ScriptException(e);
 		}

@@ -3,8 +3,8 @@ package com.github.thanospapapetrou.funcky.runtime.literals;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
+import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.PairType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
@@ -66,9 +66,9 @@ public class Pair extends Literal {
 	}
 
 	@Override
-	public PairType getType(final ScriptContext context) throws FunckyException {
+	public PairType getType(final ScriptContext context) throws ScriptException {
 		super.getType(context);
-		return new PairType(engine, (Type) first.getType(context).eval(context), (Type) second.getType(context).eval(context));
+		return new PairType(engine, (Type) first.getType(context), (Type) second.getType(context));
 	}
 
 	@Override

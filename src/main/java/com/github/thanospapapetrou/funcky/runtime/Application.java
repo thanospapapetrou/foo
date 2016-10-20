@@ -4,8 +4,8 @@ import java.net.URI;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
+import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.funcky.FunckyException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
@@ -48,20 +48,6 @@ public class Application extends Expression {
 		this.argument = Objects.requireNonNull(argument, NULL_ARGUMENT);
 	}
 
-	/**
-	 * Construct a new application generated at runtime.
-	 * 
-	 * @param engine
-	 *            the engine that generated this application
-	 * @param function
-	 *            the function of this application
-	 * @param argument
-	 *            the argument of this application
-	 */
-	public Application(final FunckyScriptEngine engine, final Expression function, final Expression argument) {
-		this(engine, FunckyScriptEngine.RUNTIME, 0, function, argument);
-	}
-
 	@Override
 	public boolean equals(final Object object) {
 		if (object instanceof Application) {
@@ -72,7 +58,7 @@ public class Application extends Expression {
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws FunckyException {
+	public Literal eval(final ScriptContext context) throws ScriptException {
 		super.eval(context);
 		checkTypes(context);
 		return ((Function) function.eval(context)).apply(argument, context);
@@ -97,11 +83,11 @@ public class Application extends Expression {
 	}
 
 	@Override
-	public Type getType(final ScriptContext context) throws FunckyException {
+	public Type getType(final ScriptContext context) throws ScriptException {
 		super.getType(context);
 		checkTypes(context);
 		final FunctionType functionType = (FunctionType) function.getType(context);
-		return functionType.getRange().bind(functionType.getDomain().inferGenericBindings(((Type) argument.getType(context).eval(context)).free()));
+		return functionType.getRange().bind(functionType.getDomain().inferGenericBindings(((Type) argument.getType(context)).free()));
 	}
 
 	@Override
@@ -115,11 +101,11 @@ public class Application extends Expression {
 		return String.format(APPLICATION, function, (argumentExpression instanceof Application) ? String.format(NESTED_APPLICATION, argumentExpression) : argumentExpression);
 	}
 
-	private void checkTypes(final ScriptContext context) throws FunckyException {
+	private void checkTypes(final ScriptContext context) throws ScriptException {
 		if (!(function.getType(context) instanceof FunctionType)) {
 			throw new InvalidFunctionException(function);
 		}
-		if (((FunctionType) function.getType(context)).getDomain().inferGenericBindings(((Type) argument.getType(context).eval(context)).free()) == null) {
+		if (((FunctionType) function.getType(context)).getDomain().inferGenericBindings(((Type) argument.getType(context)).free()) == null) {
 			throw new InvalidArgumentException(context, this);
 		}
 	}
