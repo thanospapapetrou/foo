@@ -81,11 +81,11 @@ public abstract class Library extends Script {
 		definitions.add(new Definition(engine, script, 0, ((Reference) Objects.requireNonNull(literal, NULL_LITERAL).toExpression()).getName(), literal));
 	}
 
-	protected FunctionType generateFunctionType(final Type domain, final Type range) {
+	protected FunctionType getFunctionType(final Type domain, final Type range) {
 		return new FunctionType(engine, Objects.requireNonNull(domain, NULL_DOMAIN), Objects.requireNonNull(range, NULL_RANGE));
 	}
 
-	protected TypeVariable generateTypeVariable() {
+	protected TypeVariable getTypeVariable() {
 		return new TypeVariable(engine);
 	}
 }

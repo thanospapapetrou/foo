@@ -18,7 +18,7 @@ public class TypeVariable extends Type {
 
 	private final String name;
 
-	private static final String generateRandomName() {
+	private static final String getRandomName() {
 		final UUID uuid = UUID.randomUUID();
 		return String.format(NAME, Long.toHexString(uuid.getMostSignificantBits()), Long.toHexString(uuid.getLeastSignificantBits()));
 	}
@@ -47,7 +47,7 @@ public class TypeVariable extends Type {
 	 *            the engine that parsed this type variable
 	 */
 	public TypeVariable(final FunckyScriptEngine engine) {
-		this(engine, FunckyScriptEngine.RUNTIME, 0, generateRandomName());
+		this(engine, FunckyScriptEngine.RUNTIME, 0, getRandomName());
 	}
 
 	@Override

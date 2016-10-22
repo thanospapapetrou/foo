@@ -94,16 +94,16 @@ public class Prelude extends Library {
 		booleanFalse = generateBoolean(false);
 		addDefinition(booleanFalse);
 		// functions
-		final TypeVariable bottomType1 = generateTypeVariable();
-		final TypeVariable bottomType2 = generateTypeVariable();
-		addDefinition(new Function(engine, PRELUDE, BOTTOM, generateFunctionType(bottomType1, bottomType2)) {
+		final TypeVariable bottomType1 = getTypeVariable();
+		final TypeVariable bottomType2 = getTypeVariable();
+		addDefinition(new Function(engine, PRELUDE, BOTTOM, getFunctionType(bottomType1, bottomType2)) {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				super.apply(argument, context);
 				return apply(argument, context);
 			}
 		});
-		final TypeVariable identityType = generateTypeVariable();
+		final TypeVariable identityType = getTypeVariable();
 		addDefinition(new Functor(engine, PRELUDE, IDENTITY, identityType, identityType) {
 			@Override
 			protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
@@ -111,36 +111,36 @@ public class Prelude extends Library {
 				return arguments[0].eval(context);
 			}
 		});
-		final TypeVariable composeType1 = generateTypeVariable();
-		final TypeVariable composeType2 = generateTypeVariable();
-		final TypeVariable composeType3 = generateTypeVariable();
-		addDefinition(new Functor(engine, PRELUDE, COMPOSE, generateFunctionType(composeType1, composeType2), generateFunctionType(composeType3, composeType1), composeType3, composeType2) {
+		final TypeVariable composeType1 = getTypeVariable();
+		final TypeVariable composeType2 = getTypeVariable();
+		final TypeVariable composeType3 = getTypeVariable();
+		addDefinition(new Functor(engine, PRELUDE, COMPOSE, getFunctionType(composeType1, composeType2), getFunctionType(composeType3, composeType1), composeType3, composeType2) {
 			@Override
 			protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				super.apply(context, arguments);
 				return ((Function) arguments[0].eval(context)).apply(((Function) arguments[1].eval(context)).apply(arguments[2], context), context);
 			}
 		});
-		final TypeVariable flipType1 = generateTypeVariable();
-		final TypeVariable flipType2 = generateTypeVariable();
-		final TypeVariable flipType3 = generateTypeVariable();
-		addDefinition(new Functor(engine, PRELUDE, FLIP, generateFunctionType(flipType1, generateFunctionType(flipType2, flipType3)), flipType2, flipType1, flipType3) {
+		final TypeVariable flipType1 = getTypeVariable();
+		final TypeVariable flipType2 = getTypeVariable();
+		final TypeVariable flipType3 = getTypeVariable();
+		addDefinition(new Functor(engine, PRELUDE, FLIP, getFunctionType(flipType1, getFunctionType(flipType2, flipType3)), flipType2, flipType1, flipType3) {
 			@Override
 			protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				super.apply(context, arguments);
 				return ((Function) ((Function) arguments[0].eval(context)).apply(arguments[2], context)).apply(arguments[1], context);
 			}
 		});
-		final TypeVariable duplicateType1 = generateTypeVariable();
-		final TypeVariable duplicateType2 = generateTypeVariable();
-		addDefinition(new Functor(engine, PRELUDE, DUPLICATE, generateFunctionType(duplicateType1, generateFunctionType(duplicateType1, duplicateType2)), duplicateType1, duplicateType2) {
+		final TypeVariable duplicateType1 = getTypeVariable();
+		final TypeVariable duplicateType2 = getTypeVariable();
+		addDefinition(new Functor(engine, PRELUDE, DUPLICATE, getFunctionType(duplicateType1, getFunctionType(duplicateType1, duplicateType2)), duplicateType1, duplicateType2) {
 			@Override
 			protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				super.apply(context, arguments);
 				return ((Function) ((Function) arguments[0].eval(context)).apply(arguments[1], context)).apply(arguments[1], context);
 			}
 		});
-		final TypeVariable equalType = generateTypeVariable();
+		final TypeVariable equalType = getTypeVariable();
 		addDefinition(new Functor(engine, PRELUDE, EQUAL, equalType, equalType, booleanType) {
 			@Override
 			protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
@@ -148,7 +148,7 @@ public class Prelude extends Library {
 				return arguments[0].eval(context).equals(arguments[1].eval(context)) ? booleanTrue : booleanFalse;
 			}
 		});
-		final TypeVariable ifType = generateTypeVariable();
+		final TypeVariable ifType = getTypeVariable();
 		addDefinition(new Functor(engine, PRELUDE, IF, booleanType, ifType, ifType, ifType) {
 			@Override
 			protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
@@ -156,8 +156,8 @@ public class Prelude extends Library {
 				return ((Boolean) arguments[0].eval(context)).equals(booleanTrue) ? arguments[1].eval(context) : arguments[2].eval(context);
 			}
 		});
-		final TypeVariable typeOfType = generateTypeVariable();
-		addDefinition(new Function(engine, PRELUDE, TYPE_OF, generateFunctionType(typeOfType, typeType)) {
+		final TypeVariable typeOfType = getTypeVariable();
+		addDefinition(new Function(engine, PRELUDE, TYPE_OF, getFunctionType(typeOfType, typeType)) {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				super.apply(argument, context);
@@ -171,14 +171,14 @@ public class Prelude extends Library {
 				return new FunctionType(engine, (Type) arguments[0].eval(context), (Type) arguments[1].eval(context));
 			}
 		});
-		addDefinition(new Function(engine, PRELUDE, IS_NAN, generateFunctionType(numberType, booleanType)) {
+		addDefinition(new Function(engine, PRELUDE, IS_NAN, getFunctionType(numberType, booleanType)) {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				super.apply(argument, context);
 				return Double.isNaN(((Number) argument.eval(context)).getValue()) ? booleanTrue : booleanFalse;
 			}
 		});
-		addDefinition(new Function(engine, PRELUDE, INTEGER, generateFunctionType(numberType, numberType)) {
+		addDefinition(new Function(engine, PRELUDE, INTEGER, getFunctionType(numberType, numberType)) {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				super.apply(argument, context);
@@ -214,8 +214,8 @@ public class Prelude extends Library {
 				return new Number(engine, dividend.getValue() / divisor.getValue());
 			}
 		});
-		final TypeVariable productType1 = generateTypeVariable();
-		final TypeVariable productType2 = generateTypeVariable();
+		final TypeVariable productType1 = getTypeVariable();
+		final TypeVariable productType2 = getTypeVariable();
 		addDefinition(new Functor(engine, PRELUDE, PRODUCT, productType1, productType2, new PairType(engine, productType1, productType2)) {
 			@Override
 			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
@@ -287,7 +287,7 @@ public class Prelude extends Library {
 		return new Number(engine, PRELUDE, value);
 	}
 
-	private SimpleType generateSimpleType(final String name) {
+	private SimpleType generateSimpleType(final String name) { // TODO move this method to Library
 		return new SimpleType(engine, PRELUDE, name);
 	}
 }
