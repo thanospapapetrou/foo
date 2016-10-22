@@ -55,7 +55,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	private static final String UNSUPPORTED_INVOKE_METHOD = "invokeMethod() is not supported";
 
 	private final FunckyScriptEngineFactory factory;
-	
+
 	private static String requireValidName(final String name) {
 		if (Objects.requireNonNull(name, NULL_NAME).isEmpty()) {
 			throw new IllegalArgumentException(EMPTY_NAME);
@@ -117,8 +117,11 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	/**
 	 * Generate a new application at runtime.
-	 * @param function the function of the application
-	 * @param argument the argument of the application
+	 * 
+	 * @param function
+	 *            the function of the application
+	 * @param argument
+	 *            the argument of the application
 	 * @return a new application
 	 */
 	public Application getApplication(final Expression function, final Expression argument) {
@@ -142,8 +145,11 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	/**
 	 * Generate a new reference at runtime.
-	 * @param namespace the namespace of the reference
-	 * @param name the name of the reference
+	 * 
+	 * @param namespace
+	 *            the namespace of the reference
+	 * @param name
+	 *            the name of the reference
 	 * @return a new reference
 	 */
 	public Reference getReference(final URI namespace, final String name) {
@@ -152,8 +158,11 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	/**
 	 * Generate a new reference at runtime.
-	 * @param library the library of the reference
-	 * @param name the name of the reference
+	 * 
+	 * @param library
+	 *            the library of the reference
+	 * @param name
+	 *            the name of the reference
 	 * @return a new reference
 	 */
 	public Reference getReference(final Class<? extends Library> library, final String name) {

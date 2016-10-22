@@ -89,9 +89,9 @@ public class Prelude extends Library {
 		addDefinition(getNumber(Double.POSITIVE_INFINITY));
 		addDefinition(getNumber(Double.NaN));
 		// booleans
-		booleanTrue = getBoolean(true);
+		booleanTrue = generateBoolean(true);
 		addDefinition(booleanTrue);
-		booleanFalse = getBoolean(false);
+		booleanFalse = generateBoolean(false);
 		addDefinition(booleanFalse);
 		// functions
 		final TypeVariable bottomType1 = getTypeVariable();
@@ -279,7 +279,7 @@ public class Prelude extends Library {
 		return typeType;
 	}
 
-	private Boolean getBoolean(final boolean value) {
+	private Boolean generateBoolean(final boolean value) {
 		return new Boolean(engine, PRELUDE, value);
 	}
 
