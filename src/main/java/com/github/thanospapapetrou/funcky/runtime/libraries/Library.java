@@ -51,6 +51,7 @@ public abstract class Library extends Script {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private static Class<? extends Library> getCurrentLibrary() throws ScriptException {
 		try {
 			return (Class<? extends Library>) Class.forName(Thread.currentThread().getStackTrace()[CURRENT_LIBRARY].getClassName());

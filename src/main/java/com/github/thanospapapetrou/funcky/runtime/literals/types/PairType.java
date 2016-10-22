@@ -17,7 +17,6 @@ import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
 public class PairType extends Type {
 	private static final String NULL_FIRST = "First must not be null";
 	private static final String NULL_SECOND = "Second must not be null";
-	private static final String PAIR = "pair";
 
 	private final Type first;
 	private final Type second;

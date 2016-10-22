@@ -15,8 +15,6 @@ import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
  * @author thanos
  */
 public class FunctionType extends Type {
-	private static final String FUNCTION = "function";
-
 	private final Type domain;
 	private final Type range;
 

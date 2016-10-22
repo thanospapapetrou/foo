@@ -37,12 +37,17 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 * The script URI corresponding to abstract syntax tree nodes generated at runtime.
 	 */
 	public static final URI RUNTIME = URI.create("funcky:runtime");
-
+	private static final String EMPTY_NAME = "Name must not be empty";
 	private static final String ERROR_LOADING_PRELUDE = "Error loading prelude";
 	private static final Logger LOGGER = Logger.getLogger(FunckyScriptEngine.class.getName());
+	private static final String NULL_ARGUMENT = "Argument must not be null";
 	private static final String NULL_CONTEXT = "Context must not be null";
 	private static final String NULL_GLOBAL_SCOPE_BINDINGS = "Global scope bindings must not be null";
 	private static final String NULL_FACTORY = "Factory must not be null";
+	private static final String NULL_FUNCTION = "Function must not be null";
+	private static final String NULL_LIBRARY = "Library must not be null";
+	private static final String NULL_NAME = "Name must not be null";
+	private static final String NULL_NAMESPACE = "Namespace must not be null";
 	private static final String NULL_SCRIPT = "Script must not be null";
 	private static final URI STDIN = URI.create("funcky:stdin");
 	private static final String UNSUPPORTED_GET_INTERFACE = "getInterface() is not supported";
@@ -50,6 +55,13 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	private static final String UNSUPPORTED_INVOKE_METHOD = "invokeMethod() is not supported";
 
 	private final FunckyScriptEngineFactory factory;
+	
+	private static String requireValidName(final String name) {
+		if (Objects.requireNonNull(name, NULL_NAME).isEmpty()) {
+			throw new IllegalArgumentException(EMPTY_NAME);
+		}
+		return name;
+	}
 
 	/**
 	 * Construct a new script engine.
@@ -103,8 +115,14 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 		return compile(Objects.requireNonNull(script, NULL_SCRIPT), STDIN).eval(Objects.requireNonNull(context, NULL_CONTEXT));
 	}
 
+	/**
+	 * Generate a new application at runtime.
+	 * @param function the function of the application
+	 * @param argument the argument of the application
+	 * @return a new application
+	 */
 	public Application getApplication(final Expression function, final Expression argument) {
-		return new Application(this, RUNTIME, 0, function, argument);
+		return new Application(this, RUNTIME, 0, Objects.requireNonNull(function, NULL_FUNCTION), Objects.requireNonNull(argument, NULL_ARGUMENT));
 	}
 
 	@Override
@@ -122,12 +140,24 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 		throw new UnsupportedOperationException(UNSUPPORTED_GET_INTERFACE);
 	}
 
+	/**
+	 * Generate a new reference at runtime.
+	 * @param namespace the namespace of the reference
+	 * @param name the name of the reference
+	 * @return a new reference
+	 */
 	public Reference getReference(final URI namespace, final String name) {
-		return new Reference(this, FunckyScriptEngine.RUNTIME, 0, namespace, name);
+		return new Reference(this, FunckyScriptEngine.RUNTIME, 0, Objects.requireNonNull(namespace, NULL_NAMESPACE), requireValidName(name));
 	}
 
+	/**
+	 * Generate a new reference at runtime.
+	 * @param library the library of the reference
+	 * @param name the name of the reference
+	 * @return a new reference
+	 */
 	public Reference getReference(final Class<? extends Library> library, final String name) {
-		return getReference(Library.getUri(library), name);
+		return getReference(Library.getUri(Objects.requireNonNull(library, NULL_LIBRARY)), requireValidName(name));
 	}
 
 	@Override

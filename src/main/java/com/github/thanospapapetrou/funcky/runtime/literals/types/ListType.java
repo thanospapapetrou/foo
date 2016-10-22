@@ -14,7 +14,6 @@ import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
  * @author thanos
  */
 public class ListType extends Type {
-	private static final String LIST = "List";
 	private static final String NULL_ELEMENT = "Element must not be null";
 
 	private final Type element;
