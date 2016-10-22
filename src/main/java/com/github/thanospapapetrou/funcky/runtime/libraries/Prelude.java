@@ -30,7 +30,7 @@ public class Prelude extends Library {
 	/**
 	 * The URI of the prelude library.
 	 */
-	public static final URI PRELUDE = URI.create("funcky:prelude");
+	private static final URI PRELUDE = URI.create("funcky:prelude");
 
 	public static final String ADD = "add";
 	public static final String BOOLEAN = "boolean";
@@ -59,13 +59,6 @@ public class Prelude extends Library {
 	public static final String TYPE = "type";
 	public static final String TYPE_OF = "typeOf";
 
-	private final SimpleType typeType;
-	private final SimpleType numberType;
-	private final SimpleType booleanType;
-	private final SimpleType characterType;
-	private final Boolean booleanTrue;
-	private final Boolean booleanFalse;
-
 	/**
 	 * Construct a new prelude.
 	 * 
@@ -77,26 +70,23 @@ public class Prelude extends Library {
 	public Prelude(final FunckyScriptEngine engine) throws IOException, ScriptException {
 		super(engine);
 		// types
-		typeType = getSimpleType(TYPE);
+		final SimpleType typeType = getSimpleType(TYPE);
 		addDefinition(typeType);
-		numberType = getSimpleType(NUMBER);
+		final SimpleType numberType = getSimpleType(NUMBER);
 		addDefinition(numberType);
-		booleanType = getSimpleType(BOOLEAN);
+		final SimpleType booleanType = getSimpleType(BOOLEAN);
 		addDefinition(booleanType);
-		characterType = getSimpleType(CHARACTER);
-		addDefinition(characterType);
+		addDefinition(getSimpleType(CHARACTER));
 		// numbers
 		addDefinition(getNumber(Double.POSITIVE_INFINITY));
 		addDefinition(getNumber(Double.NaN));
 		// booleans
-		booleanTrue = generateBoolean(true);
+		final Boolean booleanTrue = getBoolean(true);
 		addDefinition(booleanTrue);
-		booleanFalse = generateBoolean(false);
+		final Boolean booleanFalse = getBoolean(false);
 		addDefinition(booleanFalse);
 		// functions
-		final TypeVariable bottomType1 = getTypeVariable();
-		final TypeVariable bottomType2 = getTypeVariable();
-		addDefinition(new Function(engine, PRELUDE, BOTTOM, getFunctionType(bottomType1, bottomType2)) {
+		addDefinition(new Function(engine, PRELUDE, BOTTOM, getFunctionType(getTypeVariable(), getTypeVariable())) { // TODO add addFunctionDefinition
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				super.apply(argument, context);
@@ -156,8 +146,7 @@ public class Prelude extends Library {
 				return ((Boolean) arguments[0].eval(context)).equals(booleanTrue) ? arguments[1].eval(context) : arguments[2].eval(context);
 			}
 		});
-		final TypeVariable typeOfType = getTypeVariable();
-		addDefinition(new Function(engine, PRELUDE, TYPE_OF, getFunctionType(typeOfType, typeType)) {
+		addDefinition(new Function(engine, PRELUDE, TYPE_OF, getFunctionType(getTypeVariable(), typeType)) {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				super.apply(argument, context);
@@ -225,61 +214,7 @@ public class Prelude extends Library {
 		});
 	}
 
-	/**
-	 * Get the boolean type defined by this prelude.
-	 * 
-	 * @return the boolean type
-	 */
-	public SimpleType getBoolean() {
-		return booleanType;
-	}
-
-	/**
-	 * Get the character type defined by this prelude.
-	 * 
-	 * @return the character type
-	 */
-	public SimpleType getCharacter() {
-		return characterType;
-	}
-
-	/**
-	 * Get the boolean false defined by this prelude.
-	 * 
-	 * @return the boolean false
-	 */
-	public Boolean getFalse() {
-		return booleanFalse;
-	}
-
-	/**
-	 * Get the number type defined by this prelude.
-	 * 
-	 * @return the number type;
-	 */
-	public SimpleType getNumber() {
-		return numberType;
-	}
-
-	/**
-	 * Get the boolean true defined by this prelude.
-	 * 
-	 * @return the boolean true
-	 */
-	public Boolean getTrue() {
-		return booleanTrue;
-	}
-
-	/**
-	 * Get the type type defined by this prelude.
-	 * 
-	 * @return the type type
-	 */
-	public SimpleType getType() {
-		return typeType;
-	}
-
-	private Boolean generateBoolean(final boolean value) {
+	private Boolean getBoolean(final boolean value) {
 		return new Boolean(engine, PRELUDE, value);
 	}
 
