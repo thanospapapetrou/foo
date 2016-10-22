@@ -77,21 +77,21 @@ public class Prelude extends Library {
 	public Prelude(final FunckyScriptEngine engine) throws IOException, ScriptException {
 		super(engine);
 		// types
-		typeType = generateSimpleType(TYPE);
+		typeType = getSimpleType(TYPE);
 		addDefinition(typeType);
-		numberType = generateSimpleType(NUMBER);
+		numberType = getSimpleType(NUMBER);
 		addDefinition(numberType);
-		booleanType = generateSimpleType(BOOLEAN);
+		booleanType = getSimpleType(BOOLEAN);
 		addDefinition(booleanType);
-		characterType = generateSimpleType(CHARACTER);
+		characterType = getSimpleType(CHARACTER);
 		addDefinition(characterType);
 		// numbers
-		addDefinition(generateNumber(Double.POSITIVE_INFINITY));
-		addDefinition(generateNumber(Double.NaN));
+		addDefinition(getNumber(Double.POSITIVE_INFINITY));
+		addDefinition(getNumber(Double.NaN));
 		// booleans
-		booleanTrue = generateBoolean(true);
+		booleanTrue = getBoolean(true);
 		addDefinition(booleanTrue);
-		booleanFalse = generateBoolean(false);
+		booleanFalse = getBoolean(false);
 		addDefinition(booleanFalse);
 		// functions
 		final TypeVariable bottomType1 = getTypeVariable();
@@ -279,15 +279,15 @@ public class Prelude extends Library {
 		return typeType;
 	}
 
-	private Boolean generateBoolean(final boolean value) {
+	private Boolean getBoolean(final boolean value) {
 		return new Boolean(engine, PRELUDE, value);
 	}
 
-	private Number generateNumber(final double value) {
+	private Number getNumber(final double value) {
 		return new Number(engine, PRELUDE, value);
 	}
 
-	private SimpleType generateSimpleType(final String name) { // TODO move this method to Library
+	private SimpleType getSimpleType(final String name) { // TODO move this method to Library
 		return new SimpleType(engine, PRELUDE, name);
 	}
 }
