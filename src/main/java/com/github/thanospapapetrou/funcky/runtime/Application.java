@@ -87,7 +87,7 @@ public class Application extends Expression {
 		super.getType(context);
 		checkTypes(context);
 		final FunctionType functionType = (FunctionType) function.getType(context);
-		return functionType.getRange().bind(functionType.getDomain().inferGenericBindings(((Type) argument.getType(context)).free()));
+		return functionType.getRange().bind(functionType.getDomain().inferGenericBindings(argument.getType(context).free()));
 	}
 
 	@Override
@@ -105,7 +105,11 @@ public class Application extends Expression {
 		if (!(function.getType(context) instanceof FunctionType)) {
 			throw new InvalidFunctionException(function);
 		}
-		if (((FunctionType) function.getType(context)).getDomain().inferGenericBindings(((Type) argument.getType(context)).free()) == null) {
+		if (((FunctionType) function.getType(context)).getDomain().inferGenericBindings(argument.getType(context).free()) == null) {
+			System.out.println("Function type: " + ((FunctionType) function.getType(context)));
+			System.out.println("Domain type: " + ((FunctionType) function.getType(context)).getDomain());
+			System.out.println("Argument type: " + argument.getType(context));
+			System.out.println("Free argument type: " + argument.getType(context).free());
 			throw new InvalidArgumentException(context, this);
 		}
 	}

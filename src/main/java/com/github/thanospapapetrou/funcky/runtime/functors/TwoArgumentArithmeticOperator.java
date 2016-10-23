@@ -10,14 +10,14 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 import com.github.thanospapapetrou.funcky.runtime.literals.Number;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 
 /**
  * Abstract class representing a two argument arithmetic operator.
  * 
  * @author thanos
  */
-public abstract class TwoArgumentArithmeticOperator extends Functor {
+public abstract class TwoArgumentArithmeticOperator extends Functor implements ApplicableTwoArgumentArithmeticOperator {
 	private static final String NULL_CONTEXT = "Context must not be null";
 	private static final String NULL_ARGUMENT_1 = "Argument 1 must not be null";
 	private static final String NULL_ARGUMENT_2 = "Argument 2 must not be null";
@@ -34,28 +34,18 @@ public abstract class TwoArgumentArithmeticOperator extends Functor {
 	 * @param numberType
 	 *            the number type used to define the type of this operator
 	 */
-	public TwoArgumentArithmeticOperator(final FunckyScriptEngine engine, final URI script, final String name, final Type numberType) {
+	public TwoArgumentArithmeticOperator(final FunckyScriptEngine engine, final URI script, final String name, final SimpleType numberType) {
 		super(engine, script, name, numberType, numberType, numberType);
 	}
 
 	@Override
-	protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
+	public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 		super.apply(context, arguments);
 		return apply((Number) arguments[0].eval(context), (Number) arguments[1].eval(context), context);
 	}
 
-	/**
-	 * Apply this operator to the given arguments.
-	 * 
-	 * @param argument1
-	 *            the first argument to apply this operator to
-	 * @param argument2
-	 *            the second argument to apply this operator to
-	 * @param context
-	 *            the context in which to evaluate the application
-	 * @return the literal result of applying this operator to the given arguments
-	 */
-	protected Literal apply(final Number argument1, final Number argument2, final ScriptContext context) {
+	@Override
+	public Literal apply(final Number argument1, final Number argument2, final ScriptContext context) {
 		Objects.requireNonNull(argument1, NULL_ARGUMENT_1);
 		Objects.requireNonNull(argument2, NULL_ARGUMENT_2);
 		Objects.requireNonNull(context, NULL_CONTEXT);

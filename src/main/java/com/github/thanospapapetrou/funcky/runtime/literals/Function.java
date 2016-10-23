@@ -15,7 +15,7 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
  * 
  * @author thanos
  */
-public abstract class Function extends Literal {
+public abstract class Function extends Literal implements ApplicableFunction {
 	private static final String EMPTY_NAME = "Name must not be null";
 	private static final String NULL_ARGUMENT = "Argument must not be null";
 	private static final String NULL_CONTEXT = "Context must not be null";
@@ -45,17 +45,7 @@ public abstract class Function extends Literal {
 		this.type = Objects.requireNonNull(type, NULL_TYPE);
 	}
 
-	/**
-	 * Apply this function to an argument.
-	 * 
-	 * @param argument
-	 *            the argument to apply this function to
-	 * @param context
-	 *            the context in which to evaluate the application
-	 * @return the literal result of applying this function to the given argument
-	 * @throws ScriptException
-	 *             if any errors occur while applying this function to the given argument
-	 */
+	@Override
 	public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 		Objects.requireNonNull(argument, NULL_ARGUMENT);
 		Objects.requireNonNull(context, NULL_CONTEXT);

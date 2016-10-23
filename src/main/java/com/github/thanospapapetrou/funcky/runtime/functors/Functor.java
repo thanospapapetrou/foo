@@ -19,7 +19,7 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
  * 
  * @author thanos
  */
-public abstract class Functor extends Function {
+public abstract class Functor extends Function implements ApplicableFunctor {
 	private static final String DIFFERENT_ARGUMENTS = "Arguments must be exactly %1$d";
 	private static final int FUNCTION_TYPES = 2;
 	private static final String LESS_TYPES = "Types must not be less than %1$d";
@@ -68,7 +68,7 @@ public abstract class Functor extends Function {
 		final Functor that = this;
 		final Type[] newTypes = new Type[types.length - 1];
 		for (int i = 0; i < newTypes.length; i++) {
-			newTypes[i] = types[i + 1].bind(((Type) types[0]).inferGenericBindings(((Type) argument.getType(context)).free()));
+			newTypes[i] = types[i + 1].bind(types[0].inferGenericBindings(argument.getType(context).free()));
 		}
 		return (types.length == FUNCTION_TYPES) ? apply(context, argument) : new Functor(engine, script, toString(), newTypes) {
 			@Override
@@ -77,7 +77,7 @@ public abstract class Functor extends Function {
 			}
 
 			@Override
-			protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
+			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				super.apply(context, arguments);
 				final Expression[] newArguments = new Expression[arguments.length + 1];
 				newArguments[0] = argument;
@@ -87,18 +87,8 @@ public abstract class Functor extends Function {
 		};
 	}
 
-	/**
-	 * Apply this functor to the given arguments.
-	 * 
-	 * @param context
-	 *            the context in which to evaluate the application
-	 * @param arguments
-	 *            the arguments to apply this functor to
-	 * @return the literal result of applying this functor to the given arguments
-	 * @throws ScriptException
-	 *             if any errors occur while applying this functor to the given arguments
-	 */
-	protected Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
+	@Override
+	public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 		Objects.requireNonNull(context, NULL_CONTEXT);
 		if (Objects.requireNonNull(arguments, NULL_ARGUMENTS).length != (types.length - 1)) {
 			throw new IllegalArgumentException(String.format(DIFFERENT_ARGUMENTS, types.length - 1));
