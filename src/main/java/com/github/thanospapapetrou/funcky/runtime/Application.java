@@ -106,10 +106,6 @@ public class Application extends Expression {
 			throw new InvalidFunctionException(function);
 		}
 		if (((FunctionType) function.getType(context)).getDomain().inferGenericBindings(argument.getType(context).free()) == null) {
-			System.out.println("Function type: " + ((FunctionType) function.getType(context)));
-			System.out.println("Domain type: " + ((FunctionType) function.getType(context)).getDomain());
-			System.out.println("Argument type: " + argument.getType(context));
-			System.out.println("Free argument type: " + argument.getType(context).free());
 			throw new InvalidArgumentException(context, this);
 		}
 	}
