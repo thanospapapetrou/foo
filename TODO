@@ -1,8 +1,5 @@
-type inference
 define character, list, pair, type variable, function at runtime
-define runtime type variables without name
 check scripts and line numbers
-javadoc comments like or whatever in Function & TypeVariable
 
 define compare and use it to define equals
 domain
