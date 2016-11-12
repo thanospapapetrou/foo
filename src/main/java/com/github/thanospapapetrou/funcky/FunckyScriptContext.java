@@ -6,7 +6,6 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -24,7 +23,6 @@ import javax.script.SimpleBindings;
  */
 public class FunckyScriptContext implements ScriptContext {
 	private static final String EMPTY_NAME = "Name must not be empty";
-	private static final String INVALID_SCOPE = "Scope %1$d is invalid";
 	private static final String NULL_ENGINE_SCOPE_BINDINGS = "Engine scope bindings must not be null";
 	private static final String NULL_GLOBAL_SCOPE_BINDINGS = "Global scope bindings must not be null";
 	private static final String NULL_NAME = "Name must not be null";
@@ -39,13 +37,6 @@ public class FunckyScriptContext implements ScriptContext {
 			throw new IllegalArgumentException(EMPTY_NAME);
 		}
 		return name;
-	}
-
-	private static int requireValidScope(final int scope) {
-		if ((scope == ENGINE_SCOPE) || (scope == GLOBAL_SCOPE) || (scope > Collections.max(Arrays.asList(new Integer[] {ENGINE_SCOPE, GLOBAL_SCOPE})))) {
-			return scope;
-		}
-		throw new IllegalArgumentException(String.format(INVALID_SCOPE, scope));
 	}
 
 	/**
@@ -75,7 +66,7 @@ public class FunckyScriptContext implements ScriptContext {
 
 	@Override
 	public Object getAttribute(final String name, final int scope) {
-		return bindings.containsKey(requireValidScope(scope)) ? bindings.get(scope).get(requireValidName(name)) : null;
+		return bindings.containsKey(scope) ? bindings.get(scope).get(requireValidName(name)) : null;
 	}
 
 	@Override
@@ -90,7 +81,7 @@ public class FunckyScriptContext implements ScriptContext {
 
 	@Override
 	public Bindings getBindings(final int scope) {
-		return bindings.get(requireValidScope(scope));
+		return bindings.get(scope);
 	}
 
 	@Override
@@ -115,12 +106,12 @@ public class FunckyScriptContext implements ScriptContext {
 
 	@Override
 	public Object removeAttribute(final String name, final int scope) {
-		return bindings.containsKey(requireValidScope(scope)) ? bindings.get(scope).remove(requireValidName(name)) : null;
+		return bindings.containsKey(scope) ? bindings.get(scope).remove(requireValidName(name)) : null;
 	}
 
 	@Override
 	public void setAttribute(final String name, final Object value, final int scope) {
-		if (!bindings.containsKey(requireValidScope(scope))) {
+		if (!bindings.containsKey(scope)) {
 			bindings.put(scope, new SimpleBindings());
 		}
 		bindings.get(scope).put(requireValidName(name), value);
@@ -128,14 +119,14 @@ public class FunckyScriptContext implements ScriptContext {
 
 	@Override
 	public void setBindings(final Bindings bindings, final int scope) {
-		if (bindings == null) {
-			if (requireValidScope(scope) == ENGINE_SCOPE) {
-				throw new NullPointerException(NULL_ENGINE_SCOPE_BINDINGS);
-			} else {
-				this.bindings.remove(scope);
-			}
+		if (scope == ENGINE_SCOPE) {
+			this.bindings.put(scope, Objects.requireNonNull(bindings, NULL_ENGINE_SCOPE_BINDINGS));
 		} else {
-			this.bindings.put(scope, bindings);
+			if (bindings == null) {
+				this.bindings.remove(scope);
+			} else {
+				this.bindings.put(scope, bindings);
+			}
 		}
 	}
 

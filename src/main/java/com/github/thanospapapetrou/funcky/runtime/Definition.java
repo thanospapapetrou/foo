@@ -47,11 +47,12 @@ public class Definition extends AbstractSyntaxTreeNode {
 	@Override
 	public Void eval(final ScriptContext context) throws ScriptException {
 		super.eval(context);
-		if (context.getAttribute(name) == null) {
-			context.setAttribute(name, expression, ScriptContext.ENGINE_SCOPE);
-			return null;
+		final int scope = engine.getScope(context, script);
+		if (context.getAttribute(name, scope) != null) {
+			throw new AlreadyDefinedSymbolException(this);
 		}
-		throw new AlreadyDefinedSymbolException(this);
+		context.setAttribute(name, expression, scope);
+		return null;
 	}
 
 	/**

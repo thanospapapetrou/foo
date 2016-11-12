@@ -9,7 +9,8 @@ import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedReferenceException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndeclaredPrefixException;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 
@@ -66,6 +67,22 @@ public class Reference extends Expression {
 		}
 	}
 
+	/**
+	 * Construct a new reference relative to current script.
+	 * 
+	 * @param engine
+	 *            the engine that generated this reference
+	 * @param script
+	 *            the URI of the script from which this reference was generated
+	 * @param line
+	 *            the line from which this reference was parsed or <code>0</code> if this reference was not parsed (is builtin or generated at runtime)
+	 * @param name
+	 *            the name of this reference
+	 */
+	public Reference(final FunckyScriptEngine engine, final URI script, final int line, final String name) {
+		this(engine, script, line, null, null, name);
+	}
+
 	private Reference(final FunckyScriptEngine engine, final URI script, final int line, final URI namespace, final String prefix, final String name) {
 		super(engine, script, line);
 		if (Objects.requireNonNull(name, NULL_NAME).isEmpty()) {
@@ -77,8 +94,13 @@ public class Reference extends Expression {
 	@Override
 	public boolean equals(final Object object) {
 		if (object instanceof Reference) {
-			final Reference reference = (Reference) object;
-			return Objects.equals(getNamespace(), reference.getNamespace()) && Objects.equals(getName(), reference.getName()); // TODO resolve prefix and take it into account
+			try {
+				final Reference qualifiedThis = qualify(engine.getContext());
+				final Reference qualifiedThat = ((Reference) object).qualify(engine.getContext());
+				return Objects.equals(qualifiedThis.getNamespace(), qualifiedThat.getNamespace()) && Objects.equals(qualifiedThis.getName(), qualifiedThat.getName());
+			} catch (final UndeclaredPrefixException e) {
+				throw new RuntimeException(e);
+			}
 		}
 		return false;
 	}
@@ -123,19 +145,46 @@ public class Reference extends Expression {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getNamespace(), getName()); // TODO resolve prefix and take it into account
+		try {
+			final Reference qualifiedReference = qualify(engine.getContext());
+			return Objects.hash(qualifiedReference.getNamespace(), qualifiedReference.getName());
+		} catch (final UndeclaredPrefixException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
 	public String toString() {
-		return name.toString(); // TODO what if URI is null?
+		try {
+			return qualify(engine.getContext()).name.toString();
+		} catch (final UndeclaredPrefixException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	private Expression resolve(final ScriptContext context) throws UndefinedReferenceException {
-		final Object object = context.getAttribute(name.getLocalPart()); // TODO use different bindings?
-		if (object instanceof Expression) {
-			return (Expression) object;
+	private Reference qualify(final ScriptContext context) throws UndeclaredPrefixException {
+		if (getNamespace() != null) { // fully qualified reference
+			return this;
+		} else if (getPrefix() != null) { // relative reference with prefix
+			final URI namespace = engine.resolvePrefix(context, script, getPrefix());
+			if (namespace == null) {
+				throw new UndeclaredPrefixException(this);
+			}
+			return new Reference(engine, script, line, namespace, getName());
+		} else { // relative reference without prefix
+			return new Reference(engine, script, line, script, getName());
 		}
-		throw new UndefinedReferenceException(this);
+	}
+
+	private Expression resolve(final ScriptContext context) throws ScriptException {
+		final Reference qualified = qualify(context);
+		if (engine.getScope(context, qualified.getNamespace()) == null) {
+			engine.load(context, qualified.getNamespace());
+		}
+		final Expression expression = (Expression) context.getAttribute(qualified.getName(), engine.getScope(context, qualified.getNamespace()));
+		if (expression == null) {
+			throw new UndefinedSymbolException(qualified);
+		}
+		return expression;
 	}
 }

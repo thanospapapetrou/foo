@@ -1,3 +1,10 @@
+fix tests
+support relative URIs for files and for URLs
+remove static final field with value 3
+define javax.script.file in specific scope
+GLOBAL_SCOPE may be redundant
+check castings
+
 define character, list, pair, type variable, function at runtime
 check scripts and line numbers
 

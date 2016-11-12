@@ -66,7 +66,7 @@ public class FunckyScriptEngineFactory implements ScriptEngineFactory {
 
 	@Override
 	public List<String> getNames() {
-		return Arrays.asList(NAME, NAME.toLowerCase(Locale.ROOT));
+		return Arrays.asList(NAME, getExtensions().get(0));
 	}
 
 	@Override

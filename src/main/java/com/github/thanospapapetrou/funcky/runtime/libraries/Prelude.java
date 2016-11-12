@@ -87,7 +87,7 @@ public class Prelude extends Library {
 		final Boolean booleanFalse = getBoolean(false);
 		addDefinition(booleanFalse);
 		// functions
-		addFunctionDefinition(BOTTOM, getTypeVariable(), getTypeVariable(), new ApplicableFunction() { // TODO add addFunctionDefinition
+		addFunctionDefinition(BOTTOM, getTypeVariable(), getTypeVariable(), new ApplicableFunction() {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				return apply(argument, context);

@@ -11,7 +11,7 @@ import com.github.thanospapapetrou.funcky.runtime.Definition;
  * @author thanos
  */
 public class AlreadyDefinedSymbolException extends FunckyException {
-	private static final String ALREADY_DEFINED_SYMBOL = "Symbol %1$s is already defined in this context";
+	private static final String ALREADY_DEFINED_SYMBOL = "Symbol %1$s is already defined in script %2$s";
 	private static final String NULL_DEFINITION = "Definition must not be null";
 	private static final long serialVersionUID = 1L;
 
@@ -22,6 +22,6 @@ public class AlreadyDefinedSymbolException extends FunckyException {
 	 *            the definition of the already defined symbol
 	 */
 	public AlreadyDefinedSymbolException(final Definition definition) {
-		super(String.format(ALREADY_DEFINED_SYMBOL, Objects.requireNonNull(definition, NULL_DEFINITION).getName()), definition.getScript(), definition.getLineNumber());
+		super(String.format(ALREADY_DEFINED_SYMBOL, Objects.requireNonNull(definition, NULL_DEFINITION).getName(), definition.getScript()), definition.getScript(), definition.getLineNumber());
 	}
 }

@@ -90,7 +90,7 @@ public class Number extends Literal {
 
 	@Override
 	public Expression toExpression() {
-		if ((value == Double.POSITIVE_INFINITY)) { // TODO use Prelude.INFINITY
+		if ((value == Double.POSITIVE_INFINITY)) {
 			return engine.getReference(Prelude.class, Prelude.INFINITY);
 		} else if ((value == Double.NEGATIVE_INFINITY)) {
 			return engine.getApplication(engine.getReference(Prelude.class, MINUS), engine.getReference(Prelude.class, Prelude.INFINITY));

@@ -14,6 +14,7 @@ import com.github.thanospapapetrou.funcky.FunckyException;
 public class InvalidUriException extends FunckyException {
 	private static final String INVALID_URI = "Invalid URI %1$s";
 	private static final String NULL_EXCEPTION = "Exception must not be null";
+	private static final String NULL_URI = "URI must not be null";
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -28,5 +29,19 @@ public class InvalidUriException extends FunckyException {
 	 */
 	public InvalidUriException(final URISyntaxException exception, final URI script, final int line) {
 		super(String.format(INVALID_URI, Objects.requireNonNull(exception, NULL_EXCEPTION).getInput()), script, line);
+	}
+
+	/**
+	 * Construct a new invalid URI exception.
+	 * 
+	 * @param uri
+	 *            the <code>URI</code> that caused this invalid URI exception
+	 * @param script
+	 *            the URI of the script in which the invalid URI was encountered
+	 * @param line
+	 *            the line of the script in which the invalid URI was encountered
+	 */
+	public InvalidUriException(final URI uri, final URI script, final int line) {
+		super(String.format(INVALID_URI, Objects.requireNonNull(uri, NULL_URI)), script, line);
 	}
 }

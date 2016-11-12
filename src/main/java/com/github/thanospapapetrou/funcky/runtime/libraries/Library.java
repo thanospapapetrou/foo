@@ -55,7 +55,7 @@ public abstract class Library extends Script {
 	 */
 	public static URI getUri(final Class<? extends Library> library) {
 		try {
-			return new URI(new FunckyScriptEngineFactory().getLanguageName().toLowerCase(Locale.ROOT), library.getSimpleName().toLowerCase(Locale.ROOT), null);
+			return new URI(new FunckyScriptEngineFactory().getExtensions().get(0), library.getSimpleName().toLowerCase(Locale.ROOT), null);
 		} catch (final URISyntaxException e) {
 			throw new RuntimeException(e); // TODO add message
 		}

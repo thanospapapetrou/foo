@@ -1,13 +1,15 @@
 package com.github.thanospapapetrou.funcky;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.script.AbstractScriptEngine;
 import javax.script.Bindings;
@@ -37,9 +39,12 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 * The script URI corresponding to abstract syntax tree nodes generated at runtime.
 	 */
 	public static final URI RUNTIME = URI.create("funcky:runtime");
+
+	@SuppressWarnings("unchecked")
+	private static final Class<Library>[] BUILTIN_LIBRARIES = (Class<Library>[]) new Class<?>[] {Prelude.class};
 	private static final String EMPTY_NAME = "Name must not be empty";
-	private static final String ERROR_LOADING_PRELUDE = "Error loading prelude";
-	private static final Logger LOGGER = Logger.getLogger(FunckyScriptEngine.class.getName());
+	private static final String IMPORTS = "%1$s.imports";
+	private static final String MAX_SCOPES = "Maximum number of scopes reached";
 	private static final String NULL_ARGUMENT = "Argument must not be null";
 	private static final String NULL_CONTEXT = "Context must not be null";
 	private static final String NULL_GLOBAL_SCOPE_BINDINGS = "Global scope bindings must not be null";
@@ -49,6 +54,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	private static final String NULL_NAME = "Name must not be null";
 	private static final String NULL_NAMESPACE = "Namespace must not be null";
 	private static final String NULL_SCRIPT = "Script must not be null";
+	private static final String SCRIPT = "%1$s.script";
 	private static final URI STDIN = URI.create("funcky:stdin");
 	private static final String UNSUPPORTED_GET_INTERFACE = "getInterface() is not supported";
 	private static final String UNSUPPORTED_INVOKE_FUNCTION = "invokeFunction() is not supported";
@@ -74,11 +80,6 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	public FunckyScriptEngine(final FunckyScriptEngineFactory factory, final Bindings globalScopeBindings) {
 		this.factory = Objects.requireNonNull(factory, NULL_FACTORY);
 		setContext(new FunckyScriptContext(Objects.requireNonNull(globalScopeBindings, NULL_GLOBAL_SCOPE_BINDINGS)));
-		try {
-			new Prelude(this).eval(); // TODO do not eval prelude to load it
-		} catch (final IOException | ScriptException e) {
-			LOGGER.log(Level.WARNING, ERROR_LOADING_PRELUDE, e);
-		}
 	}
 
 	@Override
@@ -92,12 +93,53 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	@Override
 	public Expression compile(final String script) throws ScriptException {
+		createScope(context, STDIN);
 		return compile(Objects.requireNonNull(script, NULL_SCRIPT), STDIN);
 	}
 
 	@Override
 	public Bindings createBindings() {
 		return new SimpleBindings();
+	}
+
+	/**
+	 * Create a new scope for a script.
+	 * 
+	 * @param context
+	 *            the context in which to create the new scope
+	 * @param script
+	 *            the URI of the script for which to create the new scope
+	 * @throws ScriptException
+	 *             if the new scope can not be created because the maximum number of scopes has been reached
+	 */
+	public void createScope(final ScriptContext context, final URI script) throws ScriptException {
+		for (int scope = Integer.MIN_VALUE; scope < Integer.MAX_VALUE; scope++) {
+			if (!context.getScopes().contains(scope)) {
+				context.setAttribute(script.toString(), scope, ScriptContext.ENGINE_SCOPE);
+				context.setAttribute(String.format(SCRIPT, getFactory().getExtensions().get(0)), script, scope);
+				context.setAttribute(String.format(IMPORTS, getFactory().getExtensions().get(0)), new HashMap<String, URI>(), scope);
+				return;
+			}
+		}
+		throw new ScriptException(MAX_SCOPES);
+	}
+
+	/**
+	 * Declare an import.
+	 * 
+	 * @param context
+	 *            the context in which to declare the import
+	 * @param script
+	 *            the URI of the script in which to declare the import
+	 * @param prefix
+	 *            the prefix of the import to declare
+	 * @param uri
+	 *            the URI of the import to declare
+	 */
+	@SuppressWarnings("unchecked")
+	public void declareImport(final ScriptContext context, final URI script, final String prefix, final URI uri) {
+		final int scope = getScope(context, script);
+		((HashMap<String, URI>) context.getAttribute(String.format(IMPORTS, getFactory().getExtensions().get(0)), scope)).put(prefix, uri);
 	}
 
 	@Override
@@ -112,6 +154,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	@Override
 	public Literal eval(final String script, final ScriptContext context) throws ScriptException {
+		createScope(context, STDIN);
 		return compile(Objects.requireNonNull(script, NULL_SCRIPT), STDIN).eval(Objects.requireNonNull(context, NULL_CONTEXT));
 	}
 
@@ -169,6 +212,19 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 		return getReference(Library.getUri(Objects.requireNonNull(library, NULL_LIBRARY)), requireValidName(name));
 	}
 
+	/**
+	 * Get the scope of a script.
+	 * 
+	 * @param context
+	 *            the context in which to search
+	 * @param script
+	 *            the URI of the script whose scope to retrieve
+	 * @return the scope of the given script in the given context or <code>null</code> if the given script is not loaded in the current context
+	 */
+	public Integer getScope(final ScriptContext context, final URI script) {
+		return (Integer) context.getAttribute(script.toString(), ScriptContext.ENGINE_SCOPE);
+	}
+
 	@Override
 	public Object invokeFunction(final String function, final Object... arguments) {
 		throw new UnsupportedOperationException(UNSUPPORTED_INVOKE_FUNCTION);
@@ -177,6 +233,55 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	@Override
 	public Object invokeMethod(final Object object, final String method, final Object... arguments) {
 		throw new UnsupportedOperationException(UNSUPPORTED_INVOKE_METHOD);
+	}
+
+	/**
+	 * Load a script.
+	 * 
+	 * @param context
+	 *            the context in which to load the script
+	 * @param script
+	 *            the URI of the script to load
+	 * @throws ScriptException
+	 *             if any errors occur while loading the script
+	 */
+	public void load(final ScriptContext context, final URI script) throws ScriptException {
+		if (script.getScheme().equals(getFactory().getExtensions().get(0))) { // builtin library
+			for (final Class<Library> library : BUILTIN_LIBRARIES) {
+				if (Library.getUri(library).equals(script)) {
+					try {
+						library.getConstructor(FunckyScriptEngine.class).newInstance(this).eval(context);
+						return;
+					} catch (final IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
+						throw new ScriptException(e);
+					}
+				}
+			}
+			throw new ScriptException("Unknown library " + script); // TODO throw something more specific
+		} else {
+			try (final InputStreamReader reader = new InputStreamReader(script.toURL().openStream(), StandardCharsets.UTF_8)) {
+				this.compile(reader, script).eval(context);
+			} catch (final IOException e) {
+				throw new ScriptException(e);
+			}
+		}
+	}
+
+	/**
+	 * Resolve a prefix.
+	 * 
+	 * @param context
+	 *            the context in which to search
+	 * @param script
+	 *            the URI of the script in which to search
+	 * @param prefix
+	 *            the prefix to resolve
+	 * @return the URI corresponding to the given prefix in the given script and context or <code>null</code> if the given prefix is not declared in the given script and context
+	 */
+	@SuppressWarnings("unchecked")
+	public URI resolvePrefix(final ScriptContext context, final URI script, final String prefix) {
+		final int scope = getScope(context, script);
+		return ((HashMap<String, URI>) context.getAttribute(String.format(IMPORTS, getFactory().getExtensions().get(0)), scope)).get(prefix);
 	}
 
 	private Script compile(final Reader script, final URI scriptUri) throws ScriptException {

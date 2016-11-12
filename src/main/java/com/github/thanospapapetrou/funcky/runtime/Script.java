@@ -51,8 +51,9 @@ public class Script extends AbstractSyntaxTreeNode {
 	@Override
 	public Void eval(final ScriptContext context) throws ScriptException {
 		super.eval(context);
-		for (final Import _import : imports) {
-			_import.eval(context);
+		engine.createScope(context, script);
+		for (final Import impord : imports) {
+			impord.eval(context);
 		}
 		for (final Definition definition : definitions) {
 			definition.eval(context);

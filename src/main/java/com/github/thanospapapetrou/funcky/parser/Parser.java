@@ -361,7 +361,11 @@ public class Parser {
 		}
 		try {
 			parseExpectedTokens(Token.URI);
-			return new URI(tokenizer.sval);
+			final URI uri = new URI(tokenizer.sval);
+			if (uri.getScheme() == null) {
+				throw new InvalidUriException(uri, script, tokenizer.lineno());
+			}
+			return uri;
 		} catch (final URISyntaxException e) {
 			throw new InvalidUriException(e, script, tokenizer.lineno());
 		} finally {

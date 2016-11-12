@@ -7,6 +7,7 @@ import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDeclaredPrefixException;
 
 /**
  * Class representing a Funcky import.
@@ -46,7 +47,10 @@ public class Import extends AbstractSyntaxTreeNode {
 	@Override
 	public Void eval(final ScriptContext context) throws ScriptException {
 		super.eval(context);
-		// TODO implement
+		if (engine.resolvePrefix(context, script, prefix) != null) {
+			throw new AlreadyDeclaredPrefixException(this);
+		}
+		engine.declareImport(context, script, prefix, uri);
 		return null;
 	}
 
