@@ -43,6 +43,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	@SuppressWarnings("unchecked")
 	private static final Class<Library>[] BUILTIN_LIBRARIES = (Class<Library>[]) new Class<?>[] {Prelude.class};
 	private static final String EMPTY_NAME = "Name must not be empty";
+	private static final String EMPTY_PREFIX = "Prefix must not be empty";
 	private static final String IMPORTS = "%1$s.imports";
 	private static final String MAX_SCOPES = "Maximum number of scopes reached";
 	private static final String NULL_ARGUMENT = "Argument must not be null";
@@ -53,7 +54,9 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	private static final String NULL_LIBRARY = "Library must not be null";
 	private static final String NULL_NAME = "Name must not be null";
 	private static final String NULL_NAMESPACE = "Namespace must not be null";
+	private static final String NULL_PREFIX = "Prefix must not be null";
 	private static final String NULL_SCRIPT = "Script must not be null";
+	private static final String NULL_URI = "URI must not be null";
 	private static final String SCRIPT = "%1$s.script";
 	private static final URI STDIN = URI.create("funcky:stdin");
 	private static final String UNSUPPORTED_GET_INTERFACE = "getInterface() is not supported";
@@ -62,11 +65,11 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	private final FunckyScriptEngineFactory factory;
 
-	private static String requireValidName(final String name) {
-		if (Objects.requireNonNull(name, NULL_NAME).isEmpty()) {
-			throw new IllegalArgumentException(EMPTY_NAME);
+	private static String requireValidString(final String string, final String nullError, final String emptyError) {
+		if (Objects.requireNonNull(string, nullError).isEmpty()) {
+			throw new IllegalArgumentException(emptyError);
 		}
-		return name;
+		return string;
 	}
 
 	/**
@@ -113,6 +116,8 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 *             if the new scope can not be created because the maximum number of scopes has been reached
 	 */
 	public void createScope(final ScriptContext context, final URI script) throws ScriptException {
+		Objects.requireNonNull(context, NULL_CONTEXT);
+		Objects.requireNonNull(script, NULL_SCRIPT);
 		for (int scope = Integer.MIN_VALUE; scope < Integer.MAX_VALUE; scope++) {
 			if (!context.getScopes().contains(scope)) {
 				context.setAttribute(script.toString(), scope, ScriptContext.ENGINE_SCOPE);
@@ -138,8 +143,8 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 */
 	@SuppressWarnings("unchecked")
 	public void declareImport(final ScriptContext context, final URI script, final String prefix, final URI uri) {
-		final int scope = getScope(context, script);
-		((HashMap<String, URI>) context.getAttribute(String.format(IMPORTS, getFactory().getExtensions().get(0)), scope)).put(prefix, uri);
+		final int scope = getScope(Objects.requireNonNull(context, NULL_CONTEXT), Objects.requireNonNull(script, NULL_SCRIPT));
+		((HashMap<String, URI>) context.getAttribute(String.format(IMPORTS, getFactory().getExtensions().get(0)), scope)).put(requireValidString(prefix, NULL_PREFIX, EMPTY_PREFIX), Objects.requireNonNull(uri, NULL_URI));
 	}
 
 	@Override
@@ -196,7 +201,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 * @return a new reference
 	 */
 	public Reference getReference(final URI namespace, final String name) {
-		return new Reference(this, FunckyScriptEngine.RUNTIME, 0, Objects.requireNonNull(namespace, NULL_NAMESPACE), requireValidName(name));
+		return new Reference(this, FunckyScriptEngine.RUNTIME, 0, Objects.requireNonNull(namespace, NULL_NAMESPACE), requireValidString(name, NULL_NAME, EMPTY_NAME));
 	}
 
 	/**
@@ -209,7 +214,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 * @return a new reference
 	 */
 	public Reference getReference(final Class<? extends Library> library, final String name) {
-		return getReference(Library.getUri(Objects.requireNonNull(library, NULL_LIBRARY)), requireValidName(name));
+		return getReference(Library.getUri(Objects.requireNonNull(library, NULL_LIBRARY)), requireValidString(name, NULL_NAME, EMPTY_NAME));
 	}
 
 	/**
@@ -222,7 +227,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 * @return the scope of the given script in the given context or <code>null</code> if the given script is not loaded in the current context
 	 */
 	public Integer getScope(final ScriptContext context, final URI script) {
-		return (Integer) context.getAttribute(script.toString(), ScriptContext.ENGINE_SCOPE);
+		return (Integer) Objects.requireNonNull(context, NULL_CONTEXT).getAttribute(Objects.requireNonNull(script, NULL_SCRIPT).toString(), ScriptContext.ENGINE_SCOPE);
 	}
 
 	@Override
@@ -246,7 +251,8 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 *             if any errors occur while loading the script
 	 */
 	public void load(final ScriptContext context, final URI script) throws ScriptException {
-		if (script.getScheme().equals(getFactory().getExtensions().get(0))) { // builtin library
+		Objects.requireNonNull(context, NULL_CONTEXT);
+		if (Objects.requireNonNull(script, NULL_SCRIPT).getScheme().equals(getFactory().getExtensions().get(0))) { // builtin library
 			for (final Class<Library> library : BUILTIN_LIBRARIES) {
 				if (Library.getUri(library).equals(script)) {
 					try {
@@ -280,7 +286,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 */
 	@SuppressWarnings("unchecked")
 	public URI resolvePrefix(final ScriptContext context, final URI script, final String prefix) {
-		final int scope = getScope(context, script);
+		final int scope = getScope(Objects.requireNonNull(context, NULL_CONTEXT), Objects.requireNonNull(script, NULL_SCRIPT));
 		return ((HashMap<String, URI>) context.getAttribute(String.format(IMPORTS, getFactory().getExtensions().get(0)), scope)).get(prefix);
 	}
 
