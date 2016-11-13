@@ -6,10 +6,6 @@
 # type
 # number = ...
 
-# Type of booleans.
-# type
-# boolean = ...
-
 # Number π, the ratio of the circumference of a circle to its diameter.
 # number
 # pi = ...
@@ -25,14 +21,6 @@
 # NaN, not a number.
 # number
 # NaN = ...
-
-# Boolean true.
-# boolean
-# true = ...
-
-# Boolean false.
-# boolean
-# false = ...
 
 # Bottom function.
 # bottom <type1> <type2>
@@ -79,15 +67,6 @@
 # argument the argument whose type to get
 # return the type of argument
 # typeOf = ...
-
-# Ternary operator. 
-# function boolean (function <type> (function <type> <type>))
-# if condition then else
-# condition the condition to check
-# then the value to return if condition is true
-# else the value to return if condition is false
-# return then if condition is true or else if condition is false
-# if = ...
 
 # Check if a number is NaN.
 # function number boolean
@@ -168,65 +147,3 @@ quotient = compose (compose integer) divide
 # return the modulo of dividend divided by divisor (dividend - ((integer (dividend / divisor)) * divisor))
 # modulo dividend divisor = subtract dividend (multiply (quotient dividend divisor) divisor)
 modulo = compose duplicate (duplicate (flip (compose compose (compose compose (compose compose subtract))) (compose (compose multiply) quotient)))
-
-# Logical negation.
-# function boolean boolean
-# not value
-# value the boolean to negate
-# return true if value is false or false if it is true
-# not value = if value false true
-not = flip (flip if false) true
-
-# Logical conjunction.
-# function boolean (function boolean boolean)
-# and boolean1 boolean2
-# boolean1 the first operand
-# boolean2 the second operand
-# return true if both operands are true or false if either of them is false
-# and = if boolean1 boolean2 false
-and = flip (compose flip (compose if identity)) false 
-
-# Logical alternative denial.
-# function boolean (function boolean boolean)
-# nand boolean1 boolean2
-# boolean1 the first operand
-# boolean2 the second operand
-# return true if either of the two operands is false or false if both of them are true
-# nand boolean1 boolean2 = not (and boolean2 boolean2)
-nand = compose (compose not) (compose and identity)
-
-# Logical inclusive disjunction.
-# function boolean (function boolean boolean)
-# or boolean1 boolean2
-# boolean1 the first operand
-# boolean2 the second operand
-# return true if either of the two operands is true or false if both of them are false
-# or boolean1 boolean2 = if boolean1 true boolean2
-or = flip if true
-
-# Logical joint denial.
-# function boolean (function boolean boolean)
-# or boolean1 boolean2
-# boolean1 the first operand
-# boolean2 the second operand
-# return true if both operands are false or false if either of them is true
-# nor boolean1 boolean2 = not (or boolean1 boolean2)
-nor = compose (compose not) (compose or identity)
-
-# Logical exclusive disjunction.
-# function boolean (function boolean boolean)
-# xor boolean1 boolean2
-# boolean1 the first operand
-# boolean2 the second operand
-# return true if the two operands have different value or false if they have the same
-# xor boolean1 boolean2 = if boolean1 (not boolean2) boolean2
-xor = ((compose duplicate) ((flip ((compose compose) if)) not))
-
-# Logical equality.
-# function boolean (function boolean boolean)
-# xnor boolean1 boolean2
-# boolean1 the first operand
-# boolean2 the second operand
-# return true if the two operands have the same value or false if they have different
-# xnor boolean1 boolean2 = not (xor boolean1 boolean2)
-xnor = compose (compose not) (compose xor identity) 

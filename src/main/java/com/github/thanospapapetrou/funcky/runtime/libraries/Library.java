@@ -81,7 +81,9 @@ public abstract class Library extends Script {
 	public Library(final FunckyScriptEngine engine) throws ScriptException {
 		super(Objects.requireNonNull(engine, NULL_ENGINE), getUri(), 0, new ArrayList<Import>(), new ArrayList<Definition>());
 		try (final InputStreamReader reader = new InputStreamReader(Library.class.getResourceAsStream(String.format(SCRIPT, getClass().getSimpleName())), StandardCharsets.UTF_8)) {
-			definitions.addAll(new Parser(engine, reader, getUri(getClass())).parseScript().getDefinitions());
+			final Script script = new Parser(engine, reader, getUri(getClass())).parseScript();
+			imports.addAll(script.getImports());
+			definitions.addAll(script.getDefinitions());
 		} catch (final IOException e) {
 			throw new ScriptException(e);
 		}
@@ -123,6 +125,10 @@ public abstract class Library extends Script {
 
 	protected FunctionType getFunctionType(final Type domain, final Type range) {
 		return new FunctionType(engine, Objects.requireNonNull(domain, NULL_DOMAIN), Objects.requireNonNull(range, NULL_RANGE));
+	}
+
+	protected SimpleType getSimpleType(final URI script, final String name) {
+		return new SimpleType(engine, script, name);
 	}
 
 	protected TypeVariable getTypeVariable() {

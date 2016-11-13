@@ -358,29 +358,3 @@ isNaN (modulo infinity 2)
 isNaN (modulo infinity 2)
 isNaN (modulo infinity infinity)
 isNaN (modulo infinity NaN)
-not false
-not (not true)
-not (and false false)
-not (and false true)
-not (and true false)
-and true true
-nand false false
-nand false true
-nand true false
-not (nand true true)
-not (or false false)
-or false true
-or true false
-or true true
-nor false false
-not (nor false true)
-not (nor true false)
-not (nor true true)
-not (xor false false)
-xor false true
-xor true false
-not (xor true true)
-xnor false false
-not (xnor false true)
-not (xnor true false)
-xnor true true

@@ -1,0 +1,65 @@
+# boolean tests
+{funcky:booleans}equal ({funcky:prelude}typeOf {funcky:booleans}boolean) {funcky:prelude}type
+
+# true tests
+{funcky:booleans}equal ({funcky:prelude}typeOf {funcky:booleans}true) {funcky:booleans}boolean
+{funcky:booleans}true
+
+# false tests
+{funcky:booleans}equal ({funcky:prelude}typeOf {funcky:booleans}false) {funcky:booleans}boolean
+{funcky:booleans}not {funcky:booleans}false
+
+# equal tests
+# {funcky:booleans}equal ({funcky:prelude}typeOf {funcky:booleans}equal) ({funcky:prelude}function $type ({funcky:prelude}function $type {funcky:booleans}boolean)) # TODO this fails  
+# TODO add more tests
+
+# if tests
+# {funcky:booleans}equal ({funcky:prelude}typeOf {funcky:booleans}if) ({funcky:prelude}function {funcky:booleans}boolean ({funcky:prelude}function $type ({funcky:prelude}function $type $type))) # TODO this fails
+# TODO add more tests
+
+# not tests
+{funcky:booleans}equal ({funcky:prelude}typeOf {funcky:booleans}not) ({funcky:prelude}function {funcky:booleans}boolean {funcky:booleans}boolean)
+{funcky:booleans}not {funcky:booleans}false
+{funcky:booleans}not ({funcky:booleans}not {funcky:booleans}true)
+
+# and tests
+# {funcky:booleans}equal ({funcky:prelude}typeOf {funcky:booleans}and) ({funcky:prelude}function {funcky:booleans}boolean ({funcky:prelude}function {funcky:booleans}boolean {funcky:booleans}boolean)) # TODO this fails
+{funcky:booleans}not ({funcky:booleans}and {funcky:booleans}false {funcky:booleans}false)
+{funcky:booleans}not ({funcky:booleans}and {funcky:booleans}false {funcky:booleans}true)
+{funcky:booleans}not ({funcky:booleans}and {funcky:booleans}true {funcky:booleans}false)
+{funcky:booleans}and {funcky:booleans}true {funcky:booleans}true
+
+# nand tests
+# {funcky:booleans}equal ({funcky:prelude}typeOf {funcky:booleans}nand) ({funcky:prelude}function {funcky:booleans}boolean ({funcky:prelude}function {funcky:booleans}boolean {funcky:booleans}boolean)) # TODO this fails
+{funcky:booleans}nand {funcky:booleans}false {funcky:booleans}false
+{funcky:booleans}nand {funcky:booleans}false {funcky:booleans}true
+{funcky:booleans}nand {funcky:booleans}true {funcky:booleans}false
+{funcky:booleans}not ({funcky:booleans}nand {funcky:booleans}true {funcky:booleans}true)
+
+# or tests
+{funcky:booleans}equal ({funcky:prelude}typeOf {funcky:booleans}or) ({funcky:prelude}function {funcky:booleans}boolean ({funcky:prelude}function {funcky:booleans}boolean {funcky:booleans}boolean))
+{funcky:booleans}not ({funcky:booleans}or {funcky:booleans}false {funcky:booleans}false)
+{funcky:booleans}or {funcky:booleans}false {funcky:booleans}true
+{funcky:booleans}or {funcky:booleans}true {funcky:booleans}false
+{funcky:booleans}or {funcky:booleans}true {funcky:booleans}true
+
+# nor tests
+# {funcky:booleans}equal ({funcky:prelude}typeOf {funcky:booleans}nor) ({funcky:prelude}function {funcky:booleans}boolean ({funcky:prelude}function {funcky:booleans}boolean {funcky:booleans}boolean)) # TODO this fails
+{funcky:booleans}nor {funcky:booleans}false {funcky:booleans}false
+{funcky:booleans}not ({funcky:booleans}nor {funcky:booleans}false {funcky:booleans}true)
+{funcky:booleans}not ({funcky:booleans}nor {funcky:booleans}true {funcky:booleans}false)
+{funcky:booleans}not ({funcky:booleans}nor {funcky:booleans}true {funcky:booleans}true)
+
+# xor tests
+{funcky:booleans}equal ({funcky:prelude}typeOf {funcky:booleans}xor) ({funcky:prelude}function {funcky:booleans}boolean ({funcky:prelude}function {funcky:booleans}boolean {funcky:booleans}boolean))
+{funcky:booleans}not ({funcky:booleans}xor {funcky:booleans}false {funcky:booleans}false)
+{funcky:booleans}xor {funcky:booleans}false {funcky:booleans}true
+{funcky:booleans}xor {funcky:booleans}true {funcky:booleans}false
+{funcky:booleans}not ({funcky:booleans}xor {funcky:booleans}true {funcky:booleans}true)
+
+# xnor tests
+# {funcky:booleans}equal ({funcky:prelude}typeOf {funcky:booleans}xnor) ({funcky:prelude}function {funcky:booleans}boolean ({funcky:prelude}function {funcky:booleans}boolean {funcky:booleans}boolean)) # TODO this fails
+{funcky:booleans}xnor {funcky:booleans}false {funcky:booleans}false
+{funcky:booleans}not ({funcky:booleans}xnor {funcky:booleans}false {funcky:booleans}true)
+{funcky:booleans}not ({funcky:booleans}xnor {funcky:booleans}true {funcky:booleans}false)
+{funcky:booleans}xnor {funcky:booleans}true {funcky:booleans}true

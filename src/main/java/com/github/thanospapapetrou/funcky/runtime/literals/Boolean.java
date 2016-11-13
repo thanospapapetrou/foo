@@ -7,7 +7,7 @@ import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Reference;
-import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
+import com.github.thanospapapetrou.funcky.runtime.libraries.Booleans;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 
 /**
@@ -41,7 +41,7 @@ public class Boolean extends Literal {
 	@Override
 	public SimpleType getType(final ScriptContext context) throws ScriptException {
 		super.getType(context);
-		return (SimpleType) engine.getReference(Prelude.class, Prelude.BOOLEAN).eval(context);
+		return (SimpleType) engine.getReference(Booleans.class, Booleans.BOOLEAN).eval(context);
 	}
 
 	@Override
@@ -51,6 +51,6 @@ public class Boolean extends Literal {
 
 	@Override
 	public Reference toExpression() {
-		return engine.getReference(Prelude.class, java.lang.Boolean.toString(value));
+		return engine.getReference(Booleans.class, java.lang.Boolean.toString(value));
 	}
 }

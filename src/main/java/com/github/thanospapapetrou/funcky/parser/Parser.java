@@ -97,21 +97,7 @@ public class Parser {
 	public Parser(final FunckyScriptEngine engine, final Reader reader, final URI script) {
 		this.engine = Objects.requireNonNull(engine, NULL_ENGINE);
 		tokenizer = new StreamTokenizer(Objects.requireNonNull(reader, NULL_READER));
-		tokenizer.resetSyntax();
-		tokenizer.parseNumbers();
-		tokenizer.eolIsSignificant(true);
-		tokenizer.lowerCaseMode(false);
-		tokenizer.slashSlashComments(false);
-		tokenizer.slashStarComments(false);
-		tokenizer.commentChar(Token.COMMENT.getCode());
-		tokenizer.quoteChar(Token.CHARACTER.getCode());
-		tokenizer.quoteChar(Token.STRING.getCode());
-		for (final char whitespace : WHITESPACE.toCharArray()) {
-			tokenizer.whitespaceChars(whitespace, whitespace);
-		}
-		for (final char word : WORD.toCharArray()) {
-			tokenizer.wordChars(word, word);
-		}
+		initializeForSymbols();
 		this.script = Objects.requireNonNull(script, NULL_SCRIPT);
 	}
 
@@ -167,6 +153,41 @@ public class Parser {
 		}
 	}
 
+	private void initializeForSymbols() {
+		tokenizer.resetSyntax();
+		tokenizer.parseNumbers();
+		tokenizer.eolIsSignificant(true);
+		tokenizer.lowerCaseMode(false);
+		tokenizer.slashSlashComments(false);
+		tokenizer.slashStarComments(false);
+		tokenizer.commentChar(Token.COMMENT.getCode());
+		tokenizer.quoteChar(Token.CHARACTER.getCode());
+		tokenizer.quoteChar(Token.STRING.getCode());
+		for (final char whitespace : WHITESPACE.toCharArray()) {
+			tokenizer.whitespaceChars(whitespace, whitespace);
+		}
+		for (final char word : WORD.toCharArray()) {
+			tokenizer.wordChars(word, word);
+		}
+	}
+	
+	private void initializeForUris() {
+		tokenizer.resetSyntax();
+		tokenizer.eolIsSignificant(true);
+		tokenizer.lowerCaseMode(false);
+		tokenizer.slashSlashComments(false);
+		tokenizer.slashStarComments(false);
+		for (final char whitespace : WHITESPACE.toCharArray()) {
+			tokenizer.whitespaceChars(whitespace, whitespace);
+		}
+		for (final char word : WORD.toCharArray()) {
+			tokenizer.wordChars(word, word);
+		}
+		for (final char uri : URI.toCharArray()) {
+			tokenizer.wordChars(uri, uri);
+		}
+	}
+	
 	private Character parseCharacter() throws ScriptException {
 		parseExpectedTokens(Token.CHARACTER);
 		if (tokenizer.sval.length() != 1) {
@@ -356,9 +377,7 @@ public class Parser {
 	}
 
 	private URI parseUri() throws ScriptException {
-		for (final char word : URI.toCharArray()) {
-			tokenizer.wordChars(word, word);
-		}
+		initializeForUris();
 		try {
 			parseExpectedTokens(Token.URI);
 			final URI uri = new URI(tokenizer.sval);
@@ -369,9 +388,7 @@ public class Parser {
 		} catch (final URISyntaxException e) {
 			throw new InvalidUriException(e, script, tokenizer.lineno());
 		} finally {
-			for (final char word : URI.toCharArray()) {
-				tokenizer.ordinaryChar(word);
-			}
+			initializeForSymbols();
 		}
 	}
 }

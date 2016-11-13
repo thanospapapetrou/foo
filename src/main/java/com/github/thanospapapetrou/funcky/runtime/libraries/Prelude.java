@@ -11,7 +11,6 @@ import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.functors.ApplicableFunctor;
 import com.github.thanospapapetrou.funcky.runtime.functors.ApplicableTwoArgumentArithmeticOperator;
 import com.github.thanospapapetrou.funcky.runtime.literals.ApplicableFunction;
-import com.github.thanospapapetrou.funcky.runtime.literals.Boolean;
 import com.github.thanospapapetrou.funcky.runtime.literals.Function;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 import com.github.thanospapapetrou.funcky.runtime.literals.Number;
@@ -34,18 +33,14 @@ public class Prelude extends Library {
 	private static final URI PRELUDE = URI.create("funcky:prelude");
 
 	public static final String ADD = "add";
-	public static final String BOOLEAN = "boolean";
 	public static final String BOTTOM = "bottom";
 	public static final String CHARACTER = "character";
 	public static final String COMPOSE = "compose";
 	public static final String DIVIDE = "divide";
 	public static final String DUPLICATE = "duplicate";
-	public static final String EQUAL = "equal";
-	public static final String FALSE = "false";
 	public static final String FLIP = "flip";
 	public static final String FUNCTION = "function";
 	public static final String IDENTITY = "identity";
-	public static final String IF = "if";
 	public static final String INFINITY = "infinity";
 	public static final String INTEGER = "integer";
 	public static final String IS_NAN = "isNaN";
@@ -56,7 +51,6 @@ public class Prelude extends Library {
 	public static final String PAIR = "pair";
 	public static final String PRODUCT = "product";
 	public static final String SUBTRACT = "subtract";
-	public static final String TRUE = "true";
 	public static final String TYPE = "type";
 	public static final String TYPE_OF = "typeOf";
 
@@ -71,21 +65,14 @@ public class Prelude extends Library {
 	public Prelude(final FunckyScriptEngine engine) throws IOException, ScriptException {
 		super(engine);
 		// types
-		final SimpleType typeType = getSimpleType(TYPE);
+		final SimpleType typeType = getSimpleType(PRELUDE, TYPE);
 		addDefinition(typeType);
-		final SimpleType numberType = getSimpleType(NUMBER);
+		final SimpleType numberType = getSimpleType(PRELUDE, NUMBER);
 		addDefinition(numberType);
-		final SimpleType booleanType = getSimpleType(BOOLEAN);
-		addDefinition(booleanType);
-		addDefinition(getSimpleType(CHARACTER));
+		addDefinition(getSimpleType(PRELUDE, CHARACTER));
 		// numbers
 		addDefinition(getNumber(Double.POSITIVE_INFINITY));
 		addDefinition(getNumber(Double.NaN));
-		// booleans
-		final Boolean booleanTrue = getBoolean(true);
-		addDefinition(booleanTrue);
-		final Boolean booleanFalse = getBoolean(false);
-		addDefinition(booleanFalse);
 		// functions
 		addFunctionDefinition(BOTTOM, getTypeVariable(), getTypeVariable(), new ApplicableFunction() {
 			@Override
@@ -126,21 +113,6 @@ public class Prelude extends Library {
 				return ((Function) ((Function) arguments[0].eval(context)).apply(arguments[1], context)).apply(arguments[1], context);
 			}
 		}, getFunctionType(duplicateType1, getFunctionType(duplicateType1, duplicateType2)), duplicateType1, duplicateType2);
-		final TypeVariable equalType = getTypeVariable();
-		addFunctorDefinition(EQUAL, new ApplicableFunctor() {
-			@Override
-			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				return arguments[0].eval(context).equals(arguments[1].eval(context)) ? booleanTrue : booleanFalse;
-			}
-		}, equalType, equalType, booleanType);
-		final TypeVariable ifType = getTypeVariable();
-		addFunctorDefinition(IF, new ApplicableFunctor() {
-			@Override
-			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				return ((Boolean) arguments[0].eval(context)).equals(booleanTrue) ? arguments[1].eval(context) : arguments[2].eval(context);
-			}
-		}, booleanType, ifType, ifType, ifType);
-
 		addFunctionDefinition(TYPE_OF, getTypeVariable(), typeType, new ApplicableFunction() {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
@@ -153,11 +125,10 @@ public class Prelude extends Library {
 				return new FunctionType(engine, (Type) arguments[0].eval(context), (Type) arguments[1].eval(context));
 			}
 		}, typeType, typeType, typeType);
-
-		addFunctionDefinition(IS_NAN, numberType, booleanType, new ApplicableFunction() {
+		addFunctionDefinition(IS_NAN, numberType, (Type) engine.getReference(Booleans.class, Booleans.BOOLEAN).eval(), new ApplicableFunction() { // TODO maybe replace references with something more concise
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
-				return Double.isNaN(((Number) argument.eval(context)).getValue()) ? booleanTrue : booleanFalse;
+				return (Literal) (Double.isNaN(((Number) argument.eval(context)).getValue()) ? engine.getReference(Booleans.class, Booleans.TRUE).eval() : engine.getReference(Booleans.class, Booleans.FALSE).eval());
 			}
 		});
 		addFunctionDefinition(INTEGER, numberType, numberType, new ApplicableFunction() {
@@ -201,15 +172,7 @@ public class Prelude extends Library {
 		}, productType1, productType2, new PairType(engine, productType1, productType2));
 	}
 
-	private Boolean getBoolean(final boolean value) {
-		return new Boolean(engine, PRELUDE, value);
-	}
-
 	private Number getNumber(final double value) {
 		return new Number(engine, PRELUDE, value);
-	}
-
-	private SimpleType getSimpleType(final String name) { // TODO move this method to Library
-		return new SimpleType(engine, PRELUDE, name);
 	}
 }
