@@ -11,6 +11,7 @@ import com.github.thanospapapetrou.funcky.runtime.functors.ApplicableFunctor;
 import com.github.thanospapapetrou.funcky.runtime.literals.Boolean;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
 
 public class Booleans extends Library {
@@ -19,17 +20,18 @@ public class Booleans extends Library {
 	 */
 	public static final String BOOLEAN = "boolean";
 	public static final String EQUAL = "equal";
-	
+	public static final String EQUIVALENT = "equivalent";
+
 	/**
 	 * Boolean false.
 	 */
 	public static final String FALSE = "false";
-	
+
 	/**
 	 * Ternary operator.
 	 */
 	public static final String IF = "if";
-	
+
 	/**
 	 * Boolean true.
 	 */
@@ -53,6 +55,13 @@ public class Booleans extends Library {
 				return arguments[0].eval(context).equals(arguments[1].eval(context)) ? booleanTrue : booleanFalse;
 			}
 		}, equalType, equalType, booleanType);
+		final SimpleType type = getSimpleType(Library.getUri(Prelude.class), Prelude.TYPE);
+		addFunctorDefinition(EQUIVALENT, new ApplicableFunctor() {
+			@Override
+			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
+				return (((Type) arguments[0].eval(context)).inferGenericBindings((Type) arguments[1].eval(context)) == null) ? booleanFalse : booleanTrue;
+			}
+		}, type, type, booleanType);
 		final TypeVariable ifType = getTypeVariable();
 		addFunctorDefinition(IF, new ApplicableFunctor() {
 			@Override

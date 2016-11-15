@@ -53,13 +53,13 @@
 # return a new function corresponding to applying the given function to the given arguments in reverse order (function argument2 argument1)
 # flip = ... 
 
-# Construct a function type.
-# function type (function type type)
-# function domain range
-# domain the function domain type
-# range the function range type
-# return the function type corresponding to functions from the given domain type to the given range type
-# function = ...  
+# Duplicate the argument of a function.
+# function (function <type1> (function <type1> <type2>)) <type1> <type2>
+# duplicate function argument
+# function the function whose argument to duplicate
+# argument the argument to duplicate
+# return a new function corresponding to applying the given function to the given argument and reapplying the resulting function to the same argument (function argument argument)
+# duplicate = ...
 
 # Get the type of an expression.
 # function <type> type
@@ -67,6 +67,14 @@
 # argument the argument whose type to get
 # return the type of argument
 # typeOf = ...
+
+# Construct a function type.
+# function type (function type type)
+# function domain range
+# domain the function domain type
+# range the function range type
+# return the function type corresponding to functions from the given domain type to the given range type
+# function = ...  
 
 # Check if a number is NaN.
 # function number boolean

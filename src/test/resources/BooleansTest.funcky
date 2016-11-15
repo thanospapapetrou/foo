@@ -10,11 +10,26 @@
 {funcky:booleans}not {funcky:booleans}false
 
 # equal tests
-# {funcky:booleans}equal ({funcky:prelude}typeOf {funcky:booleans}equal) ({funcky:prelude}function $type ({funcky:prelude}function $type {funcky:booleans}boolean)) # TODO this fails  
+# {funcky:booleans}equivalent ({funcky:prelude}typeOf {funcky:booleans}equal) ({funcky:prelude}function $type ({funcky:prelude}function $type {funcky:booleans}boolean))  
 # TODO add more tests
 
+# equivalent tests
+{funcky:booleans}equal ({funcky:prelude}typeOf {funcky:booleans}equivalent) ({funcky:prelude}function {funcky:prelude}type ({funcky:prelude}function {funcky:prelude}type {funcky:booleans}boolean))  
+{funcky:booleans}equivalent $type $type
+{funcky:booleans}equivalent $type {funcky:booleans}boolean
+{funcky:booleans}equivalent {funcky:booleans}boolean $type
+{funcky:booleans}equivalent {funcky:booleans}boolean {funcky:booleans}boolean
+{funcky:booleans}equivalent $type1 $type2
+{funcky:booleans}equivalent $type ({funcky:prelude}function {funcky:booleans}boolean {funcky:booleans}boolean)
+{funcky:booleans}equivalent ({funcky:prelude}function {funcky:booleans}boolean {funcky:booleans}boolean) $type
+{funcky:booleans}equivalent ({funcky:prelude}function {funcky:booleans}boolean {funcky:booleans}boolean) ({funcky:prelude}function {funcky:booleans}boolean {funcky:booleans}boolean)
+{funcky:booleans}equivalent ({funcky:prelude}function $type {funcky:booleans}boolean) ({funcky:prelude}function {funcky:booleans}boolean {funcky:booleans}boolean)
+{funcky:booleans}equivalent ({funcky:prelude}function {funcky:booleans}boolean $type) ({funcky:prelude}function {funcky:booleans}boolean {funcky:booleans}boolean)
+{funcky:booleans}equivalent ({funcky:prelude}function {funcky:booleans}boolean {funcky:booleans}boolean) ({funcky:prelude}function $type {funcky:booleans}boolean)
+{funcky:booleans}equivalent ({funcky:prelude}function {funcky:booleans}boolean {funcky:booleans}boolean) ({funcky:prelude}function {funcky:booleans}boolean $type)
+
 # if tests
-# {funcky:booleans}equal ({funcky:prelude}typeOf {funcky:booleans}if) ({funcky:prelude}function {funcky:booleans}boolean ({funcky:prelude}function $type ({funcky:prelude}function $type $type))) # TODO this fails
+# {funcky:booleans}equivalent ({funcky:prelude}typeOf {funcky:booleans}if) ({funcky:prelude}function {funcky:booleans}boolean ({funcky:prelude}function $type ({funcky:prelude}function $type $type)))
 # TODO add more tests
 
 # not tests
@@ -23,7 +38,7 @@
 {funcky:booleans}not ({funcky:booleans}not {funcky:booleans}true)
 
 # and tests
-# {funcky:booleans}equal ({funcky:prelude}typeOf {funcky:booleans}and) ({funcky:prelude}function {funcky:booleans}boolean ({funcky:prelude}function {funcky:booleans}boolean {funcky:booleans}boolean)) # TODO this fails
+{funcky:booleans}equal ({funcky:prelude}typeOf {funcky:booleans}and) ({funcky:prelude}function {funcky:booleans}boolean ({funcky:prelude}function {funcky:booleans}boolean {funcky:booleans}boolean))
 {funcky:booleans}not ({funcky:booleans}and {funcky:booleans}false {funcky:booleans}false)
 {funcky:booleans}not ({funcky:booleans}and {funcky:booleans}false {funcky:booleans}true)
 {funcky:booleans}not ({funcky:booleans}and {funcky:booleans}true {funcky:booleans}false)
