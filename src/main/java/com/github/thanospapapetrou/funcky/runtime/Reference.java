@@ -179,7 +179,7 @@ public class Reference extends Expression {
 	private Expression resolve(final ScriptContext context) throws ScriptException {
 		final Reference qualified = qualify(context);
 		if (engine.getScope(context, qualified.getNamespace()) == null) {
-			engine.load(context, qualified.getNamespace());
+			engine.load(context, qualified);
 		}
 		final Expression expression = (Expression) context.getAttribute(qualified.getName(), engine.getScope(context, qualified.getNamespace()));
 		if (expression == null) {

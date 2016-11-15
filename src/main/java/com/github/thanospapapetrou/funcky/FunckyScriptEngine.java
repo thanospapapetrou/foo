@@ -28,6 +28,7 @@ import com.github.thanospapapetrou.funcky.runtime.Script;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Booleans;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Library;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
+import com.github.thanospapapetrou.funcky.runtime.libraries.UnknownBuiltinLibraryException;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 
 /**
@@ -56,6 +57,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	private static final String NULL_NAME = "Name must not be null";
 	private static final String NULL_NAMESPACE = "Namespace must not be null";
 	private static final String NULL_PREFIX = "Prefix must not be null";
+	private static final String NULL_REFERENCE = "Reference must not be null";
 	private static final String NULL_SCRIPT = "Script must not be null";
 	private static final String NULL_URI = "URI must not be null";
 	private static final String SCRIPT = "%1$s.script";
@@ -246,16 +248,16 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 * 
 	 * @param context
 	 *            the context in which to load the script
-	 * @param script
-	 *            the URI of the script to load
+	 * @param reference
+	 *            the reference that refers to the script to load
 	 * @throws ScriptException
 	 *             if any errors occur while loading the script
 	 */
-	public void load(final ScriptContext context, final URI script) throws ScriptException {
+	public void load(final ScriptContext context, final Reference reference) throws ScriptException {
 		Objects.requireNonNull(context, NULL_CONTEXT);
-		if (Objects.requireNonNull(script, NULL_SCRIPT).getScheme().equals(getFactory().getExtensions().get(0))) { // builtin library
+		if (Objects.requireNonNull(reference, NULL_REFERENCE).getNamespace().getScheme().equals(getFactory().getExtensions().get(0))) { // builtin library
 			for (final Class<Library> library : BUILTIN_LIBRARIES) {
-				if (Library.getUri(library).equals(script)) {
+				if (Library.getUri(library).equals(reference.getNamespace())) {
 					try {
 						library.getConstructor(FunckyScriptEngine.class).newInstance(this).eval(context);
 						return;
@@ -264,10 +266,10 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 					}
 				}
 			}
-			throw new ScriptException("Unknown library " + script); // TODO throw something more specific
+			throw new UnknownBuiltinLibraryException(reference);
 		} else {
-			try (final InputStreamReader reader = new InputStreamReader(script.toURL().openStream(), StandardCharsets.UTF_8)) {
-				this.compile(reader, script).eval(context);
+			try (final InputStreamReader reader = new InputStreamReader(reference.getNamespace().toURL().openStream(), StandardCharsets.UTF_8)) {
+				this.compile(reader, reference.getNamespace()).eval(context);
 			} catch (final IOException e) {
 				throw new ScriptException(e);
 			}
