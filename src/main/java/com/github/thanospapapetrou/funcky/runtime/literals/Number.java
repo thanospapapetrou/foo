@@ -7,7 +7,7 @@ import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
+import com.github.thanospapapetrou.funcky.runtime.libraries.Numbers;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 
 /**
@@ -16,8 +16,6 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
  * @author thanos
  */
 public class Number extends Literal {
-	private static final String MINUS = "minus";
-
 	private final double value;
 
 	/**
@@ -71,7 +69,7 @@ public class Number extends Literal {
 	@Override
 	public SimpleType getType(final ScriptContext context) throws ScriptException {
 		super.getType(context);
-		return (SimpleType) engine.getReference(Prelude.class, Prelude.NUMBER).eval(context);
+		return (SimpleType) engine.getReference(Numbers.class, Numbers.NUMBER).eval(context);
 	}
 
 	/**
@@ -91,11 +89,11 @@ public class Number extends Literal {
 	@Override
 	public Expression toExpression() {
 		if ((value == Double.POSITIVE_INFINITY)) {
-			return engine.getReference(Prelude.class, Prelude.INFINITY);
+			return engine.getReference(Numbers.class, Numbers.INFINITY);
 		} else if ((value == Double.NEGATIVE_INFINITY)) {
-			return engine.getApplication(engine.getReference(Prelude.class, MINUS), engine.getReference(Prelude.class, Prelude.INFINITY));
+			return engine.getApplication(engine.getReference(Numbers.class, Numbers.MINUS), engine.getReference(Numbers.class, Numbers.INFINITY));
 		} else if (Double.isNaN(value)) {
-			return engine.getReference(Prelude.class, Prelude.NAN);
+			return engine.getReference(Numbers.class, Numbers.NAN);
 		}
 		return this;
 	}

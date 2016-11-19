@@ -68,7 +68,6 @@ public class Booleans extends Library {
 		addDefinition(booleanTrue);
 		final Boolean booleanFalse = getBoolean(false);
 		addDefinition(booleanFalse);
-
 		final TypeVariable equalType = getTypeVariable();
 		addFunctorDefinition(EQUAL, new ApplicableFunctor() {
 			@Override
@@ -76,7 +75,7 @@ public class Booleans extends Library {
 				return arguments[0].eval(context).equals(arguments[1].eval(context)) ? booleanTrue : booleanFalse;
 			}
 		}, equalType, equalType, booleanType);
-		final SimpleType type = getSimpleType(Library.getUri(Prelude.class), Prelude.TYPE);
+		final SimpleType type = (SimpleType) engine.getReference(Prelude.class, Prelude.TYPE).eval();
 		addFunctorDefinition(EQUIVALENT, new ApplicableFunctor() {
 			@Override
 			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {

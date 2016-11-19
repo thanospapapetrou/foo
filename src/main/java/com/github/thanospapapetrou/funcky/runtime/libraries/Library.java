@@ -40,9 +40,11 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
  */
 public abstract class Library extends Script {
 	private static final int CURRENT_LIBRARY = 3;
+	private static final String EMPTY_NAME = "Name must not be empty";
 	private static final String NULL_DOMAIN = "Domain must not be null";
 	private static final String NULL_ENGINE = "Engine must not be null";
 	private static final String NULL_LITERAL = "Literal must not be null";
+	private static final String NULL_NAME = "Name must not be null";
 	private static final String NULL_RANGE = "Range must not be null";
 	private static final String SCRIPT = "/%1$s.funcky";
 
@@ -70,6 +72,13 @@ public abstract class Library extends Script {
 		}
 	}
 
+	private static String requireValidName(final String name) {
+		if (Objects.requireNonNull(name, NULL_NAME).isEmpty()) {
+			throw new IllegalArgumentException(EMPTY_NAME);
+		}
+		return name;
+	}
+
 	/**
 	 * Construct and load a new library.
 	 * 
@@ -89,8 +98,26 @@ public abstract class Library extends Script {
 		}
 	}
 
+	/**
+	 * Add a new literal definition to this library.
+	 * 
+	 * @param name
+	 *            the definition name
+	 * @param literal
+	 *            the definition literal
+	 */
+	protected void addDefinition(final String name, final Literal literal) {
+		definitions.add(new Definition(engine, script, 0, requireValidName(name), Objects.requireNonNull(literal, NULL_LITERAL)));
+	}
+
+	/**
+	 * Add a new literal definition to this library, using the literal representation as name.
+	 * 
+	 * @param literal
+	 *            the definition literal
+	 */
 	protected void addDefinition(final Literal literal) {
-		definitions.add(new Definition(engine, script, 0, ((Reference) Objects.requireNonNull(literal, NULL_LITERAL).toExpression()).getName(), literal));
+		addDefinition(((Reference) Objects.requireNonNull(literal, NULL_LITERAL).toExpression()).getName(), literal);
 	}
 
 	protected void addFunctionDefinition(final String name, final Type domain, final Type range, final ApplicableFunction function) {
