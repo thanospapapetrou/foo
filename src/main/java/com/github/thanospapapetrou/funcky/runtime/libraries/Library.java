@@ -74,7 +74,7 @@ public abstract class Library extends Script {
 	 * Construct and load a new library.
 	 * 
 	 * @param engine
-	 *            the engine that is loading this library
+	 *            the engine loading this library
 	 * @throws ScriptException
 	 *             if any errors occur while loading this library
 	 */

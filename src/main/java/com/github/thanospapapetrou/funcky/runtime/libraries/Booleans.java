@@ -14,12 +14,25 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
 
+/**
+ * Booleans related library.
+ * 
+ * @author thanos
+ */
 public class Booleans extends Library {
 	/**
 	 * Type of booleans.
 	 */
 	public static final String BOOLEAN = "boolean";
+
+	/**
+	 * Equality operator.
+	 */
 	public static final String EQUAL = "equal";
+
+	/**
+	 * Type equivalence operator.
+	 */
 	public static final String EQUIVALENT = "equivalent";
 
 	/**
@@ -39,6 +52,14 @@ public class Booleans extends Library {
 
 	private static final URI BOOLEANS = Library.getUri(Booleans.class);
 
+	/**
+	 * Construct and load a new booleans library.
+	 * 
+	 * @param engine
+	 *            the engine loading this booleans library
+	 * @throws ScriptException
+	 *             if any errors occur while loading this booleans library
+	 */
 	public Booleans(final FunckyScriptEngine engine) throws ScriptException {
 		super(engine);
 		final SimpleType booleanType = getSimpleType(BOOLEANS, BOOLEAN);
