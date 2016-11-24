@@ -8,11 +8,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import org.testng.Assert;
@@ -22,52 +20,46 @@ import org.testng.annotations.Test;
 import com.github.thanospapapetrou.funcky.parser.Token;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Booleans;
 
-public class FunckyTest implements FileFilter {
+/**
+ * Run tests.
+ * 
+ * @author thanos
+ */
+public class FunckyTest {
 	private static final String CLASSPATH_ROOT = "/";
+	private static final String COMMENT = String.valueOf(Character.toChars(Token.COMMENT.getCode()));
+	private static final String PROVIDER = "funcky";
 
-	private final FunckyScriptEngine engine;
+	private final FunckyScriptEngineFactory factory;
 
-	public FunckyTest() {
-		engine = new FunckyScriptEngineFactory().getScriptEngine();
-	}
-
-	@Override
-	public boolean accept(final File file) {
-		return file.isFile();
-	}
-
-	@DataProvider(name = "tests")
-	public Iterator<Object[]> listTests() throws URISyntaxException {
-		final Iterator<File> tests = Arrays.asList(new File(getClass().getResource(CLASSPATH_ROOT).toURI()).listFiles(this)).iterator();
-		return new Iterator<Object[]>() {
+	@DataProvider(name = PROVIDER, parallel = true)
+	private static Object[][] listTests() throws IOException, URISyntaxException {
+		final List<Object[]> tests = new ArrayList<Object[]>();
+		for (final File test : new File(FunckyTest.class.getResource(CLASSPATH_ROOT).toURI()).listFiles(new FileFilter() {
 			@Override
-			public boolean hasNext() {
-				return tests.hasNext();
+			public boolean accept(final File file) {
+				return file.isFile();
 			}
-
-			@Override
-			public Object[] next() {
-				return new Object[] {tests.next()};
-			}
-
-			@Override
-			public void remove() {
-				tests.remove();
-			}
-		};
-	}
-
-	@Test(dataProvider = "tests")
-	public void test(final File test) throws IOException, ScriptException {
-		try (final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(test), StandardCharsets.UTF_8))) {
-			engine.getContext().setAttribute(ScriptEngine.FILENAME, test.getCanonicalPath(), ScriptContext.ENGINE_SCOPE);
-			final String comment = String.valueOf(Character.toChars(Token.COMMENT.getCode()));
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				if ((!line.isEmpty()) && (!line.startsWith(comment))) {
-					Assert.assertEquals(engine.eval(line), engine.getReference(Booleans.class, Booleans.TRUE).eval(), line);
+		})) {
+			try (final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(test), StandardCharsets.UTF_8))) {
+				String expression = null;
+				while ((expression = reader.readLine()) != null) {
+					if ((!expression.isEmpty()) && (!expression.startsWith(COMMENT))) {
+						tests.add(new Object[] {expression});
+					}
 				}
 			}
 		}
+		return tests.toArray(new Object[][] {});
+	}
+
+	private FunckyTest(final String expression) {
+		factory = new FunckyScriptEngineFactory();
+	}
+
+	@Test(dataProvider = PROVIDER)
+	private void test(final String expression) throws ScriptException {
+		final FunckyScriptEngine engine = factory.getScriptEngine();
+		Assert.assertEquals(engine.eval(expression), engine.getReference(Booleans.class, Booleans.TRUE).eval(), expression);
 	}
 }
