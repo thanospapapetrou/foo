@@ -21,13 +21,10 @@ import com.github.thanospapapetrou.funcky.runtime.Import;
 import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.Script;
 import com.github.thanospapapetrou.funcky.runtime.functors.ApplicableFunctor;
-import com.github.thanospapapetrou.funcky.runtime.functors.ApplicableTwoArgumentArithmeticOperator;
 import com.github.thanospapapetrou.funcky.runtime.functors.Functor;
-import com.github.thanospapapetrou.funcky.runtime.functors.TwoArgumentArithmeticOperator;
 import com.github.thanospapapetrou.funcky.runtime.literals.ApplicableFunction;
 import com.github.thanospapapetrou.funcky.runtime.literals.Function;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
-import com.github.thanospapapetrou.funcky.runtime.literals.Number;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
@@ -80,12 +77,12 @@ public abstract class Library extends Script {
 	}
 
 	/**
-	 * Construct and load a new library.
+	 * Construct a new library.
 	 * 
 	 * @param engine
-	 *            the engine loading this library
+	 *            the engine constructing this library
 	 * @throws ScriptException
-	 *             if any errors occur while loading this library
+	 *             if any errors occur while constructing this library
 	 */
 	public Library(final FunckyScriptEngine engine) throws ScriptException {
 		super(Objects.requireNonNull(engine, NULL_ENGINE), getUri(), 0, new ArrayList<Import>(), new ArrayList<Definition>());
@@ -136,16 +133,6 @@ public abstract class Library extends Script {
 			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				super.apply(context, arguments);
 				return functor.apply(context, arguments);
-			}
-		});
-	}
-
-	protected void addTwoArgumentArithmeticOperatorDefinition(final String name, final SimpleType numberType, final ApplicableTwoArgumentArithmeticOperator operator) throws ScriptException { // TODO move this one level down in class hierarchy and remove number type
-		addDefinition(new TwoArgumentArithmeticOperator(engine, getUri(), name, numberType) {
-			@Override
-			public Literal apply(final Number argument1, final Number argument2, final ScriptContext context) {
-				super.apply(argument1, argument2, context);
-				return operator.apply(argument1, argument2, context);
 			}
 		});
 	}

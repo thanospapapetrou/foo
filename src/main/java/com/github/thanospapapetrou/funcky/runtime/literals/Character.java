@@ -9,7 +9,7 @@ import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
+import com.github.thanospapapetrou.funcky.runtime.libraries.Characters;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 
 /**
@@ -57,6 +57,18 @@ public class Character extends Literal {
 		this.value = value;
 	}
 
+	/**
+	 * Construct a new character generated at runtime.
+	 * 
+	 * @param engine
+	 *            the engine that constructed this character
+	 * @param value
+	 *            the value of this character
+	 */
+	public Character(final FunckyScriptEngine engine, final char value) {
+		this(engine, FunckyScriptEngine.RUNTIME, 0, value);
+	}
+
 	@Override
 	public boolean equals(final Object object) {
 		return (object instanceof Character) && (value == ((Character) object).value);
@@ -65,7 +77,7 @@ public class Character extends Literal {
 	@Override
 	public SimpleType getType(final ScriptContext context) throws ScriptException {
 		super.getType(context);
-		return (SimpleType) engine.getReference(Prelude.class, Prelude.CHARACTER).eval(context);
+		return (SimpleType) engine.getReference(Characters.class, Characters.CHARACTER).eval(context);
 	}
 
 	/**

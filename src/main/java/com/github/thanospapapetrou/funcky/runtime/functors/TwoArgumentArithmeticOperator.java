@@ -45,7 +45,7 @@ public abstract class TwoArgumentArithmeticOperator extends Functor implements A
 	}
 
 	@Override
-	public Literal apply(final Number argument1, final Number argument2, final ScriptContext context) {
+	public Number apply(final Number argument1, final Number argument2, final ScriptContext context) {
 		Objects.requireNonNull(argument1, NULL_ARGUMENT_1);
 		Objects.requireNonNull(argument2, NULL_ARGUMENT_2);
 		Objects.requireNonNull(context, NULL_CONTEXT);

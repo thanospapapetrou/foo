@@ -1,7 +1,7 @@
 prelude: funcky:prelude
 
 # Type of booleans.
-# type
+# prelude:type
 # boolean = ...
 
 # Boolean true.
@@ -13,7 +13,7 @@ prelude: funcky:prelude
 # false = ...
 
 # Equality operator.
-# function <type> (function <type> boolean)
+# prelude:function $type (prelude:function $type boolean)
 # equal value1 value2
 # value1 the first operand
 # value2 the second operand
@@ -21,7 +21,7 @@ prelude: funcky:prelude
 # equal = ...
 
 # Type equivalence operator.
-# function type (function type boolean)
+# prelude:function prelude:type (prelude:function prelude:type boolean)
 # equivalent type1 type2
 # type1 the first operand
 # type2 the second operand
@@ -29,7 +29,7 @@ prelude: funcky:prelude
 # equivalent = ...
 
 # Ternary operator. 
-# function boolean (function <type> (function <type> <type>))
+# prelude:function boolean (prelude:function $type (prelude:function $type $type))
 # if condition then else
 # condition the condition to check
 # then the value to return if condition is true
@@ -38,7 +38,7 @@ prelude: funcky:prelude
 # if = ...
 
 # Logical negation.
-# function boolean boolean
+# prelude:function boolean boolean
 # not value
 # value the boolean to negate
 # return true if value is false or false if it is true
@@ -46,7 +46,7 @@ prelude: funcky:prelude
 not = prelude:flip (prelude:flip if false) true
 
 # Logical conjunction.
-# function boolean (function boolean boolean)
+# prelude:function boolean (prelude:function boolean boolean)
 # and boolean1 boolean2
 # boolean1 the first operand
 # boolean2 the second operand
@@ -55,7 +55,7 @@ not = prelude:flip (prelude:flip if false) true
 and = ((prelude:flip ((prelude:compose prelude:flip) ((prelude:flip ((prelude:compose prelude:compose) if)) ((prelude:flip ((prelude:flip if) true)) false)))) false)
 
 # Logical alternative denial.
-# function boolean (function boolean boolean)
+# prelude:function boolean (prelude:function boolean boolean)
 # nand boolean1 boolean2
 # boolean1 the first operand
 # boolean2 the second operand
@@ -64,7 +64,7 @@ and = ((prelude:flip ((prelude:compose prelude:flip) ((prelude:flip ((prelude:co
 nand = prelude:compose (prelude:compose not) (prelude:compose and prelude:identity)
 
 # Logical inclusive disjunction.
-# function boolean (function boolean boolean)
+# prelude:function boolean (prelude:function boolean boolean)
 # or boolean1 boolean2
 # boolean1 the first operand
 # boolean2 the second operand
@@ -73,7 +73,7 @@ nand = prelude:compose (prelude:compose not) (prelude:compose and prelude:identi
 or = prelude:flip if true
 
 # Logical joint denial.
-# function boolean (function boolean boolean)
+# prelude:function boolean (prelude:function boolean boolean)
 # or boolean1 boolean2
 # boolean1 the first operand
 # boolean2 the second operand
@@ -82,7 +82,7 @@ or = prelude:flip if true
 nor = prelude:compose (prelude:compose not) (prelude:compose or prelude:identity)
 
 # Logical exclusive disjunction.
-# function boolean (function boolean boolean)
+# prelude:function boolean (prelude:function boolean boolean)
 # xor boolean1 boolean2
 # boolean1 the first operand
 # boolean2 the second operand
@@ -91,7 +91,7 @@ nor = prelude:compose (prelude:compose not) (prelude:compose or prelude:identity
 xor = ((prelude:compose prelude:duplicate) ((prelude:flip ((prelude:compose prelude:compose) if)) not))
 
 # Logical equality.
-# function boolean (function boolean boolean)
+# prelude:function boolean (prelude:function boolean boolean)
 # xnor boolean1 boolean2
 # boolean1 the first operand
 # boolean2 the second operand

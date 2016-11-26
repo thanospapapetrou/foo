@@ -1,0 +1,11 @@
+# character tests
+{funcky:booleans}equal ({funcky:prelude}typeOf {funcky:characters}character) {funcky:prelude}type
+
+# codePoint tests
+{funcky:booleans}equal ({funcky:prelude}typeOf {funcky:characters}codePoint) ({funcky:prelude}function {funcky:characters}character ({funcky:prelude}function {funcky:characters}character {funcky:numbers}number))
+
+# highSurrogate tests
+{funcky:booleans}equal ({funcky:prelude}typeOf {funcky:characters}highSurrogate) ({funcky:prelude}function {funcky:numbers}number {funcky:characters}character)
+
+# lowSurrogate tests
+{funcky:booleans}equal ({funcky:prelude}typeOf {funcky:characters}lowSurrogate) ({funcky:prelude}function {funcky:numbers}number {funcky:characters}character)

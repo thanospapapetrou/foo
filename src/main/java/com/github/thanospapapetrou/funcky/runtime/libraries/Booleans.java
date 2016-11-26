@@ -53,12 +53,12 @@ public class Booleans extends Library {
 	private static final URI BOOLEANS = Library.getUri(Booleans.class);
 
 	/**
-	 * Construct and load a new booleans library.
+	 * Construct a new booleans library.
 	 * 
 	 * @param engine
-	 *            the engine loading this booleans library
+	 *            the engine constructing this booleans library
 	 * @throws ScriptException
-	 *             if any errors occur while loading this booleans library
+	 *             if any errors occur while constructing this booleans library
 	 */
 	public Booleans(final FunckyScriptEngine engine) throws ScriptException {
 		super(engine);

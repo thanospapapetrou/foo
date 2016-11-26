@@ -3,20 +3,20 @@
 # type = ...
 
 # Bottom function.
-# bottom <type1> <type2>
+# bottom $type1 $type2
 # bottom argument
 # return never return any value
 # bottom = ...
 
 # Identity function.
-# function <type> <type>
+# function $type $type
 # identity argument
 # argument the value to return
 # return the given argument
 # identity = ...
 
 # Compose two functions.
-# function (function <type1> <type2>) (function (function <type3> <type1>) (function <type3> <type2>))
+# function (function $type1 $type2) (function (function $type3 $type1) (function $type3 $type2))
 # compose function1 function2 argument
 # function1 the outer function to compose
 # function2 the inner function to compose
@@ -25,7 +25,7 @@
 # compose = ...
 
 # Flip the arguments of a function.
-# function (function <type1> (function <type2> <type3>)) (function <type2> (function <type1> <type3>))
+# function (function $type1 (function $type2 $type3)) (function $type2 (function $type1 $type3))
 # flip function argument1 argument2
 # function the function whose arguments to flip
 # argument1 the second argument to pass to the function
@@ -34,7 +34,7 @@
 # flip = ... 
 
 # Duplicate the argument of a function.
-# function (function <type1> (function <type1> <type2>)) <type1> <type2>
+# function (function $type1 (function $type1 $type2)) $type1 $type2
 # duplicate function argument
 # function the function whose argument to duplicate
 # argument the argument to duplicate
@@ -42,7 +42,7 @@
 # duplicate = ...
 
 # Get the type of an expression.
-# function <type> type
+# function $type type
 # typeOf argument
 # argument the argument whose type to get
 # return the type of argument
@@ -55,3 +55,6 @@
 # range the function range type
 # return the function type corresponding to functions from the given domain type to the given range type
 # function = ...  
+
+# TODO domain
+# TODO range

@@ -1,7 +1,8 @@
+booleans: funcky:booleans
 prelude: funcky:prelude
  
 # Type of numbers.
-# type
+# prelude:type
 # number = ...
 
 # Infinity (∞).
@@ -21,21 +22,21 @@ prelude: funcky:prelude
 # e = ...
 
 # Check if a number is NaN.
-# function number boolean
+# prelude:function number booleans: boolean
 # isNaN value
 # value the number to check
 # return true if value is NaN, false otherwise
 # isNaN = ...
 
 # Get the integer part of a number.
-# function number number
+# prelude:function number number
 # integer value
 # value the number whose integer part to get
 # return the integer part of value
 # integer = ...
 
 # Add two numbers.
-# function number (function number number)
+# prelude:function number (prelude:function number number)
 # add term1 term2
 # term1 the first term to add
 # term2 the second term to add
@@ -43,7 +44,7 @@ prelude: funcky:prelude
 # add = ...
 
 # Subtract two numbers.
-# function number (function number number)
+# prelude:function number (prelude:function number number)
 # subtract minuend subtrahend
 # minuend the minuend to subtract from
 # subtrahend the subtrahend to subtract
@@ -51,7 +52,7 @@ prelude: funcky:prelude
 # subtract = ...
 
 # Multiply two numbers.
-# function number (function number number)
+# prelude:function number (prelude:function number number)
 # multiply factor1 factor2
 # factor1 the first factor to multiply
 # factor2 the second factor to multiply
@@ -59,7 +60,7 @@ prelude: funcky:prelude
 # multiply = ...
 
 # Divide two numbers.
-# function number (function number number)
+# prelude:function number (prelude:function number number)
 # divide dividend divisor
 # dividend the dividend to divide
 # divisor the divisor to divide by
@@ -67,7 +68,7 @@ prelude: funcky:prelude
 # divide = ...
 
 # Negate a number.
-# function number number
+# prelude:function number number
 # minus value
 # value the number to negate
 # return the negation of value (-value)
@@ -75,7 +76,7 @@ prelude: funcky:prelude
 minus = subtract 0
 
 # Invert a number.
-# function number number
+# prelude:function number number
 # invert value
 # value the number to invert
 # return the inverse of the value (1 / value)
@@ -83,7 +84,7 @@ minus = subtract 0
 inverse = divide 1
 
 # Calculate the integer quotient of two numbers.
-# function number (function number number)
+# prelude:function number (prelude:function number number)
 # quotient dividend divisor
 # dividend the dividend to divide
 # divisor the divisor to divide by
@@ -92,7 +93,7 @@ inverse = divide 1
 quotient = prelude:compose (prelude:compose integer) divide
 
 # Calculate the modulo of two numbers.
-# function number (function number number)
+# prelude:function number (prelude:function number number)
 # modulo dividend divisor
 # dividend the dividend to divide
 # divisor the divisor to divide by

@@ -2,7 +2,6 @@ package com.github.thanospapapetrou.funcky.runtime.functors;
 
 import javax.script.ScriptContext;
 
-import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 import com.github.thanospapapetrou.funcky.runtime.literals.Number;
 
 /**
@@ -20,7 +19,7 @@ public interface ApplicableTwoArgumentArithmeticOperator {
 	 *            the second argument to apply this operator to
 	 * @param context
 	 *            the context in which to evaluate the application
-	 * @return the literal result of applying this operator to the given arguments
+	 * @return the result of applying this operator to the given arguments
 	 */
-	public Literal apply(final Number argument1, final Number argument2, final ScriptContext context);
+	public Number apply(final Number argument1, final Number argument2, final ScriptContext context);
 }

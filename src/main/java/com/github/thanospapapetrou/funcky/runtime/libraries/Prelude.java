@@ -29,33 +29,61 @@ public class Prelude extends Library {
 	 */
 	private static final URI PRELUDE = URI.create("funcky:prelude");
 
+	/**
+	 * Bottom function.
+	 */
 	public static final String BOTTOM = "bottom";
-	public static final String CHARACTER = "character";
+
+	/**
+	 * Compose two functions.
+	 */
 	public static final String COMPOSE = "compose";
+
+	/**
+	 * Duplicate the argument of a function.
+	 */
 	public static final String DUPLICATE = "duplicate";
+
+	/**
+	 * Flip the arguments of a function.
+	 */
 	public static final String FLIP = "flip";
+
+	/**
+	 * Construct a function type.
+	 */
 	public static final String FUNCTION = "function";
+
+	/**
+	 * Identity function.
+	 */
 	public static final String IDENTITY = "identity";
 	public static final String LIST = "list";
 	public static final String PAIR = "pair";
 	public static final String PRODUCT = "product";
+
+	/**
+	 * Type of types.
+	 */
 	public static final String TYPE = "type";
+
+	/**
+	 * Get the type of an expression.
+	 */
 	public static final String TYPE_OF = "typeOf";
 
 	/**
-	 * Construct and load a new prelude library.
+	 * Construct a new prelude library.
 	 * 
 	 * @param engine
-	 *            the engine loading this prelude library
+	 *            the engine constructing this prelude library
 	 * @throws ScriptException
-	 *             if any errors occur while loading this prelude library
+	 *             if any errors occur while constructing this prelude library
 	 */
 	public Prelude(final FunckyScriptEngine engine) throws ScriptException {
 		super(engine);
 		final SimpleType typeType = getSimpleType(PRELUDE, TYPE);
 		addDefinition(typeType);
-		addDefinition(getSimpleType(PRELUDE, CHARACTER));
-		// functions
 		addFunctionDefinition(BOTTOM, getTypeVariable(), getTypeVariable(), new ApplicableFunction() {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
@@ -103,7 +131,7 @@ public class Prelude extends Library {
 		});
 		addFunctorDefinition(FUNCTION, new ApplicableFunctor() {
 			@Override
-			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
+			public FunctionType apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				return new FunctionType(engine, (Type) arguments[0].eval(context), (Type) arguments[1].eval(context));
 			}
 		}, typeType, typeType, typeType);
@@ -111,7 +139,7 @@ public class Prelude extends Library {
 		final TypeVariable productType2 = getTypeVariable();
 		addFunctorDefinition(PRODUCT, new ApplicableFunctor() {
 			@Override
-			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
+			public Pair apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				return new Pair(engine, arguments[0].eval(context), arguments[1].eval(context));
 			}
 		}, productType1, productType2, new PairType(engine, productType1, productType2));
