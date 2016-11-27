@@ -11,9 +11,7 @@ import com.github.thanospapapetrou.funcky.runtime.functors.ApplicableFunctor;
 import com.github.thanospapapetrou.funcky.runtime.literals.ApplicableFunction;
 import com.github.thanospapapetrou.funcky.runtime.literals.Function;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
-import com.github.thanospapapetrou.funcky.runtime.literals.Pair;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.PairType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
@@ -24,11 +22,6 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
  * @author thanos
  */
 public class Prelude extends Library {
-	/**
-	 * The URI of the prelude library.
-	 */
-	private static final URI PRELUDE = URI.create("funcky:prelude");
-
 	/**
 	 * Bottom function.
 	 */
@@ -59,8 +52,6 @@ public class Prelude extends Library {
 	 */
 	public static final String IDENTITY = "identity";
 	public static final String LIST = "list";
-	public static final String PAIR = "pair";
-	public static final String PRODUCT = "product";
 
 	/**
 	 * Type of types.
@@ -71,6 +62,8 @@ public class Prelude extends Library {
 	 * Get the type of an expression.
 	 */
 	public static final String TYPE_OF = "typeOf";
+
+	private static final URI PRELUDE = URI.create("funcky:prelude");
 
 	/**
 	 * Construct a new prelude library.
@@ -135,13 +128,5 @@ public class Prelude extends Library {
 				return new FunctionType(engine, (Type) arguments[0].eval(context), (Type) arguments[1].eval(context));
 			}
 		}, typeType, typeType, typeType);
-		final TypeVariable productType1 = getTypeVariable();
-		final TypeVariable productType2 = getTypeVariable();
-		addFunctorDefinition(PRODUCT, new ApplicableFunctor() {
-			@Override
-			public Pair apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				return new Pair(engine, arguments[0].eval(context), arguments[1].eval(context));
-			}
-		}, productType1, productType2, new PairType(engine, productType1, productType2));
 	}
 }

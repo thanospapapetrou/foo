@@ -1,0 +1,45 @@
+prelude: funcky:prelude
+
+# Construct a new pair type.
+# {funcky:prelude}function {funcky:prelude}type ({funcky:prelude}function {funcky:prelude}type {funcky:prelude}type)
+# pair type1 type2
+# type1 the first type
+# type2 the second type
+# return a new pair type with type1 as first type and type2 as second
+# pair = ...
+
+# Get the first type of a pair type.
+# {funcky:prelude}function {funcky:prelude}type {funcky:prelude}type
+# firstType pairType
+# pairType the pair type whose first type to retrieve
+# return the first type of the given pair type
+# firstType = ...
+
+# Get the second type of a pair type.
+# {funcky:prelude}function {funcky:prelude}type {funcky:prelude}type
+# secondType pairType
+# pairType the pair type whose second type to retrieve
+# return the second type of the given pair type
+# secondType = ...
+
+# Construct a new pair.
+# {funcky:prelude}function $type1 ({funcky:prelude}function $type2 ({funcky:pairs}pair $type1 $type2))
+# combine firstValue secondValue
+# firstValue the first value of the pair
+# secondValue the second value of the pair
+# return a new pair having firstValue as its first value and secondValue as its second
+# combine = ...
+
+# Get the first value of a pair.
+# {funcky:prelude}function ({funcky:pairs}pair $type1 $type2) $type1
+# first pairValue
+# pairValue the pair whose first value to retrieve
+# return the first value of the given pair
+# first = ...
+
+# Get the second value of a pair.
+# {funcky:prelude}function ({funcky:pairs}pair $type1 $type2) $type2
+# second pairValue
+# pairValue the pair whose second value to retrieve
+# return the second value of the given pair
+# second = ...

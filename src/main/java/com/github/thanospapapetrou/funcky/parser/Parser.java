@@ -22,7 +22,7 @@ import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.Import;
 import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.Script;
-import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
+import com.github.thanospapapetrou.funcky.runtime.libraries.Pairs;
 import com.github.thanospapapetrou.funcky.runtime.literals.Character;
 import com.github.thanospapapetrou.funcky.runtime.literals.Number;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
@@ -170,7 +170,7 @@ public class Parser {
 			tokenizer.wordChars(word, word);
 		}
 	}
-	
+
 	private void initializeForUris() {
 		tokenizer.resetSyntax();
 		tokenizer.eolIsSignificant(true);
@@ -187,7 +187,7 @@ public class Parser {
 			tokenizer.wordChars(uri, uri);
 		}
 	}
-	
+
 	private Character parseCharacter() throws ScriptException {
 		parseExpectedTokens(Token.CHARACTER);
 		if (tokenizer.sval.length() != 1) {
@@ -306,7 +306,7 @@ public class Parser {
 		parseExpectedTokens(Token.COMMA);
 		final Expression second = parseExpression(Token.RIGHT_ANGLE_BRACKET);
 		parseExpectedTokens(Token.RIGHT_ANGLE_BRACKET);
-		return new Application(engine, script, tokenizer.lineno(), new Application(engine, script, tokenizer.lineno(), engine.getReference(Prelude.class, Prelude.PRODUCT), first), second);
+		return new Application(engine, script, tokenizer.lineno(), new Application(engine, script, tokenizer.lineno(), engine.getReference(Pairs.class, Pairs.COMBINE), first), second);
 	}
 
 	private Reference parseReference() throws ScriptException {

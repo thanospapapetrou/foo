@@ -7,7 +7,7 @@ import java.util.Objects;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Application;
-import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
+import com.github.thanospapapetrou.funcky.runtime.libraries.Pairs;
 
 /**
  * Class representing a Funcky pair type.
@@ -100,7 +100,7 @@ public class PairType extends Type {
 
 	@Override
 	public Application toExpression() {
-		return engine.getApplication(engine.getApplication(engine.getReference(Prelude.class, Prelude.PAIR), first), second);
+		return engine.getApplication(engine.getApplication(engine.getReference(Pairs.class, Pairs.PAIR), first), second);
 	}
 
 	@Override

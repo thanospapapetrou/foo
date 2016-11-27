@@ -29,6 +29,7 @@ import com.github.thanospapapetrou.funcky.runtime.libraries.Booleans;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Characters;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Library;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Numbers;
+import com.github.thanospapapetrou.funcky.runtime.libraries.Pairs;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
 import com.github.thanospapapetrou.funcky.runtime.libraries.UnknownBuiltinLibraryException;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
@@ -45,7 +46,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	public static final URI RUNTIME = URI.create("funcky:runtime");
 
 	@SuppressWarnings("unchecked")
-	private static final Class<Library>[] BUILTIN_LIBRARIES = (Class<Library>[]) new Class<?>[] {Prelude.class, Booleans.class, Numbers.class, Characters.class};
+	private static final Class<Library>[] BUILTIN_LIBRARIES = (Class<Library>[]) new Class<?>[] {Prelude.class, Booleans.class, Numbers.class, Characters.class, Pairs.class};
 	private static final String EMPTY_NAME = "Name must not be empty";
 	private static final String EMPTY_PREFIX = "Prefix must not be empty";
 	private static final String IMPORTS = "%1$s.imports";
