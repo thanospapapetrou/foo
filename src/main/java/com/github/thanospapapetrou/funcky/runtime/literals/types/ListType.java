@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.Application;
-import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
+import com.github.thanospapapetrou.funcky.runtime.libraries.Lists;
 
 /**
  * Class representing a Funcky list type.
@@ -69,7 +69,7 @@ public class ListType extends Type {
 
 	@Override
 	public Application toExpression() {
-		return engine.getApplication(engine.getReference(Prelude.class, Prelude.LIST), element);
+		return engine.getApplication(engine.getReference(Lists.class, Lists.LIST), element);
 	}
 
 	@Override

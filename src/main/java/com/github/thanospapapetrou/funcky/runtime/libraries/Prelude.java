@@ -51,7 +51,6 @@ public class Prelude extends Library {
 	 * Identity function.
 	 */
 	public static final String IDENTITY = "identity";
-	public static final String LIST = "list";
 
 	/**
 	 * Type of types.

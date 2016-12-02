@@ -1,0 +1,32 @@
+# list tests
+{funcky:booleans}equal ({funcky:prelude}typeOf {funcky:lists}list) ({funcky:prelude}function {funcky:prelude}type {funcky:prelude}type)
+
+# element tests
+{funcky:booleans}equal ({funcky:prelude}typeOf {funcky:lists}element) ({funcky:prelude}function {funcky:prelude}type {funcky:prelude}type)
+{funcky:booleans}equal ({funcky:lists}element ({funcky:lists}list {funcky:prelude}type)) {funcky:prelude}type
+{funcky:booleans}equal ({funcky:lists}element ({funcky:lists}list {funcky:numbers}number)) {funcky:numbers}number
+
+# empty tests
+{funcky:booleans}equivalent ({funcky:prelude}typeOf {funcky:lists}empty) ({funcky:lists}list $type)
+{funcky:booleans}equal {funcky:lists}empty []
+
+# head tests
+{funcky:booleans}equivalent ({funcky:prelude}typeOf {funcky:lists}head) ({funcky:prelude}function ({funcky:lists}list $type) $type)
+{funcky:booleans}equal ({funcky:lists}head [{funcky:prelude}type]) {funcky:prelude}type
+{funcky:booleans}equal ({funcky:lists}head [{funcky:prelude}type, {funcky:booleans}boolean]) {funcky:prelude}type
+{funcky:booleans}equal ({funcky:lists}head [0]) 0
+{funcky:booleans}equal ({funcky:lists}head [0, 1]) 0
+
+# tail tests
+{funcky:booleans}equivalent ({funcky:prelude}typeOf {funcky:lists}tail) ({funcky:prelude}function $type ({funcky:lists}list $type))
+{funcky:booleans}equal ({funcky:lists}tail [{funcky:prelude}type]) []
+{funcky:booleans}equal ({funcky:lists}tail [{funcky:prelude}type, {funcky:booleans}boolean]) [{funcky:booleans}boolean]
+{funcky:booleans}equal ({funcky:lists}tail [0]) []
+{funcky:booleans}equal ({funcky:lists}tail [0, 1]) [1]
+
+# Prepend an element to a list.
+{funcky:booleans}equivalent ({funcky:prelude}typeOf {funcky:lists}prepend) ({funcky:prelude}function $type ({funcky:prelude}function ({funcky:lists}list $type) ({funcky:lists}list $type)))
+{funcky:booleans}equal ({funcky:lists}prepend {funcky:prelude}type []) [{funcky:prelude}type]
+{funcky:booleans}equal ({funcky:lists}prepend {funcky:prelude}type [{funcky:booleans}boolean]) [{funcky:prelude}type, {funcky:booleans}boolean]
+{funcky:booleans}equal ({funcky:lists}prepend 0 []) [0]
+{funcky:booleans}equal ({funcky:lists}prepend 0 [1]) [0, 1]

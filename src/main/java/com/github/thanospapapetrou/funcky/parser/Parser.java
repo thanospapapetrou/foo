@@ -6,7 +6,6 @@ import java.io.StreamTokenizer;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import javax.script.ScriptException;
@@ -22,8 +21,10 @@ import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.Import;
 import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.Script;
+import com.github.thanospapapetrou.funcky.runtime.libraries.Lists;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Pairs;
 import com.github.thanospapapetrou.funcky.runtime.literals.Character;
+import com.github.thanospapapetrou.funcky.runtime.literals.List;
 import com.github.thanospapapetrou.funcky.runtime.literals.Number;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
 
@@ -122,8 +123,8 @@ public class Parser {
 	 *             if any errors occur
 	 */
 	public Script parseScript() throws ScriptException {
-		final List<Import> imports = new ArrayList<>();
-		final List<Definition> definitions = new ArrayList<>();
+		final java.util.List<Import> imports = new ArrayList<>();
+		final java.util.List<Definition> definitions = new ArrayList<>();
 		while (true) {
 			switch (parseExpectedTokens(Token.EOF, Token.EOL, Token.SYMBOL)) {
 			case EOF:
@@ -196,12 +197,12 @@ public class Parser {
 		return new Character(engine, script, tokenizer.lineno(), tokenizer.sval.charAt(0));
 	}
 
-	private List<Expression> parseElements() throws ScriptException {
-		final List<Expression> expressions = new ArrayList<>();
+	private Expression parseElements() throws ScriptException {
+		Expression list = new List(engine);
 		while (true) {
-			expressions.add(parseExpression(Token.COMMA, Token.RIGHT_SQUARE_BRACKET));
+			list = new Application(engine, script, tokenizer.lineno(), new Application(engine, script, tokenizer.lineno(), engine.getReference(Lists.class, Lists.APPEND), list), parseExpression(Token.COMMA, Token.RIGHT_SQUARE_BRACKET));
 			if (parseExpectedTokens(Token.COMMA, Token.RIGHT_SQUARE_BRACKET) == Token.RIGHT_SQUARE_BRACKET) {
-				return expressions;
+				return list;
 			}
 		}
 	}
@@ -275,17 +276,13 @@ public class Parser {
 		}
 	}
 
-	private Expression parseList() throws ScriptException { // TODO change return type
+	private Expression parseList() throws ScriptException {
 		parseExpectedTokens(Token.LEFT_SQUARE_BRACKET);
 		if (parseExpectedTokens(Token.CHARACTER, Token.DOLLAR, Token.LEFT_ANGLE_BRACKET, Token.LEFT_CURLY_BRACKET, Token.LEFT_PARENTHESIS, Token.LEFT_SQUARE_BRACKET, Token.NUMBER, Token.RIGHT_SQUARE_BRACKET, Token.STRING, Token.SYMBOL) == Token.RIGHT_SQUARE_BRACKET) {
-			// TODO return empty list
-			return null;
+			return new List(engine);
 		}
 		tokenizer.pushBack();
-		final List<Expression> elements = parseElements();
-		parseExpectedTokens(Token.RIGHT_SQUARE_BRACKET);
-		// TODO return elements
-		return null;
+		return parseElements();
 	}
 
 	private Expression parseNestedExpression() throws ScriptException {
@@ -363,10 +360,9 @@ public class Parser {
 		}
 	}
 
-	private Expression parseString() throws ScriptException {
+	private List parseString() throws ScriptException {
 		parseExpectedTokens(Token.STRING);
-		// return new List(tokenizer.sval,... TODO retun new list of chars
-		return null;
+		return tokenizer.sval.isEmpty() ? new List(engine) : new List(engine, tokenizer.sval);
 	}
 
 	private TypeVariable parseTypeVariable() throws ScriptException {
