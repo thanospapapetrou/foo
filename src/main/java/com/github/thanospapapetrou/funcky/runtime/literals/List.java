@@ -16,12 +16,13 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
  */
 public class List extends Literal {
 	private static final String EMPTY_STRING = "String must not be empty";
+	private static final String LEFT_SQUARE_BRACKET = "[";
 	private static final String LIST_DELIMITER = ", ";
-	private static final String LIST_END = "]";
-	private static final String LIST_START = "[";
 	private static final String NULL_HEAD = "Head must not be null";
 	private static final String NULL_STRING = "String must not be null";
 	private static final String NULL_TAIL = "Tail must not be null";
+	private static final String QUOTATION_MARK = "\"";
+	private static final String RIGHT_SQUARE_BRACKET = "]";
 
 	private final Literal head;
 	private final List tail;
@@ -113,13 +114,12 @@ public class List extends Literal {
 
 	@Override
 	public String toString() {
-		final StringBuilder string = new StringBuilder(LIST_START);
-		if (head != null) {
-			string.append(head.toString());
-			for (List list = tail; list.head != null; list = list.tail) {
-				string.append(LIST_DELIMITER).append(list.head.toString());
-			}
+		final boolean isString = head instanceof Character;
+		final StringBuilder string = new StringBuilder(isString ? QUOTATION_MARK : LEFT_SQUARE_BRACKET);
+		for (List list = this; list.head != null; list = list.tail) {
+			string.append(isString ? ((Character) list.head).getValue() : list.head.toString()).append(isString ? "" : LIST_DELIMITER);
 		}
-		return string.append(LIST_END).toString();
+		string.setLength(string.length() - (isString ? 0 : LIST_DELIMITER.length()));
+		return string.append(isString ? QUOTATION_MARK : RIGHT_SQUARE_BRACKET).toString();
 	}
 }
