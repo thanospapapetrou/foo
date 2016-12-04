@@ -81,6 +81,8 @@ public class Numbers extends Library {
 	public static final String SUBTRACT = "subtract";
 
 	private static final URI NUMBERS = Library.getUri(Numbers.class);
+	
+	private final SimpleType numberType;
 
 	/**
 	 * Construct a new numbers library.
@@ -92,7 +94,7 @@ public class Numbers extends Library {
 	 */
 	public Numbers(final FunckyScriptEngine engine) throws ScriptException {
 		super(engine);
-		final SimpleType numberType = getSimpleType(NUMBERS, NUMBER);
+		numberType = getSimpleType(NUMBERS, NUMBER);
 		addDefinition(numberType);
 		addDefinition(getNumber(Double.POSITIVE_INFINITY));
 		addDefinition(getNumber(Double.NaN));
@@ -111,25 +113,25 @@ public class Numbers extends Library {
 				return new Number(engine, (Double.isInfinite(value) || Double.isNaN(value)) ? value : (int) value);
 			}
 		});
-		addTwoArgumentArithmeticOperatorDefinition(ADD, numberType, new ApplicableTwoArgumentArithmeticOperator() {
+		addTwoArgumentArithmeticOperatorDefinition(ADD, new ApplicableTwoArgumentArithmeticOperator() {
 			@Override
 			public Number apply(final Number term1, final Number term2, final ScriptContext context) {
 				return new Number(engine, term1.getValue() + term2.getValue());
 			}
 		});
-		addTwoArgumentArithmeticOperatorDefinition(SUBTRACT, numberType, new ApplicableTwoArgumentArithmeticOperator() {
+		addTwoArgumentArithmeticOperatorDefinition(SUBTRACT, new ApplicableTwoArgumentArithmeticOperator() {
 			@Override
 			public Number apply(final Number minuend, final Number subtrahend, final ScriptContext context) {
 				return new Number(engine, minuend.getValue() - subtrahend.getValue());
 			}
 		});
-		addTwoArgumentArithmeticOperatorDefinition(MULTIPLY, numberType, new ApplicableTwoArgumentArithmeticOperator() {
+		addTwoArgumentArithmeticOperatorDefinition(MULTIPLY, new ApplicableTwoArgumentArithmeticOperator() {
 			@Override
 			public Number apply(final Number factor1, final Number factor2, final ScriptContext context) {
 				return new Number(engine, factor1.getValue() * factor2.getValue());
 			}
 		});
-		addTwoArgumentArithmeticOperatorDefinition(DIVIDE, numberType, new ApplicableTwoArgumentArithmeticOperator() {
+		addTwoArgumentArithmeticOperatorDefinition(DIVIDE, new ApplicableTwoArgumentArithmeticOperator() {
 			@Override
 			public Number apply(final Number dividend, final Number divisor, final ScriptContext context) {
 				return new Number(engine, dividend.getValue() / divisor.getValue());
@@ -137,7 +139,7 @@ public class Numbers extends Library {
 		});
 	}
 
-	private void addTwoArgumentArithmeticOperatorDefinition(final String name, final SimpleType numberType, final ApplicableTwoArgumentArithmeticOperator operator) throws ScriptException { // TODO move this one level down in class hierarchy and remove number type
+	private void addTwoArgumentArithmeticOperatorDefinition(final String name, final ApplicableTwoArgumentArithmeticOperator operator) throws ScriptException { // TODO move this one level down in class hierarchy and remove number type
 		addDefinition(new TwoArgumentArithmeticOperator(engine, NUMBERS, name, numberType) {
 			@Override
 			public Number apply(final Number argument1, final Number argument2, final ScriptContext context) {
