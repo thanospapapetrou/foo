@@ -81,7 +81,7 @@ public class Numbers extends Library {
 	public static final String SUBTRACT = "subtract";
 
 	private static final URI NUMBERS = Library.getUri(Numbers.class);
-	
+
 	private final SimpleType numberType;
 
 	/**
@@ -139,7 +139,7 @@ public class Numbers extends Library {
 		});
 	}
 
-	private void addTwoArgumentArithmeticOperatorDefinition(final String name, final ApplicableTwoArgumentArithmeticOperator operator) throws ScriptException { // TODO move this one level down in class hierarchy and remove number type
+	private void addTwoArgumentArithmeticOperatorDefinition(final String name, final ApplicableTwoArgumentArithmeticOperator operator) throws ScriptException {
 		addDefinition(new TwoArgumentArithmeticOperator(engine, NUMBERS, name, numberType) {
 			@Override
 			public Number apply(final Number argument1, final Number argument2, final ScriptContext context) {

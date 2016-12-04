@@ -36,13 +36,15 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
  * @author thanos
  */
 public abstract class Library extends Script {
-	private static final int CURRENT_LIBRARY = 3;
 	private static final String EMPTY_NAME = "Name must not be empty";
+	private static final String ERROR_RETRIEVING_URI_FOR_CURRENT_LIBRARY = "Error retrieving URI corresponding to current library class";
+	private static final String ERROR_RETRIEVING_URI_FOR_LIBRARY = "Error retrieving URI corresponding to library class %1$s";
 	private static final String NULL_DOMAIN = "Domain must not be null";
 	private static final String NULL_ENGINE = "Engine must not be null";
 	private static final String NULL_LITERAL = "Literal must not be null";
 	private static final String NULL_NAME = "Name must not be null";
 	private static final String NULL_RANGE = "Range must not be null";
+	private static final String OUTSIDE_LIBRARY_CONTEXT = String.format("Method %1$s.getUri() should not be called outside the context of a library class", Library.class.getName());
 	private static final String SCRIPT = "/%1$s.funcky";
 
 	/**
@@ -56,16 +58,22 @@ public abstract class Library extends Script {
 		try {
 			return new URI(new FunckyScriptEngineFactory().getExtensions().get(0), library.getSimpleName().toLowerCase(Locale.ROOT), null);
 		} catch (final URISyntaxException e) {
-			throw new RuntimeException(e); // TODO add message
+			throw new RuntimeException(String.format(ERROR_RETRIEVING_URI_FOR_LIBRARY, library.getName()), e);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private static URI getUri() {
 		try {
-			return getUri((Class<? extends Library>) Class.forName(Thread.currentThread().getStackTrace()[CURRENT_LIBRARY].getClassName()));
+			for (final StackTraceElement element : Thread.currentThread().getStackTrace()) {
+				final Class<?> clazz = Class.forName(element.getClassName());
+				if (Library.class.isAssignableFrom(clazz) && (!Library.class.equals(clazz))) {
+					return getUri((Class<? extends Library>) clazz);
+				}
+			}
+			throw new IllegalStateException(OUTSIDE_LIBRARY_CONTEXT);
 		} catch (final ClassNotFoundException e) {
-			throw new RuntimeException(e); // TODO add message
+			throw new RuntimeException(ERROR_RETRIEVING_URI_FOR_CURRENT_LIBRARY, e);
 		}
 	}
 
@@ -117,6 +125,18 @@ public abstract class Library extends Script {
 		addDefinition(((Reference) Objects.requireNonNull(literal, NULL_LITERAL).toExpression()).getName(), literal);
 	}
 
+	/**
+	 * Add a new function definition to this library.
+	 * 
+	 * @param name
+	 *            the name of the function to define
+	 * @param domain
+	 *            the domain of the function to define
+	 * @param range
+	 *            the range of the function to define
+	 * @param function
+	 *            the implementation of the function to define
+	 */
 	protected void addFunctionDefinition(final String name, final Type domain, final Type range, final ApplicableFunction function) {
 		addDefinition(new Function(engine, getUri(), name, getFunctionType(domain, range)) {
 			@Override
@@ -127,6 +147,16 @@ public abstract class Library extends Script {
 		});
 	}
 
+	/**
+	 * Add a new functor definition to this library.
+	 * 
+	 * @param name
+	 *            the name of the functor to define
+	 * @param functor
+	 *            the implementation of the functor to define
+	 * @param types
+	 *            the types of the functor to define
+	 */
 	protected void addFunctorDefinition(final String name, final ApplicableFunctor functor, final Type... types) {
 		addDefinition(new Functor(engine, getUri(), name, types) {
 			@Override
@@ -137,14 +167,37 @@ public abstract class Library extends Script {
 		});
 	}
 
+	/**
+	 * Generate a new function type.
+	 * 
+	 * @param domain
+	 *            the domain of the function type to generate
+	 * @param range
+	 *            the range of the function type to generate
+	 * @return a new function type with the given domain and range
+	 */
 	protected FunctionType getFunctionType(final Type domain, final Type range) {
 		return new FunctionType(engine, Objects.requireNonNull(domain, NULL_DOMAIN), Objects.requireNonNull(range, NULL_RANGE));
 	}
 
+	/**
+	 * Generate a new simple type.
+	 * 
+	 * @param script
+	 *            the URI of the script of the simple type to generate
+	 * @param name
+	 *            the name of the simple type to generate
+	 * @return a new simple type with the given script URI and name
+	 */
 	protected SimpleType getSimpleType(final URI script, final String name) {
 		return new SimpleType(engine, script, name);
 	}
 
+	/**
+	 * Generate a new type variable.
+	 * 
+	 * @return a new type variable
+	 */
 	protected TypeVariable getTypeVariable() {
 		return new TypeVariable(engine);
 	}
