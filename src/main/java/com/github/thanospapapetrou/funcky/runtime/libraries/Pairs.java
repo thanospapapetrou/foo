@@ -64,7 +64,7 @@ public class Pairs extends Library {
 		addFunctorDefinition(PAIR, new ApplicableFunctor() {
 			@Override
 			public PairType apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				return new PairType(engine, ((Type) arguments[0].eval(context)), ((Type) arguments[1].eval(context)));
+				return new PairType(engine, (Type) arguments[0].eval(context), (Type) arguments[1].eval(context));
 			}
 		}, type, type, type);
 		addFunctionDefinition(FIRST_TYPE, type, type, new ApplicableFunction() {

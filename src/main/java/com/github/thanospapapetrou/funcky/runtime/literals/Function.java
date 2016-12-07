@@ -39,9 +39,10 @@ public abstract class Function extends Literal implements ApplicableFunction {
 	 */
 	public Function(final FunckyScriptEngine engine, final URI script, final String name, final FunctionType type) {
 		super(engine, script, 0);
-		if ((this.name = Objects.requireNonNull(name, NULL_NAME)).isEmpty()) {
+		if (Objects.requireNonNull(name, NULL_NAME).isEmpty()) {
 			throw new IllegalArgumentException(EMPTY_NAME);
 		}
+		this.name = name;
 		this.type = Objects.requireNonNull(type, NULL_TYPE);
 	}
 

@@ -36,10 +36,6 @@ public class Character extends Literal {
 		ESCAPES.put('\\', "\\\\");
 	}
 
-	private static String escape(final char character) {
-		return ESCAPES.containsKey(character) ? ESCAPES.get(character) : (CONTROL.matcher(java.lang.Character.toString(character)).matches() ? String.format(OCTAL, (int) character) : java.lang.Character.toString(character));
-	}
-
 	/**
 	 * Construct a new character.
 	 * 
@@ -67,6 +63,10 @@ public class Character extends Literal {
 	 */
 	public Character(final FunckyScriptEngine engine, final char value) {
 		this(engine, FunckyScriptEngine.RUNTIME, 0, value);
+	}
+
+	private static String escape(final char character) {
+		return ESCAPES.containsKey(character) ? ESCAPES.get(character) : (CONTROL.matcher(java.lang.Character.toString(character)).matches() ? String.format(OCTAL, (int) character) : java.lang.Character.toString(character));
 	}
 
 	@Override

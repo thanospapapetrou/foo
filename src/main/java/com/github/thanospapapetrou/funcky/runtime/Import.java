@@ -38,9 +38,10 @@ public class Import extends AbstractSyntaxTreeNode {
 	 */
 	public Import(final FunckyScriptEngine engine, final URI script, final int line, final String prefix, final URI uri) {
 		super(engine, script, line);
-		if ((this.prefix = Objects.requireNonNull(prefix, NULL_PREFIX)).isEmpty()) {
+		if (Objects.requireNonNull(prefix, NULL_PREFIX).isEmpty()) {
 			throw new IllegalArgumentException(EMPTY_PREFIX);
 		}
+		this.prefix = prefix;
 		this.uri = Objects.requireNonNull(uri, NULL_URI);
 	}
 

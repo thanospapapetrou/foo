@@ -88,9 +88,9 @@ public class Number extends Literal {
 
 	@Override
 	public Expression toExpression() {
-		if ((value == Double.POSITIVE_INFINITY)) {
+		if (value == Double.POSITIVE_INFINITY) {
 			return engine.getReference(Numbers.class, Numbers.INFINITY);
-		} else if ((value == Double.NEGATIVE_INFINITY)) {
+		} else if (value == Double.NEGATIVE_INFINITY) {
 			return engine.getApplication(engine.getReference(Numbers.class, Numbers.MINUS), engine.getReference(Numbers.class, Numbers.INFINITY));
 		} else if (Double.isNaN(value)) {
 			return engine.getReference(Numbers.class, Numbers.NAN);

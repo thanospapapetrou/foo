@@ -27,13 +27,6 @@ public class List extends Literal {
 	private final Literal head;
 	private final List tail;
 
-	private static String requireValidString(final String string) {
-		if (Objects.requireNonNull(string, NULL_STRING).isEmpty()) {
-			throw new IllegalArgumentException(EMPTY_STRING);
-		}
-		return string;
-	}
-
 	/**
 	 * Construct a new list.
 	 * 
@@ -72,6 +65,13 @@ public class List extends Literal {
 	 */
 	public List(final FunckyScriptEngine engine, final String string) {
 		this(engine, new Character(engine, requireValidString(string).charAt(0)), string.substring(1).isEmpty() ? new List(engine) : new List(engine, string.substring(1)));
+	}
+
+	private static String requireValidString(final String string) {
+		if (Objects.requireNonNull(string, NULL_STRING).isEmpty()) {
+			throw new IllegalArgumentException(EMPTY_STRING);
+		}
+		return string;
 	}
 
 	@Override

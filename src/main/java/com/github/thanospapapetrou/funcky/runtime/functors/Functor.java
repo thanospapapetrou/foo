@@ -31,20 +31,6 @@ public abstract class Functor extends Function implements ApplicableFunctor {
 
 	private final Type[] types;
 
-	private static FunctionType getFunctionType(final FunckyScriptEngine engine, final URI script, final Type... types) {
-		return new FunctionType(engine, types[0], (types.length == FUNCTION_TYPES) ? types[1] : getFunctionType(engine, script, Arrays.copyOfRange(types, 1, types.length)));
-	}
-
-	private static Type[] requireValidTypes(final Type[] types) {
-		if ((Objects.requireNonNull(types, NULL_TYPES)).length < FUNCTION_TYPES) {
-			throw new IllegalArgumentException(String.format(LESS_TYPES, FUNCTION_TYPES));
-		}
-		for (int i = 0; i < types.length; i++) {
-			Objects.requireNonNull(types[i], String.format(NULL_TYPE, i));
-		}
-		return types;
-	}
-
 	/**
 	 * Construct a new functor.
 	 * 
@@ -60,6 +46,20 @@ public abstract class Functor extends Function implements ApplicableFunctor {
 	public Functor(final FunckyScriptEngine engine, final URI script, final String name, final Type... types) {
 		super(engine, script, name, getFunctionType(engine, script, requireValidTypes(types)));
 		this.types = types;
+	}
+
+	private static FunctionType getFunctionType(final FunckyScriptEngine engine, final URI script, final Type... types) {
+		return new FunctionType(engine, types[0], (types.length == FUNCTION_TYPES) ? types[1] : getFunctionType(engine, script, Arrays.copyOfRange(types, 1, types.length)));
+	}
+
+	private static Type[] requireValidTypes(final Type[] types) {
+		if ((Objects.requireNonNull(types, NULL_TYPES)).length < FUNCTION_TYPES) {
+			throw new IllegalArgumentException(String.format(LESS_TYPES, FUNCTION_TYPES));
+		}
+		for (int i = 0; i < types.length; i++) {
+			Objects.requireNonNull(types[i], String.format(NULL_TYPE, i));
+		}
+		return types;
 	}
 
 	@Override

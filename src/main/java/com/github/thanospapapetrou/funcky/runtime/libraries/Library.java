@@ -48,6 +48,25 @@ public abstract class Library extends Script {
 	private static final String SCRIPT = "/%1$s.funcky";
 
 	/**
+	 * Construct a new library.
+	 * 
+	 * @param engine
+	 *            the engine constructing this library
+	 * @throws ScriptException
+	 *             if any errors occur while constructing this library
+	 */
+	public Library(final FunckyScriptEngine engine) throws ScriptException {
+		super(Objects.requireNonNull(engine, NULL_ENGINE), getUri(), 0, new ArrayList<Import>(), new ArrayList<Definition>());
+		try (final InputStreamReader reader = new InputStreamReader(Library.class.getResourceAsStream(String.format(SCRIPT, getClass().getSimpleName())), StandardCharsets.UTF_8)) {
+			final Script script = new Parser(engine, reader, getUri(getClass())).parseScript();
+			imports.addAll(script.getImports());
+			definitions.addAll(script.getDefinitions());
+		} catch (final IOException e) {
+			throw new ScriptException(e);
+		}
+	}
+
+	/**
 	 * Get the namespace URI corresponding to a library.
 	 * 
 	 * @param library
@@ -82,25 +101,6 @@ public abstract class Library extends Script {
 			throw new IllegalArgumentException(EMPTY_NAME);
 		}
 		return name;
-	}
-
-	/**
-	 * Construct a new library.
-	 * 
-	 * @param engine
-	 *            the engine constructing this library
-	 * @throws ScriptException
-	 *             if any errors occur while constructing this library
-	 */
-	public Library(final FunckyScriptEngine engine) throws ScriptException {
-		super(Objects.requireNonNull(engine, NULL_ENGINE), getUri(), 0, new ArrayList<Import>(), new ArrayList<Definition>());
-		try (final InputStreamReader reader = new InputStreamReader(Library.class.getResourceAsStream(String.format(SCRIPT, getClass().getSimpleName())), StandardCharsets.UTF_8)) {
-			final Script script = new Parser(engine, reader, getUri(getClass())).parseScript();
-			imports.addAll(script.getImports());
-			definitions.addAll(script.getDefinitions());
-		} catch (final IOException e) {
-			throw new ScriptException(e);
-		}
 	}
 
 	/**

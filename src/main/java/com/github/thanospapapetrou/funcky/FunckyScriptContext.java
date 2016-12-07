@@ -32,13 +32,6 @@ public class FunckyScriptContext implements ScriptContext {
 	private Writer writer;
 	private Writer errorWriter;
 
-	private static String requireValidName(final String name) {
-		if (Objects.requireNonNull(name, NULL_NAME).isEmpty()) {
-			throw new IllegalArgumentException(EMPTY_NAME);
-		}
-		return name;
-	}
-
 	/**
 	 * Construct a new script context.
 	 * 
@@ -52,6 +45,13 @@ public class FunckyScriptContext implements ScriptContext {
 		errorWriter = new OutputStreamWriter(System.err, StandardCharsets.UTF_8);
 		setBindings(new SimpleBindings(), ENGINE_SCOPE);
 		setBindings(Objects.requireNonNull(globalScopeBindings, NULL_GLOBAL_SCOPE_BINDINGS), GLOBAL_SCOPE);
+	}
+
+	private static String requireValidName(final String name) {
+		if (Objects.requireNonNull(name, NULL_NAME).isEmpty()) {
+			throw new IllegalArgumentException(EMPTY_NAME);
+		}
+		return name;
 	}
 
 	@Override

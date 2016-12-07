@@ -38,9 +38,10 @@ public class Definition extends AbstractSyntaxTreeNode {
 	 */
 	public Definition(final FunckyScriptEngine engine, final URI script, final int line, final String name, final Expression expression) {
 		super(engine, script, line);
-		if ((this.name = Objects.requireNonNull(name, NULL_NAME)).isEmpty()) {
+		if (Objects.requireNonNull(name, NULL_NAME).isEmpty()) {
 			throw new IllegalArgumentException(EMPTY_NAME);
 		}
+		this.name = name;
 		this.expression = Objects.requireNonNull(expression, NULL_EXPRESSION);
 	}
 

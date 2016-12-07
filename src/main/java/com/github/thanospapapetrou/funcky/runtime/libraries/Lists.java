@@ -69,7 +69,7 @@ public class Lists extends Library {
 		addFunctionDefinition(LIST, type, type, new ApplicableFunction() {
 			@Override
 			public ListType apply(final Expression argument, final ScriptContext context) throws ScriptException {
-				return new ListType(engine, ((Type) argument.eval(context)));
+				return new ListType(engine, (Type) argument.eval(context));
 			}
 		});
 		addFunctionDefinition(ELEMENT, type, type, new ApplicableFunction() {

@@ -21,6 +21,22 @@ public class UnexpectedTokenException extends FunckyException {
 	private static final String UNEXPECTED_TOKEN = "Unexpected %1$s, expected %2$s";
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Construct a new unexpected token exception.
+	 * 
+	 * @param unexpectedToken
+	 *            the unexpected token
+	 * @param script
+	 *            the URI of the script in which the unexpected token was encountered
+	 * @param line
+	 *            the line of the script in which the unexpected token was encountered
+	 * @param expectedTokens
+	 *            the tokens normally expected
+	 */
+	public UnexpectedTokenException(final Token unexpectedToken, final URI script, final int line, final Token... expectedTokens) {
+		super(String.format(UNEXPECTED_TOKEN, Objects.requireNonNull(unexpectedToken, NULL_UNEXPECTED_TOKEN).getName(), or(requireValidExpectedTokens(expectedTokens))), script, line);
+	}
+
 	private static String or(final Token... tokens) {
 		final StringBuilder or = new StringBuilder(tokens[0].getName());
 		for (int i = 1; i < tokens.length; i++) {
@@ -37,21 +53,5 @@ public class UnexpectedTokenException extends FunckyException {
 			Objects.requireNonNull(expectedTokens[i], String.format(NULL_EXPECTED_TOKEN, i));
 		}
 		return expectedTokens;
-	}
-
-	/**
-	 * Construct a new unexpected token exception.
-	 * 
-	 * @param unexpectedToken
-	 *            the unexpected token
-	 * @param script
-	 *            the URI of the script in which the unexpected token was encountered
-	 * @param line
-	 *            the line of the script in which the unexpected token was encountered
-	 * @param expectedTokens
-	 *            the tokens normally expected
-	 */
-	public UnexpectedTokenException(final Token unexpectedToken, final URI script, final int line, final Token... expectedTokens) {
-		super(String.format(UNEXPECTED_TOKEN, Objects.requireNonNull(unexpectedToken, NULL_UNEXPECTED_TOKEN).getName(), or(requireValidExpectedTokens(expectedTokens))), script, line);
 	}
 }

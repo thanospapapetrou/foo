@@ -52,7 +52,8 @@ not = prelude:flip (prelude:flip if false) true
 # boolean2 the second operand
 # return true if both operands are true or false if either of them is false
 # and = if boolean1 (if boolean2 true false) false
-and = ((prelude:flip ((prelude:compose prelude:flip) ((prelude:flip ((prelude:compose prelude:compose) if)) ((prelude:flip ((prelude:flip if) true)) false)))) false)
+# TODO simplify
+and = ((prelude:flip ((prelude:compose prelude:flip) ((prelude:compose (prelude:flip if)) ((prelude:flip ((prelude:flip if) true)) false)))) false)
 
 # Logical alternative denial.
 # prelude:function boolean (prelude:function boolean boolean)
@@ -61,7 +62,7 @@ and = ((prelude:flip ((prelude:compose prelude:flip) ((prelude:flip ((prelude:co
 # boolean2 the second operand
 # return true if either of the two operands is false or false if both of them are true
 # nand boolean1 boolean2 = not (and boolean2 boolean2)
-nand = prelude:compose (prelude:compose not) (prelude:compose and prelude:identity)
+nand = ((prelude:compose (prelude:compose not)) and)
 
 # Logical inclusive disjunction.
 # prelude:function boolean (prelude:function boolean boolean)

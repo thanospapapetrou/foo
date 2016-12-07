@@ -72,13 +72,6 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	private final FunckyScriptEngineFactory factory;
 
-	private static String requireValidString(final String string, final String nullError, final String emptyError) {
-		if (Objects.requireNonNull(string, nullError).isEmpty()) {
-			throw new IllegalArgumentException(emptyError);
-		}
-		return string;
-	}
-
 	/**
 	 * Construct a new script engine.
 	 * 
@@ -90,6 +83,13 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	public FunckyScriptEngine(final FunckyScriptEngineFactory factory, final Bindings globalScopeBindings) {
 		this.factory = Objects.requireNonNull(factory, NULL_FACTORY);
 		setContext(new FunckyScriptContext(Objects.requireNonNull(globalScopeBindings, NULL_GLOBAL_SCOPE_BINDINGS)));
+	}
+
+	private static String requireValidString(final String string, final String nullError, final String emptyError) {
+		if (Objects.requireNonNull(string, nullError).isEmpty()) {
+			throw new IllegalArgumentException(emptyError);
+		}
+		return string;
 	}
 
 	@Override
