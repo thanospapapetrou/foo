@@ -119,7 +119,7 @@ public class List extends Literal {
 		for (List list = this; list.head != null; list = list.tail) {
 			string.append(isString ? ((Character) list.head).getValue() : list.head.toString()).append(isString ? "" : LIST_DELIMITER);
 		}
-		string.setLength(string.length() - (isString ? 0 : LIST_DELIMITER.length()));
+		string.setLength(string.length() - ((head == null) || isString ? 0 : LIST_DELIMITER.length()));
 		return string.append(isString ? QUOTATION_MARK : RIGHT_SQUARE_BRACKET).toString();
 	}
 }
