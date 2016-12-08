@@ -54,7 +54,7 @@ public class Characters extends Library {
 		super(engine);
 		final SimpleType characterType = getSimpleType(CHARACTERS, CHARACTER);
 		addDefinition(characterType);
-		final SimpleType numberType = (SimpleType) engine.getReference(Numbers.class, Numbers.NUMBER).eval();
+		final SimpleType numberType = engine.getLiteral(Numbers.class, Numbers.NUMBER);
 		addFunctorDefinition(CODE_POINT, new ApplicableFunctor() {
 			@Override
 			public Number apply(final ScriptContext context, final Expression... arguments) throws ScriptException {

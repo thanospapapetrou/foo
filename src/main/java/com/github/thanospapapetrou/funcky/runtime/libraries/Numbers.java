@@ -100,10 +100,10 @@ public class Numbers extends Library {
 		addDefinition(getNumber(Double.NaN));
 		addDefinition(PI, getNumber(Math.PI));
 		addDefinition(E, getNumber(Math.E));
-		addFunctionDefinition(IS_NAN, numberType, (SimpleType) engine.getReference(Booleans.class, Booleans.BOOLEAN).eval(), new ApplicableFunction() {
+		addFunctionDefinition(IS_NAN, numberType, engine.<SimpleType> getLiteral(Booleans.class, Booleans.BOOLEAN), new ApplicableFunction() {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
-				return (Literal) (Double.isNaN(((Number) argument.eval(context)).getValue()) ? engine.getReference(Booleans.class, Booleans.TRUE).eval() : engine.getReference(Booleans.class, Booleans.FALSE).eval());
+				return (Literal) (Double.isNaN(((Number) argument.eval(context)).getValue()) ? engine.getLiteral(Booleans.class, Booleans.TRUE) : engine.getLiteral(Booleans.class, Booleans.FALSE));
 			}
 		});
 		addFunctionDefinition(INTEGER, numberType, numberType, new ApplicableFunction() {

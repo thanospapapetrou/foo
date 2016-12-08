@@ -77,7 +77,7 @@ public class Character extends Literal {
 	@Override
 	public SimpleType getType(final ScriptContext context) throws ScriptException {
 		super.getType(context);
-		return (SimpleType) engine.getReference(Characters.class, Characters.CHARACTER).eval(context);
+		return engine.getLiteral(Characters.class, Characters.CHARACTER);
 	}
 
 	/**

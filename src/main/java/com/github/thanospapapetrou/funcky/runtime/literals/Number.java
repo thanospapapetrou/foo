@@ -69,7 +69,7 @@ public class Number extends Literal {
 	@Override
 	public SimpleType getType(final ScriptContext context) throws ScriptException {
 		super.getType(context);
-		return (SimpleType) engine.getReference(Numbers.class, Numbers.NUMBER).eval(context);
+		return engine.getLiteral(Numbers.class, Numbers.NUMBER);
 	}
 
 	/**

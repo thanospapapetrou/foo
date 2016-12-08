@@ -51,7 +51,7 @@ public abstract class Type extends Literal {
 	@Override
 	public SimpleType getType(final ScriptContext context) throws ScriptException {
 		super.getType(context);
-		return (SimpleType) engine.getReference(Prelude.class, Prelude.TYPE).eval(context);
+		return engine.getLiteral(Prelude.class, Prelude.TYPE);
 	}
 
 	/**

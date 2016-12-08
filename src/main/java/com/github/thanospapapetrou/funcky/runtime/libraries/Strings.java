@@ -11,6 +11,11 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
  */
 public class Strings extends Library {
 	/**
+	 * Type of strings.
+	 */
+	public static final String STRING = "string";
+
+	/**
 	 * Construct a new strings library.
 	 * 
 	 * @param engine

@@ -65,7 +65,7 @@ public class Lists extends Library {
 	 */
 	public Lists(final FunckyScriptEngine engine) throws ScriptException {
 		super(engine);
-		final SimpleType type = (SimpleType) engine.getReference(Prelude.class, Prelude.TYPE).eval();
+		final SimpleType type = engine.getLiteral(Prelude.class, Prelude.TYPE);
 		addFunctionDefinition(LIST, type, type, new ApplicableFunction() {
 			@Override
 			public ListType apply(final Expression argument, final ScriptContext context) throws ScriptException {
@@ -110,7 +110,7 @@ public class Lists extends Library {
 			public List apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				final List list = (List) arguments[0].eval(context);
 				final Literal element = arguments[1].eval(context);
-				final List empty = (List) engine.getReference(Lists.class, EMPTY).eval(context);
+				final List empty = engine.getLiteral(Lists.class, EMPTY);
 				return list.equals(empty) ? new List(engine, element, empty) : new List(engine, list.getHead(), apply(context, list.getTail(), element));
 			}
 		}, appendListType, appendElementType, appendListType);
