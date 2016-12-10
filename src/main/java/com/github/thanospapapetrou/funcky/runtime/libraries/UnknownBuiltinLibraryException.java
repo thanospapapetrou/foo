@@ -22,6 +22,6 @@ public class UnknownBuiltinLibraryException extends FunckyException {
 	 *            the reference that refers to the unknown builtin library
 	 */
 	public UnknownBuiltinLibraryException(final Reference reference) {
-		super(String.format(UNKNOWN_LIBRARY, Objects.requireNonNull(reference, NULL_REFERENCE).getNamespace()), reference.getScript(), reference.getLineNumber());
+		super(String.format(UNKNOWN_LIBRARY, Objects.requireNonNull(reference, NULL_REFERENCE).getUri()), reference.getScript(), reference.getLineNumber());
 	}
 }

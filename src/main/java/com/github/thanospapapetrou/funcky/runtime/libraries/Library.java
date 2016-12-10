@@ -67,11 +67,11 @@ public abstract class Library extends Script {
 	}
 
 	/**
-	 * Get the namespace URI corresponding to a library.
+	 * Get the URI corresponding to a library.
 	 * 
 	 * @param library
-	 *            the library of which the namespace URI to get
-	 * @return the namespace URI of the library provided
+	 *            the library of which the URI to get
+	 * @return the URI of the library provided
 	 */
 	public static URI getUri(final Class<? extends Library> library) {
 		try {

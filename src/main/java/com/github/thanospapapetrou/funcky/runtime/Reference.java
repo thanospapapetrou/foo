@@ -23,8 +23,8 @@ public class Reference extends Expression {
 	private static final String EMPTY_PREFIX = "Prefix must not be empty";
 	private static final String EMPTY_NAME = "Name must not be empty";
 	private static final String NULL_NAME = "Name must not be null";
-	private static final String NULL_NAMESPACE = "Namespace must not be null";
 	private static final String NULL_PREFIX = "Prefix must not be null";
+	private static final String NULL_URI = "URI must not be null";
 
 	private final QName name;
 
@@ -37,13 +37,13 @@ public class Reference extends Expression {
 	 *            the URI of the script from which this reference was generated
 	 * @param line
 	 *            the line from which this reference was parsed or <code>0</code> if this reference was not parsed (is builtin or generated at runtime)
-	 * @param namespace
-	 *            the namespace of this reference (the URI of the script that this reference refers to)
+	 * @param uri
+	 *            the URI of this reference (the URI of the script that this reference refers to)
 	 * @param name
 	 *            the name of this reference
 	 */
-	public Reference(final FunckyScriptEngine engine, final URI script, final int line, final URI namespace, final String name) {
-		this(engine, script, line, Objects.requireNonNull(namespace, NULL_NAMESPACE), null, name);
+	public Reference(final FunckyScriptEngine engine, final URI script, final int line, final URI uri, final String name) {
+		this(engine, script, line, Objects.requireNonNull(uri, NULL_URI), null, name);
 	}
 
 	/**
@@ -83,12 +83,12 @@ public class Reference extends Expression {
 		this(engine, script, line, null, null, name);
 	}
 
-	private Reference(final FunckyScriptEngine engine, final URI script, final int line, final URI namespace, final String prefix, final String name) {
+	private Reference(final FunckyScriptEngine engine, final URI script, final int line, final URI uri, final String prefix, final String name) {
 		super(engine, script, line);
 		if (Objects.requireNonNull(name, NULL_NAME).isEmpty()) {
 			throw new IllegalArgumentException(EMPTY_NAME);
 		}
-		this.name = new QName((namespace == null) ? null : namespace.toString(), name, (prefix == null) ? XMLConstants.DEFAULT_NS_PREFIX : prefix);
+		this.name = new QName((uri == null) ? null : uri.toString(), name, (prefix == null) ? XMLConstants.DEFAULT_NS_PREFIX : prefix);
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public class Reference extends Expression {
 			try {
 				final Reference qualifiedThis = qualify(engine.getContext());
 				final Reference qualifiedThat = ((Reference) object).qualify(engine.getContext());
-				return Objects.equals(qualifiedThis.getNamespace(), qualifiedThat.getNamespace()) && Objects.equals(qualifiedThis.getName(), qualifiedThat.getName());
+				return Objects.equals(qualifiedThis.getUri(), qualifiedThat.getUri()) && Objects.equals(qualifiedThis.getName(), qualifiedThat.getName());
 			} catch (final UndeclaredPrefixException e) {
 				throw new RuntimeException(e);
 			}
@@ -120,11 +120,11 @@ public class Reference extends Expression {
 	}
 
 	/**
-	 * Get the namespace of this reference.
+	 * Get the URI of this reference.
 	 * 
-	 * @return the namespace of this reference (the URI of the script that this reference refers to) or <code>null</code> if this reference has no namespace (has a prefix)
+	 * @return the URI of this reference (the URI of the script that this reference refers to) or <code>null</code> if this reference has no URI (has a prefix)
 	 */
-	public URI getNamespace() {
+	public URI getUri() {
 		return name.getNamespaceURI().equals(XMLConstants.NULL_NS_URI) ? null : URI.create(name.getNamespaceURI());
 	}
 
@@ -147,7 +147,7 @@ public class Reference extends Expression {
 	public int hashCode() {
 		try {
 			final Reference qualifiedReference = qualify(engine.getContext());
-			return Objects.hash(qualifiedReference.getNamespace(), qualifiedReference.getName());
+			return Objects.hash(qualifiedReference.getUri(), qualifiedReference.getName());
 		} catch (final UndeclaredPrefixException e) {
 			throw new RuntimeException(e);
 		}
@@ -163,14 +163,14 @@ public class Reference extends Expression {
 	}
 
 	private Reference qualify(final ScriptContext context) throws UndeclaredPrefixException {
-		if (getNamespace() != null) { // fully qualified reference
+		if (getUri() != null) { // fully qualified reference
 			return this;
 		} else if (getPrefix() != null) { // relative reference with prefix
-			final URI namespace = engine.resolvePrefix(context, script, getPrefix());
-			if (namespace == null) {
+			final URI uri = engine.resolvePrefix(context, script, getPrefix());
+			if (uri == null) {
 				throw new UndeclaredPrefixException(this);
 			}
-			return new Reference(engine, script, line, namespace, getName());
+			return new Reference(engine, script, line, uri, getName());
 		} else { // relative reference without prefix
 			return new Reference(engine, script, line, script, getName());
 		}
@@ -178,10 +178,10 @@ public class Reference extends Expression {
 
 	private Expression resolve(final ScriptContext context) throws ScriptException {
 		final Reference qualified = qualify(context);
-		if (engine.getScope(context, qualified.getNamespace()) == null) {
+		if (engine.getScope(context, qualified.getUri()) == null) {
 			engine.load(qualified);
 		}
-		final Expression expression = (Expression) context.getAttribute(qualified.getName(), engine.getScope(context, qualified.getNamespace()));
+		final Expression expression = (Expression) context.getAttribute(qualified.getName(), engine.getScope(context, qualified.getUri()));
 		if (expression == null) {
 			throw new UndefinedSymbolException(qualified);
 		}

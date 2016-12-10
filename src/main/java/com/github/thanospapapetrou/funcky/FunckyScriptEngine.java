@@ -67,7 +67,6 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	private static final String NULL_FUNCTION = "Function must not be null";
 	private static final String NULL_LIBRARY = "Library must not be null";
 	private static final String NULL_NAME = "Name must not be null";
-	private static final String NULL_NAMESPACE = "Namespace must not be null";
 	private static final String NULL_PREFIX = "Prefix must not be null";
 	private static final String NULL_REFERENCE = "Reference must not be null";
 	private static final String NULL_SCRIPT = "Script must not be null";
@@ -238,14 +237,14 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	/**
 	 * Generate a new reference at runtime.
 	 * 
-	 * @param namespace
-	 *            the namespace of the reference
+	 * @param uri
+	 *            the URI of the reference
 	 * @param name
 	 *            the name of the reference
 	 * @return a new reference
 	 */
-	public Reference getReference(final URI namespace, final String name) {
-		return new Reference(this, FunckyScriptEngine.RUNTIME, 0, Objects.requireNonNull(namespace, NULL_NAMESPACE), requireValidString(name, NULL_NAME, EMPTY_NAME));
+	public Reference getReference(final URI uri, final String name) {
+		return new Reference(this, FunckyScriptEngine.RUNTIME, 0, Objects.requireNonNull(uri, NULL_URI), requireValidString(name, NULL_NAME, EMPTY_NAME));
 	}
 
 	/**
@@ -293,11 +292,11 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 *             if any errors occur while loading the script or the builtin library
 	 */
 	public void load(final Reference reference) throws ScriptException {
-		if (Objects.requireNonNull(reference, NULL_REFERENCE).getNamespace().getScheme().equals(getFactory().getExtensions().get(0))) {
+		if (Objects.requireNonNull(reference, NULL_REFERENCE).getUri().getScheme().equals(getFactory().getExtensions().get(0))) {
 			loadLibrary(reference);
 		} else {
 			try {
-				loadScript(reference.getNamespace().toURL());
+				loadScript(reference.getUri().toURL());
 			} catch (final MalformedURLException e) {
 				throw new ScriptException(e);
 			}
@@ -331,10 +330,10 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	private void loadLibrary(final Reference reference) throws ScriptException {
 		for (final Class<Library> library : BUILTIN_LIBRARIES) {
-			if (Library.getUri(library).equals(reference.getNamespace())) {
+			if (Library.getUri(library).equals(reference.getUri())) {
 				try {
 					library.getConstructor(FunckyScriptEngine.class).newInstance(this).eval(context);
-					logger.info(String.format(LOADED, reference.getNamespace()));
+					logger.info(String.format(LOADED, reference.getUri()));
 					return;
 				} catch (final IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
 					throw new ScriptException(e);

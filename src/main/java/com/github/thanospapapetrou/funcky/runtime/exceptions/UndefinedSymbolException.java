@@ -22,6 +22,6 @@ public class UndefinedSymbolException extends FunckyException {
 	 *            the reference with the undefined symbol
 	 */
 	public UndefinedSymbolException(final Reference reference) {
-		super(String.format(UNDEFINED_SYMBOL, Objects.requireNonNull(reference, NULL_REFERENCE).getName(), reference.getNamespace()), reference.getScript(), reference.getLineNumber());
+		super(String.format(UNDEFINED_SYMBOL, Objects.requireNonNull(reference, NULL_REFERENCE).getName(), reference.getUri()), reference.getScript(), reference.getLineNumber());
 	}
 }

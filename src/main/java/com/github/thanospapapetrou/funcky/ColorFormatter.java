@@ -6,6 +6,11 @@ import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
+/**
+ * A formatter that formats log records using colors.
+ * 
+ * @author thanos
+ */
 public class ColorFormatter extends Formatter {
 	private static final Map<Level, String> COLORS = new HashMap<>();
 	private static final String FORMAT = "%1$s%2$s%3$s\n";
@@ -20,5 +25,4 @@ public class ColorFormatter extends Formatter {
 	public String format(final LogRecord record) {
 		return String.format(FORMAT, COLORS.containsKey(record.getLevel()) ? COLORS.get(record.getLevel()) : RESET, record.getMessage(), RESET);
 	}
-
 }
