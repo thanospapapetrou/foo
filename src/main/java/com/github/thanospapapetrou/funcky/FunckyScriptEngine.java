@@ -5,11 +5,17 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
 
 import javax.script.AbstractScriptEngine;
 import javax.script.Bindings;
@@ -52,6 +58,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	private static final String EMPTY_NAME = "Name must not be empty";
 	private static final String EMPTY_PREFIX = "Prefix must not be empty";
 	private static final String IMPORTS = "%1$s.imports";
+	private static final String LOADED = "Loaded %1$s";
 	private static final String MAX_SCOPES = "Maximum number of scopes reached";
 	private static final String NULL_ARGUMENT = "Argument must not be null";
 	private static final String NULL_CONTEXT = "Context must not be null";
@@ -72,6 +79,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	private static final String UNSUPPORTED_INVOKE_METHOD = "invokeMethod() is not supported";
 
 	private final FunckyScriptEngineFactory factory;
+	private final Logger logger;
 
 	/**
 	 * Construct a new script engine.
@@ -83,6 +91,11 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 */
 	public FunckyScriptEngine(final FunckyScriptEngineFactory factory, final Bindings globalScopeBindings) {
 		this.factory = Objects.requireNonNull(factory, NULL_FACTORY);
+		logger = Logger.getAnonymousLogger();
+		logger.setUseParentHandlers(false);
+		final Handler handler = new ConsoleHandler();
+		handler.setFormatter(new ColorFormatter());
+		logger.addHandler(handler);
 		setContext(new FunckyScriptContext(Objects.requireNonNull(globalScopeBindings, NULL_GLOBAL_SCOPE_BINDINGS)));
 	}
 
@@ -166,9 +179,14 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	}
 
 	@Override
-	public Literal eval(final String script, final ScriptContext context) throws ScriptException {
-		createScope(context, STDIN);
-		return compile(Objects.requireNonNull(script, NULL_SCRIPT), STDIN).eval(Objects.requireNonNull(context, NULL_CONTEXT));
+	public Literal eval(final String script, final ScriptContext context) {
+		try {
+			createScope(context, STDIN);
+			return compile(Objects.requireNonNull(script, NULL_SCRIPT), STDIN).eval(Objects.requireNonNull(context, NULL_CONTEXT));
+		} catch (final ScriptException e) {
+			logger.warning(e.getMessage());
+			return null;
+		}
 	}
 
 	/**
@@ -267,33 +285,20 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	}
 
 	/**
-	 * Load a script.
+	 * Load a script or a bultin library.
 	 * 
-	 * @param context
-	 *            the context in which to load the script
 	 * @param reference
-	 *            the reference that refers to the script to load
+	 *            the reference that refers to the script or builtin library to load
 	 * @throws ScriptException
-	 *             if any errors occur while loading the script
+	 *             if any errors occur while loading the script or the builtin library
 	 */
-	public void load(final ScriptContext context, final Reference reference) throws ScriptException {
-		Objects.requireNonNull(context, NULL_CONTEXT);
-		if (Objects.requireNonNull(reference, NULL_REFERENCE).getNamespace().getScheme().equals(getFactory().getExtensions().get(0))) { // builtin library
-			for (final Class<Library> library : BUILTIN_LIBRARIES) {
-				if (Library.getUri(library).equals(reference.getNamespace())) {
-					try {
-						library.getConstructor(FunckyScriptEngine.class).newInstance(this).eval(context);
-						return;
-					} catch (final IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
-						throw new ScriptException(e);
-					}
-				}
-			}
-			throw new UnknownBuiltinLibraryException(reference);
+	public void load(final Reference reference) throws ScriptException {
+		if (Objects.requireNonNull(reference, NULL_REFERENCE).getNamespace().getScheme().equals(getFactory().getExtensions().get(0))) {
+			loadLibrary(reference);
 		} else {
-			try (final InputStreamReader reader = new InputStreamReader(reference.getNamespace().toURL().openStream(), StandardCharsets.UTF_8)) {
-				this.compile(reader, reference.getNamespace()).eval(context);
-			} catch (final IOException e) {
+			try {
+				loadScript(reference.getNamespace().toURL());
+			} catch (final MalformedURLException e) {
 				throw new ScriptException(e);
 			}
 		}
@@ -322,5 +327,29 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	private Expression compile(final String script, final URI scriptUri) throws ScriptException {
 		return new Parser(this, new StringReader(script), scriptUri).parseExpression();
+	}
+
+	private void loadLibrary(final Reference reference) throws ScriptException {
+		for (final Class<Library> library : BUILTIN_LIBRARIES) {
+			if (Library.getUri(library).equals(reference.getNamespace())) {
+				try {
+					library.getConstructor(FunckyScriptEngine.class).newInstance(this).eval(context);
+					logger.info(String.format(LOADED, reference.getNamespace()));
+					return;
+				} catch (final IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
+					throw new ScriptException(e);
+				}
+			}
+		}
+		throw new UnknownBuiltinLibraryException(reference);
+	}
+
+	private void loadScript(final URL script) throws ScriptException {
+		try (final InputStreamReader reader = new InputStreamReader(script.openStream(), StandardCharsets.UTF_8)) {
+			compile(reader, script.toURI()).eval(context);
+			logger.info(String.format(LOADED, script));
+		} catch (final IOException | URISyntaxException e) {
+			throw new ScriptException(e);
+		}
 	}
 }
