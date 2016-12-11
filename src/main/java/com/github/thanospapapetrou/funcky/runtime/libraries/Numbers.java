@@ -103,7 +103,7 @@ public class Numbers extends Library {
 		addFunctionDefinition(IS_NAN, numberType, engine.<SimpleType> getLiteral(Booleans.class, Booleans.BOOLEAN), new ApplicableFunction() {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
-				return (Literal) (Double.isNaN(((Number) argument.eval(context)).getValue()) ? engine.getLiteral(Booleans.class, Booleans.TRUE) : engine.getLiteral(Booleans.class, Booleans.FALSE));
+				return engine.getLiteral(Booleans.class, Double.isNaN(((Number) argument.eval(context)).getValue()) ? Booleans.TRUE : Booleans.FALSE);
 			}
 		});
 		addFunctionDefinition(INTEGER, numberType, numberType, new ApplicableFunction() {
