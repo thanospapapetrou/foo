@@ -26,7 +26,7 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	 * @param script
 	 *            the URI of the script from which this expression was generated
 	 * @param line
-	 *            the line from which this expression was parsed or <code>0</code> if this expression was not parsed (is builtin or generated at runtime)
+	 *            the line from which this expression was parsed or <code>-1</code> if this expression was not parsed (is built-in or generated at runtime)
 	 */
 	protected Expression(final FunckyScriptEngine engine, final URI script, final int line) {
 		super(engine, script, line);

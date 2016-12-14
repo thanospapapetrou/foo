@@ -36,7 +36,7 @@ public class Application extends Expression {
 	 * @param script
 	 *            the URI of the script from which this application was generated
 	 * @param line
-	 *            the line from which this application was parsed or <code>0</code> if this application was not parsed (is builtin or generated at runtime)
+	 *            the line from which this application was parsed or <code>-1</code> if this application was not parsed (is built-in or generated at runtime)
 	 * @param function
 	 *            the function of this application
 	 * @param argument

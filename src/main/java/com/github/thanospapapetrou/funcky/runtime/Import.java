@@ -30,7 +30,7 @@ public class Import extends AbstractSyntaxTreeNode {
 	 * @param script
 	 *            the URI of the script from which this import was generated
 	 * @param line
-	 *            the line from which this import was parsed or <code>0</code> if this import was not parsed (is builtin or generated at runtime)
+	 *            the line from which this import was parsed
 	 * @param prefix
 	 *            the prefix of this import
 	 * @param uri

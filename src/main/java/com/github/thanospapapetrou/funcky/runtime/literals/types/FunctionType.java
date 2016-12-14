@@ -29,7 +29,7 @@ public class FunctionType extends Type {
 	 *            the range of this function type
 	 */
 	public FunctionType(final FunckyScriptEngine engine, final Type domain, final Type range) {
-		super(engine, FunckyScriptEngine.RUNTIME, 0);
+		super(engine, FunckyScriptEngine.RUNTIME, -1);
 		this.domain = domain;
 		this.range = range;
 	}

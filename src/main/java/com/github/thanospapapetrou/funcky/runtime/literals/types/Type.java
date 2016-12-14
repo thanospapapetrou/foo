@@ -30,7 +30,7 @@ public abstract class Type extends Literal {
 	 * @param script
 	 *            the URI of the script from which this type was generated
 	 * @param line
-	 *            the line from which this type was parsed or <code>0</code> if this type was not parsed (is builtin or generated at runtime)
+	 *            the line from which this type was parsed or <code>-1</code> if this type was not parsed (is built-in or generated at runtime)
 	 */
 	protected Type(final FunckyScriptEngine engine, final URI script, final int line) {
 		super(engine, script, line);

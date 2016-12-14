@@ -15,7 +15,6 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
  * @author thanos
  */
 public abstract class AbstractSyntaxTreeNode extends CompiledScript {
-	private static final String NEGATIVE_LINE_NUMBER = "Line number must be non-negative";
 	private static final String NULL_CONTEXT = "Context must not be null";
 	private static final String NULL_ENGINE = "Engine must not be null";
 	private static final String NULL_SCRIPT = "Script must not be null";
@@ -43,14 +42,11 @@ public abstract class AbstractSyntaxTreeNode extends CompiledScript {
 	 * @param script
 	 *            the URI of the script from which this node was generated
 	 * @param line
-	 *            the line from which this node was parsed or <code>0</code> if this node was not parsed (is builtin or generated at runtime)
+	 *            the line from which this node was parsed or <code>-1</code> if this node was not parsed (is built-in or generated at runtime)
 	 */
 	protected AbstractSyntaxTreeNode(final FunckyScriptEngine engine, final URI script, final int line) {
 		this.engine = Objects.requireNonNull(engine, NULL_ENGINE);
 		this.script = Objects.requireNonNull(script, NULL_SCRIPT);
-		if (line < 0) {
-			throw new IllegalArgumentException(NEGATIVE_LINE_NUMBER);
-		}
 		this.line = line;
 	}
 
@@ -77,7 +73,7 @@ public abstract class AbstractSyntaxTreeNode extends CompiledScript {
 	/**
 	 * Get the line number.
 	 * 
-	 * @return the line from which this abstract syntax tree node was parsed or <code>null</code> if this abstract syntax tree node was not parsed from any line (is a builtin)
+	 * @return the line from which this abstract syntax tree node was parsed or <code>-1</code> if this abstract syntax tree node was not parsed from any line (is a built-in)
 	 */
 	public int getLineNumber() {
 		return line;

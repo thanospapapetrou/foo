@@ -38,7 +38,7 @@ public class List extends Literal {
 	 *            the tail of this list
 	 */
 	public List(final FunckyScriptEngine engine, final Literal head, final List tail) {
-		super(engine, FunckyScriptEngine.RUNTIME, 0);
+		super(engine, FunckyScriptEngine.RUNTIME, -1);
 		this.head = Objects.requireNonNull(head, NULL_HEAD);
 		this.tail = Objects.requireNonNull(tail, NULL_TAIL);
 	}
@@ -50,7 +50,7 @@ public class List extends Literal {
 	 *            the engine that generated this empty list
 	 */
 	public List(final FunckyScriptEngine engine) {
-		super(engine, FunckyScriptEngine.RUNTIME, 0);
+		super(engine, FunckyScriptEngine.RUNTIME, -1);
 		this.head = null;
 		this.tail = null;
 	}

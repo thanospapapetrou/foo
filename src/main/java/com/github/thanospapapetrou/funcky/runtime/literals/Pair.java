@@ -32,7 +32,7 @@ public class Pair extends Literal {
 	 *            the second value of this pair
 	 */
 	public Pair(final FunckyScriptEngine engine, final Literal first, final Literal second) {
-		super(engine, FunckyScriptEngine.RUNTIME, 0);
+		super(engine, FunckyScriptEngine.RUNTIME, -1);
 		this.first = Objects.requireNonNull(first, NULL_FIRST);
 		this.second = Objects.requireNonNull(second, NULL_SECOND);
 	}

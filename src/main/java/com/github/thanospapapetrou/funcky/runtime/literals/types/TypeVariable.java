@@ -31,7 +31,7 @@ public class TypeVariable extends Type {
 	 * @param script
 	 *            the URI of the script from which this type variable was generated
 	 * @param line
-	 *            the line from which this type variable was parsed or <code>0</code> if this type was not parsed (is builtin or generated at runtime)
+	 *            the line from which this type variable was parsed or <code>-1</code> if this type was not parsed (is built-in or generated at runtime)
 	 * @param name
 	 *            the name of this type variable
 	 */
@@ -47,7 +47,7 @@ public class TypeVariable extends Type {
 	 *            the engine that parsed this type variable
 	 */
 	public TypeVariable(final FunckyScriptEngine engine) {
-		this(engine, FunckyScriptEngine.RUNTIME, 0, getRandomName());
+		this(engine, FunckyScriptEngine.RUNTIME, -1, getRandomName());
 	}
 
 	@Override

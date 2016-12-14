@@ -27,7 +27,7 @@ public class ListType extends Type {
 	 *            the type of the element of this list type
 	 */
 	public ListType(final FunckyScriptEngine engine, final Type element) {
-		super(engine, FunckyScriptEngine.RUNTIME, 0);
+		super(engine, FunckyScriptEngine.RUNTIME, -1);
 		this.element = Objects.requireNonNull(element, NULL_ELEMENT);
 	}
 

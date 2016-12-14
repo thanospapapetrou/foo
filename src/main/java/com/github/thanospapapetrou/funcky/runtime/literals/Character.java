@@ -44,7 +44,7 @@ public class Character extends Literal {
 	 * @param script
 	 *            the URI of the script from which this character was generated
 	 * @param line
-	 *            the line from which this character was parsed or <code>0</code> if this number was not parsed (is builtin or generated at runtime)
+	 *            the line from which this character was parsed or <code>-1</code> if this character was not parsed (is built-in or generated at runtime)
 	 * @param value
 	 *            the value of this character
 	 */
@@ -62,7 +62,7 @@ public class Character extends Literal {
 	 *            the value of this character
 	 */
 	public Character(final FunckyScriptEngine engine, final char value) {
-		this(engine, FunckyScriptEngine.RUNTIME, 0, value);
+		this(engine, FunckyScriptEngine.RUNTIME, -1, value);
 	}
 
 	private static String escape(final char character) {

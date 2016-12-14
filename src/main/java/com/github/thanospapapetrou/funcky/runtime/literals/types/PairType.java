@@ -32,7 +32,7 @@ public class PairType extends Type {
 	 *            the second type of this pair type
 	 */
 	public PairType(final FunckyScriptEngine engine, final Type first, final Type second) {
-		super(engine, FunckyScriptEngine.RUNTIME, 0);
+		super(engine, FunckyScriptEngine.RUNTIME, -1);
 		this.first = Objects.requireNonNull(first, NULL_FIRST);
 		this.second = Objects.requireNonNull(second, NULL_SECOND);
 	}

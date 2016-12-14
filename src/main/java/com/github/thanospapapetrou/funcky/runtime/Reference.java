@@ -36,7 +36,7 @@ public class Reference extends Expression {
 	 * @param script
 	 *            the URI of the script from which this reference was generated
 	 * @param line
-	 *            the line from which this reference was parsed or <code>0</code> if this reference was not parsed (is builtin or generated at runtime)
+	 *            the line from which this reference was parsed or <code>-1</code> if this reference was not parsed (is built-in or generated at runtime)
 	 * @param uri
 	 *            the URI of this reference (the URI of the script that this reference refers to)
 	 * @param name
@@ -54,7 +54,7 @@ public class Reference extends Expression {
 	 * @param script
 	 *            the URI of the script from which this reference was generated
 	 * @param line
-	 *            the line from which this reference was parsed or <code>0</code> if this reference was not parsed (is builtin or generated at runtime)
+	 *            the line from which this reference was parsed or <code>-1</code> if this reference was not parsed (is built-in or generated at runtime)
 	 * @param prefix
 	 *            the prefix of this reference
 	 * @param name
@@ -75,7 +75,7 @@ public class Reference extends Expression {
 	 * @param script
 	 *            the URI of the script from which this reference was generated
 	 * @param line
-	 *            the line from which this reference was parsed or <code>0</code> if this reference was not parsed (is builtin or generated at runtime)
+	 *            the line from which this reference was parsed or <code>-1</code> if this reference was not parsed (is built-in or generated at runtime)
 	 * @param name
 	 *            the name of this reference
 	 */

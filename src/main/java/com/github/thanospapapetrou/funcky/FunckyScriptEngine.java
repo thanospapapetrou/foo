@@ -39,7 +39,7 @@ import com.github.thanospapapetrou.funcky.runtime.libraries.Numbers;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Pairs;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Strings;
-import com.github.thanospapapetrou.funcky.runtime.libraries.UnknownBuiltinLibraryException;
+import com.github.thanospapapetrou.funcky.runtime.libraries.UnknownBuiltInLibraryException;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 
 /**
@@ -198,7 +198,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 * @return a new application
 	 */
 	public Application getApplication(final Expression function, final Expression argument) {
-		return new Application(this, RUNTIME, 0, Objects.requireNonNull(function, NULL_FUNCTION), Objects.requireNonNull(argument, NULL_ARGUMENT));
+		return new Application(this, RUNTIME, -1, Objects.requireNonNull(function, NULL_FUNCTION), Objects.requireNonNull(argument, NULL_ARGUMENT));
 	}
 
 	@Override
@@ -244,7 +244,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 * @return a new reference
 	 */
 	public Reference getReference(final URI uri, final String name) {
-		return new Reference(this, FunckyScriptEngine.RUNTIME, 0, Objects.requireNonNull(uri, NULL_URI), requireValidString(name, NULL_NAME, EMPTY_NAME));
+		return new Reference(this, FunckyScriptEngine.RUNTIME, -1, Objects.requireNonNull(uri, NULL_URI), requireValidString(name, NULL_NAME, EMPTY_NAME));
 	}
 
 	/**
@@ -284,12 +284,12 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	}
 
 	/**
-	 * Load a script or a bultin library.
+	 * Load a script or a built-in library.
 	 * 
 	 * @param reference
-	 *            the reference that refers to the script or builtin library to load
+	 *            the reference that refers to the script or built-in library to load
 	 * @throws ScriptException
-	 *             if any errors occur while loading the script or the builtin library
+	 *             if any errors occur while loading the script or the built-in library
 	 */
 	public void load(final Reference reference) throws ScriptException {
 		if (Objects.requireNonNull(reference, NULL_REFERENCE).getUri().getScheme().equals(getFactory().getExtensions().get(0))) {
@@ -340,7 +340,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 				}
 			}
 		}
-		throw new UnknownBuiltinLibraryException(reference);
+		throw new UnknownBuiltInLibraryException(reference);
 	}
 
 	private void loadScript(final URL script) throws ScriptException {

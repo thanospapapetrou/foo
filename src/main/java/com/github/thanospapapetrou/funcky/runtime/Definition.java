@@ -30,7 +30,7 @@ public class Definition extends AbstractSyntaxTreeNode {
 	 * @param script
 	 *            the URI of the script from which this definition was generated
 	 * @param line
-	 *            the line from which this definition was parsed or <code>0</code> if this definition was not parsed (is builtin or generated at runtime)
+	 *            the line from which this definition was parsed or <code>-1</code> if this definition was not parsed (is built-in or generated at runtime)
 	 * @param name
 	 *            the name of this definition.
 	 * @param expression

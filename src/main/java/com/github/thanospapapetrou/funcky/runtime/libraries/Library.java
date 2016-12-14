@@ -56,7 +56,7 @@ public abstract class Library extends Script {
 	 *             if any errors occur while constructing this library
 	 */
 	public Library(final FunckyScriptEngine engine) throws ScriptException {
-		super(Objects.requireNonNull(engine, NULL_ENGINE), getUri(), 0, new ArrayList<Import>(), new ArrayList<Definition>());
+		super(Objects.requireNonNull(engine, NULL_ENGINE), getUri(), -1, new ArrayList<Import>(), new ArrayList<Definition>());
 		try (final InputStreamReader reader = new InputStreamReader(Library.class.getResourceAsStream(String.format(SCRIPT, getClass().getSimpleName())), StandardCharsets.UTF_8)) {
 			final Script script = new Parser(engine, reader, getUri(getClass())).parseScript();
 			imports.addAll(script.getImports());

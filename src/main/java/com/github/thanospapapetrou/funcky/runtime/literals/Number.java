@@ -26,7 +26,7 @@ public class Number extends Literal {
 	 * @param script
 	 *            the URI of the script from which this number was generated
 	 * @param line
-	 *            the line from which this number was parsed or <code>0</code> if this number was not parsed (is builtin or generated at runtime)
+	 *            the line from which this number was parsed or <code>-1</code> if this number was not parsed (is built-in or generated at runtime)
 	 * @param value
 	 *            the value of this number
 	 */
@@ -36,7 +36,7 @@ public class Number extends Literal {
 	}
 
 	/**
-	 * Construct a new builtin number.
+	 * Construct a new built-in number.
 	 * 
 	 * @param engine
 	 *            the engine that generated this number
@@ -46,7 +46,7 @@ public class Number extends Literal {
 	 *            the value of this number
 	 */
 	public Number(final FunckyScriptEngine engine, final URI script, final double value) {
-		this(engine, script, 0, value);
+		this(engine, script, -1, value);
 	}
 
 	/**

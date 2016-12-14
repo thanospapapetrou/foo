@@ -25,7 +25,7 @@ public abstract class FunckyException extends ScriptException {
 	 * @param script
 	 *            the URI of the script (or library) in which the error occurred
 	 * @param line
-	 *            the line in which the error occurred or <code>0</code> if this error occured at runtime
+	 *            the line in which the error occurred or <code>-1</code> if this error occurred at runtime
 	 */
 	protected FunckyException(final String message, final URI script, final int line) {
 		super(Objects.requireNonNull(message, NULL_MESSAGE), Objects.requireNonNull(script, NULL_SCRIPT).toString(), line);

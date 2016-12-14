@@ -26,7 +26,7 @@ public class SimpleType extends Type {
 	 *            the name of this simple type
 	 */
 	public SimpleType(final FunckyScriptEngine engine, final URI script, final String name) {
-		super(engine, script, 0);
+		super(engine, script, -1);
 		this.name = name;
 	}
 

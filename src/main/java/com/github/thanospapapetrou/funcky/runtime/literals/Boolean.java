@@ -29,7 +29,7 @@ public class Boolean extends Literal {
 	 *            the value of this boolean
 	 */
 	public Boolean(final FunckyScriptEngine engine, final URI script, final boolean value) {
-		super(engine, script, 0);
+		super(engine, script, -1);
 		this.value = value;
 	}
 
