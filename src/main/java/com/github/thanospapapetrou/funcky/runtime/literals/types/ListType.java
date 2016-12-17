@@ -1,5 +1,6 @@
 package com.github.thanospapapetrou.funcky.runtime.literals.types;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
@@ -23,18 +24,20 @@ public class ListType extends Type {
 	 * 
 	 * @param engine
 	 *            the engine that generated this list type
+	 * @param script
+	 *            the URI of the script from which this list type was generated
 	 * @param element
 	 *            the type of the element of this list type
 	 */
-	public ListType(final FunckyScriptEngine engine, final Type element) {
-		super(engine, FunckyScriptEngine.RUNTIME, -1);
+	public ListType(final FunckyScriptEngine engine, final URI script, final Type element) {
+		super(engine, script, -1);
 		this.element = Objects.requireNonNull(element, NULL_ELEMENT);
 	}
 
 	@Override
 	public Type bind(final Map<TypeVariable, Type> bindings) {
 		super.bind(bindings);
-		return new ListType(engine, element.bind(bindings));
+		return engine.getListType(element.bind(bindings));
 	}
 
 	@Override
@@ -75,6 +78,6 @@ public class ListType extends Type {
 	@Override
 	protected ListType free(final Map<TypeVariable, TypeVariable> free) {
 		super.free(free);
-		return new ListType(engine, element.free(free));
+		return engine.getListType(element.free(free));
 	}
 }

@@ -198,7 +198,7 @@ public class Parser {
 	}
 
 	private Expression parseElements() throws ScriptException {
-		Expression list = new List(engine);
+		Expression list = new List(engine, script, tokenizer.lineno());
 		while (true) {
 			list = new Application(engine, script, tokenizer.lineno(), new Application(engine, script, tokenizer.lineno(), engine.getReference(Lists.class, Lists.APPEND), list), parseExpression(Token.COMMA, Token.RIGHT_SQUARE_BRACKET));
 			if (parseExpectedTokens(Token.COMMA, Token.RIGHT_SQUARE_BRACKET) == Token.RIGHT_SQUARE_BRACKET) {
@@ -279,7 +279,7 @@ public class Parser {
 	private Expression parseList() throws ScriptException {
 		parseExpectedTokens(Token.LEFT_SQUARE_BRACKET);
 		if (parseExpectedTokens(Token.CHARACTER, Token.DOLLAR, Token.LEFT_ANGLE_BRACKET, Token.LEFT_CURLY_BRACKET, Token.LEFT_PARENTHESIS, Token.LEFT_SQUARE_BRACKET, Token.NUMBER, Token.RIGHT_SQUARE_BRACKET, Token.STRING, Token.SYMBOL) == Token.RIGHT_SQUARE_BRACKET) {
-			return new List(engine);
+			return new List(engine, script, tokenizer.lineno());
 		}
 		tokenizer.pushBack();
 		return parseElements();
@@ -362,7 +362,7 @@ public class Parser {
 
 	private List parseString() throws ScriptException {
 		parseExpectedTokens(Token.STRING);
-		return tokenizer.sval.isEmpty() ? new List(engine) : new List(engine, tokenizer.sval);
+		return tokenizer.sval.isEmpty() ? new List(engine, script, tokenizer.lineno()) : new List(engine, script, tokenizer.lineno(), tokenizer.sval);
 	}
 
 	private TypeVariable parseTypeVariable() throws ScriptException {

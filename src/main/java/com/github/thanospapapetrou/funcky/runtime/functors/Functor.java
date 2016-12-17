@@ -49,7 +49,7 @@ public abstract class Functor extends Function implements ApplicableFunctor {
 	}
 
 	private static FunctionType getFunctionType(final FunckyScriptEngine engine, final URI script, final Type... types) {
-		return new FunctionType(engine, types[0], (types.length == FUNCTION_TYPES) ? types[1] : getFunctionType(engine, script, Arrays.copyOfRange(types, 1, types.length)));
+		return engine.getFunctionType(types[0], (types.length == FUNCTION_TYPES) ? types[1] : getFunctionType(engine, script, Arrays.copyOfRange(types, 1, types.length)));
 	}
 
 	private static Type[] requireValidTypes(final Type[] types) {

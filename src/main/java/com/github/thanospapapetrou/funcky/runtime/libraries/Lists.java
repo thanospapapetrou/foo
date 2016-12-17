@@ -69,7 +69,7 @@ public class Lists extends Library {
 		addFunctionDefinition(LIST, type, type, new ApplicableFunction() {
 			@Override
 			public ListType apply(final Expression argument, final ScriptContext context) throws ScriptException {
-				return new ListType(engine, (Type) argument.eval(context));
+				return engine.getListType((Type) argument.eval(context));
 			}
 		});
 		addFunctionDefinition(ELEMENT, type, type, new ApplicableFunction() {
@@ -78,40 +78,40 @@ public class Lists extends Library {
 				return ((ListType) argument.eval(context)).getElement(); // TODO validate that argument is list type
 			}
 		});
-		final TypeVariable headElementType = getTypeVariable();
-		final ListType headListType = new ListType(engine, headElementType);
-		addDefinition(EMPTY, new List(engine));
+		final TypeVariable headElementType = engine.getTypeVariable();
+		final ListType headListType = engine.getListType(headElementType);
+		addDefinition(EMPTY, engine.getList());
 		addFunctionDefinition(HEAD, headListType, headElementType, new ApplicableFunction() {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				return ((List) argument.eval(context)).getHead(); // TODO validate that argument is not empty
 			}
 		});
-		final ListType tailType = new ListType(engine, getTypeVariable());
+		final ListType tailType = engine.getListType(engine.getTypeVariable());
 		addFunctionDefinition(TAIL, tailType, tailType, new ApplicableFunction() {
 			@Override
 			public List apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				return ((List) argument.eval(context)).getTail(); // TODO validate that argument is not empty
 			}
 		});
-		final TypeVariable prependElementType = getTypeVariable();
-		final ListType prependListType = new ListType(engine, prependElementType);
+		final TypeVariable prependElementType = engine.getTypeVariable();
+		final ListType prependListType = engine.getListType(prependElementType);
 		addFunctorDefinition(PREPEND, new ApplicableFunctor() {
 			@Override
 			public List apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				return new List(engine, arguments[0].eval(context), (List) arguments[1].eval(context));
+				return engine.getList(arguments[0].eval(context), (List) arguments[1].eval(context));
 			}
 		}, prependElementType, prependListType, prependListType);
 		// TODO remove append and define it in funcky
-		final TypeVariable appendElementType = getTypeVariable();
-		final ListType appendListType = new ListType(engine, appendElementType);
+		final TypeVariable appendElementType = engine.getTypeVariable();
+		final ListType appendListType = engine.getListType(appendElementType);
 		addFunctorDefinition(APPEND, new ApplicableFunctor() {
 			@Override
 			public List apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				final List list = (List) arguments[0].eval(context);
 				final Literal element = arguments[1].eval(context);
 				final List empty = engine.getLiteral(Lists.class, EMPTY);
-				return list.equals(empty) ? new List(engine, element, empty) : new List(engine, list.getHead(), apply(context, list.getTail(), element));
+				return list.equals(empty) ? engine.getList(element, empty) : engine.getList(list.getHead(), apply(context, list.getTail(), element));
 			}
 		}, appendListType, appendElementType, appendListType);
 	}

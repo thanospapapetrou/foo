@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
@@ -40,7 +41,16 @@ import com.github.thanospapapetrou.funcky.runtime.libraries.Pairs;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Strings;
 import com.github.thanospapapetrou.funcky.runtime.libraries.UnknownBuiltInLibraryException;
+import com.github.thanospapapetrou.funcky.runtime.literals.Character;
+import com.github.thanospapapetrou.funcky.runtime.literals.List;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.literals.Number;
+import com.github.thanospapapetrou.funcky.runtime.literals.Pair;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.ListType;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.PairType;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
+import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
 
 /**
  * Class implementing a Funcky script engine.
@@ -48,11 +58,6 @@ import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
  * @author thanos
  */
 public class FunckyScriptEngine extends AbstractScriptEngine implements Compilable, Invocable {
-	/**
-	 * The script URI corresponding to abstract syntax tree nodes generated at runtime.
-	 */
-	public static final URI RUNTIME = URI.create("funcky:runtime");
-
 	@SuppressWarnings("unchecked")
 	private static final Class<Library>[] BUILTIN_LIBRARIES = (Class<Library>[]) new Class<?>[] {Prelude.class, Booleans.class, Numbers.class, Characters.class, Pairs.class, Lists.class, Strings.class};
 	private static final String EMPTY_NAME = "Name must not be empty";
@@ -62,15 +67,24 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	private static final String MAX_SCOPES = "Maximum number of scopes reached";
 	private static final String NULL_ARGUMENT = "Argument must not be null";
 	private static final String NULL_CONTEXT = "Context must not be null";
-	private static final String NULL_GLOBAL_SCOPE_BINDINGS = "Global scope bindings must not be null";
+	private static final String NULL_DOMAIN = "Domain must not be null";
+	private static final String NULL_ELEMENT = "Element must not be null";
 	private static final String NULL_FACTORY = "Factory must not be null";
+	private static final String NULL_FIRST = "First must not be null";
 	private static final String NULL_FUNCTION = "Function must not be null";
+	private static final String NULL_GLOBAL_SCOPE_BINDINGS = "Global scope bindings must not be null";
+	private static final String NULL_HEAD = "Head must not be null";
 	private static final String NULL_LIBRARY = "Library must not be null";
 	private static final String NULL_NAME = "Name must not be null";
 	private static final String NULL_PREFIX = "Prefix must not be null";
+	private static final String NULL_RANGE = "Range must not be null";
 	private static final String NULL_REFERENCE = "Reference must not be null";
 	private static final String NULL_SCRIPT = "Script must not be null";
+	private static final String NULL_SECOND = "Second must not be null";
+	private static final String NULL_TAIL = "Tail must not be null";
 	private static final String NULL_URI = "URI must not be null";
+	private static final String RANDOM_NAME = "_%1$s%2$s";
+	private static final URI RUNTIME = URI.create("funcky:runtime");
 	private static final String SCRIPT = "%1$s.script";
 	private static final URI STDIN = URI.create("funcky:stdin");
 	private static final String UNSUPPORTED_GET_INTERFACE = "getInterface() is not supported";
@@ -189,7 +203,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	}
 
 	/**
-	 * Generate a new application at runtime.
+	 * Get a new application generated at runtime.
 	 * 
 	 * @param function
 	 *            the function of the application
@@ -201,9 +215,33 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 		return new Application(this, RUNTIME, -1, Objects.requireNonNull(function, NULL_FUNCTION), Objects.requireNonNull(argument, NULL_ARGUMENT));
 	}
 
+	/**
+	 * Get a new character generated at runtime.
+	 * 
+	 * @param value
+	 *            the value of the character
+	 * @return a new character
+	 */
+	public Character getCharacter(char value) {
+		return new Character(this, RUNTIME, -1, value);
+	}
+
 	@Override
 	public FunckyScriptEngineFactory getFactory() {
 		return factory;
+	}
+
+	/**
+	 * Get a new function type generated at runtime.
+	 * 
+	 * @param domain
+	 *            the domain type of the function type
+	 * @param range
+	 *            the range type of the function type
+	 * @return a new function type
+	 */
+	public FunctionType getFunctionType(final Type domain, final Type range) {
+		return new FunctionType(this, RUNTIME, Objects.requireNonNull(domain, NULL_DOMAIN), Objects.requireNonNull(range, NULL_RANGE));
 	}
 
 	@Override
@@ -214,6 +252,39 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	@Override
 	public <T> T getInterface(final Object object, final Class<T> clazz) {
 		throw new UnsupportedOperationException(UNSUPPORTED_GET_INTERFACE);
+	}
+
+	/**
+	 * Get a new list generated at runtime.
+	 * 
+	 * @param head
+	 *            the head of the list
+	 * @param tail
+	 *            the tail of the list
+	 * @return a new list
+	 */
+	public List getList(final Literal head, final List tail) {
+		return new List(this, RUNTIME, -1, Objects.requireNonNull(head, NULL_HEAD), Objects.requireNonNull(tail, NULL_TAIL));
+	}
+
+	/**
+	 * Get a new empty list generated at runtime.
+	 * 
+	 * @return a new empty list
+	 */
+	public List getList() {
+		return new List(this, RUNTIME, -1);
+	}
+
+	/**
+	 * Get a new list type generated at runtime.
+	 * 
+	 * @param element
+	 *            the element type of the list type
+	 * @return a new list type
+	 */
+	public ListType getListType(final Type element) {
+		return new ListType(this, RUNTIME, Objects.requireNonNull(element, NULL_ELEMENT));
 	}
 
 	/**
@@ -235,7 +306,44 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	}
 
 	/**
-	 * Generate a new reference at runtime.
+	 * Get a new number generated at runtime.
+	 * 
+	 * @param value
+	 *            the value of the number
+	 * @return a new number
+	 */
+	public Number getNumber(final double value) {
+		return new Number(this, RUNTIME, -1, value);
+	}
+
+	/**
+	 * Get a new pair generated at runtime.
+	 * 
+	 * @param first
+	 *            the first value of the pair
+	 * @param second
+	 *            the second value of the pair
+	 * @return a new pair
+	 */
+	public Pair getPair(final Literal first, final Literal second) {
+		return new Pair(this, RUNTIME, -1, Objects.requireNonNull(first, NULL_FIRST), Objects.requireNonNull(second, NULL_SECOND));
+	}
+
+	/**
+	 * Get a new pair type generated at runtime.
+	 * 
+	 * @param first
+	 *            the first type of the pair type
+	 * @param second
+	 *            the second type of the pair type
+	 * @return a new pair type
+	 */
+	public PairType getPairType(final Type first, final Type second) {
+		return new PairType(this, RUNTIME, Objects.requireNonNull(first, NULL_FIRST), Objects.requireNonNull(second, NULL_SECOND));
+	}
+
+	/**
+	 * Get a new reference generated at runtime.
 	 * 
 	 * @param uri
 	 *            the URI of the reference
@@ -244,11 +352,11 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 * @return a new reference
 	 */
 	public Reference getReference(final URI uri, final String name) {
-		return new Reference(this, FunckyScriptEngine.RUNTIME, -1, Objects.requireNonNull(uri, NULL_URI), requireValidString(name, NULL_NAME, EMPTY_NAME));
+		return new Reference(this, RUNTIME, -1, Objects.requireNonNull(uri, NULL_URI), requireValidString(name, NULL_NAME, EMPTY_NAME));
 	}
 
 	/**
-	 * Generate a new reference at runtime.
+	 * Get a new reference generated at runtime.
 	 * 
 	 * @param library
 	 *            the library of the reference
@@ -271,6 +379,16 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 */
 	public Integer getScope(final ScriptContext context, final URI script) {
 		return (Integer) Objects.requireNonNull(context, NULL_CONTEXT).getAttribute(Objects.requireNonNull(script, NULL_SCRIPT).toString(), ScriptContext.ENGINE_SCOPE);
+	}
+
+	/**
+	 * Get a new type variable generated at runtime.
+	 * 
+	 * @return a new type variable
+	 */
+	public TypeVariable getTypeVariable() {
+		final UUID uuid = UUID.randomUUID();
+		return new TypeVariable(this, RUNTIME, -1, String.format(RANDOM_NAME, Long.toHexString(uuid.getMostSignificantBits()), Long.toHexString(uuid.getLeastSignificantBits())));
 	}
 
 	@Override

@@ -53,18 +53,6 @@ public class Character extends Literal {
 		this.value = value;
 	}
 
-	/**
-	 * Construct a new character generated at runtime.
-	 * 
-	 * @param engine
-	 *            the engine that constructed this character
-	 * @param value
-	 *            the value of this character
-	 */
-	public Character(final FunckyScriptEngine engine, final char value) {
-		this(engine, FunckyScriptEngine.RUNTIME, -1, value);
-	}
-
 	private static String escape(final char character) {
 		return ESCAPES.containsKey(character) ? ESCAPES.get(character) : (CONTROL.matcher(java.lang.Character.toString(character)).matches() ? String.format(OCTAL, (int) character) : java.lang.Character.toString(character));
 	}

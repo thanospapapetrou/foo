@@ -35,32 +35,6 @@ public class Number extends Literal {
 		this.value = value;
 	}
 
-	/**
-	 * Construct a new built-in number.
-	 * 
-	 * @param engine
-	 *            the engine that generated this number
-	 * @param script
-	 *            the URI of the script from which this number was generated
-	 * @param value
-	 *            the value of this number
-	 */
-	public Number(final FunckyScriptEngine engine, final URI script, final double value) {
-		this(engine, script, -1, value);
-	}
-
-	/**
-	 * Construct a new number generated at runtime.
-	 * 
-	 * @param engine
-	 *            the engine that constructed this number
-	 * @param value
-	 *            the value of this number
-	 */
-	public Number(final FunckyScriptEngine engine, final double value) {
-		this(engine, FunckyScriptEngine.RUNTIME, value);
-	}
-
 	@Override
 	public boolean equals(final Object object) {
 		return (object instanceof Number) && (value == ((Number) object).value);

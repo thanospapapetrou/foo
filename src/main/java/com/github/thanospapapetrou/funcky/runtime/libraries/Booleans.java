@@ -62,13 +62,13 @@ public class Booleans extends Library {
 	 */
 	public Booleans(final FunckyScriptEngine engine) throws ScriptException {
 		super(engine);
-		final SimpleType booleanType = getSimpleType(BOOLEANS, BOOLEAN);
+		final SimpleType booleanType = new SimpleType(engine, BOOLEANS, BOOLEAN);
 		addDefinition(booleanType);
 		final Boolean booleanTrue = getBoolean(true);
 		addDefinition(booleanTrue);
 		final Boolean booleanFalse = getBoolean(false);
 		addDefinition(booleanFalse);
-		final TypeVariable equalType = getTypeVariable();
+		final TypeVariable equalType = engine.getTypeVariable();
 		addFunctorDefinition(EQUAL, new ApplicableFunctor() {
 			@Override
 			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
@@ -82,7 +82,7 @@ public class Booleans extends Library {
 				return (((Type) arguments[0].eval(context)).inferGenericBindings((Type) arguments[1].eval(context)) == null) ? booleanFalse : booleanTrue;
 			}
 		}, type, type, booleanType);
-		final TypeVariable ifType = getTypeVariable();
+		final TypeVariable ifType = engine.getTypeVariable();
 		addFunctorDefinition(IF, new ApplicableFunctor() {
 			@Override
 			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {

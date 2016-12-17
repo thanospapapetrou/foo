@@ -1,5 +1,6 @@
 package com.github.thanospapapetrou.funcky.runtime.literals;
 
+import java.net.URI;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
@@ -26,13 +27,17 @@ public class Pair extends Literal {
 	 * 
 	 * @param engine
 	 *            the engine that generated this pair
+	 * @param script
+	 *            the URI of the script from which this pair was generated
+	 * @param line
+	 *            the line from which this pair was parsed or <code>-1</code> if this pair was not parsed (is built-in or generated at runtime)
 	 * @param first
 	 *            the first value of this pair
 	 * @param second
 	 *            the second value of this pair
 	 */
-	public Pair(final FunckyScriptEngine engine, final Literal first, final Literal second) {
-		super(engine, FunckyScriptEngine.RUNTIME, -1);
+	public Pair(final FunckyScriptEngine engine, final URI script, final int line, final Literal first, final Literal second) {
+		super(engine, script, line);
 		this.first = Objects.requireNonNull(first, NULL_FIRST);
 		this.second = Objects.requireNonNull(second, NULL_SECOND);
 	}
@@ -67,7 +72,7 @@ public class Pair extends Literal {
 	@Override
 	public PairType getType(final ScriptContext context) throws ScriptException {
 		super.getType(context);
-		return new PairType(engine, first.getType(context), second.getType(context));
+		return engine.getPairType(first.getType(context), second.getType(context));
 	}
 
 	@Override

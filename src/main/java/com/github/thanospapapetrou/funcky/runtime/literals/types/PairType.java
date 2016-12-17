@@ -1,5 +1,6 @@
 package com.github.thanospapapetrou.funcky.runtime.literals.types;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,13 +27,15 @@ public class PairType extends Type {
 	 * 
 	 * @param engine
 	 *            the engine that generated this pair type
+	 * @param script
+	 *            the URI of the script from which this pair type was generated
 	 * @param first
 	 *            the first type of this pair type
 	 * @param second
 	 *            the second type of this pair type
 	 */
-	public PairType(final FunckyScriptEngine engine, final Type first, final Type second) {
-		super(engine, FunckyScriptEngine.RUNTIME, -1);
+	public PairType(final FunckyScriptEngine engine, final URI script, final Type first, final Type second) {
+		super(engine, script, -1);
 		this.first = Objects.requireNonNull(first, NULL_FIRST);
 		this.second = Objects.requireNonNull(second, NULL_SECOND);
 	}
@@ -40,7 +43,7 @@ public class PairType extends Type {
 	@Override
 	public Type bind(final Map<TypeVariable, Type> bindings) {
 		super.bind(bindings);
-		return new PairType(engine, first.bind(bindings), second.bind(bindings));
+		return engine.getPairType(first.bind(bindings), second.bind(bindings));
 	}
 
 	@Override
@@ -106,6 +109,6 @@ public class PairType extends Type {
 	@Override
 	protected PairType free(final Map<TypeVariable, TypeVariable> free) {
 		super.free(free);
-		return new PairType(engine, first.free(free), second.free(free));
+		return engine.getPairType(first.free(free), second.free(free));
 	}
 }

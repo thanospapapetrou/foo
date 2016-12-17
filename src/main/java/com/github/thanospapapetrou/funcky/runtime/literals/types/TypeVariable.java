@@ -3,7 +3,6 @@ package com.github.thanospapapetrou.funcky.runtime.literals.types;
 import java.net.URI;
 import java.util.Collections;
 import java.util.Map;
-import java.util.UUID;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 
@@ -13,15 +12,9 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
  * @author thanos
  */
 public class TypeVariable extends Type {
-	private static final String NAME = "_%1$s%2$s";
 	private static final String TYPE_VARIABLE = "$%1$s";
 
 	private final String name;
-
-	private static final String getRandomName() {
-		final UUID uuid = UUID.randomUUID();
-		return String.format(NAME, Long.toHexString(uuid.getMostSignificantBits()), Long.toHexString(uuid.getLeastSignificantBits()));
-	}
 
 	/**
 	 * Construct a new type variable.
@@ -38,16 +31,6 @@ public class TypeVariable extends Type {
 	public TypeVariable(final FunckyScriptEngine engine, final URI script, final int line, final String name) {
 		super(engine, script, line);
 		this.name = name;
-	}
-
-	/**
-	 * Construct a new type variable with a random name generated at runtime.
-	 * 
-	 * @param engine
-	 *            the engine that parsed this type variable
-	 */
-	public TypeVariable(final FunckyScriptEngine engine) {
-		this(engine, FunckyScriptEngine.RUNTIME, -1, getRandomName());
 	}
 
 	@Override
@@ -81,7 +64,7 @@ public class TypeVariable extends Type {
 	protected TypeVariable free(final Map<TypeVariable, TypeVariable> free) {
 		super.free(free);
 		if (!free.containsKey(this)) {
-			free.put(this, new TypeVariable(engine));
+			free.put(this, engine.getTypeVariable());
 		}
 		return free.get(this);
 	}

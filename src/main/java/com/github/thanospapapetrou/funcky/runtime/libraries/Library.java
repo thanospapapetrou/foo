@@ -25,10 +25,7 @@ import com.github.thanospapapetrou.funcky.runtime.functors.Functor;
 import com.github.thanospapapetrou.funcky.runtime.literals.ApplicableFunction;
 import com.github.thanospapapetrou.funcky.runtime.literals.Function;
 import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
 
 /**
  * Class representing a Funcky library.
@@ -41,6 +38,7 @@ public abstract class Library extends Script {
 	private static final String ERROR_RETRIEVING_URI_FOR_LIBRARY = "Error retrieving URI corresponding to library class %1$s";
 	private static final String NULL_DOMAIN = "Domain must not be null";
 	private static final String NULL_ENGINE = "Engine must not be null";
+	private static final String NULL_FUNCTION = "Function must notbe null";
 	private static final String NULL_LITERAL = "Literal must not be null";
 	private static final String NULL_NAME = "Name must not be null";
 	private static final String NULL_RANGE = "Range must not be null";
@@ -138,7 +136,8 @@ public abstract class Library extends Script {
 	 *            the implementation of the function to define
 	 */
 	protected void addFunctionDefinition(final String name, final Type domain, final Type range, final ApplicableFunction function) {
-		addDefinition(new Function(engine, getUri(), name, getFunctionType(domain, range)) {
+		Objects.requireNonNull(function, NULL_FUNCTION);
+		addDefinition(new Function(engine, getUri(), requireValidName(name), engine.getFunctionType(Objects.requireNonNull(domain, NULL_DOMAIN), Objects.requireNonNull(range, NULL_RANGE))) {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				super.apply(argument, context);
@@ -157,7 +156,7 @@ public abstract class Library extends Script {
 	 * @param types
 	 *            the types of the functor to define
 	 */
-	protected void addFunctorDefinition(final String name, final ApplicableFunctor functor, final Type... types) {
+	protected void addFunctorDefinition(final String name, final ApplicableFunctor functor, final Type... types) { // TOOD check arguments
 		addDefinition(new Functor(engine, getUri(), name, types) {
 			@Override
 			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
@@ -165,40 +164,5 @@ public abstract class Library extends Script {
 				return functor.apply(context, arguments);
 			}
 		});
-	}
-
-	/**
-	 * Generate a new function type.
-	 * 
-	 * @param domain
-	 *            the domain of the function type to generate
-	 * @param range
-	 *            the range of the function type to generate
-	 * @return a new function type with the given domain and range
-	 */
-	protected FunctionType getFunctionType(final Type domain, final Type range) {
-		return new FunctionType(engine, Objects.requireNonNull(domain, NULL_DOMAIN), Objects.requireNonNull(range, NULL_RANGE));
-	}
-
-	/**
-	 * Generate a new simple type.
-	 * 
-	 * @param script
-	 *            the URI of the script of the simple type to generate
-	 * @param name
-	 *            the name of the simple type to generate
-	 * @return a new simple type with the given script URI and name
-	 */
-	protected SimpleType getSimpleType(final URI script, final String name) {
-		return new SimpleType(engine, script, name);
-	}
-
-	/**
-	 * Generate a new type variable.
-	 * 
-	 * @return a new type variable
-	 */
-	protected TypeVariable getTypeVariable() {
-		return new TypeVariable(engine);
 	}
 }

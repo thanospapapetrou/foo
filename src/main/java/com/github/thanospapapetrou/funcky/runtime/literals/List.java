@@ -1,5 +1,6 @@
 package com.github.thanospapapetrou.funcky.runtime.literals;
 
+import java.net.URI;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
@@ -7,7 +8,6 @@ import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.literals.types.ListType;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
 
 /**
  * Class representing a Funcky list.
@@ -32,13 +32,17 @@ public class List extends Literal {
 	 * 
 	 * @param engine
 	 *            the engine that generated this list
+	 * @param script
+	 *            the URI of the script from which this list was generated
+	 * @param line
+	 *            the line from which this list was parsed or <code>-1</code> if this list was not parsed (is built-in or generated at runtime)
 	 * @param head
 	 *            the head of this list
 	 * @param tail
 	 *            the tail of this list
 	 */
-	public List(final FunckyScriptEngine engine, final Literal head, final List tail) {
-		super(engine, FunckyScriptEngine.RUNTIME, -1);
+	public List(final FunckyScriptEngine engine, final URI script, final int line, final Literal head, final List tail) {
+		super(engine, script, line);
 		this.head = Objects.requireNonNull(head, NULL_HEAD);
 		this.tail = Objects.requireNonNull(tail, NULL_TAIL);
 	}
@@ -48,9 +52,13 @@ public class List extends Literal {
 	 * 
 	 * @param engine
 	 *            the engine that generated this empty list
+	 * @param script
+	 *            the URI of the script from which this list was generated
+	 * @param line
+	 *            the line from which this list was parsed or <code>-1</code> if this list was not parsed (is built-in or generated at runtime)
 	 */
-	public List(final FunckyScriptEngine engine) {
-		super(engine, FunckyScriptEngine.RUNTIME, -1);
+	public List(final FunckyScriptEngine engine, final URI script, final int line) {
+		super(engine, script, line);
 		this.head = null;
 		this.tail = null;
 	}
@@ -60,11 +68,15 @@ public class List extends Literal {
 	 * 
 	 * @param engine
 	 *            the engine that generated this string
+	 * @param script
+	 *            the URI of the script from which this string was generated
+	 * @param line
+	 *            the line from which this string was parsed or <code>-1</code> if this string was not parsed (is built-in or generated at runtime)
 	 * @param string
 	 *            the value of this string
 	 */
-	public List(final FunckyScriptEngine engine, final String string) {
-		this(engine, new Character(engine, requireValidString(string).charAt(0)), string.substring(1).isEmpty() ? new List(engine) : new List(engine, string.substring(1)));
+	public List(final FunckyScriptEngine engine, final URI script, final int line, final String string) {
+		this(engine, script, line, new Character(engine, script, line, requireValidString(string).charAt(0)), string.substring(1).isEmpty() ? new List(engine, script, line) : new List(engine, script, line, string.substring(1)));
 	}
 
 	private static String requireValidString(final String string) {
@@ -104,7 +116,7 @@ public class List extends Literal {
 	@Override
 	public ListType getType(final ScriptContext context) throws ScriptException {
 		super.getType(context);
-		return new ListType(engine, (head == null) ? new TypeVariable(engine) : head.getType(context));
+		return engine.getListType((head == null) ? engine.getTypeVariable() : head.getType(context));
 	}
 
 	@Override

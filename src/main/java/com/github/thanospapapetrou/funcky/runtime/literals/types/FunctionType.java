@@ -1,5 +1,6 @@
 package com.github.thanospapapetrou.funcky.runtime.literals.types;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,13 +24,15 @@ public class FunctionType extends Type {
 	 * 
 	 * @param engine
 	 *            the engine that generated this function type
+	 * @param script
+	 *            the URI of the script from which this function type was generated
 	 * @param domain
 	 *            the domain of this function type
 	 * @param range
 	 *            the range of this function type
 	 */
-	public FunctionType(final FunckyScriptEngine engine, final Type domain, final Type range) {
-		super(engine, FunckyScriptEngine.RUNTIME, -1);
+	public FunctionType(final FunckyScriptEngine engine, final URI script, final Type domain, final Type range) {
+		super(engine, script, -1);
 		this.domain = domain;
 		this.range = range;
 	}
@@ -37,7 +40,7 @@ public class FunctionType extends Type {
 	@Override
 	public Type bind(final Map<TypeVariable, Type> bindings) {
 		super.bind(bindings);
-		return new FunctionType(engine, domain.bind(bindings), range.bind(bindings));
+		return engine.getFunctionType(domain.bind(bindings), range.bind(bindings));
 	}
 
 	@Override
@@ -103,6 +106,6 @@ public class FunctionType extends Type {
 	@Override
 	protected FunctionType free(final Map<TypeVariable, TypeVariable> free) {
 		super.free(free);
-		return new FunctionType(engine, domain.free(free), range.free(free));
+		return engine.getFunctionType(domain.free(free), range.free(free));
 	}
 }

@@ -94,7 +94,7 @@ public class Numbers extends Library {
 	 */
 	public Numbers(final FunckyScriptEngine engine) throws ScriptException {
 		super(engine);
-		numberType = getSimpleType(NUMBERS, NUMBER);
+		numberType = new SimpleType(engine, NUMBERS, NUMBER);
 		addDefinition(numberType);
 		addDefinition(getNumber(Double.POSITIVE_INFINITY));
 		addDefinition(getNumber(Double.NaN));
@@ -110,31 +110,31 @@ public class Numbers extends Library {
 			@Override
 			public Number apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				final double value = ((Number) argument.eval(context)).getValue();
-				return new Number(engine, (Double.isInfinite(value) || Double.isNaN(value)) ? value : (int) value);
+				return engine.getNumber((Double.isInfinite(value) || Double.isNaN(value)) ? value : (int) value);
 			}
 		});
 		addTwoArgumentArithmeticOperatorDefinition(ADD, new ApplicableTwoArgumentArithmeticOperator() {
 			@Override
 			public Number apply(final Number term1, final Number term2, final ScriptContext context) {
-				return new Number(engine, term1.getValue() + term2.getValue());
+				return engine.getNumber(term1.getValue() + term2.getValue());
 			}
 		});
 		addTwoArgumentArithmeticOperatorDefinition(SUBTRACT, new ApplicableTwoArgumentArithmeticOperator() {
 			@Override
 			public Number apply(final Number minuend, final Number subtrahend, final ScriptContext context) {
-				return new Number(engine, minuend.getValue() - subtrahend.getValue());
+				return engine.getNumber(minuend.getValue() - subtrahend.getValue());
 			}
 		});
 		addTwoArgumentArithmeticOperatorDefinition(MULTIPLY, new ApplicableTwoArgumentArithmeticOperator() {
 			@Override
 			public Number apply(final Number factor1, final Number factor2, final ScriptContext context) {
-				return new Number(engine, factor1.getValue() * factor2.getValue());
+				return engine.getNumber(factor1.getValue() * factor2.getValue());
 			}
 		});
 		addTwoArgumentArithmeticOperatorDefinition(DIVIDE, new ApplicableTwoArgumentArithmeticOperator() {
 			@Override
 			public Number apply(final Number dividend, final Number divisor, final ScriptContext context) {
-				return new Number(engine, dividend.getValue() / divisor.getValue());
+				return engine.getNumber(dividend.getValue() / divisor.getValue());
 			}
 		});
 	}
@@ -150,6 +150,6 @@ public class Numbers extends Library {
 	}
 
 	private Number getNumber(final double value) {
-		return new Number(engine, NUMBERS, value);
+		return new Number(engine, NUMBERS, -1, value);
 	}
 }

@@ -52,27 +52,27 @@ public class Characters extends Library {
 	 */
 	public Characters(final FunckyScriptEngine engine) throws ScriptException {
 		super(engine);
-		final SimpleType characterType = getSimpleType(CHARACTERS, CHARACTER);
+		final SimpleType characterType = new SimpleType(engine, CHARACTERS, CHARACTER);
 		addDefinition(characterType);
 		final SimpleType numberType = engine.getLiteral(Numbers.class, Numbers.NUMBER);
 		addFunctorDefinition(CODE_POINT, new ApplicableFunctor() {
 			@Override
 			public Number apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				return new Number(engine, java.lang.Character.toCodePoint(((Character) arguments[0].eval(context)).getValue(), ((Character) arguments[1].eval(context)).getValue()));
+				return engine.getNumber(java.lang.Character.toCodePoint(((Character) arguments[0].eval(context)).getValue(), ((Character) arguments[1].eval(context)).getValue()));
 			}
 		}, characterType, characterType, numberType);
 		// TODO check that argument is int
 		addFunctionDefinition(HIGH_SURROGATE, numberType, characterType, new ApplicableFunction() {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
-				return new Character(engine, java.lang.Character.highSurrogate((int) ((Number) argument.eval(context)).getValue()));
+				return engine.getCharacter(java.lang.Character.highSurrogate((int) ((Number) argument.eval(context)).getValue()));
 			}
 		});
 		// TODO check that argument is int
 		addFunctionDefinition(LOW_SURROGATE, numberType, characterType, new ApplicableFunction() {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
-				return new Character(engine, java.lang.Character.lowSurrogate((int) ((Number) argument.eval(context)).getValue()));
+				return engine.getCharacter(java.lang.Character.lowSurrogate((int) ((Number) argument.eval(context)).getValue()));
 			}
 		});
 		// TODO

@@ -64,7 +64,7 @@ public class Pairs extends Library {
 		addFunctorDefinition(PAIR, new ApplicableFunctor() {
 			@Override
 			public PairType apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				return new PairType(engine, (Type) arguments[0].eval(context), (Type) arguments[1].eval(context));
+				return engine.getPairType((Type) arguments[0].eval(context), (Type) arguments[1].eval(context));
 			}
 		}, type, type, type);
 		addFunctionDefinition(FIRST_TYPE, type, type, new ApplicableFunction() {
@@ -79,23 +79,23 @@ public class Pairs extends Library {
 				return ((PairType) argument.eval(context)).getSecond();
 			}
 		});
-		final TypeVariable combineType1 = getTypeVariable();
-		final TypeVariable combineType2 = getTypeVariable();
+		final TypeVariable combineType1 = engine.getTypeVariable();
+		final TypeVariable combineType2 = engine.getTypeVariable();
 		addFunctorDefinition(COMBINE, new ApplicableFunctor() {
 			@Override
 			public Pair apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				return new Pair(engine, arguments[0].eval(context), arguments[1].eval(context));
+				return engine.getPair(arguments[0].eval(context), arguments[1].eval(context));
 			}
-		}, combineType1, combineType2, new PairType(engine, combineType1, combineType2));
-		final TypeVariable firstType = getTypeVariable();
-		addFunctionDefinition(FIRST, new PairType(engine, firstType, getTypeVariable()), firstType, new ApplicableFunction() {
+		}, combineType1, combineType2, engine.getPairType(combineType1, combineType2));
+		final TypeVariable firstType = engine.getTypeVariable();
+		addFunctionDefinition(FIRST, engine.getPairType(firstType, engine.getTypeVariable()), firstType, new ApplicableFunction() {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				return ((Pair) argument.eval(context)).getFirst();
 			}
 		});
-		final TypeVariable secondType = getTypeVariable();
-		addFunctionDefinition(SECOND, new PairType(engine, getTypeVariable(), secondType), secondType, new ApplicableFunction() {
+		final TypeVariable secondType = engine.getTypeVariable();
+		addFunctionDefinition(SECOND, engine.getPairType(engine.getTypeVariable(), secondType), secondType, new ApplicableFunction() {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				return ((Pair) argument.eval(context)).getSecond();

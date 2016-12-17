@@ -74,48 +74,48 @@ public class Prelude extends Library {
 	 */
 	public Prelude(final FunckyScriptEngine engine) throws ScriptException {
 		super(engine);
-		final SimpleType typeType = getSimpleType(PRELUDE, TYPE);
+		final SimpleType typeType = new SimpleType(engine, PRELUDE, TYPE);
 		addDefinition(typeType);
-		addFunctionDefinition(BOTTOM, getTypeVariable(), getTypeVariable(), new ApplicableFunction() {
+		addFunctionDefinition(BOTTOM, engine.getTypeVariable(), engine.getTypeVariable(), new ApplicableFunction() {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				return apply(argument, context);
 			}
 		});
-		final TypeVariable identityType = getTypeVariable();
+		final TypeVariable identityType = engine.getTypeVariable();
 		addFunctorDefinition(IDENTITY, new ApplicableFunctor() {
 			@Override
 			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				return arguments[0].eval(context);
 			}
 		}, identityType, identityType);
-		final TypeVariable composeType1 = getTypeVariable();
-		final TypeVariable composeType2 = getTypeVariable();
-		final TypeVariable composeType3 = getTypeVariable();
+		final TypeVariable composeType1 = engine.getTypeVariable();
+		final TypeVariable composeType2 = engine.getTypeVariable();
+		final TypeVariable composeType3 = engine.getTypeVariable();
 		addFunctorDefinition(COMPOSE, new ApplicableFunctor() {
 			@Override
 			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				return ((Function) arguments[0].eval(context)).apply(((Function) arguments[1].eval(context)).apply(arguments[2], context), context);
 			}
-		}, getFunctionType(composeType1, composeType2), getFunctionType(composeType3, composeType1), composeType3, composeType2);
-		final TypeVariable flipType1 = getTypeVariable();
-		final TypeVariable flipType2 = getTypeVariable();
-		final TypeVariable flipType3 = getTypeVariable();
+		}, engine.getFunctionType(composeType1, composeType2), engine.getFunctionType(composeType3, composeType1), composeType3, composeType2);
+		final TypeVariable flipType1 = engine.getTypeVariable();
+		final TypeVariable flipType2 = engine.getTypeVariable();
+		final TypeVariable flipType3 = engine.getTypeVariable();
 		addFunctorDefinition(FLIP, new ApplicableFunctor() {
 			@Override
 			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				return ((Function) ((Function) arguments[0].eval(context)).apply(arguments[2], context)).apply(arguments[1], context);
 			}
-		}, getFunctionType(flipType1, getFunctionType(flipType2, flipType3)), flipType2, flipType1, flipType3);
-		final TypeVariable duplicateType1 = getTypeVariable();
-		final TypeVariable duplicateType2 = getTypeVariable();
+		}, engine.getFunctionType(flipType1, engine.getFunctionType(flipType2, flipType3)), flipType2, flipType1, flipType3);
+		final TypeVariable duplicateType1 = engine.getTypeVariable();
+		final TypeVariable duplicateType2 = engine.getTypeVariable();
 		addFunctorDefinition(DUPLICATE, new ApplicableFunctor() {
 			@Override
 			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
 				return ((Function) ((Function) arguments[0].eval(context)).apply(arguments[1], context)).apply(arguments[1], context);
 			}
-		}, getFunctionType(duplicateType1, getFunctionType(duplicateType1, duplicateType2)), duplicateType1, duplicateType2);
-		addFunctionDefinition(TYPE_OF, getTypeVariable(), typeType, new ApplicableFunction() {
+		}, engine.getFunctionType(duplicateType1, engine.getFunctionType(duplicateType1, duplicateType2)), duplicateType1, duplicateType2);
+		addFunctionDefinition(TYPE_OF, engine.getTypeVariable(), typeType, new ApplicableFunction() {
 			@Override
 			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
 				return argument.getType(context);
@@ -124,7 +124,7 @@ public class Prelude extends Library {
 		addFunctorDefinition(FUNCTION, new ApplicableFunctor() {
 			@Override
 			public FunctionType apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				return new FunctionType(engine, (Type) arguments[0].eval(context), (Type) arguments[1].eval(context));
+				return engine.getFunctionType((Type) arguments[0].eval(context), (Type) arguments[1].eval(context));
 			}
 		}, typeType, typeType, typeType);
 	}
