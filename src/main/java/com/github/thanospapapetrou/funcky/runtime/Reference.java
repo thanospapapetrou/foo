@@ -3,7 +3,6 @@ package com.github.thanospapapetrou.funcky.runtime;
 import java.net.URI;
 import java.util.Objects;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
@@ -95,8 +94,8 @@ public class Reference extends Expression {
 	public boolean equals(final Object object) {
 		if (object instanceof Reference) {
 			try {
-				final Reference qualifiedThis = qualify(engine.getContext());
-				final Reference qualifiedThat = ((Reference) object).qualify(engine.getContext());
+				final Reference qualifiedThis = qualify();
+				final Reference qualifiedThat = ((Reference) object).qualify();
 				return Objects.equals(qualifiedThis.getUri(), qualifiedThat.getUri()) && Objects.equals(qualifiedThis.getName(), qualifiedThat.getName());
 			} catch (final UndeclaredPrefixException e) {
 				throw new RuntimeException(e);
@@ -106,8 +105,8 @@ public class Reference extends Expression {
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws ScriptException {
-		return resolve(context).eval(context);
+	public Literal eval() throws ScriptException {
+		return resolve().eval();
 	}
 
 	/**
@@ -138,15 +137,14 @@ public class Reference extends Expression {
 	}
 
 	@Override
-	public Type getType(final ScriptContext context) throws ScriptException {
-		super.getType(context);
-		return resolve(context).getType(context);
+	public Type getType() throws ScriptException {
+		return resolve().getType();
 	}
 
 	@Override
 	public int hashCode() {
 		try {
-			final Reference qualifiedReference = qualify(engine.getContext());
+			final Reference qualifiedReference = qualify();
 			return Objects.hash(qualifiedReference.getUri(), qualifiedReference.getName());
 		} catch (final UndeclaredPrefixException e) {
 			throw new RuntimeException(e);
@@ -156,17 +154,17 @@ public class Reference extends Expression {
 	@Override
 	public String toString() {
 		try {
-			return qualify(engine.getContext()).name.toString();
+			return qualify().name.toString();
 		} catch (final UndeclaredPrefixException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private Reference qualify(final ScriptContext context) throws UndeclaredPrefixException {
+	private Reference qualify() throws UndeclaredPrefixException {
 		if (getUri() != null) { // fully qualified reference
 			return this;
 		} else if (getPrefix() != null) { // relative reference with prefix
-			final URI uri = engine.resolvePrefix(context, script, getPrefix());
+			final URI uri = engine.resolvePrefix(script, getPrefix());
 			if (uri == null) {
 				throw new UndeclaredPrefixException(this);
 			}
@@ -176,12 +174,12 @@ public class Reference extends Expression {
 		}
 	}
 
-	private Expression resolve(final ScriptContext context) throws ScriptException {
-		final Reference qualified = qualify(context);
-		if (engine.getScope(context, qualified.getUri()) == null) {
+	private Expression resolve() throws ScriptException {
+		final Reference qualified = qualify();
+		if (engine.getScope(qualified.getUri()) == null) {
 			engine.load(qualified);
 		}
-		final Expression expression = (Expression) context.getAttribute(qualified.getName(), engine.getScope(context, qualified.getUri()));
+		final Expression expression = (Expression) engine.getContext().getAttribute(qualified.getName(), engine.getScope(qualified.getUri()));
 		if (expression == null) {
 			throw new UndefinedSymbolException(qualified);
 		}

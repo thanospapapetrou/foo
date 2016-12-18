@@ -1,9 +1,7 @@
 package com.github.thanospapapetrou.funcky.runtime;
 
 import java.net.URI;
-import java.util.Objects;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
@@ -16,8 +14,6 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
  * @author thanos
  */
 public abstract class Expression extends AbstractSyntaxTreeNode {
-	private static final String NULL_CONTEXT = "Context must not be null";
-
 	/**
 	 * Construct a new expression.
 	 * 
@@ -33,22 +29,14 @@ public abstract class Expression extends AbstractSyntaxTreeNode {
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws ScriptException {
-		super.eval(context);
-		return null;
-	}
+	public abstract Literal eval() throws ScriptException;
 
 	/**
 	 * Get the type of this expression.
 	 * 
-	 * @param context
-	 *            the context in which to evaluate the type
-	 * @return the type of this expression as evaluated in the given context
+	 * @return the type of this expression
 	 * @throws ScriptException
-	 *             if any errors occur while evaluating the type of this expression in the given context
+	 *             if any errors occur while evaluating the type of this expression
 	 */
-	public Type getType(final ScriptContext context) throws ScriptException {
-		Objects.requireNonNull(context, NULL_CONTEXT);
-		return null;
-	}
+	public abstract Type getType() throws ScriptException;
 }

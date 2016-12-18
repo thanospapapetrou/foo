@@ -3,7 +3,6 @@ package com.github.thanospapapetrou.funcky.runtime.functors;
 import java.net.URI;
 import java.util.Objects;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
@@ -18,7 +17,6 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
  * @author thanos
  */
 public abstract class TwoArgumentArithmeticOperator extends Functor implements ApplicableTwoArgumentArithmeticOperator {
-	private static final String NULL_CONTEXT = "Context must not be null";
 	private static final String NULL_ARGUMENT_1 = "Argument 1 must not be null";
 	private static final String NULL_ARGUMENT_2 = "Argument 2 must not be null";
 
@@ -39,16 +37,15 @@ public abstract class TwoArgumentArithmeticOperator extends Functor implements A
 	}
 
 	@Override
-	public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-		super.apply(context, arguments);
-		return apply((Number) arguments[0].eval(context), (Number) arguments[1].eval(context), context);
+	public Literal apply(final Expression... arguments) throws ScriptException {
+		super.apply(arguments);
+		return apply((Number) arguments[0].eval(), (Number) arguments[1].eval());
 	}
 
 	@Override
-	public Number apply(final Number argument1, final Number argument2, final ScriptContext context) {
+	public Number apply(final Number argument1, final Number argument2) {
 		Objects.requireNonNull(argument1, NULL_ARGUMENT_1);
 		Objects.requireNonNull(argument2, NULL_ARGUMENT_2);
-		Objects.requireNonNull(context, NULL_CONTEXT);
 		return null;
 	}
 }

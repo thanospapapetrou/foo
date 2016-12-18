@@ -2,7 +2,6 @@ package com.github.thanospapapetrou.funcky.runtime.libraries;
 
 import java.net.URI;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
@@ -71,22 +70,22 @@ public class Booleans extends Library {
 		final TypeVariable equalType = engine.getTypeVariable();
 		addFunctorDefinition(EQUAL, new ApplicableFunctor() {
 			@Override
-			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				return arguments[0].eval(context).equals(arguments[1].eval(context)) ? booleanTrue : booleanFalse;
+			public Literal apply(final Expression... arguments) throws ScriptException {
+				return arguments[0].eval().equals(arguments[1].eval()) ? booleanTrue : booleanFalse;
 			}
 		}, equalType, equalType, booleanType);
 		final SimpleType type = engine.getLiteral(Prelude.class, Prelude.TYPE);
 		addFunctorDefinition(EQUIVALENT, new ApplicableFunctor() {
 			@Override
-			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				return (((Type) arguments[0].eval(context)).inferGenericBindings((Type) arguments[1].eval(context)) == null) ? booleanFalse : booleanTrue;
+			public Literal apply(final Expression... arguments) throws ScriptException {
+				return (((Type) arguments[0].eval()).inferGenericBindings((Type) arguments[1].eval()) == null) ? booleanFalse : booleanTrue;
 			}
 		}, type, type, booleanType);
 		final TypeVariable ifType = engine.getTypeVariable();
 		addFunctorDefinition(IF, new ApplicableFunctor() {
 			@Override
-			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				return ((Boolean) arguments[0].eval(context)).equals(booleanTrue) ? arguments[1].eval(context) : arguments[2].eval(context);
+			public Literal apply(final Expression... arguments) throws ScriptException {
+				return ((Boolean) arguments[0].eval()).equals(booleanTrue) ? arguments[1].eval() : arguments[2].eval();
 			}
 		}, booleanType, ifType, ifType, ifType);
 	}

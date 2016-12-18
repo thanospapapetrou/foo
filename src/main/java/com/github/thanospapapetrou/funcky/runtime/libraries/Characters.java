@@ -2,7 +2,6 @@ package com.github.thanospapapetrou.funcky.runtime.libraries;
 
 import java.net.URI;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
@@ -57,22 +56,22 @@ public class Characters extends Library {
 		final SimpleType numberType = engine.getLiteral(Numbers.class, Numbers.NUMBER);
 		addFunctorDefinition(CODE_POINT, new ApplicableFunctor() {
 			@Override
-			public Number apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				return engine.getNumber(java.lang.Character.toCodePoint(((Character) arguments[0].eval(context)).getValue(), ((Character) arguments[1].eval(context)).getValue()));
+			public Number apply(final Expression... arguments) throws ScriptException {
+				return engine.getNumber(java.lang.Character.toCodePoint(((Character) arguments[0].eval()).getValue(), ((Character) arguments[1].eval()).getValue()));
 			}
 		}, characterType, characterType, numberType);
 		// TODO check that argument is int
 		addFunctionDefinition(HIGH_SURROGATE, numberType, characterType, new ApplicableFunction() {
 			@Override
-			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
-				return engine.getCharacter(java.lang.Character.highSurrogate((int) ((Number) argument.eval(context)).getValue()));
+			public Literal apply(final Expression argument) throws ScriptException {
+				return engine.getCharacter(java.lang.Character.highSurrogate((int) ((Number) argument.eval()).getValue()));
 			}
 		});
 		// TODO check that argument is int
 		addFunctionDefinition(LOW_SURROGATE, numberType, characterType, new ApplicableFunction() {
 			@Override
-			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
-				return engine.getCharacter(java.lang.Character.lowSurrogate((int) ((Number) argument.eval(context)).getValue()));
+			public Literal apply(final Expression argument) throws ScriptException {
+				return engine.getCharacter(java.lang.Character.lowSurrogate((int) ((Number) argument.eval()).getValue()));
 			}
 		});
 		// TODO

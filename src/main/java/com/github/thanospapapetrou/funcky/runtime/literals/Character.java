@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
@@ -63,8 +62,7 @@ public class Character extends Literal {
 	}
 
 	@Override
-	public SimpleType getType(final ScriptContext context) throws ScriptException {
-		super.getType(context);
+	public SimpleType getType() throws ScriptException {
 		return engine.getLiteral(Characters.class, Characters.CHARACTER);
 	}
 

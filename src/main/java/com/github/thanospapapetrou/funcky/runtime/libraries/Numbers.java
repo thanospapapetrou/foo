@@ -2,7 +2,6 @@ package com.github.thanospapapetrou.funcky.runtime.libraries;
 
 import java.net.URI;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
@@ -102,38 +101,38 @@ public class Numbers extends Library {
 		addDefinition(E, getNumber(Math.E));
 		addFunctionDefinition(IS_NAN, numberType, engine.<SimpleType> getLiteral(Booleans.class, Booleans.BOOLEAN), new ApplicableFunction() {
 			@Override
-			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
-				return engine.getLiteral(Booleans.class, Double.isNaN(((Number) argument.eval(context)).getValue()) ? Booleans.TRUE : Booleans.FALSE);
+			public Literal apply(final Expression argument) throws ScriptException {
+				return engine.getLiteral(Booleans.class, Double.isNaN(((Number) argument.eval()).getValue()) ? Booleans.TRUE : Booleans.FALSE);
 			}
 		});
 		addFunctionDefinition(INTEGER, numberType, numberType, new ApplicableFunction() {
 			@Override
-			public Number apply(final Expression argument, final ScriptContext context) throws ScriptException {
-				final double value = ((Number) argument.eval(context)).getValue();
+			public Number apply(final Expression argument) throws ScriptException {
+				final double value = ((Number) argument.eval()).getValue();
 				return engine.getNumber((Double.isInfinite(value) || Double.isNaN(value)) ? value : (int) value);
 			}
 		});
 		addTwoArgumentArithmeticOperatorDefinition(ADD, new ApplicableTwoArgumentArithmeticOperator() {
 			@Override
-			public Number apply(final Number term1, final Number term2, final ScriptContext context) {
+			public Number apply(final Number term1, final Number term2) {
 				return engine.getNumber(term1.getValue() + term2.getValue());
 			}
 		});
 		addTwoArgumentArithmeticOperatorDefinition(SUBTRACT, new ApplicableTwoArgumentArithmeticOperator() {
 			@Override
-			public Number apply(final Number minuend, final Number subtrahend, final ScriptContext context) {
+			public Number apply(final Number minuend, final Number subtrahend) {
 				return engine.getNumber(minuend.getValue() - subtrahend.getValue());
 			}
 		});
 		addTwoArgumentArithmeticOperatorDefinition(MULTIPLY, new ApplicableTwoArgumentArithmeticOperator() {
 			@Override
-			public Number apply(final Number factor1, final Number factor2, final ScriptContext context) {
+			public Number apply(final Number factor1, final Number factor2) {
 				return engine.getNumber(factor1.getValue() * factor2.getValue());
 			}
 		});
 		addTwoArgumentArithmeticOperatorDefinition(DIVIDE, new ApplicableTwoArgumentArithmeticOperator() {
 			@Override
-			public Number apply(final Number dividend, final Number divisor, final ScriptContext context) {
+			public Number apply(final Number dividend, final Number divisor) {
 				return engine.getNumber(dividend.getValue() / divisor.getValue());
 			}
 		});
@@ -142,9 +141,9 @@ public class Numbers extends Library {
 	private void addTwoArgumentArithmeticOperatorDefinition(final String name, final ApplicableTwoArgumentArithmeticOperator operator) throws ScriptException {
 		addDefinition(new TwoArgumentArithmeticOperator(engine, NUMBERS, name, numberType) {
 			@Override
-			public Number apply(final Number argument1, final Number argument2, final ScriptContext context) {
-				super.apply(argument1, argument2, context);
-				return operator.apply(argument1, argument2, context);
+			public Number apply(final Number argument1, final Number argument2) {
+				super.apply(argument1, argument2);
+				return operator.apply(argument1, argument2);
 			}
 		});
 	}

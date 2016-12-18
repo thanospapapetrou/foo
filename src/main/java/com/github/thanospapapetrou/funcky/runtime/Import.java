@@ -3,7 +3,6 @@ package com.github.thanospapapetrou.funcky.runtime;
 import java.net.URI;
 import java.util.Objects;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
@@ -46,12 +45,11 @@ public class Import extends AbstractSyntaxTreeNode {
 	}
 
 	@Override
-	public Void eval(final ScriptContext context) throws ScriptException {
-		super.eval(context);
-		if (engine.resolvePrefix(context, script, prefix) != null) {
+	public Void eval() throws ScriptException {
+		if (engine.resolvePrefix(script, prefix) != null) {
 			throw new AlreadyDeclaredPrefixException(this);
 		}
-		engine.declareImport(context, script, prefix, uri);
+		engine.declareImport(script, prefix, uri);
 		return null;
 	}
 

@@ -3,7 +3,6 @@ package com.github.thanospapapetrou.funcky.runtime.literals;
 import java.net.URI;
 import java.util.Objects;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
@@ -18,7 +17,6 @@ import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
 public abstract class Function extends Literal implements ApplicableFunction {
 	private static final String EMPTY_NAME = "Name must not be null";
 	private static final String NULL_ARGUMENT = "Argument must not be null";
-	private static final String NULL_CONTEXT = "Context must not be null";
 	private static final String NULL_NAME = "Name must not be null";
 	private static final String NULL_TYPE = "Type must not be null";
 
@@ -47,9 +45,8 @@ public abstract class Function extends Literal implements ApplicableFunction {
 	}
 
 	@Override
-	public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
+	public Literal apply(final Expression argument) throws ScriptException {
 		Objects.requireNonNull(argument, NULL_ARGUMENT);
-		Objects.requireNonNull(context, NULL_CONTEXT);
 		return null;
 	}
 
@@ -59,8 +56,7 @@ public abstract class Function extends Literal implements ApplicableFunction {
 	}
 
 	@Override
-	public FunctionType getType(final ScriptContext context) throws ScriptException {
-		super.getType(context);
+	public FunctionType getType() throws ScriptException {
 		return type;
 	}
 

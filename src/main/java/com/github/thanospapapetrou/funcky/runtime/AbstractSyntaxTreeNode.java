@@ -15,7 +15,6 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
  * @author thanos
  */
 public abstract class AbstractSyntaxTreeNode extends CompiledScript {
-	private static final String NULL_CONTEXT = "Context must not be null";
 	private static final String NULL_ENGINE = "Engine must not be null";
 	private static final String NULL_SCRIPT = "Script must not be null";
 
@@ -51,9 +50,11 @@ public abstract class AbstractSyntaxTreeNode extends CompiledScript {
 	}
 
 	@Override
-	public Object eval(final ScriptContext context) throws ScriptException {
-		Objects.requireNonNull(context, NULL_CONTEXT);
-		return null;
+	public abstract Object eval() throws ScriptException;
+
+	@Override
+	public Object eval(final ScriptContext ignored) throws ScriptException {
+		return eval();
 	}
 
 	@Override

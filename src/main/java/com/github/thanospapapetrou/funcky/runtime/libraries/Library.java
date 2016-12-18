@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
@@ -139,9 +138,9 @@ public abstract class Library extends Script {
 		Objects.requireNonNull(function, NULL_FUNCTION);
 		addDefinition(new Function(engine, getUri(), requireValidName(name), engine.getFunctionType(Objects.requireNonNull(domain, NULL_DOMAIN), Objects.requireNonNull(range, NULL_RANGE))) {
 			@Override
-			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
-				super.apply(argument, context);
-				return function.apply(argument, context);
+			public Literal apply(final Expression argument) throws ScriptException {
+				super.apply(argument);
+				return function.apply(argument);
 			}
 		});
 	}
@@ -159,9 +158,9 @@ public abstract class Library extends Script {
 	protected void addFunctorDefinition(final String name, final ApplicableFunctor functor, final Type... types) { // TOOD check arguments
 		addDefinition(new Functor(engine, getUri(), name, types) {
 			@Override
-			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				super.apply(context, arguments);
-				return functor.apply(context, arguments);
+			public Literal apply(final Expression... arguments) throws ScriptException {
+				super.apply(arguments);
+				return functor.apply(arguments);
 			}
 		});
 	}

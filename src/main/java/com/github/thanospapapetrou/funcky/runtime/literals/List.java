@@ -3,7 +3,6 @@ package com.github.thanospapapetrou.funcky.runtime.literals;
 import java.net.URI;
 import java.util.Objects;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
@@ -114,9 +113,8 @@ public class List extends Literal {
 	}
 
 	@Override
-	public ListType getType(final ScriptContext context) throws ScriptException {
-		super.getType(context);
-		return engine.getListType((head == null) ? engine.getTypeVariable() : head.getType(context));
+	public ListType getType() throws ScriptException {
+		return engine.getListType((head == null) ? engine.getTypeVariable() : head.getType());
 	}
 
 	@Override

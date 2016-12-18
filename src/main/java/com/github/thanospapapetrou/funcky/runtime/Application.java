@@ -3,7 +3,6 @@ package com.github.thanospapapetrou.funcky.runtime;
 import java.net.URI;
 import java.util.Objects;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
@@ -58,10 +57,9 @@ public class Application extends Expression {
 	}
 
 	@Override
-	public Literal eval(final ScriptContext context) throws ScriptException {
-		super.eval(context);
-		checkTypes(context);
-		return ((Function) function.eval(context)).apply(argument, context);
+	public Literal eval() throws ScriptException {
+		checkTypes();
+		return ((Function) function.eval()).apply(argument);
 	}
 
 	/**
@@ -83,11 +81,10 @@ public class Application extends Expression {
 	}
 
 	@Override
-	public Type getType(final ScriptContext context) throws ScriptException {
-		super.getType(context);
-		checkTypes(context);
-		final FunctionType functionType = (FunctionType) function.getType(context);
-		return functionType.getRange().bind(functionType.getDomain().inferGenericBindings(argument.getType(context).free()));
+	public Type getType() throws ScriptException {
+		checkTypes();
+		final FunctionType functionType = (FunctionType) function.getType();
+		return functionType.getRange().bind(functionType.getDomain().inferGenericBindings(argument.getType().free()));
 	}
 
 	@Override
@@ -101,12 +98,12 @@ public class Application extends Expression {
 		return String.format(APPLICATION, function, (argumentExpression instanceof Application) ? String.format(NESTED_APPLICATION, argumentExpression) : argumentExpression);
 	}
 
-	private void checkTypes(final ScriptContext context) throws ScriptException {
-		if (!(function.getType(context) instanceof FunctionType)) {
+	private void checkTypes() throws ScriptException {
+		if (!(function.getType() instanceof FunctionType)) {
 			throw new InvalidFunctionException(function);
 		}
-		if (((FunctionType) function.getType(context)).getDomain().inferGenericBindings(argument.getType(context).free()) == null) {
-			throw new InvalidArgumentException(context, this);
+		if (((FunctionType) function.getType()).getDomain().inferGenericBindings(argument.getType().free()) == null) {
+			throw new InvalidArgumentException(this);
 		}
 	}
 }

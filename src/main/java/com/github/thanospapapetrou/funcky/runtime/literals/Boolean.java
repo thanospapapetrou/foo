@@ -2,7 +2,6 @@ package com.github.thanospapapetrou.funcky.runtime.literals;
 
 import java.net.URI;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
@@ -39,8 +38,7 @@ public class Boolean extends Literal {
 	}
 
 	@Override
-	public SimpleType getType(final ScriptContext context) throws ScriptException {
-		super.getType(context);
+	public SimpleType getType() throws ScriptException {
 		return engine.getLiteral(Booleans.class, Booleans.BOOLEAN);
 	}
 

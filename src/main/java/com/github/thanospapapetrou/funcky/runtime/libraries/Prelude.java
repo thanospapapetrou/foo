@@ -2,7 +2,6 @@ package com.github.thanospapapetrou.funcky.runtime.libraries;
 
 import java.net.URI;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
@@ -78,15 +77,15 @@ public class Prelude extends Library {
 		addDefinition(typeType);
 		addFunctionDefinition(BOTTOM, engine.getTypeVariable(), engine.getTypeVariable(), new ApplicableFunction() {
 			@Override
-			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
-				return apply(argument, context);
+			public Literal apply(final Expression argument) throws ScriptException {
+				return apply(argument);
 			}
 		});
 		final TypeVariable identityType = engine.getTypeVariable();
 		addFunctorDefinition(IDENTITY, new ApplicableFunctor() {
 			@Override
-			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				return arguments[0].eval(context);
+			public Literal apply(final Expression... arguments) throws ScriptException {
+				return arguments[0].eval();
 			}
 		}, identityType, identityType);
 		final TypeVariable composeType1 = engine.getTypeVariable();
@@ -94,8 +93,8 @@ public class Prelude extends Library {
 		final TypeVariable composeType3 = engine.getTypeVariable();
 		addFunctorDefinition(COMPOSE, new ApplicableFunctor() {
 			@Override
-			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				return ((Function) arguments[0].eval(context)).apply(((Function) arguments[1].eval(context)).apply(arguments[2], context), context);
+			public Literal apply(final Expression... arguments) throws ScriptException {
+				return ((Function) arguments[0].eval()).apply(((Function) arguments[1].eval()).apply(arguments[2]));
 			}
 		}, engine.getFunctionType(composeType1, composeType2), engine.getFunctionType(composeType3, composeType1), composeType3, composeType2);
 		final TypeVariable flipType1 = engine.getTypeVariable();
@@ -103,28 +102,28 @@ public class Prelude extends Library {
 		final TypeVariable flipType3 = engine.getTypeVariable();
 		addFunctorDefinition(FLIP, new ApplicableFunctor() {
 			@Override
-			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				return ((Function) ((Function) arguments[0].eval(context)).apply(arguments[2], context)).apply(arguments[1], context);
+			public Literal apply(final Expression... arguments) throws ScriptException {
+				return ((Function) ((Function) arguments[0].eval()).apply(arguments[2])).apply(arguments[1]);
 			}
 		}, engine.getFunctionType(flipType1, engine.getFunctionType(flipType2, flipType3)), flipType2, flipType1, flipType3);
 		final TypeVariable duplicateType1 = engine.getTypeVariable();
 		final TypeVariable duplicateType2 = engine.getTypeVariable();
 		addFunctorDefinition(DUPLICATE, new ApplicableFunctor() {
 			@Override
-			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				return ((Function) ((Function) arguments[0].eval(context)).apply(arguments[1], context)).apply(arguments[1], context);
+			public Literal apply(final Expression... arguments) throws ScriptException {
+				return ((Function) ((Function) arguments[0].eval()).apply(arguments[1])).apply(arguments[1]);
 			}
 		}, engine.getFunctionType(duplicateType1, engine.getFunctionType(duplicateType1, duplicateType2)), duplicateType1, duplicateType2);
 		addFunctionDefinition(TYPE_OF, engine.getTypeVariable(), typeType, new ApplicableFunction() {
 			@Override
-			public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
-				return argument.getType(context);
+			public Literal apply(final Expression argument) throws ScriptException {
+				return argument.getType();
 			}
 		});
 		addFunctorDefinition(FUNCTION, new ApplicableFunctor() {
 			@Override
-			public FunctionType apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				return engine.getFunctionType((Type) arguments[0].eval(context), (Type) arguments[1].eval(context));
+			public FunctionType apply(final Expression... arguments) throws ScriptException {
+				return engine.getFunctionType((Type) arguments[0].eval(), (Type) arguments[1].eval());
 			}
 		}, typeType, typeType, typeType);
 	}

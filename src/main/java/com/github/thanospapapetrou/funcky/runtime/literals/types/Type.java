@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
@@ -49,8 +48,7 @@ public abstract class Type extends Literal {
 	};
 
 	@Override
-	public SimpleType getType(final ScriptContext context) throws ScriptException {
-		super.getType(context);
+	public SimpleType getType() throws ScriptException {
 		return engine.getLiteral(Prelude.class, Prelude.TYPE);
 	}
 

@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
@@ -49,14 +48,13 @@ public class Script extends AbstractSyntaxTreeNode {
 	}
 
 	@Override
-	public Void eval(final ScriptContext context) throws ScriptException {
-		super.eval(context);
-		engine.createScope(context, script);
+	public Void eval() throws ScriptException {
+		engine.createScope(script);
 		for (final Import impord : imports) {
-			impord.eval(context);
+			impord.eval();
 		}
 		for (final Definition definition : definitions) {
-			definition.eval(context);
+			definition.eval();
 		}
 		return null;
 	}

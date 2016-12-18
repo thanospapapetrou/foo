@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Objects;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
@@ -25,7 +24,6 @@ public abstract class Functor extends Function implements ApplicableFunctor {
 	private static final String LESS_TYPES = "Types must not be less than %1$d";
 	private static final String NULL_ARGUMENT = "Argument must not be null";
 	private static final String NULL_ARGUMENTS = "Arguments must not be null";
-	private static final String NULL_CONTEXT = "Context must not be null";
 	private static final String NULL_TYPE = "Type %1$d must not be null";
 	private static final String NULL_TYPES = "Types must not be null";
 
@@ -63,33 +61,32 @@ public abstract class Functor extends Function implements ApplicableFunctor {
 	}
 
 	@Override
-	public Literal apply(final Expression argument, final ScriptContext context) throws ScriptException {
-		super.apply(argument, context);
+	public Literal apply(final Expression argument) throws ScriptException {
+		super.apply(argument);
 		final Functor that = this;
 		final Type[] newTypes = new Type[types.length - 1];
 		for (int i = 0; i < newTypes.length; i++) {
-			newTypes[i] = types[i + 1].bind(types[0].inferGenericBindings(argument.getType(context).free()));
+			newTypes[i] = types[i + 1].bind(types[0].inferGenericBindings(argument.getType().free()));
 		}
-		return (types.length == FUNCTION_TYPES) ? apply(context, argument) : new Functor(engine, script, toString(), newTypes) {
+		return (types.length == FUNCTION_TYPES) ? apply(new Expression[] {argument}) : new Functor(engine, script, toString(), newTypes) {
 			@Override
 			public Expression toExpression() {
 				return engine.getApplication(that, argument);
 			}
 
 			@Override
-			public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-				super.apply(context, arguments);
+			public Literal apply(final Expression... arguments) throws ScriptException {
+				super.apply(arguments);
 				final Expression[] newArguments = new Expression[arguments.length + 1];
 				newArguments[0] = argument;
 				System.arraycopy(arguments, 0, newArguments, 1, arguments.length);
-				return that.apply(context, newArguments);
+				return that.apply(newArguments);
 			}
 		};
 	}
 
 	@Override
-	public Literal apply(final ScriptContext context, final Expression... arguments) throws ScriptException {
-		Objects.requireNonNull(context, NULL_CONTEXT);
+	public Literal apply(final Expression... arguments) throws ScriptException {
 		if (Objects.requireNonNull(arguments, NULL_ARGUMENTS).length != (types.length - 1)) {
 			throw new IllegalArgumentException(String.format(DIFFERENT_ARGUMENTS, types.length - 1));
 		}

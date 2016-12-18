@@ -130,7 +130,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	@Override
 	public Expression compile(final String script) throws ScriptException {
-		createScope(context, STDIN);
+		createScope(STDIN);
 		return compile(Objects.requireNonNull(script, NULL_SCRIPT), STDIN);
 	}
 
@@ -142,15 +142,12 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	/**
 	 * Create a new scope for a script.
 	 * 
-	 * @param context
-	 *            the context in which to create the new scope
 	 * @param script
 	 *            the URI of the script for which to create the new scope
 	 * @throws ScriptException
 	 *             if the new scope can not be created because the maximum number of scopes has been reached
 	 */
-	public void createScope(final ScriptContext context, final URI script) throws ScriptException {
-		Objects.requireNonNull(context, NULL_CONTEXT);
+	public void createScope(final URI script) throws ScriptException {
 		Objects.requireNonNull(script, NULL_SCRIPT);
 		for (int scope = Integer.MIN_VALUE; scope < Integer.MAX_VALUE; scope++) {
 			if (!context.getScopes().contains(scope)) {
@@ -166,8 +163,6 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	/**
 	 * Declare an import.
 	 * 
-	 * @param context
-	 *            the context in which to declare the import
 	 * @param script
 	 *            the URI of the script in which to declare the import
 	 * @param prefix
@@ -176,15 +171,15 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 *            the URI of the import to declare
 	 */
 	@SuppressWarnings("unchecked")
-	public void declareImport(final ScriptContext context, final URI script, final String prefix, final URI uri) {
-		final int scope = getScope(Objects.requireNonNull(context, NULL_CONTEXT), Objects.requireNonNull(script, NULL_SCRIPT));
+	public void declareImport(final URI script, final String prefix, final URI uri) {
+		final int scope = getScope(Objects.requireNonNull(script, NULL_SCRIPT));
 		((HashMap<String, URI>) context.getAttribute(String.format(IMPORTS, getFactory().getExtensions().get(0)), scope)).put(requireValidString(prefix, NULL_PREFIX, EMPTY_PREFIX), Objects.requireNonNull(uri, NULL_URI));
 	}
 
 	@Override
 	public Void eval(final Reader script, final ScriptContext context) throws ScriptException {
 		try {
-			compile(Objects.requireNonNull(script, NULL_SCRIPT), Paths.get(Objects.requireNonNull(context, NULL_CONTEXT).getAttribute(ScriptEngine.FILENAME).toString()).toRealPath().toUri()).eval(context);
+			compile(Objects.requireNonNull(script, NULL_SCRIPT), Paths.get(Objects.requireNonNull(context, NULL_CONTEXT).getAttribute(ScriptEngine.FILENAME).toString()).toRealPath().toUri()).eval();
 			return null;
 		} catch (final IOException e) {
 			throw new ScriptException(e);
@@ -192,10 +187,10 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	}
 
 	@Override
-	public Literal eval(final String script, final ScriptContext context) {
+	public Literal eval(final String script, final ScriptContext ignored) {
 		try {
-			createScope(context, STDIN);
-			return compile(Objects.requireNonNull(script, NULL_SCRIPT), STDIN).eval(Objects.requireNonNull(context, NULL_CONTEXT));
+			createScope(STDIN);
+			return compile(Objects.requireNonNull(script, NULL_SCRIPT), STDIN).eval();
 		} catch (final ScriptException e) {
 			logger.warning(e.getMessage());
 			return null;
@@ -371,14 +366,12 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	/**
 	 * Get the scope of a script.
 	 * 
-	 * @param context
-	 *            the context in which to search
 	 * @param script
 	 *            the URI of the script whose scope to retrieve
-	 * @return the scope of the given script in the given context or <code>null</code> if the given script is not loaded in the current context
+	 * @return the scope of the given script or <code>null</code> if the given script is not loaded
 	 */
-	public Integer getScope(final ScriptContext context, final URI script) {
-		return (Integer) Objects.requireNonNull(context, NULL_CONTEXT).getAttribute(Objects.requireNonNull(script, NULL_SCRIPT).toString(), ScriptContext.ENGINE_SCOPE);
+	public Integer getScope(final URI script) {
+		return (Integer) context.getAttribute(Objects.requireNonNull(script, NULL_SCRIPT).toString(), ScriptContext.ENGINE_SCOPE);
 	}
 
 	/**
@@ -424,17 +417,15 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	/**
 	 * Resolve a prefix.
 	 * 
-	 * @param context
-	 *            the context in which to search
 	 * @param script
 	 *            the URI of the script in which to search
 	 * @param prefix
 	 *            the prefix to resolve
-	 * @return the URI corresponding to the given prefix in the given script and context or <code>null</code> if the given prefix is not declared in the given script and context
+	 * @return the URI corresponding to the given prefix in the given script or <code>null</code> if the given prefix is not declared in the given script
 	 */
 	@SuppressWarnings("unchecked")
-	public URI resolvePrefix(final ScriptContext context, final URI script, final String prefix) {
-		final int scope = getScope(Objects.requireNonNull(context, NULL_CONTEXT), Objects.requireNonNull(script, NULL_SCRIPT));
+	public URI resolvePrefix(final URI script, final String prefix) {
+		final int scope = getScope(Objects.requireNonNull(script, NULL_SCRIPT));
 		return ((HashMap<String, URI>) context.getAttribute(String.format(IMPORTS, getFactory().getExtensions().get(0)), scope)).get(prefix);
 	}
 
