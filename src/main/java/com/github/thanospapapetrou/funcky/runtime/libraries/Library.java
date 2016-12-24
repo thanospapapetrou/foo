@@ -6,6 +6,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -24,6 +25,7 @@ import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Function;
 import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Literal;
 import com.github.thanospapapetrou.funcky.runtime.expressions.literals.functors.ApplicableFunctor;
 import com.github.thanospapapetrou.funcky.runtime.expressions.literals.functors.Functor;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.FunctionType;
 import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.Type;
 
 /**
@@ -35,12 +37,16 @@ public abstract class Library extends Script {
 	private static final String EMPTY_NAME = "Name must not be empty";
 	private static final String ERROR_RETRIEVING_URI_FOR_CURRENT_LIBRARY = "Error retrieving URI corresponding to current library class";
 	private static final String ERROR_RETRIEVING_URI_FOR_LIBRARY = "Error retrieving URI corresponding to library class %1$s";
+	private static final int FUNCTION_TYPES = 2;
+	private static final String LESS_TYPES = "Types must not be less than %1$d";
 	private static final String NULL_DOMAIN = "Domain must not be null";
 	private static final String NULL_ENGINE = "Engine must not be null";
 	private static final String NULL_FUNCTION = "Function must notbe null";
 	private static final String NULL_LITERAL = "Literal must not be null";
 	private static final String NULL_NAME = "Name must not be null";
 	private static final String NULL_RANGE = "Range must not be null";
+	private static final String NULL_TYPE = "Type %1$d must not be null";
+	private static final String NULL_TYPES = "Types must not be null";
 	private static final String OUTSIDE_LIBRARY_CONTEXT = String.format("Method %1$s.getUri() should not be called outside the context of a library class", Library.class.getName());
 	private static final String SCRIPT = "/%1$s.funcky";
 
@@ -100,6 +106,16 @@ public abstract class Library extends Script {
 		return name;
 	}
 
+	private static Type[] requireValidTypes(final Type[] types) {
+		if (Objects.requireNonNull(types, NULL_TYPES).length < FUNCTION_TYPES) {
+			throw new IllegalArgumentException(String.format(LESS_TYPES, FUNCTION_TYPES));
+		}
+		for (int i = 0; i < types.length; i++) {
+			Objects.requireNonNull(types[i], String.format(NULL_TYPE, i));
+		}
+		return types;
+	}
+
 	/**
 	 * Add a new literal definition to this library.
 	 * 
@@ -136,7 +152,7 @@ public abstract class Library extends Script {
 	 */
 	protected void addFunctionDefinition(final String name, final Type domain, final Type range, final ApplicableFunction function) {
 		Objects.requireNonNull(function, NULL_FUNCTION);
-		addDefinition(new Function(engine, getUri(), requireValidName(name), engine.getFunctionType(Objects.requireNonNull(domain, NULL_DOMAIN), Objects.requireNonNull(range, NULL_RANGE))) {
+		addDefinition(new Function(engine, getUri(), requireValidName(name), getFunctionType(Objects.requireNonNull(domain, NULL_DOMAIN), Objects.requireNonNull(range, NULL_RANGE))) {
 			@Override
 			public Literal apply(final Expression argument) throws ScriptException {
 				super.apply(argument);
@@ -155,8 +171,8 @@ public abstract class Library extends Script {
 	 * @param types
 	 *            the types of the functor to define
 	 */
-	protected void addFunctorDefinition(final String name, final ApplicableFunctor functor, final Type... types) { // TOOD check arguments
-		addDefinition(new Functor(engine, getUri(), name, types) {
+	protected void addFunctorDefinition(final String name, final ApplicableFunctor functor, final Type... types) {
+		addDefinition(new Functor(engine, getUri(), requireValidName(name), getFunctionType(requireValidTypes(types)), types.length - 1) {
 			@Override
 			public Literal apply(final Expression... arguments) throws ScriptException {
 				super.apply(arguments);
@@ -164,4 +180,9 @@ public abstract class Library extends Script {
 			}
 		});
 	}
+
+	private FunctionType getFunctionType(final Type... types) {
+		return engine.getFunctionType(types[0], (types.length == FUNCTION_TYPES) ? types[1] : getFunctionType(Arrays.copyOfRange(types, 1, types.length)));
+	}
+
 }

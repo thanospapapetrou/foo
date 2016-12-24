@@ -1,7 +1,8 @@
-remove FunckyScriptEngine.getLiteral()
+make empty list have type & define empty as function type list
+move equal in prelude
+define error
 remove numberType field from Numbers
 add domain, range, free, infer & range in Prelude
-make functor have a single type
 
 fix tests
 support relative URIs for files and for URLs

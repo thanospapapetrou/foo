@@ -17,6 +17,7 @@ import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.Sim
  * @author thanos
  */
 public abstract class TwoArgumentArithmeticOperator extends Functor implements ApplicableTwoArgumentArithmeticOperator {
+	private static final int ARGUMENTS = 2;
 	private static final String NULL_ARGUMENT_1 = "Argument 1 must not be null";
 	private static final String NULL_ARGUMENT_2 = "Argument 2 must not be null";
 
@@ -33,7 +34,7 @@ public abstract class TwoArgumentArithmeticOperator extends Functor implements A
 	 *            the number type used to define the type of this operator
 	 */
 	public TwoArgumentArithmeticOperator(final FunckyScriptEngine engine, final URI script, final String name, final SimpleType numberType) {
-		super(engine, script, name, numberType, numberType, numberType);
+		super(engine, script, name, engine.getFunctionType(numberType, engine.getFunctionType(numberType, numberType)), ARGUMENTS);
 	}
 
 	@Override

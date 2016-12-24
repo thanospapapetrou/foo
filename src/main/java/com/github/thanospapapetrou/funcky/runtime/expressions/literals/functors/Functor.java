@@ -1,7 +1,6 @@
 package com.github.thanospapapetrou.funcky.runtime.expressions.literals.functors;
 
 import java.net.URI;
-import java.util.Arrays;
 import java.util.Objects;
 
 import javax.script.ScriptException;
@@ -20,14 +19,11 @@ import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.Typ
  */
 public abstract class Functor extends Function implements ApplicableFunctor {
 	private static final String DIFFERENT_ARGUMENTS = "Arguments must be exactly %1$d";
-	private static final int FUNCTION_TYPES = 2;
-	private static final String LESS_TYPES = "Types must not be less than %1$d";
+	private static final String NON_POSITIVE_ARGUMENTS = "Arguments must be positive";
 	private static final String NULL_ARGUMENT = "Argument must not be null";
 	private static final String NULL_ARGUMENTS = "Arguments must not be null";
-	private static final String NULL_TYPE = "Type %1$d must not be null";
-	private static final String NULL_TYPES = "Types must not be null";
 
-	private final Type[] types;
+	private final int arguments;
 
 	/**
 	 * Construct a new functor.
@@ -38,37 +34,25 @@ public abstract class Functor extends Function implements ApplicableFunctor {
 	 *            the URI of the script from which this functor was generated
 	 * @param name
 	 *            the name of this functor
-	 * @param types
-	 *            the types of this functor
+	 * @param type
+	 *            the type of this functor
+	 * @param arguments
+	 *            the arguments of this functor
 	 */
-	public Functor(final FunckyScriptEngine engine, final URI script, final String name, final Type... types) {
-		super(engine, script, name, getFunctionType(engine, script, requireValidTypes(types)));
-		this.types = types;
-	}
-
-	private static FunctionType getFunctionType(final FunckyScriptEngine engine, final URI script, final Type... types) {
-		return engine.getFunctionType(types[0], (types.length == FUNCTION_TYPES) ? types[1] : getFunctionType(engine, script, Arrays.copyOfRange(types, 1, types.length)));
-	}
-
-	private static Type[] requireValidTypes(final Type[] types) {
-		if ((Objects.requireNonNull(types, NULL_TYPES)).length < FUNCTION_TYPES) {
-			throw new IllegalArgumentException(String.format(LESS_TYPES, FUNCTION_TYPES));
+	public Functor(final FunckyScriptEngine engine, final URI script, final String name, final FunctionType type, final int arguments) {
+		super(engine, script, name, type);
+		if (arguments < 1) {
+			throw new IllegalArgumentException(NON_POSITIVE_ARGUMENTS);
 		}
-		for (int i = 0; i < types.length; i++) {
-			Objects.requireNonNull(types[i], String.format(NULL_TYPE, i));
-		}
-		return types;
+		this.arguments = arguments;
 	}
 
 	@Override
 	public Literal apply(final Expression argument) throws ScriptException {
 		super.apply(argument);
 		final Functor that = this;
-		final Type[] newTypes = new Type[types.length - 1];
-		for (int i = 0; i < newTypes.length; i++) {
-			newTypes[i] = types[i + 1].bind(types[0].infer(argument.getType().free()));
-		}
-		return (types.length == FUNCTION_TYPES) ? apply(new Expression[] {argument}) : new Functor(engine, script, toString(), newTypes) {
+		final Type newType = getType().getRange().bind(getType().getDomain().infer(argument.getType().free()));
+		return (arguments > 1) ? new Functor(engine, script, toString(), (FunctionType) newType, arguments - 1) {
 			@Override
 			public Expression toExpression() {
 				return engine.getApplication(that, argument);
@@ -82,13 +66,13 @@ public abstract class Functor extends Function implements ApplicableFunctor {
 				System.arraycopy(arguments, 0, newArguments, 1, arguments.length);
 				return that.apply(newArguments);
 			}
-		};
+		} : apply(new Expression[] {argument});
 	}
 
 	@Override
 	public Literal apply(final Expression... arguments) throws ScriptException {
-		if (Objects.requireNonNull(arguments, NULL_ARGUMENTS).length != (types.length - 1)) {
-			throw new IllegalArgumentException(String.format(DIFFERENT_ARGUMENTS, types.length - 1));
+		if (Objects.requireNonNull(arguments, NULL_ARGUMENTS).length != this.arguments) {
+			throw new IllegalArgumentException(String.format(DIFFERENT_ARGUMENTS, this.arguments));
 		}
 		for (final Expression argument : arguments) {
 			Objects.requireNonNull(argument, NULL_ARGUMENT);
