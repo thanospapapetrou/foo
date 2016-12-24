@@ -3,7 +3,7 @@ package com.github.thanospapapetrou.funcky.runtime.exceptions;
 import java.util.Objects;
 
 import com.github.thanospapapetrou.funcky.FunckyException;
-import com.github.thanospapapetrou.funcky.runtime.Expression;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Expression;
 
 /**
  * Exception thrown when encountering an invalid function.

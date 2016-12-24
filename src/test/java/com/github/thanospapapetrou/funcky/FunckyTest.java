@@ -18,8 +18,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.github.thanospapapetrou.funcky.parser.Token;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Boolean;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Booleans;
-import com.github.thanospapapetrou.funcky.runtime.literals.Boolean;
 
 /**
  * Run tests.

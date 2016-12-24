@@ -28,10 +28,20 @@ import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
 import com.github.thanospapapetrou.funcky.parser.Parser;
-import com.github.thanospapapetrou.funcky.runtime.Application;
-import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.Script;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Application;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Expression;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Reference;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Character;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.List;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Number;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Pair;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.FunctionType;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.ListType;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.PairType;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.Type;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.TypeVariable;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Booleans;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Characters;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Library;
@@ -41,16 +51,6 @@ import com.github.thanospapapetrou.funcky.runtime.libraries.Pairs;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Strings;
 import com.github.thanospapapetrou.funcky.runtime.libraries.UnknownBuiltInLibraryException;
-import com.github.thanospapapetrou.funcky.runtime.literals.Character;
-import com.github.thanospapapetrou.funcky.runtime.literals.List;
-import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
-import com.github.thanospapapetrou.funcky.runtime.literals.Number;
-import com.github.thanospapapetrou.funcky.runtime.literals.Pair;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.ListType;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.PairType;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
 
 /**
  * Class implementing a Funcky script engine.

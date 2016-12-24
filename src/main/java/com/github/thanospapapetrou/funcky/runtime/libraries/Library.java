@@ -15,16 +15,16 @@ import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngineFactory;
 import com.github.thanospapapetrou.funcky.parser.Parser;
 import com.github.thanospapapetrou.funcky.runtime.Definition;
-import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.Import;
-import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.Script;
-import com.github.thanospapapetrou.funcky.runtime.functors.ApplicableFunctor;
-import com.github.thanospapapetrou.funcky.runtime.functors.Functor;
-import com.github.thanospapapetrou.funcky.runtime.literals.ApplicableFunction;
-import com.github.thanospapapetrou.funcky.runtime.literals.Function;
-import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Expression;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Reference;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.ApplicableFunction;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Function;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.functors.ApplicableFunctor;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.functors.Functor;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.Type;
 
 /**
  * Class representing a Funcky library.

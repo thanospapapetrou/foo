@@ -1,8 +1,8 @@
-package com.github.thanospapapetrou.funcky.runtime.literals;
+package com.github.thanospapapetrou.funcky.runtime.expressions.literals;
 
 import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.funcky.runtime.Expression;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Expression;
 
 /**
  * Interface representing a function.

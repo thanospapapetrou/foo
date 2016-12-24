@@ -1,4 +1,4 @@
-package com.github.thanospapapetrou.funcky.runtime;
+package com.github.thanospapapetrou.funcky.runtime.expressions;
 
 import java.net.URI;
 import java.util.Objects;
@@ -10,8 +10,8 @@ import javax.xml.namespace.QName;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndeclaredPrefixException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.UndefinedSymbolException;
-import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.Type;
 
 /**
  * Class representing a Funcky reference.

@@ -1,4 +1,4 @@
-package com.github.thanospapapetrou.funcky.runtime.functors;
+package com.github.thanospapapetrou.funcky.runtime.expressions.literals.functors;
 
 import java.net.URI;
 import java.util.Objects;
@@ -6,10 +6,10 @@ import java.util.Objects;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
-import com.github.thanospapapetrou.funcky.runtime.literals.Number;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Expression;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Number;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.SimpleType;
 
 /**
  * Abstract class representing a two argument arithmetic operator.

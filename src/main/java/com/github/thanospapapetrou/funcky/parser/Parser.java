@@ -15,18 +15,18 @@ import com.github.thanospapapetrou.funcky.parser.exceptions.InvalidCharacterLite
 import com.github.thanospapapetrou.funcky.parser.exceptions.InvalidUriException;
 import com.github.thanospapapetrou.funcky.parser.exceptions.UnexpectedTokenException;
 import com.github.thanospapapetrou.funcky.parser.exceptions.UnparsableInputException;
-import com.github.thanospapapetrou.funcky.runtime.Application;
 import com.github.thanospapapetrou.funcky.runtime.Definition;
-import com.github.thanospapapetrou.funcky.runtime.Expression;
 import com.github.thanospapapetrou.funcky.runtime.Import;
-import com.github.thanospapapetrou.funcky.runtime.Reference;
 import com.github.thanospapapetrou.funcky.runtime.Script;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Application;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Expression;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Reference;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Character;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.List;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Number;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.TypeVariable;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Lists;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Pairs;
-import com.github.thanospapapetrou.funcky.runtime.literals.Character;
-import com.github.thanospapapetrou.funcky.runtime.literals.List;
-import com.github.thanospapapetrou.funcky.runtime.literals.Number;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
 
 /**
  * Class implementing a Funcky parser. This parser is based on the following BNF:

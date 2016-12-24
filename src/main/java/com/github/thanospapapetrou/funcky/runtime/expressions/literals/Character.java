@@ -1,4 +1,4 @@
-package com.github.thanospapapetrou.funcky.runtime.literals;
+package com.github.thanospapapetrou.funcky.runtime.expressions.literals;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -8,8 +8,8 @@ import java.util.regex.Pattern;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.SimpleType;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Characters;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 
 /**
  * Class representing a Funcky character.

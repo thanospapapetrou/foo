@@ -1,4 +1,4 @@
-package com.github.thanospapapetrou.funcky.runtime;
+package com.github.thanospapapetrou.funcky.runtime.expressions;
 
 import java.net.URI;
 import java.util.Objects;
@@ -8,10 +8,10 @@ import javax.script.ScriptException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidArgumentException;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.InvalidFunctionException;
-import com.github.thanospapapetrou.funcky.runtime.literals.Function;
-import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Function;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.FunctionType;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.Type;
 
 /**
  * Class representing a Funcky application.

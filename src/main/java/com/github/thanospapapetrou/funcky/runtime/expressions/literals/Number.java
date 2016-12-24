@@ -1,13 +1,13 @@
-package com.github.thanospapapetrou.funcky.runtime.literals;
+package com.github.thanospapapetrou.funcky.runtime.expressions.literals;
 
 import java.net.URI;
 
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.Expression;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Expression;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.SimpleType;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Numbers;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
 
 /**
  * Class representing a Funcky number.

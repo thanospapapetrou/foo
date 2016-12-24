@@ -1,4 +1,4 @@
-package com.github.thanospapapetrou.funcky.runtime.literals.types;
+package com.github.thanospapapetrou.funcky.runtime.expressions.literals.types;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -8,8 +8,8 @@ import java.util.Objects;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Literal;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Prelude;
-import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
 
 /**
  * Abstract class representing a Funcky type.

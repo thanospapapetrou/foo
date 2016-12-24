@@ -1,12 +1,13 @@
-package com.github.thanospapapetrou.funcky.runtime;
+package com.github.thanospapapetrou.funcky.runtime.expressions;
 
 import java.net.URI;
 
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
+import com.github.thanospapapetrou.funcky.runtime.AbstractSyntaxTreeNode;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.Type;
 
 /**
  * Abstract class representing a Funcky expression.

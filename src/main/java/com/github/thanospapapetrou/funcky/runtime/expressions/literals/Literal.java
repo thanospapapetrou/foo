@@ -1,11 +1,11 @@
-package com.github.thanospapapetrou.funcky.runtime.literals;
+package com.github.thanospapapetrou.funcky.runtime.expressions.literals;
 
 import java.net.URI;
 
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.Expression;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Expression;
 
 /**
  * Abstract class representing a Funcky literal. A literal can not be evaluated further, however it may not be directly representable, so it has to be converted to an expression to be displayed.

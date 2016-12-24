@@ -1,4 +1,4 @@
-package com.github.thanospapapetrou.funcky.runtime.literals.types;
+package com.github.thanospapapetrou.funcky.runtime.expressions.literals.types;
 
 import java.net.URI;
 import java.util.Collections;

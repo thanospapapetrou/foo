@@ -1,6 +1,6 @@
-package com.github.thanospapapetrou.funcky.runtime.functors;
+package com.github.thanospapapetrou.funcky.runtime.expressions.literals.functors;
 
-import com.github.thanospapapetrou.funcky.runtime.literals.Number;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Number;
 
 /**
  * Interface representing a two argument arithmetic operator.

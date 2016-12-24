@@ -1,9 +1,9 @@
-package com.github.thanospapapetrou.funcky.runtime.functors;
+package com.github.thanospapapetrou.funcky.runtime.expressions.literals.functors;
 
 import javax.script.ScriptException;
 
-import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Expression;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Literal;
 
 /**
  * Interface representing a functor.

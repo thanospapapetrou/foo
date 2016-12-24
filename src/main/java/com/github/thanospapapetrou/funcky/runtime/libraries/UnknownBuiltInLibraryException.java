@@ -3,7 +3,7 @@ package com.github.thanospapapetrou.funcky.runtime.libraries;
 import java.util.Objects;
 
 import com.github.thanospapapetrou.funcky.FunckyException;
-import com.github.thanospapapetrou.funcky.runtime.Reference;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Reference;
 
 /**
  * Exception thrown when encountering an unknown built-in library.

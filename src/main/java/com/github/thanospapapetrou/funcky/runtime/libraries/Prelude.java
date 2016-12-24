@@ -5,15 +5,15 @@ import java.net.URI;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.Expression;
-import com.github.thanospapapetrou.funcky.runtime.functors.ApplicableFunctor;
-import com.github.thanospapapetrou.funcky.runtime.literals.ApplicableFunction;
-import com.github.thanospapapetrou.funcky.runtime.literals.Function;
-import com.github.thanospapapetrou.funcky.runtime.literals.Literal;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.SimpleType;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.Type;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.TypeVariable;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Expression;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.ApplicableFunction;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Function;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.functors.ApplicableFunctor;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.FunctionType;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.SimpleType;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.Type;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.TypeVariable;
 
 /**
  * Class representing the Funcky prelude.

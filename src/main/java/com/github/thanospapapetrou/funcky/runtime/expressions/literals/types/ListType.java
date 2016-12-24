@@ -1,4 +1,4 @@
-package com.github.thanospapapetrou.funcky.runtime.literals.types;
+package com.github.thanospapapetrou.funcky.runtime.expressions.literals.types;
 
 import java.net.URI;
 import java.util.Collections;
@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.Application;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Application;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Lists;
 
 /**

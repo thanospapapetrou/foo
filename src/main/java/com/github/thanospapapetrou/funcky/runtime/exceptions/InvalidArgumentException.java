@@ -5,8 +5,8 @@ import java.util.Objects;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyException;
-import com.github.thanospapapetrou.funcky.runtime.Application;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.FunctionType;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Application;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.FunctionType;
 
 /**
  * Exception thrown when encountering an invalid argument.

@@ -7,6 +7,7 @@ import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.exceptions.AlreadyDefinedSymbolException;
+import com.github.thanospapapetrou.funcky.runtime.expressions.Expression;
 
 /**
  * Class representing a Funcky definition.

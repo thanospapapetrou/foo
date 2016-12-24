@@ -1,4 +1,4 @@
-package com.github.thanospapapetrou.funcky.runtime.literals;
+package com.github.thanospapapetrou.funcky.runtime.expressions.literals;
 
 import java.net.URI;
 import java.util.Objects;
@@ -6,7 +6,7 @@ import java.util.Objects;
 import javax.script.ScriptException;
 
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
-import com.github.thanospapapetrou.funcky.runtime.literals.types.ListType;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.types.ListType;
 
 /**
  * Class representing a Funcky list.
