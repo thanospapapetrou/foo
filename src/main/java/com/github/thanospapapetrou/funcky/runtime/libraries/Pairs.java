@@ -59,7 +59,7 @@ public class Pairs extends Library {
 	 */
 	public Pairs(final FunckyScriptEngine engine) throws ScriptException {
 		super(engine);
-		final SimpleType type = engine.getLiteral(Prelude.class, Prelude.TYPE);
+		final SimpleType type = (SimpleType) engine.getReference(Prelude.class, Prelude.TYPE).eval();
 		addFunctorDefinition(PAIR, new ApplicableFunctor() {
 			@Override
 			public PairType apply(final Expression... arguments) throws ScriptException {

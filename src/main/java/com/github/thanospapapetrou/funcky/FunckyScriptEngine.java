@@ -283,24 +283,6 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	}
 
 	/**
-	 * Get a literal defined in a library.
-	 * 
-	 * @param <L>
-	 *            the class of the literal to get
-	 * @param library
-	 *            the library in which the literal is defined
-	 * @param name
-	 *            the name of the literal
-	 * @return the literal specified
-	 * @throws ScriptException
-	 *             if any errors occur while resolving the requested literal
-	 */
-	@SuppressWarnings("unchecked")
-	public <L extends Literal> L getLiteral(final Class<? extends Library> library, final String name) throws ScriptException {
-		return (L) getReference(library, name).eval(getContext());
-	}
-
-	/**
 	 * Get a new number generated at runtime.
 	 * 
 	 * @param value

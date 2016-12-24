@@ -41,7 +41,7 @@ public class Number extends Literal {
 
 	@Override
 	public SimpleType getType() throws ScriptException {
-		return engine.getLiteral(Numbers.class, Numbers.NUMBER);
+		return (SimpleType) engine.getReference(Numbers.class, Numbers.NUMBER).eval();
 	}
 
 	/**

@@ -39,7 +39,7 @@ public class Boolean extends Literal {
 
 	@Override
 	public SimpleType getType() throws ScriptException {
-		return engine.getLiteral(Booleans.class, Booleans.BOOLEAN);
+		return (SimpleType) engine.getReference(Booleans.class, Booleans.BOOLEAN).eval();
 	}
 
 	@Override

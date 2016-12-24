@@ -74,7 +74,7 @@ public class Booleans extends Library {
 				return arguments[0].eval().equals(arguments[1].eval()) ? booleanTrue : booleanFalse;
 			}
 		}, equalType, equalType, booleanType);
-		final SimpleType type = engine.getLiteral(Prelude.class, Prelude.TYPE);
+		final SimpleType type = (SimpleType) engine.getReference(Prelude.class, Prelude.TYPE).eval();
 		addFunctorDefinition(EQUIVALENT, new ApplicableFunctor() {
 			@Override
 			public Literal apply(final Expression... arguments) throws ScriptException {
