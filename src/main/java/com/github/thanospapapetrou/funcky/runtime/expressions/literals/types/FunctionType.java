@@ -38,7 +38,7 @@ public class FunctionType extends Type {
 	}
 
 	@Override
-	public Type bind(final Map<TypeVariable, Type> bindings) {
+	public FunctionType bind(final Map<TypeVariable, Type> bindings) {
 		super.bind(bindings);
 		return engine.getFunctionType(domain.bind(bindings), range.bind(bindings));
 	}

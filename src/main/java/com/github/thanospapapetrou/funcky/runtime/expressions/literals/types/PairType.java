@@ -41,7 +41,7 @@ public class PairType extends Type {
 	}
 
 	@Override
-	public Type bind(final Map<TypeVariable, Type> bindings) {
+	public PairType bind(final Map<TypeVariable, Type> bindings) {
 		super.bind(bindings);
 		return engine.getPairType(first.bind(bindings), second.bind(bindings));
 	}

@@ -31,7 +31,7 @@ public class SimpleType extends Type {
 	}
 
 	@Override
-	public Type bind(final Map<TypeVariable, Type> bindings) {
+	public SimpleType bind(final Map<TypeVariable, Type> bindings) {
 		super.bind(bindings);
 		return this;
 	}

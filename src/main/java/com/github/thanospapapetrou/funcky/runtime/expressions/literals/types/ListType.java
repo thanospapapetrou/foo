@@ -35,7 +35,7 @@ public class ListType extends Type {
 	}
 
 	@Override
-	public Type bind(final Map<TypeVariable, Type> bindings) {
+	public ListType bind(final Map<TypeVariable, Type> bindings) {
 		super.bind(bindings);
 		return engine.getListType(element.bind(bindings));
 	}
