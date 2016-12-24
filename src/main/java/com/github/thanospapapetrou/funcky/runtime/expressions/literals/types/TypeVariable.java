@@ -50,8 +50,8 @@ public class TypeVariable extends Type {
 	}
 
 	@Override
-	public Map<TypeVariable, Type> inferGenericBindings(final Type type) {
-		super.inferGenericBindings(type);
+	public Map<TypeVariable, Type> infer(final Type type) {
+		super.infer(type);
 		return Collections.singletonMap(this, type);
 	}
 

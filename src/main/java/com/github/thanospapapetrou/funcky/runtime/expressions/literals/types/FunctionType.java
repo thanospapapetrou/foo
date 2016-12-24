@@ -76,17 +76,17 @@ public class FunctionType extends Type {
 	}
 
 	@Override
-	public Map<TypeVariable, Type> inferGenericBindings(final Type type) {
-		super.inferGenericBindings(type);
+	public Map<TypeVariable, Type> infer(final Type type) {
+		super.infer(type);
 		if (type instanceof TypeVariable) {
 			return Collections.<TypeVariable, Type> singletonMap((TypeVariable) type, this);
 		} else if (type instanceof FunctionType) {
 			final FunctionType functionType = (FunctionType) type;
-			final Map<TypeVariable, Type> domainBindings = domain.inferGenericBindings(functionType.domain);
+			final Map<TypeVariable, Type> domainBindings = domain.infer(functionType.domain);
 			if (domainBindings == null) {
 				return null;
 			}
-			final Map<TypeVariable, Type> rangeBindings = range.inferGenericBindings(functionType.range);
+			final Map<TypeVariable, Type> rangeBindings = range.infer(functionType.range);
 			if (rangeBindings == null) {
 				return null;
 			}

@@ -78,7 +78,7 @@ public class Booleans extends Library {
 		addFunctorDefinition(EQUIVALENT, new ApplicableFunctor() {
 			@Override
 			public Literal apply(final Expression... arguments) throws ScriptException {
-				return (((Type) arguments[0].eval()).inferGenericBindings((Type) arguments[1].eval()) == null) ? booleanFalse : booleanTrue;
+				return (((Type) arguments[0].eval()).infer((Type) arguments[1].eval()) == null) ? booleanFalse : booleanTrue;
 			}
 		}, type, type, booleanType);
 		final TypeVariable ifType = engine.getTypeVariable();

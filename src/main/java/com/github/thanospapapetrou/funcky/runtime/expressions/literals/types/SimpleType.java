@@ -47,8 +47,8 @@ public class SimpleType extends Type {
 	}
 
 	@Override
-	public Map<TypeVariable, Type> inferGenericBindings(final Type type) {
-		super.inferGenericBindings(type);
+	public Map<TypeVariable, Type> infer(final Type type) {
+		super.infer(type);
 		if (type instanceof TypeVariable) {
 			return Collections.<TypeVariable, Type> singletonMap((TypeVariable) type, this);
 		} else if (type instanceof SimpleType) {

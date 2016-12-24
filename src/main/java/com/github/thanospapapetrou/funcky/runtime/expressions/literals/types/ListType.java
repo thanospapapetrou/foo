@@ -60,12 +60,12 @@ public class ListType extends Type {
 	}
 
 	@Override
-	public Map<TypeVariable, Type> inferGenericBindings(final Type type) {
-		super.inferGenericBindings(type);
+	public Map<TypeVariable, Type> infer(final Type type) {
+		super.infer(type);
 		if (type instanceof TypeVariable) {
 			return Collections.<TypeVariable, Type> singletonMap((TypeVariable) type, this);
 		} else if (type instanceof ListType) {
-			return element.inferGenericBindings(((ListType) type).element);
+			return element.infer(((ListType) type).element);
 		}
 		return null;
 	}

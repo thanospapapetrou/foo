@@ -66,7 +66,7 @@ public abstract class Functor extends Function implements ApplicableFunctor {
 		final Functor that = this;
 		final Type[] newTypes = new Type[types.length - 1];
 		for (int i = 0; i < newTypes.length; i++) {
-			newTypes[i] = types[i + 1].bind(types[0].inferGenericBindings(argument.getType().free()));
+			newTypes[i] = types[i + 1].bind(types[0].infer(argument.getType().free()));
 		}
 		return (types.length == FUNCTION_TYPES) ? apply(new Expression[] {argument}) : new Functor(engine, script, toString(), newTypes) {
 			@Override

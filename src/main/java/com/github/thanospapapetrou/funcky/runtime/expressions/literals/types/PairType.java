@@ -79,17 +79,17 @@ public class PairType extends Type {
 	}
 
 	@Override
-	public Map<TypeVariable, Type> inferGenericBindings(final Type type) {
-		super.inferGenericBindings(type);
+	public Map<TypeVariable, Type> infer(final Type type) {
+		super.infer(type);
 		if (type instanceof TypeVariable) {
 			return Collections.<TypeVariable, Type> singletonMap((TypeVariable) type, this);
 		} else if (type instanceof PairType) {
 			final PairType pairType = (PairType) type;
-			final Map<TypeVariable, Type> firstBindings = first.inferGenericBindings(pairType.first);
+			final Map<TypeVariable, Type> firstBindings = first.infer(pairType.first);
 			if (firstBindings == null) {
 				return null;
 			}
-			final Map<TypeVariable, Type> secondBindings = second.inferGenericBindings(pairType.second);
+			final Map<TypeVariable, Type> secondBindings = second.infer(pairType.second);
 			if (secondBindings == null) {
 				return null;
 			}

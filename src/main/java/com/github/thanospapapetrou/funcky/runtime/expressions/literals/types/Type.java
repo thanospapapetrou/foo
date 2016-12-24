@@ -68,7 +68,7 @@ public abstract class Type extends Literal {
 	 *            the type to bind this type to
 	 * @return a map containing each type variable of this type along with the type it should be bound with, or <code>null</code> if this type can not be bound to the given type
 	 */
-	public Map<TypeVariable, Type> inferGenericBindings(final Type type) {
+	public Map<TypeVariable, Type> infer(final Type type) {
 		Objects.requireNonNull(type, NULL_TYPE);
 		return null;
 	}
