@@ -1,3 +1,8 @@
+remove FunckyScriptEngine.getLiteral()
+remove numberType field from Numbers
+add domain, range, free, infer & range in Prelude
+make functor have a single type
+
 fix tests
 support relative URIs for files and for URLs
 remove static final field with value 3

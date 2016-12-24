@@ -55,7 +55,7 @@ public abstract class Type extends Literal {
 	/**
 	 * Free any type variables occurring in this type by replacing each of them with a new unbound type variable.
 	 * 
-	 * @return the type that occurrs after freeing any type variable occurring in this type
+	 * @return the type that occurs after freeing any type variable occurring in this type
 	 */
 	public Type free() {
 		return free(new HashMap<TypeVariable, TypeVariable>());
