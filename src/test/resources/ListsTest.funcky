@@ -7,8 +7,9 @@
 {funcky:booleans}equal ({funcky:lists}element ({funcky:lists}list {funcky:numbers}number)) {funcky:numbers}number
 
 # empty tests
-{funcky:booleans}equivalent ({funcky:prelude}typeOf {funcky:lists}empty) ({funcky:lists}list $type)
-{funcky:booleans}equal {funcky:lists}empty []
+{funcky:booleans}equivalent ({funcky:prelude}typeOf {funcky:lists}empty) ({funcky:prelude}function {funcky:prelude}type ({funcky:lists}list $type))
+{funcky:booleans}equal ({funcky:lists}empty $type) []
+{funcky:booleans}equal ({funcky:lists}empty {funcky:characters}character) ""
 
 # head tests
 {funcky:booleans}equivalent ({funcky:prelude}typeOf {funcky:lists}head) ({funcky:prelude}function ({funcky:lists}list $type) $type)

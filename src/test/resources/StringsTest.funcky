@@ -1,5 +1,6 @@
 # string tests
 {funcky:booleans}equal {funcky:strings}string ({funcky:lists}list {funcky:characters}character)
-{funcky:booleans}not ({funcky:booleans}equal ({funcky:prelude}typeOf "") {funcky:strings}string)
+{funcky:booleans}equal ({funcky:prelude}typeOf "") {funcky:strings}string
+{funcky:booleans}not ({funcky:booleans}equal ({funcky:prelude}typeOf []) {funcky:strings}string)
 {funcky:booleans}equal ({funcky:prelude}typeOf "funcky") {funcky:strings}string
 {funcky:booleans}equal ({funcky:prelude}typeOf ({funcky:lists}prepend 'f')) ({funcky:prelude}function {funcky:strings}string {funcky:strings}string)

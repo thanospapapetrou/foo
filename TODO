@@ -1,12 +1,10 @@
-make empty list have type & define empty as function type list
 move equal in prelude
 define error
-remove numberType field from Numbers
+remove numberType field from Numbers -> this can not be done since the Numbers library can not be loaded before being initialized
 add domain, range, free, infer & range in Prelude
 
 fix tests
 support relative URIs for files and for URLs
-remove static final field with value 3
 GLOBAL_SCOPE may be redundant
 check castings
 

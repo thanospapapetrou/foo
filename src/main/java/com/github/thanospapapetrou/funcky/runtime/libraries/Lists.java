@@ -77,9 +77,14 @@ public class Lists extends Library {
 				return ((ListType) argument.eval()).getElement(); // TODO validate that argument is list type
 			}
 		});
+		addFunctionDefinition(EMPTY, type, engine.getListType(engine.getTypeVariable()), new ApplicableFunction() {
+			@Override
+			public Literal apply(final Expression argument) throws ScriptException {
+				return engine.getList((Type) argument.eval());
+			}
+		});
 		final TypeVariable headElementType = engine.getTypeVariable();
 		final ListType headListType = engine.getListType(headElementType);
-		addDefinition(EMPTY, engine.getList());
 		addFunctionDefinition(HEAD, headListType, headElementType, new ApplicableFunction() {
 			@Override
 			public Literal apply(final Expression argument) throws ScriptException {
@@ -109,7 +114,7 @@ public class Lists extends Library {
 			public List apply(final Expression... arguments) throws ScriptException {
 				final List list = (List) arguments[0].eval();
 				final Literal element = arguments[1].eval();
-				final List empty = (List) engine.getReference(Lists.class, EMPTY).eval();
+				final List empty = (List) engine.getApplication(engine.getReference(Lists.class, EMPTY), engine.getTypeVariable()).eval();
 				return list.equals(empty) ? engine.getList(element, empty) : engine.getList(list.getHead(), apply(list.getTail(), element));
 			}
 		}, appendListType, appendElementType, appendListType);

@@ -257,18 +257,22 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 * @param tail
 	 *            the tail of the list
 	 * @return a new list
+	 * @throws ScriptException
+	 *             if any errors occur while generating the list
 	 */
-	public List getList(final Literal head, final List tail) {
+	public List getList(final Literal head, final List tail) throws ScriptException {
 		return new List(this, RUNTIME, -1, Objects.requireNonNull(head, NULL_HEAD), Objects.requireNonNull(tail, NULL_TAIL));
 	}
 
 	/**
 	 * Get a new empty list generated at runtime.
 	 * 
+	 * @param element
+	 *            the element type of the type of the list
 	 * @return a new empty list
 	 */
-	public List getList() {
-		return new List(this, RUNTIME, -1);
+	public List getList(final Type element) {
+		return new List(this, RUNTIME, -1, getListType(element));
 	}
 
 	/**
