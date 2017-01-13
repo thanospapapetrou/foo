@@ -49,7 +49,7 @@ public abstract class Type extends Literal {
 
 	@Override
 	public SimpleType getType() throws ScriptException {
-		return (SimpleType) engine.getReference(Prelude.class, Prelude.TYPE).eval();
+		return (SimpleType) engine.getReference(Prelude.class, Prelude.TYPE).eval(); // TODO no casting
 	}
 
 	/**

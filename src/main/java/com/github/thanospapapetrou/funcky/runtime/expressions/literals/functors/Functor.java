@@ -52,7 +52,7 @@ public abstract class Functor extends Function implements ApplicableFunctor {
 		super.apply(argument);
 		final Functor that = this;
 		final Type newType = getType().getRange().bind(getType().getDomain().infer(argument.getType().free()));
-		return (arguments > 1) ? new Functor(engine, script, toString(), (FunctionType) newType, arguments - 1) {
+		return (arguments > 1) ? new Functor(engine, script, toString(), (FunctionType) newType, arguments - 1) { // TODO no casting
 			@Override
 			public Expression toExpression() {
 				return engine.getApplication(that, argument);

@@ -49,7 +49,7 @@ public class Import extends AbstractSyntaxTreeNode {
 		if (engine.resolvePrefix(script, prefix) != null) {
 			throw new AlreadyDeclaredPrefixException(this);
 		}
-		engine.declareImport(script, prefix, uri);
+		engine.declare(script, prefix, uri);
 		return null;
 	}
 

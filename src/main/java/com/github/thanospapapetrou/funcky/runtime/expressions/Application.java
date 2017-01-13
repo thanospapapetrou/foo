@@ -59,7 +59,7 @@ public class Application extends Expression {
 	@Override
 	public Literal eval() throws ScriptException {
 		checkTypes();
-		return ((Function) function.eval()).apply(argument);
+		return ((Function) function.eval()).apply(argument); // TODO no casting
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class Application extends Expression {
 	@Override
 	public Type getType() throws ScriptException {
 		checkTypes();
-		final FunctionType functionType = (FunctionType) function.getType();
+		final FunctionType functionType = (FunctionType) function.getType(); // TODO no casting
 		return functionType.getRange().bind(functionType.getDomain().infer(argument.getType().free()));
 	}
 
@@ -94,7 +94,7 @@ public class Application extends Expression {
 
 	@Override
 	public String toString() {
-		final Expression argumentExpression = (argument instanceof Literal) ? ((Literal) argument).toExpression() : argument;
+		final Expression argumentExpression = (argument instanceof Literal) ? ((Literal) argument).toExpression() : argument; // TODO no casting
 		return String.format(APPLICATION, function, (argumentExpression instanceof Application) ? String.format(NESTED_APPLICATION, argumentExpression) : argumentExpression);
 	}
 
@@ -102,7 +102,7 @@ public class Application extends Expression {
 		if (!(function.getType() instanceof FunctionType)) {
 			throw new InvalidFunctionException(function);
 		}
-		if (((FunctionType) function.getType()).getDomain().infer(argument.getType().free()) == null) {
+		if (((FunctionType) function.getType()).getDomain().infer(argument.getType().free()) == null) { // TODO no casting
 			throw new InvalidArgumentException(this);
 		}
 	}

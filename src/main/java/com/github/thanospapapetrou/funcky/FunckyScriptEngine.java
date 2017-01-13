@@ -12,6 +12,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.ConsoleHandler;
@@ -69,6 +70,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	private static final String NULL_CONTEXT = "Context must not be null";
 	private static final String NULL_DOMAIN = "Domain must not be null";
 	private static final String NULL_ELEMENT = "Element must not be null";
+	private static final String NULL_EXPRESSION = "Expression must not be null";
 	private static final String NULL_FACTORY = "Factory must not be null";
 	private static final String NULL_FIRST = "First must not be null";
 	private static final String NULL_FUNCTION = "Function must not be null";
@@ -122,7 +124,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	@Override
 	public Script compile(final Reader script) throws ScriptException {
 		try {
-			return compile(Objects.requireNonNull(script, NULL_SCRIPT), Paths.get(Objects.requireNonNull(context, NULL_CONTEXT).getAttribute(ScriptEngine.FILENAME).toString()).toRealPath().toUri());
+			return compile(Objects.requireNonNull(script, NULL_SCRIPT), Paths.get(context.getAttribute(ScriptEngine.FILENAME).toString()).toRealPath().toUri());
 		} catch (final IOException e) {
 			throw new ScriptException(e);
 		}
@@ -170,10 +172,14 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 * @param uri
 	 *            the URI of the import to declare
 	 */
-	@SuppressWarnings("unchecked")
-	public void declareImport(final URI script, final String prefix, final URI uri) {
-		final int scope = getScope(Objects.requireNonNull(script, NULL_SCRIPT));
-		((HashMap<String, URI>) context.getAttribute(String.format(IMPORTS, getFactory().getExtensions().get(0)), scope)).put(requireValidString(prefix, NULL_PREFIX, EMPTY_PREFIX), Objects.requireNonNull(uri, NULL_URI));
+	public void declare(final URI script, final String prefix, final URI uri) {
+		final Map<String, URI> imports = getImports(Objects.requireNonNull(script, NULL_SCRIPT)); // TODO imports may be null if script is not loaded
+		imports.put(requireValidString(prefix, NULL_PREFIX, EMPTY_PREFIX), Objects.requireNonNull(uri, NULL_URI));
+	}
+
+	public void define(final URI script, final String name, final Expression expression) {
+		final Integer scope = getScope(Objects.requireNonNull(script, NULL_SCRIPT));
+		context.setAttribute(requireValidString(name, NULL_NAME, EMPTY_NAME), Objects.requireNonNull(expression, NULL_EXPRESSION), scope);
 	}
 
 	@Override
@@ -357,7 +363,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 * @return the scope of the given script or <code>null</code> if the given script is not loaded
 	 */
 	public Integer getScope(final URI script) {
-		return (Integer) context.getAttribute(Objects.requireNonNull(script, NULL_SCRIPT).toString(), ScriptContext.ENGINE_SCOPE);
+		return (Integer) context.getAttribute(Objects.requireNonNull(script, NULL_SCRIPT).toString(), ScriptContext.ENGINE_SCOPE); // TODO no casting
 	}
 
 	/**
@@ -400,6 +406,10 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 		}
 	}
 
+	public Expression resolve(final Reference reference) throws ScriptException {
+		return (Expression) context.getAttribute(Objects.requireNonNull(reference, NULL_REFERENCE).getName(), getScope(reference.getUri())); // TODO no casting
+	}
+
 	/**
 	 * Resolve a prefix.
 	 * 
@@ -409,10 +419,9 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 *            the prefix to resolve
 	 * @return the URI corresponding to the given prefix in the given script or <code>null</code> if the given prefix is not declared in the given script
 	 */
-	@SuppressWarnings("unchecked")
 	public URI resolvePrefix(final URI script, final String prefix) {
-		final int scope = getScope(Objects.requireNonNull(script, NULL_SCRIPT));
-		return ((HashMap<String, URI>) context.getAttribute(String.format(IMPORTS, getFactory().getExtensions().get(0)), scope)).get(prefix);
+		final Map<String, URI> imports = getImports(Objects.requireNonNull(script, NULL_SCRIPT)); // TODO imports may be null if script is not loaded
+		return imports.get(prefix);
 	}
 
 	private Script compile(final Reader script, final URI scriptUri) throws ScriptException {
@@ -421,6 +430,12 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 
 	private Expression compile(final String script, final URI scriptUri) throws ScriptException {
 		return new Parser(this, new StringReader(script), scriptUri).parseExpression();
+	}
+
+	@SuppressWarnings("unchecked")
+	private Map<String, URI> getImports(final URI script) {
+		final Integer scope = getScope(script);
+		return (scope == null) ? null : (Map<String, URI>) context.getAttribute(String.format(IMPORTS, getFactory().getExtensions().get(0)), scope); // TODO no casting
 	}
 
 	private void loadLibrary(final Reference reference) throws ScriptException {

@@ -27,6 +27,6 @@ public class InvalidArgumentException extends FunckyException {
 	 *             if any errors occur while evaluating function and argument types
 	 */
 	public InvalidArgumentException(final Application application) throws ScriptException {
-		super(String.format(INVALID_ARGUMENT, Objects.requireNonNull(application, NULL_APPLICATION).getFunction(), ((FunctionType) application.getFunction().getType()).getDomain(), application.getArgument(), application.getArgument().getType()), application.getScript(), application.getLineNumber());
+		super(String.format(INVALID_ARGUMENT, Objects.requireNonNull(application, NULL_APPLICATION).getFunction(), ((FunctionType) application.getFunction().getType()).getDomain(), application.getArgument(), application.getArgument().getType()), application.getScript(), application.getLineNumber()); // TODO no casting
 	}
 }

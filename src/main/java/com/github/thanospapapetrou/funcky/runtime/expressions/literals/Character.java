@@ -63,7 +63,7 @@ public class Character extends Literal {
 
 	@Override
 	public SimpleType getType() throws ScriptException {
-		return (SimpleType) engine.getReference(Characters.class, Characters.CHARACTER).eval();
+		return (SimpleType) engine.getReference(Characters.class, Characters.CHARACTER).eval(); // TODO no casting
 	}
 
 	/**

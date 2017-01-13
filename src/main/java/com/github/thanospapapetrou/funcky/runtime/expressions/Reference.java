@@ -179,7 +179,7 @@ public class Reference extends Expression {
 		if (engine.getScope(qualified.getUri()) == null) {
 			engine.load(qualified);
 		}
-		final Expression expression = (Expression) engine.getContext().getAttribute(qualified.getName(), engine.getScope(qualified.getUri()));
+		final Expression expression = engine.resolve(qualified);
 		if (expression == null) {
 			throw new UndefinedSymbolException(qualified);
 		}
