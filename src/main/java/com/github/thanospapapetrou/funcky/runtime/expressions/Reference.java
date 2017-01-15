@@ -97,7 +97,7 @@ public class Reference extends Expression {
 				final Reference qualifiedThis = qualify();
 				final Reference qualifiedThat = ((Reference) object).qualify();
 				return Objects.equals(qualifiedThis.getUri(), qualifiedThat.getUri()) && Objects.equals(qualifiedThis.getName(), qualifiedThat.getName());
-			} catch (final UndeclaredPrefixException e) {
+			} catch (final ScriptException e) {
 				throw new RuntimeException(e);
 			}
 		}
@@ -146,7 +146,7 @@ public class Reference extends Expression {
 		try {
 			final Reference qualifiedReference = qualify();
 			return Objects.hash(qualifiedReference.getUri(), qualifiedReference.getName());
-		} catch (final UndeclaredPrefixException e) {
+		} catch (final ScriptException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -155,16 +155,16 @@ public class Reference extends Expression {
 	public String toString() {
 		try {
 			return qualify().name.toString();
-		} catch (final UndeclaredPrefixException e) {
+		} catch (final ScriptException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private Reference qualify() throws UndeclaredPrefixException {
+	private Reference qualify() throws ScriptException {
 		if (getUri() != null) { // fully qualified reference
 			return this;
 		} else if (getPrefix() != null) { // relative reference with prefix
-			final URI uri = engine.resolvePrefix(script, getPrefix());
+			final URI uri = engine.resolve(script, getPrefix());
 			if (uri == null) {
 				throw new UndeclaredPrefixException(this);
 			}

@@ -59,13 +59,25 @@ import com.github.thanospapapetrou.funcky.runtime.libraries.UnknownBuiltInLibrar
  * @author thanos
  */
 public class FunckyScriptEngine extends AbstractScriptEngine implements Compilable, Invocable {
+	private static class Imports extends HashMap<String, URI> implements Map<String, URI> {
+		private static final long serialVersionUID = 1L;
+
+		private Imports() {
+			super();
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	private static final Class<Library>[] BUILTIN_LIBRARIES = (Class<Library>[]) new Class<?>[] {Prelude.class, Booleans.class, Numbers.class, Characters.class, Pairs.class, Lists.class, Strings.class};
 	private static final String EMPTY_NAME = "Name must not be empty";
 	private static final String EMPTY_PREFIX = "Prefix must not be empty";
+	private static final String ERROR_RESOLVING_REFERENCE = "Reference %1$s does not resolve to %2$s";
+	private static final String ERROR_RETRIEVING_IMPORTS = "Imports of script %1$s do not resolve to %2$s";
 	private static final String IMPORTS = "%1$s.imports";
 	private static final String LOADED = "Loaded %1$s";
 	private static final String MAX_SCOPES = "Maximum number of scopes reached";
+	private static final String NOT_INTEGER_SCOPE = "Scope of script %1$s is not an integer";
+	private static final String NOT_LOADED_SCRIPT = "Script %1$s is not loaded";
 	private static final String NULL_ARGUMENT = "Argument must not be null";
 	private static final String NULL_CONTEXT = "Context must not be null";
 	private static final String NULL_DOMAIN = "Domain must not be null";
@@ -155,7 +167,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 			if (!context.getScopes().contains(scope)) {
 				context.setAttribute(script.toString(), scope, ScriptContext.ENGINE_SCOPE);
 				context.setAttribute(String.format(SCRIPT, getFactory().getExtensions().get(0)), script, scope);
-				context.setAttribute(String.format(IMPORTS, getFactory().getExtensions().get(0)), new HashMap<String, URI>(), scope);
+				context.setAttribute(String.format(IMPORTS, getFactory().getExtensions().get(0)), new Imports(), scope);
 				return;
 			}
 		}
@@ -171,14 +183,31 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 *            the prefix of the import to declare
 	 * @param uri
 	 *            the URI of the import to declare
+	 * @throws ScriptException
+	 *             if any errors occur while declaring this import
 	 */
-	public void declare(final URI script, final String prefix, final URI uri) {
-		final Map<String, URI> imports = getImports(Objects.requireNonNull(script, NULL_SCRIPT)); // TODO imports may be null if script is not loaded
+	public void declare(final URI script, final String prefix, final URI uri) throws ScriptException {
+		final Map<String, URI> imports = getImports(Objects.requireNonNull(script, NULL_SCRIPT));
 		imports.put(requireValidString(prefix, NULL_PREFIX, EMPTY_PREFIX), Objects.requireNonNull(uri, NULL_URI));
 	}
 
-	public void define(final URI script, final String name, final Expression expression) {
+	/**
+	 * Define a definition.
+	 * 
+	 * @param script
+	 *            the URI of the script in which to define the definition
+	 * @param name
+	 *            the name of the definition to define
+	 * @param expression
+	 *            the expression of the definition to define
+	 * @throws ScriptException
+	 *             if any errors occur while defining this definition
+	 */
+	public void define(final URI script, final String name, final Expression expression) throws ScriptException {
 		final Integer scope = getScope(Objects.requireNonNull(script, NULL_SCRIPT));
+		if (scope == null) {
+			illegalState(String.format(NOT_LOADED_SCRIPT, script));
+		}
 		context.setAttribute(requireValidString(name, NULL_NAME, EMPTY_NAME), Objects.requireNonNull(expression, NULL_EXPRESSION), scope);
 	}
 
@@ -361,9 +390,12 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 * @param script
 	 *            the URI of the script whose scope to retrieve
 	 * @return the scope of the given script or <code>null</code> if the given script is not loaded
+	 * @throws ScriptException
+	 *             if any errors occur while retrieving scope
 	 */
-	public Integer getScope(final URI script) {
-		return (Integer) context.getAttribute(Objects.requireNonNull(script, NULL_SCRIPT).toString(), ScriptContext.ENGINE_SCOPE); // TODO no casting
+	public Integer getScope(final URI script) throws ScriptException {
+		final Object scope = context.getAttribute(Objects.requireNonNull(script, NULL_SCRIPT).toString(), ScriptContext.ENGINE_SCOPE);
+		return ((scope == null) || (scope instanceof Integer)) ? (Integer) scope : this.<Integer> illegalState(String.format(NOT_INTEGER_SCOPE, script));
 	}
 
 	/**
@@ -406,8 +438,22 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 		}
 	}
 
+	/**
+	 * Resolve a reference.
+	 * 
+	 * @param reference
+	 *            the reference to resolve
+	 * @return the expression corresponding to the given reference or <code>null</code> if the given reference is not defined
+	 * @throws ScriptException
+	 *             if any errors occur while resolving reference
+	 */
 	public Expression resolve(final Reference reference) throws ScriptException {
-		return (Expression) context.getAttribute(Objects.requireNonNull(reference, NULL_REFERENCE).getName(), getScope(reference.getUri())); // TODO no casting
+		final Integer scope = getScope(Objects.requireNonNull(reference, NULL_REFERENCE).getUri());
+		if (scope == null) {
+			return illegalState(String.format(NOT_LOADED_SCRIPT, reference.getUri()));
+		}
+		final Object expression = context.getAttribute(Objects.requireNonNull(reference, NULL_REFERENCE).getName(), scope);
+		return ((expression == null) || (expression instanceof Expression)) ? (Expression) expression : this.<Expression> illegalState(String.format(ERROR_RESOLVING_REFERENCE, reference, Expression.class.getName()));
 	}
 
 	/**
@@ -418,10 +464,11 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	 * @param prefix
 	 *            the prefix to resolve
 	 * @return the URI corresponding to the given prefix in the given script or <code>null</code> if the given prefix is not declared in the given script
+	 * @throws ScriptException
+	 *             if any errors occur while resolving prefix
 	 */
-	public URI resolvePrefix(final URI script, final String prefix) {
-		final Map<String, URI> imports = getImports(Objects.requireNonNull(script, NULL_SCRIPT)); // TODO imports may be null if script is not loaded
-		return imports.get(prefix);
+	public URI resolve(final URI script, final String prefix) throws ScriptException {
+		return getImports(Objects.requireNonNull(script, NULL_SCRIPT)).get(prefix);
 	}
 
 	private Script compile(final Reader script, final URI scriptUri) throws ScriptException {
@@ -432,10 +479,17 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 		return new Parser(this, new StringReader(script), scriptUri).parseExpression();
 	}
 
-	@SuppressWarnings("unchecked")
-	private Map<String, URI> getImports(final URI script) {
+	private Map<String, URI> getImports(final URI script) throws ScriptException {
 		final Integer scope = getScope(script);
-		return (scope == null) ? null : (Map<String, URI>) context.getAttribute(String.format(IMPORTS, getFactory().getExtensions().get(0)), scope); // TODO no casting
+		if (scope == null) {
+			return illegalState(String.format(NOT_LOADED_SCRIPT, script));
+		}
+		final Object imports = context.getAttribute(String.format(IMPORTS, getFactory().getExtensions().get(0)), scope);
+		return (imports instanceof Imports) ? (Imports) imports : this.<Map<String, URI>> illegalState(String.format(ERROR_RETRIEVING_IMPORTS, script, Imports.class.getName()));
+	}
+
+	private <T> T illegalState(final String message) throws ScriptException {
+		throw new ScriptException(new IllegalStateException(message));
 	}
 
 	private void loadLibrary(final Reference reference) throws ScriptException {

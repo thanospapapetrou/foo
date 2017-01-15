@@ -46,7 +46,7 @@ public class Import extends AbstractSyntaxTreeNode {
 
 	@Override
 	public Void eval() throws ScriptException {
-		if (engine.resolvePrefix(script, prefix) != null) {
+		if (engine.resolve(script, prefix) != null) {
 			throw new AlreadyDeclaredPrefixException(this);
 		}
 		engine.declare(script, prefix, uri);
