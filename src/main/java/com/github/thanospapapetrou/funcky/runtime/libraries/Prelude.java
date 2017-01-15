@@ -94,7 +94,7 @@ public class Prelude extends Library {
 		addFunctorDefinition(COMPOSE, new ApplicableFunctor() {
 			@Override
 			public Literal apply(final Expression... arguments) throws ScriptException {
-				return ((Function) arguments[0].eval()).apply(((Function) arguments[1].eval()).apply(arguments[2]));
+				return arguments[0].evaluate(Function.class).apply(arguments[1].evaluate(Function.class).apply(arguments[2]));
 			}
 		}, engine.getFunctionType(composeType1, composeType2), engine.getFunctionType(composeType3, composeType1), composeType3, composeType2);
 		final TypeVariable flipType1 = engine.getTypeVariable();
@@ -103,7 +103,7 @@ public class Prelude extends Library {
 		addFunctorDefinition(FLIP, new ApplicableFunctor() {
 			@Override
 			public Literal apply(final Expression... arguments) throws ScriptException {
-				return ((Function) ((Function) arguments[0].eval()).apply(arguments[2])).apply(arguments[1]);
+				return arguments[0].evaluate(Function.class).apply(arguments[2]).evaluate(Function.class).apply(arguments[1]);
 			}
 		}, engine.getFunctionType(flipType1, engine.getFunctionType(flipType2, flipType3)), flipType2, flipType1, flipType3);
 		final TypeVariable duplicateType1 = engine.getTypeVariable();
@@ -111,7 +111,7 @@ public class Prelude extends Library {
 		addFunctorDefinition(DUPLICATE, new ApplicableFunctor() {
 			@Override
 			public Literal apply(final Expression... arguments) throws ScriptException {
-				return ((Function) ((Function) arguments[0].eval()).apply(arguments[1])).apply(arguments[1]);
+				return arguments[0].evaluate(Function.class).apply(arguments[1]).evaluate(Function.class).apply(arguments[1]);
 			}
 		}, engine.getFunctionType(duplicateType1, engine.getFunctionType(duplicateType1, duplicateType2)), duplicateType1, duplicateType2);
 		addFunctionDefinition(TYPE_OF, engine.getTypeVariable(), typeType, new ApplicableFunction() {
@@ -123,7 +123,7 @@ public class Prelude extends Library {
 		addFunctorDefinition(FUNCTION, new ApplicableFunctor() {
 			@Override
 			public FunctionType apply(final Expression... arguments) throws ScriptException {
-				return engine.getFunctionType((Type) arguments[0].eval(), (Type) arguments[1].eval());
+				return engine.getFunctionType(arguments[0].evaluate(Type.class), arguments[1].evaluate(Type.class));
 			}
 		}, typeType, typeType, typeType);
 	}

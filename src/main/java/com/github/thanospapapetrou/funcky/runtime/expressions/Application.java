@@ -57,9 +57,10 @@ public class Application extends Expression {
 	}
 
 	@Override
-	public Literal eval() throws ScriptException {
+	public <L extends Literal> L evaluate(final Class<L> clazz) throws ScriptException {
+		super.evaluate(clazz);
 		checkTypes();
-		return ((Function) function.eval()).apply(argument); // TODO no casting
+		return function.evaluate(Function.class).apply(argument).evaluate(clazz);
 	}
 
 	/**
@@ -94,7 +95,7 @@ public class Application extends Expression {
 
 	@Override
 	public String toString() {
-		final Expression argumentExpression = (argument instanceof Literal) ? ((Literal) argument).toExpression() : argument; // TODO no casting
+		final Expression argumentExpression = (argument instanceof Literal) ? ((Literal) argument).toExpression() : argument;
 		return String.format(APPLICATION, function, (argumentExpression instanceof Application) ? String.format(NESTED_APPLICATION, argumentExpression) : argumentExpression);
 	}
 

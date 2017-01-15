@@ -105,8 +105,9 @@ public class Reference extends Expression {
 	}
 
 	@Override
-	public Literal eval() throws ScriptException {
-		return resolve().eval();
+	public <L extends Literal> L evaluate(final Class<L> clazz) throws ScriptException {
+		super.evaluate(clazz);
+		return resolve().evaluate(clazz);
 	}
 
 	/**

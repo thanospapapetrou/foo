@@ -7,7 +7,7 @@ import javax.script.ScriptException;
 import com.github.thanospapapetrou.funcky.FunckyScriptEngine;
 import com.github.thanospapapetrou.funcky.runtime.expressions.Expression;
 import com.github.thanospapapetrou.funcky.runtime.expressions.literals.ApplicableFunction;
-import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Boolean;
 import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Number;
 import com.github.thanospapapetrou.funcky.runtime.expressions.literals.functors.ApplicableTwoArgumentArithmeticOperator;
 import com.github.thanospapapetrou.funcky.runtime.expressions.literals.functors.TwoArgumentArithmeticOperator;
@@ -99,17 +99,17 @@ public class Numbers extends Library {
 		addDefinition(getNumber(Double.NaN));
 		addDefinition(PI, getNumber(Math.PI));
 		addDefinition(E, getNumber(Math.E));
-		addFunctionDefinition(IS_NAN, numberType, (SimpleType) engine.getReference(Booleans.class, Booleans.BOOLEAN).eval(), new ApplicableFunction() {
+		addFunctionDefinition(IS_NAN, numberType, engine.getReference(Booleans.class, Booleans.BOOLEAN).evaluate(SimpleType.class), new ApplicableFunction() {
 			@Override
-			public Literal apply(final Expression argument) throws ScriptException {
-				return engine.getReference(Booleans.class, Double.isNaN(((Number) argument.eval()).getValue()) ? Booleans.TRUE : Booleans.FALSE).eval();
+			public Boolean apply(final Expression argument) throws ScriptException {
+				return engine.getReference(Booleans.class, Double.isNaN(argument.evaluate(Number.class).getValue()) ? Booleans.TRUE : Booleans.FALSE).evaluate(Boolean.class);
 			}
 		});
 		addFunctionDefinition(INTEGER, numberType, numberType, new ApplicableFunction() {
 			@Override
 			public Number apply(final Expression argument) throws ScriptException {
-				final double value = ((Number) argument.eval()).getValue();
-				return engine.getNumber((Double.isInfinite(value) || Double.isNaN(value)) ? value : (int) value);
+				final double value = argument.evaluate(Number.class).getValue();
+				return engine.getNumber((Double.isInfinite(value) || Double.isNaN(value)) ? value : Double.valueOf(value).intValue());
 			}
 		});
 		addTwoArgumentArithmeticOperatorDefinition(ADD, new ApplicableTwoArgumentArithmeticOperator() {

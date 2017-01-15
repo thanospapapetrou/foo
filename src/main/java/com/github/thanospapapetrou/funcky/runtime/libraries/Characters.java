@@ -53,25 +53,25 @@ public class Characters extends Library {
 		super(engine);
 		final SimpleType characterType = new SimpleType(engine, CHARACTERS, CHARACTER);
 		addDefinition(characterType);
-		final SimpleType numberType = (SimpleType) engine.getReference(Numbers.class, Numbers.NUMBER).eval(); // TODO no casting
+		final SimpleType numberType = engine.getReference(Numbers.class, Numbers.NUMBER).evaluate(SimpleType.class);
 		addFunctorDefinition(CODE_POINT, new ApplicableFunctor() {
 			@Override
 			public Number apply(final Expression... arguments) throws ScriptException {
-				return engine.getNumber(java.lang.Character.toCodePoint(((Character) arguments[0].eval()).getValue(), ((Character) arguments[1].eval()).getValue())); // TODO no casting
+				return engine.getNumber(java.lang.Character.toCodePoint(arguments[0].evaluate(Character.class).getValue(), arguments[1].evaluate(Character.class).getValue()));
 			}
 		}, characterType, characterType, numberType);
 		// TODO check that argument is int
 		addFunctionDefinition(HIGH_SURROGATE, numberType, characterType, new ApplicableFunction() {
 			@Override
 			public Literal apply(final Expression argument) throws ScriptException {
-				return engine.getCharacter(java.lang.Character.highSurrogate((int) ((Number) argument.eval()).getValue())); // TODO no casting
+				return engine.getCharacter(java.lang.Character.highSurrogate(Double.valueOf(argument.evaluate(Number.class).getValue()).intValue()));
 			}
 		});
 		// TODO check that argument is int
 		addFunctionDefinition(LOW_SURROGATE, numberType, characterType, new ApplicableFunction() {
 			@Override
 			public Literal apply(final Expression argument) throws ScriptException {
-				return engine.getCharacter(java.lang.Character.lowSurrogate((int) ((Number) argument.eval()).getValue())); // TODO no casting
+				return engine.getCharacter(java.lang.Character.lowSurrogate(Double.valueOf(argument.evaluate(Number.class).getValue()).intValue()));
 			}
 		});
 		// TODO

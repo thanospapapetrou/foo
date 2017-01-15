@@ -13,6 +13,8 @@ import com.github.thanospapapetrou.funcky.runtime.expressions.Expression;
  * @author thanos
  */
 public abstract class Literal extends Expression {
+	private static final String LITERAL_CAST_ERROR = "Literal %1$s can not be cast to %2$s";
+
 	/**
 	 * Construct a new literal.
 	 * 
@@ -28,8 +30,12 @@ public abstract class Literal extends Expression {
 	}
 
 	@Override
-	public Literal eval() throws ScriptException {
-		return this;
+	public <L extends Literal> L evaluate(final Class<L> clazz) throws ScriptException {
+		super.evaluate(clazz);
+		if (clazz.isAssignableFrom(this.getClass())) {
+			return clazz.cast(this);
+		}
+		throw new ScriptException(new IllegalStateException(String.format(LITERAL_CAST_ERROR, this, clazz.getName())));
 	}
 
 	/**

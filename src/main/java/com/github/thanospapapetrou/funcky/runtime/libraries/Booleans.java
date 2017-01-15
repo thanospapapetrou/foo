@@ -74,18 +74,18 @@ public class Booleans extends Library {
 				return arguments[0].eval().equals(arguments[1].eval()) ? booleanTrue : booleanFalse;
 			}
 		}, equalType, equalType, booleanType);
-		final SimpleType type = (SimpleType) engine.getReference(Prelude.class, Prelude.TYPE).eval(); // TODO no casting
+		final SimpleType type = engine.getReference(Prelude.class, Prelude.TYPE).evaluate(SimpleType.class);
 		addFunctorDefinition(EQUIVALENT, new ApplicableFunctor() {
 			@Override
 			public Literal apply(final Expression... arguments) throws ScriptException {
-				return (((Type) arguments[0].eval()).infer((Type) arguments[1].eval()) == null) ? booleanFalse : booleanTrue; // TODO no casting
+				return (arguments[0].evaluate(Type.class).infer(arguments[1].evaluate(Type.class)) == null) ? booleanFalse : booleanTrue;
 			}
 		}, type, type, booleanType);
 		final TypeVariable ifType = engine.getTypeVariable();
 		addFunctorDefinition(IF, new ApplicableFunctor() {
 			@Override
 			public Literal apply(final Expression... arguments) throws ScriptException {
-				return ((Boolean) arguments[0].eval()).equals(booleanTrue) ? arguments[1].eval() : arguments[2].eval(); // TODO no casting
+				return arguments[0].evaluate(Boolean.class).equals(booleanTrue) ? arguments[1].eval() : arguments[2].eval();
 			}
 		}, booleanType, ifType, ifType, ifType);
 	}

@@ -40,7 +40,7 @@ public abstract class TwoArgumentArithmeticOperator extends Functor implements A
 	@Override
 	public Literal apply(final Expression... arguments) throws ScriptException {
 		super.apply(arguments);
-		return apply((Number) arguments[0].eval(), (Number) arguments[1].eval()); // TODO no casting
+		return apply(arguments[0].evaluate(Number.class), arguments[1].evaluate(Number.class));
 	}
 
 	@Override

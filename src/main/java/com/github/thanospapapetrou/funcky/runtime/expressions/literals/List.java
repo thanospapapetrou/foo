@@ -88,7 +88,7 @@ public class List extends Literal {
 	 */
 	public List(final FunckyScriptEngine engine, final URI script, final int line, final String string) throws ScriptException {
 		super(engine, script, line);
-		this.type = engine.getListType((SimpleType) engine.getReference(Characters.class, Characters.CHARACTER).eval()); // TODO no casting
+		this.type = engine.getListType(engine.getReference(Characters.class, Characters.CHARACTER).evaluate(SimpleType.class));
 		this.head = Objects.requireNonNull(string, NULL_STRING).isEmpty() ? null : new Character(engine, script, line, string.charAt(0));
 		this.tail = string.isEmpty() ? null : new List(engine, script, line, string.substring(1));
 	}
@@ -133,15 +133,15 @@ public class List extends Literal {
 	@Override
 	public String toString() {
 		try {
-			final boolean isString = type.equals(engine.getReference(Strings.class, Strings.STRING).eval());
+			final boolean isString = type.equals(engine.getReference(Strings.class, Strings.STRING).evaluate(ListType.class));
 			final StringBuilder string = new StringBuilder(isString ? QUOTATION_MARK : LEFT_SQUARE_BRACKET);
 			for (List list = this; list.head != null; list = list.tail) {
-				string.append(isString ? ((Character) list.head).getValue() : list.head.toString()).append(isString ? "" : LIST_DELIMITER); // TODO no casting
+				string.append(isString ? list.head.evaluate(Character.class).getValue() : list.head.toString()).append(isString ? "" : LIST_DELIMITER);
 			}
 			string.setLength(string.length() - ((head == null) || isString ? 0 : LIST_DELIMITER.length()));
 			return string.append(isString ? QUOTATION_MARK : RIGHT_SQUARE_BRACKET).toString();
 		} catch (final ScriptException e) {
-			return null; // TODO
+			throw new RuntimeException(e);
 		}
 	}
 }

@@ -71,9 +71,8 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	private static final Class<Library>[] BUILTIN_LIBRARIES = (Class<Library>[]) new Class<?>[] {Prelude.class, Booleans.class, Numbers.class, Characters.class, Pairs.class, Lists.class, Strings.class};
 	private static final String EMPTY_NAME = "Name must not be empty";
 	private static final String EMPTY_PREFIX = "Prefix must not be empty";
-	private static final String ERROR_RESOLVING_REFERENCE = "Reference %1$s does not resolve to %2$s";
-	private static final String ERROR_RETRIEVING_IMPORTS = "Imports of script %1$s do not resolve to %2$s";
 	private static final String IMPORTS = "%1$s.imports";
+	private static final String IMPORTS_CAST_ERRROR = "Imports of script %1$s can not be cast to %2$s";
 	private static final String LOADED = "Loaded %1$s";
 	private static final String MAX_SCOPES = "Maximum number of scopes reached";
 	private static final String NOT_INTEGER_SCOPE = "Scope of script %1$s is not an integer";
@@ -98,6 +97,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 	private static final String NULL_TAIL = "Tail must not be null";
 	private static final String NULL_URI = "URI must not be null";
 	private static final String RANDOM_NAME = "_%1$s%2$s";
+	private static final String REFERENCE_RESOLUTION_ERROR = "Reference %1$s does not resolve to %2$s";
 	private static final URI RUNTIME = URI.create("funcky:runtime");
 	private static final String SCRIPT = "%1$s.script";
 	private static final URI STDIN = URI.create("funcky:stdin");
@@ -453,7 +453,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 			return illegalState(String.format(NOT_LOADED_SCRIPT, reference.getUri()));
 		}
 		final Object expression = context.getAttribute(Objects.requireNonNull(reference, NULL_REFERENCE).getName(), scope);
-		return ((expression == null) || (expression instanceof Expression)) ? (Expression) expression : this.<Expression> illegalState(String.format(ERROR_RESOLVING_REFERENCE, reference, Expression.class.getName()));
+		return ((expression == null) || (expression instanceof Expression)) ? (Expression) expression : this.<Expression> illegalState(String.format(REFERENCE_RESOLUTION_ERROR, reference, Expression.class.getName()));
 	}
 
 	/**
@@ -485,7 +485,7 @@ public class FunckyScriptEngine extends AbstractScriptEngine implements Compilab
 			return illegalState(String.format(NOT_LOADED_SCRIPT, script));
 		}
 		final Object imports = context.getAttribute(String.format(IMPORTS, getFactory().getExtensions().get(0)), scope);
-		return (imports instanceof Imports) ? (Imports) imports : this.<Map<String, URI>> illegalState(String.format(ERROR_RETRIEVING_IMPORTS, script, Imports.class.getName()));
+		return (imports instanceof Imports) ? (Imports) imports : this.<Map<String, URI>> illegalState(String.format(IMPORTS_CAST_ERRROR, script, Imports.class.getName()));
 	}
 
 	private <T> T illegalState(final String message) throws ScriptException {

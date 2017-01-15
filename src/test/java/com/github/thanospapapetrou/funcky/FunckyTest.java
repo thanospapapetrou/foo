@@ -18,7 +18,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.github.thanospapapetrou.funcky.parser.Token;
-import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Literal;
+import com.github.thanospapapetrou.funcky.runtime.expressions.literals.Boolean;
 import com.github.thanospapapetrou.funcky.runtime.libraries.Booleans;
 
 /**
@@ -67,7 +67,7 @@ public class FunckyTest {
 	@Test(dataProvider = TESTS)
 	private void test(final File test) throws IOException, ScriptException {
 		final FunckyScriptEngine engine = factory.getScriptEngine();
-		final Literal booleanTrue = engine.getReference(Booleans.class, Booleans.TRUE).eval();
+		final Boolean booleanTrue = engine.getReference(Booleans.class, Booleans.TRUE).evaluate(Boolean.class);
 		try (final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(test), StandardCharsets.UTF_8))) {
 			String line = null;
 			int counter = 0;

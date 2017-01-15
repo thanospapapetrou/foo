@@ -59,11 +59,11 @@ public class Pairs extends Library {
 	 */
 	public Pairs(final FunckyScriptEngine engine) throws ScriptException {
 		super(engine);
-		final SimpleType type = (SimpleType) engine.getReference(Prelude.class, Prelude.TYPE).eval();
+		final SimpleType type = engine.getReference(Prelude.class, Prelude.TYPE).evaluate(SimpleType.class);
 		addFunctorDefinition(PAIR, new ApplicableFunctor() {
 			@Override
 			public PairType apply(final Expression... arguments) throws ScriptException {
-				return engine.getPairType((Type) arguments[0].eval(), (Type) arguments[1].eval());
+				return engine.getPairType(arguments[0].evaluate(Type.class), arguments[1].evaluate(Type.class));
 			}
 		}, type, type, type);
 		addFunctionDefinition(FIRST_TYPE, type, type, new ApplicableFunction() {
@@ -90,14 +90,14 @@ public class Pairs extends Library {
 		addFunctionDefinition(FIRST, engine.getPairType(firstType, engine.getTypeVariable()), firstType, new ApplicableFunction() {
 			@Override
 			public Literal apply(final Expression argument) throws ScriptException {
-				return ((Pair) argument.eval()).getFirst();
+				return argument.evaluate(Pair.class).getFirst();
 			}
 		});
 		final TypeVariable secondType = engine.getTypeVariable();
 		addFunctionDefinition(SECOND, engine.getPairType(engine.getTypeVariable(), secondType), secondType, new ApplicableFunction() {
 			@Override
 			public Literal apply(final Expression argument) throws ScriptException {
-				return ((Pair) argument.eval()).getSecond();
+				return argument.evaluate(Pair.class).getSecond();
 			}
 		});
 	}
