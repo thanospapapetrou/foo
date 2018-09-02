@@ -22,27 +22,64 @@
 			<name>Thanos Papapetrou</name>
 			<email>thanos.papapetrou@gmail.com</email>
 			<url>https://github.com/thanospapapetrou</url>
-      <roles>
-        <role>developer</role>
-      </roles>
-      <timezone>Europe/Athens</timezone>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>Europe/Athens</timezone>
 		</developer>
 	</developers>
 	<scm>
-    <connection>scm:git:https://github.com/thanospapapetrou/funcky.git</connection>
-    <developerConnection>scm:git:https://github.com/thanospapapetrou/funcky.git</developerConnection>
-    <url>https://github.com/thanospapapetrou/funcky</url>
-  </scm>
-  <issueManagement>
-    <system>GitHub</system>
-    <url>https://github.com/thanospapapetrou/funcky/issues</url>
-  </issueManagement>
-  <properties>
+		<connection>scm:git:https://github.com/thanospapapetrou/funcky.git</connection>
+		<developerConnection>scm:git:https://github.com/thanospapapetrou/funcky.git</developerConnection>
+		<url>https://github.com/thanospapapetrou/funcky</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/thanospapapetrou/funcky/issues</url>
+	</issueManagement>
+	<properties>
+		<funcky.extension>funcky</funcky.extension>
+		<funcky.mime.type>application/x.funcky, text/x.funcky</funcky.mime.type>
+		<funcky.name>Funcky, funcky</funcky.name>
 		<maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<build>
-    <defaultGoal>verify</defaultGoal>
-  </build>
+		<defaultGoal>verify</defaultGoal>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<archive>
+						<index>true</index>
+						<manifest>
+							<mainClass>com.github.thanospapapetrou.funcky.Funcky</mainClass>
+						</manifest>
+						<manifestSections>
+							<manifestSection>
+								<name>com/github/thanospapapetrou/funcky</name>
+								<manifestEntries>
+									<Specification-Title>JSR 223: Scripting for the JavaTM Platform</Specification-Title>
+									<Specification-Version>Final Release</Specification-Version>
+									<Specification-Vendor>Java Community Process</Specification-Vendor>
+									<Implementation-Title>${project.name}</Implementation-Title>
+									<Implementation-Version>${project.version}</Implementation-Version>
+									<Implementation-Vendor>${project.developers[0].name}</Implementation-Vendor>
+								</manifestEntries>
+							</manifestSection>
+						</manifestSections>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
