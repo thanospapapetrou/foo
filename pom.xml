@@ -4,62 +4,16 @@
 	<groupId>com.github.thanospapapetrou</groupId>
 	<artifactId>funcky</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
-	<dependencies>
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>6.9.10</version>
-			<type>jar</type>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.2</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.0.0</version>
-				<configuration>
-					<archive>
-						<manifestSections>
-							<manifestSection>
-								<name>com/github/thanospapapetrou/funcky</name>
-								<manifestEntries>
-									<Specification-Title>Java Scripting API</Specification-Title>
-									<Specification-Version>JSR-000223</Specification-Version>
-									<Specification-Vendor>Java Community Process</Specification-Vendor>
-									<Implementation-Title>${project.artifactId}</Implementation-Title>
-									<Implementation-Version>${project.version}</Implementation-Version>
-									<Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
-									<Sealed>true</Sealed>
-								</manifestEntries>
-							</manifestSection>
-						</manifestSections>
-					</archive>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 	<name>Funcky</name>
+	<description>A functional language implementation using the Java Scripting API.</description>
+	<url>https://github.com/thanospapapetrou/funcky/</url>
 	<inceptionYear>2016</inceptionYear>
 	<licenses>
 		<license>
-			<name>GNU Affero General Public License v3.0</name>
+			<name>GNU Affero General Public License, Version 3.0</name>
 			<url>http://www.gnu.org/licenses/agpl-3.0.en.html</url>
 			<distribution>repo</distribution>
+			<comments>AGPLv3</comments>
 		</license>
 	</licenses>
 	<developers>
@@ -67,15 +21,28 @@
 			<id>thanos</id>
 			<name>Thanos Papapetrou</name>
 			<email>thanos.papapetrou@gmail.com</email>
-			<roles>
-				<role>Owner</role>
-			</roles>
+			<url>https://github.com/thanospapapetrou</url>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>Europe/Athens</timezone>
 		</developer>
 	</developers>
 	<scm>
-		<connection>scm:git:git://github.com/thanospapapetrou/funcky.git</connection>
-		<developerConnection>scm:git:git@gibhub.com:thanospapapetrou/funcky.git</developerConnection>
-		<url>https://github.com/thanospapapetrou/funcky</url>
-	</scm>
+    <connection>scm:git:https://github.com/thanospapapetrou/funcky.git</connection>
+    <developerConnection>scm:git:https://github.com/thanospapapetrou/funcky.git</developerConnection>
+    <url>https://github.com/thanospapapetrou/funcky</url>
+  </scm>
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/thanospapapetrou/funcky/issues</url>
+  </issueManagement>
+  <properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+	<build>
+    <defaultGoal>verify</defaultGoal>
+  </build>
 </project>
-

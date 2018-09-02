@@ -1,6 +1,0 @@
-characters: funcky:characters
-lists: funcky:lists
- 
-# Type of strings.
-# prelude:type
-string = lists:list characters:character

@@ -1,60 +1,11 @@
-move equal in prelude
-define error
-remove numberType field from Numbers -> this can not be done since the Numbers library can not be loaded before being initialized
-add domain, range, free, infer & range in Prelude
-
-fix tests
-support relative URIs for files and for URLs
-GLOBAL_SCOPE may be redundant
-check castings
-
-define character, list, pair, type variable, function at runtime
-check scripts and line numbers
-
-define compare and use it to define equals
-domain
-range
-cast
-error
-equal
-quotient
-modulo
-lessThan
-greaterThan
-lessEqual
-greaterEqual
-abs
-round
-ceil
-floor
-min
-max
-sin
-cos
-tan
-asin
-acos
-atan
-pow
-sqrt x = pow x (div 1 2)
-ln
-log x y = ln y / ln y 
-
-pair
-first
-last
-
-list
-empty
-head
-tail
-repeat
-take
-map
-foldRight
-foldLeft
-sum
-product
-all
-any
+numbers
+booleans
+types and type inference
+chars
+lists
+strings
+packages and loading
+functors
+pairs
+extend library
 

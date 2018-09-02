@@ -1,7 +1,0 @@
-#!/bin/bash
-for script in "$@"
-do
-	scripts+=" -f \"$script\""
-done
-eval "$JAVA_HOME/bin/jrunscript" -cp "$(dirname $0)/../target/funcky-1.0.0-SNAPSHOT.jar" -l Funcky -encoding 'UTF-8' $scripts -f -
-
