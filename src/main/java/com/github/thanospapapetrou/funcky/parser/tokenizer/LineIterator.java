@@ -1,4 +1,4 @@
-package com.github.thanospapapetrou.funcky.parser.lexer;
+package com.github.thanospapapetrou.funcky.parser.tokenizer;
 
 import java.io.BufferedReader;
 import java.io.IOException;

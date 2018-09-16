@@ -1,12 +1,14 @@
-package com.github.thanospapapetrou.funcky.parser.lexer;
+package com.github.thanospapapetrou.funcky.parser.tokenizer;
 
 import java.util.regex.Pattern;
 
 enum TokenType {
     COMMENT("comment", "#.*$"),
+    EOF("end of file", null),
+    EOL("end of line", null),
+    EQUAL("equal", "="),
     IDENTIFIER("identifier", "[\\w&&\\D]\\w*"),
     LEFT_PARENTHESIS("left parenthesis", "\\("),
-    NEW_LINE("new line", null),
     NUMBER("number", "[\\+\\-]?\\d+(\\.\\d+)?"),
     RIGHT_PARENTHESIS("right parenthesis", "\\)"),
     WHITESPACE("whitespace", "\\s+");

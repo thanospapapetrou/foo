@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
-import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 
 /**
@@ -131,9 +130,8 @@ public class FunckyEngineFactory implements ScriptEngineFactory {
     }
 
     @Override
-    public ScriptEngine getScriptEngine() {
-        // TODO Auto-generated method stub
-        return null;
+    public FunckyEngine getScriptEngine() {
+        return new FunckyEngine(this);
     }
 
     private String getStringProperty(final String key) {

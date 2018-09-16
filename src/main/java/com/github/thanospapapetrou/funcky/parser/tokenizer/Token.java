@@ -1,11 +1,11 @@
-package com.github.thanospapapetrou.funcky.parser.lexer;
+package com.github.thanospapapetrou.funcky.parser.tokenizer;
 
 import java.net.URI;
 
 class Token {
-    private final URI file;
     private final TokenType type;
     private final String value;
+    private final URI file;
     private final int line;
     private final int column;
 
