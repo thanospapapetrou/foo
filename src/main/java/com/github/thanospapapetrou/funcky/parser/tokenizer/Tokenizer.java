@@ -23,12 +23,17 @@ public class Tokenizer {
 
     public static void main(final String[] arguments) {
         final Tokenizer tokenizer = new Tokenizer(
-                new StringReader("foo \tbar\nbuz  1.2\n#lala\nmoo"), URI.create("funcky:stdin"));
+                new StringReader("foo \tbar\nbuz = (1.2)\n#lala\nmoo"), URI.create("funcky:stdin"));
         System.out.println();
         tokenizer.tokenize()
                 .forEach(token -> System.out.println(token.getType() + " " + token.getValue() + " "
                         + token.getFile() + " " + token.getLine() + " " + token.getColumn()));
-
+        final Tokenizer tokenizer2 =
+                new Tokenizer(new StringReader("foo+"), URI.create("funcky:stdin"));
+        System.out.println();
+        tokenizer2.tokenize()
+                .forEach(token -> System.out.println(token.getType() + " " + token.getValue() + " "
+                        + token.getFile() + " " + token.getLine() + " " + token.getColumn()));
     }
 
     Tokenizer(final Reader reader, final URI file) {
@@ -39,18 +44,25 @@ public class Tokenizer {
     }
 
     private Stream<Token> tokenize() {
-        return Stream.concat(StreamSupport
-                .stream(Spliterators.spliteratorUnknownSize(input, Spliterator.ORDERED), false)
-                .flatMap(this::tokenize), Stream.of(token(TokenType.EOF, null)));
+        return Stream.concat(
+                StreamSupport
+                        .stream(Spliterators.spliteratorUnknownSize(input, Spliterator.ORDERED),
+                                false)
+                        .flatMap(this::tokenize),
+                Stream.generate(() -> token(TokenType.EOF, null)).limit(1L));
     }
 
     private Stream<Token> tokenize(final String input) {
         final List<Token> tokens = new ArrayList<>();
         while (column < input.length()) {
             tokens.add(Arrays.stream(TokenType.values()).map(type -> tokenize(input, type))
-                    .filter(Objects::nonNull).findAny().orElse(unparsable(input)));
+                    .filter(Objects::nonNull).findAny()
+                    .orElseThrow(() -> new TokenizerException(input.substring(column), file,
+                            line + 1, column + 1)));
         }
         tokens.add(token(TokenType.EOL, null));
+        line++;
+        column = 0;
         return tokens.stream();
     }
 
@@ -65,10 +77,6 @@ public class Tokenizer {
             }
         }
         return null;
-    }
-
-    private Token unparsable(final String input) {
-        throw new TokenizerException(input.substring(column), file, line, column);
     }
 
     private Token token(final TokenType type, final String value) {
