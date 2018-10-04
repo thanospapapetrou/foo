@@ -2,39 +2,46 @@ package com.github.thanospapapetrou.funcky.parser.tokenizer;
 
 import java.net.URI;
 
-class Token {
+public class Token {
+    private static final String FORMAT = "%1$s '%2$s'";
+
     private final TokenType type;
     private final String value;
-    private final URI file;
+    private final URI script;
     private final int line;
     private final int column;
 
-    Token(final TokenType type, final String value, final URI file, final int line,
+    Token(final TokenType type, final String value, final URI script, final int line,
             final int column) {
         this.type = type;
         this.value = value;
-        this.file = file;
+        this.script = script;
         this.line = line;
         this.column = column;
     }
 
-    TokenType getType() {
+    public TokenType getType() {
         return type;
     }
 
-    String getValue() {
+    public String getValue() {
         return value;
     }
 
-    URI getFile() {
-        return file;
+    public URI getScript() {
+        return script;
     }
 
-    int getLine() {
+    public int getLine() {
         return line;
     }
 
-    int getColumn() {
+    public int getColumn() {
         return column;
+    }
+
+    @Override
+    public String toString() {
+        return (value == null) ? type.toString() : String.format(FORMAT, type, value);
     }
 }

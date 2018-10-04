@@ -2,7 +2,7 @@ package com.github.thanospapapetrou.funcky.parser.tokenizer;
 
 import java.util.regex.Pattern;
 
-enum TokenType {
+public enum TokenType {
     COMMENT("comment", "#.*$"),
     EOF("end of file", null),
     EOL("end of line", null),

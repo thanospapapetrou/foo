@@ -1,8 +1,8 @@
 package com.github.thanospapapetrou.funcky.parser.tokenizer;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,33 +17,18 @@ import java.util.stream.StreamSupport;
 
 public class Tokenizer {
     private final LineIterator input;
-    private final URI file;
+    private final URI script;
     private int line;
     private int column;
 
-    public static void main(final String[] arguments) {
-        final Tokenizer tokenizer = new Tokenizer(
-                new StringReader("foo \tbar\nbuz = (1.2)\n#lala\nmoo"), URI.create("funcky:stdin"));
-        System.out.println();
-        tokenizer.tokenize()
-                .forEach(token -> System.out.println(token.getType() + " " + token.getValue() + " "
-                        + token.getFile() + " " + token.getLine() + " " + token.getColumn()));
-        final Tokenizer tokenizer2 =
-                new Tokenizer(new StringReader("foo+"), URI.create("funcky:stdin"));
-        System.out.println();
-        tokenizer2.tokenize()
-                .forEach(token -> System.out.println(token.getType() + " " + token.getValue() + " "
-                        + token.getFile() + " " + token.getLine() + " " + token.getColumn()));
-    }
-
-    Tokenizer(final Reader reader, final URI file) {
-        this.input = new LineIterator(new BufferedReader(reader), file);
-        this.file = file;
+    public Tokenizer(final Reader reader, final URI script) throws IOException {
+        this.input = new LineIterator(new BufferedReader(reader), script);
+        this.script = script;
         line = 0;
         column = 0;
     }
 
-    private Stream<Token> tokenize() {
+    public Stream<Token> tokenize() {
         return Stream.concat(
                 StreamSupport
                         .stream(Spliterators.spliteratorUnknownSize(input, Spliterator.ORDERED),
@@ -57,7 +42,7 @@ public class Tokenizer {
         while (column < input.length()) {
             tokens.add(Arrays.stream(TokenType.values()).map(type -> tokenize(input, type))
                     .filter(Objects::nonNull).findAny()
-                    .orElseThrow(() -> new TokenizerException(input.substring(column), file,
+                    .orElseThrow(() -> new UnparsableInputException(input.substring(column), script,
                             line + 1, column + 1)));
         }
         tokens.add(token(TokenType.EOL, null));
@@ -80,6 +65,6 @@ public class Tokenizer {
     }
 
     private Token token(final TokenType type, final String value) {
-        return new Token(type, value, file, line + 1, column + 1);
+        return new Token(type, value, script, line + 1, column + 1);
     }
 }

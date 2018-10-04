@@ -7,17 +7,13 @@ import java.util.Iterator;
 
 class LineIterator implements Iterator<String> {
     private final BufferedReader reader;
-    private final URI file;
+    private final URI script;
     private String next;
 
-    LineIterator(final BufferedReader reader, final URI file) {
+    LineIterator(final BufferedReader reader, final URI script) throws IOException {
         this.reader = reader;
-        this.file = file;
-        try {
-            this.next = reader.readLine();
-        } catch (final IOException e) {
-            throw new LineIteratorException(file, e);
-        }
+        this.script = script;
+        this.next = reader.readLine();
     }
 
     @Override
@@ -31,7 +27,7 @@ class LineIterator implements Iterator<String> {
         try {
             this.next = reader.readLine();
         } catch (final IOException e) {
-            throw new LineIteratorException(file, e);
+            throw new ReadingException(script, e);
         }
         return next;
     }

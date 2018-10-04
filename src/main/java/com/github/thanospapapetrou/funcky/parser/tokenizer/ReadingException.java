@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URI;
 
-class LineIteratorException extends UncheckedIOException {
+class ReadingException extends UncheckedIOException {
     private static final String ERROR_READING = "Error reading from %1$s";
     private static final long serialVersionUID = 0L;
 
-    LineIteratorException(final URI file, final IOException e) {
-        super(String.format(ERROR_READING, file), e);
+    ReadingException(final URI script, final IOException e) {
+        super(String.format(ERROR_READING, script), e);
     }
 }
