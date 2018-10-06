@@ -15,25 +15,27 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+/**
+ * Class implementing a Funcky tokenizer.
+ * 
+ * @author thanos
+ */
 public class Tokenizer {
-    private final LineIterator input;
     private final URI script;
     private int line;
     private int column;
 
-    public Tokenizer(final Reader reader, final URI script) throws IOException {
-        this.input = new LineIterator(new BufferedReader(reader), script);
+    public Tokenizer(final URI script) {
         this.script = script;
         line = 0;
         column = 0;
     }
 
-    public Stream<Token> tokenize() {
+    public Stream<Token> tokenize(final Reader reader) throws IOException {
         return Stream.concat(
-                StreamSupport
-                        .stream(Spliterators.spliteratorUnknownSize(input, Spliterator.ORDERED),
-                                false)
-                        .flatMap(this::tokenize),
+                StreamSupport.stream(Spliterators.spliteratorUnknownSize(
+                        new LineIterator(new BufferedReader(reader), script), Spliterator.ORDERED),
+                        false).flatMap(this::tokenize),
                 Stream.generate(() -> token(TokenType.EOF, null)).limit(1L));
     }
 

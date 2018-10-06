@@ -28,7 +28,7 @@ public class Parser {
     public Parser(final FunckyEngine engine, final Reader reader, final URI script)
             throws IOException {
         this.engine = engine;
-        tokens = new PushbackIterator<>(new Tokenizer(reader, script).tokenize().filter(NO_COMMENT)
+        tokens = new PushbackIterator<>(new Tokenizer(script).tokenize(reader).filter(NO_COMMENT)
                 .filter(NO_WHITESPACE).iterator());
     }
 

@@ -2,15 +2,55 @@ package com.github.thanospapapetrou.funcky.parser.tokenizer;
 
 import java.util.regex.Pattern;
 
+/**
+ * Class representing Funcky token types.
+ * 
+ * @author thanos
+ */
 public enum TokenType {
+    /**
+     * Comment ('#...').
+     */
     COMMENT("comment", "#.*$"),
+
+    /**
+     * End of file.
+     */
     EOF("end of file", null),
+
+    /**
+     * End of line ('\n').
+     */
     EOL("end of line", null),
-    EQUAL("equal", "="),
+
+    /**
+     * Equals ('=').
+     */
+    EQUALS("equals", "="),
+
+    /**
+     * Identifier.
+     */
     IDENTIFIER("identifier", "[\\w&&\\D]\\w*"),
+
+    /**
+     * Left parenthesis ('(').
+     */
     LEFT_PARENTHESIS("left parenthesis", "\\("),
+
+    /**
+     * Number.
+     */
     NUMBER("number", "[\\+\\-]?\\d+(\\.\\d+)?"),
+
+    /**
+     * Right parenthesis (')').
+     */
     RIGHT_PARENTHESIS("right parenthesis", "\\)"),
+
+    /**
+     * Whitespace.
+     */
     WHITESPACE("whitespace", "\\s+");
 
     private final String name;
