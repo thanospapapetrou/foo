@@ -1,9 +1,11 @@
 package com.github.thanospapapetrou.funcky.parser;
 
 import com.github.thanospapapetrou.funcky.FunckyEngine;
+import com.github.thanospapapetrou.funcky.parser.tokenizer.ReadingException;
 import com.github.thanospapapetrou.funcky.parser.tokenizer.Token;
 import com.github.thanospapapetrou.funcky.parser.tokenizer.TokenType;
 import com.github.thanospapapetrou.funcky.parser.tokenizer.Tokenizer;
+import com.github.thanospapapetrou.funcky.parser.tokenizer.UnparsableInputRuntimeException;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -26,10 +28,18 @@ public class Parser {
     private final PushbackIterator<Token> tokens;
 
     public Parser(final FunckyEngine engine, final Reader reader, final URI script)
-            throws IOException {
+            throws ParseException {
         this.engine = engine;
-        tokens = new PushbackIterator<>(new Tokenizer(script).tokenize(reader).filter(NO_COMMENT)
-                .filter(NO_WHITESPACE).iterator());
+        try {
+            tokens = new PushbackIterator<>(new Tokenizer(script).tokenize(reader)
+                    .filter(NO_COMMENT).filter(NO_WHITESPACE).iterator());
+        } catch (final IOException e) {
+            throw new ParseException(script, e);
+        } catch (final ReadingException e) {
+            throw new ParseException(script, e.getCause());
+        } catch (final UnparsableInputRuntimeException e) {
+            throw new ParseException(script, e); // TODO these exceptions (and unexpected token) should be subclasses of parse exception
+        }
     }
 
     void parseScript() {

@@ -2,17 +2,14 @@ package com.github.thanospapapetrou.funcky.parser.tokenizer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URI;
 import java.util.Iterator;
 
 class LineIterator implements Iterator<String> {
     private final BufferedReader reader;
-    private final URI script;
     private String next;
 
-    LineIterator(final BufferedReader reader, final URI script) throws IOException {
+    LineIterator(final BufferedReader reader) throws IOException {
         this.reader = reader;
-        this.script = script;
         this.next = reader.readLine();
     }
 
@@ -27,7 +24,7 @@ class LineIterator implements Iterator<String> {
         try {
             this.next = reader.readLine();
         } catch (final IOException e) {
-            throw new ReadingException(script, e);
+            throw new ReadingException(e);
         }
         return next;
     }

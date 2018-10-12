@@ -2,13 +2,11 @@ package com.github.thanospapapetrou.funcky.parser.tokenizer;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.net.URI;
 
-class ReadingException extends UncheckedIOException {
-    private static final String ERROR_READING = "Error reading from %1$s";
+public class ReadingException extends UncheckedIOException {
     private static final long serialVersionUID = 0L;
 
-    ReadingException(final URI script, final IOException e) {
-        super(String.format(ERROR_READING, script), e);
+    ReadingException(final IOException e) {
+        super(e);
     }
 }

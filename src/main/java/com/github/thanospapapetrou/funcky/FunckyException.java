@@ -26,8 +26,8 @@ public abstract class FunckyException extends ScriptException {
      *            the column in which the error occured or <code>-1</code> if this error occured at
      *            runtime
      */
-    protected FunckyException(final String message, final URI script, final int line,
-            final int column) {
-        super(message, script.toString(), line, column);
-    }
+//    protected FunckyException(final String message, final URI script, final int line,
+//            final int column) {
+//        super(message, script.toString(), line, column);
+//    }
 }
