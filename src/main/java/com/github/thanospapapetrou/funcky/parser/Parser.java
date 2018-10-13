@@ -28,13 +28,13 @@ public class Parser {
     private final PushbackIterator<Token> tokens;
 
     public Parser(final FunckyEngine engine, final Reader reader, final URI script)
-            throws ParseException {
+            throws ParsingErrorException {
         this.engine = engine;
         try {
             tokens = new PushbackIterator<>(new Tokenizer(script).tokenize(reader)
                     .filter(NO_COMMENT).filter(NO_WHITESPACE).iterator());
         } catch (final IOException e) {
-            throw new ParseException(script, e);
+            throw new ParsingErrorException(script, e);
         }
     }
 
@@ -43,14 +43,16 @@ public class Parser {
     }
 
     public Expression parseExpression() throws ParseException {
+        // TODO h = f produces invalid error (expected right parenthesis)
         try {
             final Expression expression = _parseExpression();
             parse(TokenType.EOL);
             parse(TokenType.EOF);
             return expression;
         } catch (final ReadingException e) {
-            throw new ParseException(URI.create("funcky:stding"), e.getCause()); // TODO define
-                                                                                 // script
+            throw new ParsingErrorException(URI.create("funcky:stding"), e.getCause()); // TODO
+                                                                                         // define
+            // script
         } catch (final UnparsableInputRuntimeException e) {
             throw new UnparsableInputException(URI.create("funcky:stding"), e); // TODO define
                                                                                 // script

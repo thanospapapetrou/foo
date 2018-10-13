@@ -13,8 +13,8 @@ import javax.script.ScriptException;
 public abstract class FunckyException extends ScriptException {
     private static final long serialVersionUID = 1L;
 
-    protected FunckyException(final String message, final URI script, final IOException e) {
-        super(message, script.toString(), -1);
+    protected FunckyException(final URI script, final IOException e) {
+        super(null, script.toString(), -1);
         initCause(e);
     }
 
@@ -22,10 +22,4 @@ public abstract class FunckyException extends ScriptException {
             final int column) {
         super(message, script.toString(), line, column);
     }
-
-//    @Override
-//    public String getMessage() {
-        // TODO find a way to call grandparent method
-//        return ((Exception) this).getMessage();
-//    }
 }
