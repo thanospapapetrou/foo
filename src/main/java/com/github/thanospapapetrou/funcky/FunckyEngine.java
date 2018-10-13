@@ -4,7 +4,6 @@ import com.github.thanospapapetrou.funcky.parser.Expression;
 import com.github.thanospapapetrou.funcky.parser.Number;
 import com.github.thanospapapetrou.funcky.parser.Parser;
 
-import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
@@ -34,18 +33,11 @@ public class FunckyEngine extends AbstractScriptEngine
 
     @Override
     public Expression compile(final String expression) throws FunckyException {
-        try {
-            // TODO
-            final Expression exp =
-                    new Parser(this, new StringReader(expression), URI.create("funcky:stdin"))
-                            .parseExpression();
-            System.out.println("Parsed " + exp);
-            return exp;
-        } catch (final IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
-        }
+        final Expression exp =
+                new Parser(this, new StringReader(expression), URI.create("funcky:stdin"))
+                        .parseExpression();
+        System.out.println("Parsed " + exp);
+        return exp;
     }
 
     @Override

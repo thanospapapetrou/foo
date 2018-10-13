@@ -1,5 +1,6 @@
 package com.github.thanospapapetrou.funcky;
 
+import java.io.IOException;
 import java.net.URI;
 
 import javax.script.ScriptException;
@@ -12,22 +13,19 @@ import javax.script.ScriptException;
 public abstract class FunckyException extends ScriptException {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Construct a new Funcky exception.
-     * 
-     * @param message
-     *            the message of the exception
-     * @param script
-     *            the URI of the script (or library) in which the error occurred
-     * @param line
-     *            the line in which the error occurred or <code>-1</code> if this error occurred at
-     *            runtime
-     * @param column
-     *            the column in which the error occured or <code>-1</code> if this error occured at
-     *            runtime
-     */
-//    protected FunckyException(final String message, final URI script, final int line,
-//            final int column) {
-//        super(message, script.toString(), line, column);
+    protected FunckyException(final String message, final URI script, final IOException e) {
+        super(message, script.toString(), -1);
+        initCause(e);
+    }
+
+    protected FunckyException(final String message, final URI script, final int line,
+            final int column) {
+        super(message, script.toString(), line, column);
+    }
+
+//    @Override
+//    public String getMessage() {
+        // TODO find a way to call grandparent method
+//        return ((Exception) this).getMessage();
 //    }
 }

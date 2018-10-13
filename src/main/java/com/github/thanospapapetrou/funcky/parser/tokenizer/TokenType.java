@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
  * @author thanos
  */
 public enum TokenType {
+    // TODO add logic to show or not value when printing token
     /**
      * Comment ('#...').
      */

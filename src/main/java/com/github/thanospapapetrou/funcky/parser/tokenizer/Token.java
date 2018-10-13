@@ -8,7 +8,7 @@ import java.net.URI;
  * @author thanos
  */
 public class Token {
-    private static final String FORMAT = "%1$s '%2$s'";
+    private static final String FORMAT = "%1$s \"%2$s\"";
 
     private final TokenType type;
     private final String value;

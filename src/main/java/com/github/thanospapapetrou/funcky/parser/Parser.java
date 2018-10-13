@@ -35,10 +35,6 @@ public class Parser {
                     .filter(NO_COMMENT).filter(NO_WHITESPACE).iterator());
         } catch (final IOException e) {
             throw new ParseException(script, e);
-        } catch (final ReadingException e) {
-            throw new ParseException(script, e.getCause());
-        } catch (final UnparsableInputRuntimeException e) {
-            throw new ParseException(script, e); // TODO these exceptions (and unexpected token) should be subclasses of parse exception
         }
     }
 
@@ -46,11 +42,19 @@ public class Parser {
         // TODO
     }
 
-    public Expression parseExpression() throws UnexpectedTokenException {
-        final Expression expression = _parseExpression();
-        parse(TokenType.EOL);
-        parse(TokenType.EOF);
-        return expression;
+    public Expression parseExpression() throws ParseException {
+        try {
+            final Expression expression = _parseExpression();
+            parse(TokenType.EOL);
+            parse(TokenType.EOF);
+            return expression;
+        } catch (final ReadingException e) {
+            throw new ParseException(URI.create("funcky:stding"), e.getCause()); // TODO define
+                                                                                 // script
+        } catch (final UnparsableInputRuntimeException e) {
+            throw new UnparsableInputException(URI.create("funcky:stding"), e); // TODO define
+                                                                                // script
+        }
     }
 
     private Expression _parseExpression() throws UnexpectedTokenException {
