@@ -35,7 +35,7 @@ public class Tokenizer {
         return Stream.concat(
                 StreamSupport.stream(
                         Spliterators.spliteratorUnknownSize(
-                                new LineIterator(new BufferedReader(reader)), Spliterator.ORDERED),
+                                new LineIterator(script, new BufferedReader(reader)), Spliterator.ORDERED),
                         false).flatMap(this::tokenize),
                 Stream.generate(() -> token(TokenType.EOF, null)).limit(1L));
     }
@@ -46,7 +46,7 @@ public class Tokenizer {
             tokens.add(Arrays.stream(TokenType.values()).map(type -> tokenize(input, type))
                     .filter(Objects::nonNull).findAny()
                     .orElseThrow(() -> new UnparsableInputRuntimeException(input.substring(column),
-                            line + 1, column + 1)));
+                            script, line + 1, column + 1)));
         }
         tokens.add(token(TokenType.EOL, null));
         line++;

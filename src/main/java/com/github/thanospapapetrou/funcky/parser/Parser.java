@@ -50,9 +50,7 @@ public class Parser {
             parse(TokenType.EOF);
             return expression;
         } catch (final ReadingException e) {
-            throw new ParsingErrorException(URI.create("funcky:stding"), e.getCause()); // TODO
-                                                                                         // define
-            // script
+            throw new ParsingErrorException(e.getScript(), e.getCause());
         } catch (final UnparsableInputRuntimeException e) {
             throw new UnparsableInputException(URI.create("funcky:stding"), e); // TODO define
                                                                                 // script
