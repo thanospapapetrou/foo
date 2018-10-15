@@ -21,6 +21,9 @@ import java.util.stream.StreamSupport;
  * @author thanos
  */
 public class Tokenizer {
+    private static final String NULL_READER = "Reader must not be null";
+    private static final String NULL_SCRIPT = "Script must not be null";
+
     private final URI script;
     private int line;
     private int column;
@@ -32,6 +35,7 @@ public class Tokenizer {
      *            the URI of the script to tokenize
      */
     public Tokenizer(final URI script) {
+        Objects.requireNonNull(script, NULL_SCRIPT);
         this.script = script;
         line = 0;
         column = 0;
@@ -47,6 +51,7 @@ public class Tokenizer {
      *             if any I/O errors occur while tokenizing
      */
     public Stream<Token> tokenize(final Reader reader) throws IOException {
+        Objects.requireNonNull(reader, NULL_READER);
         return Stream.concat(
                 StreamSupport.stream(Spliterators.spliteratorUnknownSize(
                         new LineIterator(script, new BufferedReader(reader)), Spliterator.ORDERED),
