@@ -52,8 +52,7 @@ public class Parser {
         } catch (final ReadingException e) {
             throw new ParsingErrorException(e.getScript(), e.getCause());
         } catch (final UnparsableInputRuntimeException e) {
-            throw new UnparsableInputException(URI.create("funcky:stding"), e); // TODO define
-                                                                                // script
+            throw new UnparsableInputException(e.getScript(), e);
         }
     }
 
