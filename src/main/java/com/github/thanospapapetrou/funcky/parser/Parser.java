@@ -15,24 +15,46 @@ import java.io.IOException;
 import java.io.Reader;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * Class implementing a Funcky parser.
+ * 
+ * @author thanos
+ */
 public class Parser {
-    private static final String ILLEGAL_STATE =
-            "Parser is in illegal state: token %1$s was expected but not handled";
     private static final Predicate<Token> NO_COMMENT =
             ((Predicate<Token>) ((Function<TokenType, Boolean>) TokenType.COMMENT::equals)
                     .compose(Token::getType)::apply).negate();
     private static final Predicate<Token> NO_WHITESPACE =
             ((Predicate<Token>) ((Function<TokenType, Boolean>) TokenType.WHITESPACE::equals)
                     .compose(Token::getType)::apply).negate();
+    private static final String NULL_ENGINE = "Engine must not be null";
+    private static final String NULL_READER = "Reader must not be null";
+    private static final String NULL_SCRIPT = "Script must not be null";
 
     private final FunckyEngine engine;
     private final PushbackIterator<Token> tokens;
 
+    /**
+     * Construct a new parser.
+     * 
+     * @param engine
+     *            the Funcky engine that this parser belongs to
+     * @param reader
+     *            the reader from which to read the script to parse
+     * @param script
+     *            the URI of the script to parse
+     * @throws ParsingErrorException
+     *             if any I/O errors occur while parsing
+     */
     public Parser(final FunckyEngine engine, final Reader reader, final URI script)
             throws ParsingErrorException {
+        Objects.requireNonNull(engine, NULL_ENGINE);
+        Objects.requireNonNull(reader, NULL_READER);
+        Objects.requireNonNull(script, NULL_SCRIPT);
         this.engine = engine;
         try {
             tokens = new PushbackIterator<>(new Tokenizer(script).tokenize(reader)
@@ -46,6 +68,13 @@ public class Parser {
         // TODO
     }
 
+    /**
+     * Parse an expression.
+     * 
+     * @return the expression parsed
+     * @throws ParseException
+     *             if any errors occur while parsing
+     */
     public Expression parseExpression() throws ParseException {
         // TODO h = f produces invalid error (expected right parenthesis)
         try {

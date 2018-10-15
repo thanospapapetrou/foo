@@ -25,13 +25,4 @@ class PushbackIterator<E> implements Iterator<E> {
     public E next() {
         return items.isEmpty() ? iterator.next() : items.pop();
     }
-
-    @Override
-    public void remove() {
-        if (items.isEmpty()) {
-            iterator.remove();
-        } else {
-            items.pop();
-        }
-    }
 }

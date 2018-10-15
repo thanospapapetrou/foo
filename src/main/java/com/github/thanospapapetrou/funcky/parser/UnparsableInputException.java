@@ -4,6 +4,11 @@ import com.github.thanospapapetrou.funcky.parser.tokenizer.UnparsableInputRuntim
 
 import java.net.URI;
 
+/**
+ * Exception thrown by {@link Parser} whenever unparsable input is encountered.
+ * 
+ * @author thanos
+ */
 public class UnparsableInputException extends ParseException {
     private static final String UNPARSABLE_INPUT = "Unparsable input \"%1$s\"";
     private static final long serialVersionUID = 0L;
