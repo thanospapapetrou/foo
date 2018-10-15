@@ -6,6 +6,10 @@ import com.github.thanospapapetrou.funcky.parser.tokenizer.Token;
 import com.github.thanospapapetrou.funcky.parser.tokenizer.TokenType;
 import com.github.thanospapapetrou.funcky.parser.tokenizer.Tokenizer;
 import com.github.thanospapapetrou.funcky.parser.tokenizer.UnparsableInputRuntimeException;
+import com.github.thanospapapetrou.funcky.script.Application;
+import com.github.thanospapapetrou.funcky.script.Expression;
+import com.github.thanospapapetrou.funcky.script.Number;
+import com.github.thanospapapetrou.funcky.script.Reference;
 
 import java.io.IOException;
 import java.io.Reader;

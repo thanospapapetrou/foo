@@ -1,8 +1,8 @@
 package com.github.thanospapapetrou.funcky;
 
-import com.github.thanospapapetrou.funcky.parser.Expression;
-import com.github.thanospapapetrou.funcky.parser.Number;
 import com.github.thanospapapetrou.funcky.parser.Parser;
+import com.github.thanospapapetrou.funcky.script.Expression;
+import com.github.thanospapapetrou.funcky.script.Number;
 
 import java.io.Reader;
 import java.io.StringReader;

@@ -1,4 +1,4 @@
-package com.github.thanospapapetrou.funcky.parser;
+package com.github.thanospapapetrou.funcky.script;
 
 import com.github.thanospapapetrou.funcky.FunckyEngine;
 import com.github.thanospapapetrou.funcky.FunckyException;

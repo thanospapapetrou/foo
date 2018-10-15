@@ -1,14 +1,14 @@
-package com.github.thanospapapetrou.funcky.parser;
+package com.github.thanospapapetrou.funcky.script;
 
 import com.github.thanospapapetrou.funcky.FunckyEngine;
 import com.github.thanospapapetrou.funcky.FunckyException;
 
 import javax.script.ScriptContext;
 
-class Reference extends Expression {
+public class Reference extends Expression {
     private final String name;
 
-    Reference(final FunckyEngine engine, final String name) {
+    public Reference(final FunckyEngine engine, final String name) {
         super(engine);
         this.name = name;
     }

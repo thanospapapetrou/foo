@@ -11,7 +11,7 @@ import javax.script.ScriptException;
  * @author thanos
  */
 public abstract class FunckyException extends ScriptException {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 0L;
 
     protected FunckyException(final URI script, final IOException e) {
         super(null, script.toString(), -1);

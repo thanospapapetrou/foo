@@ -1,18 +1,19 @@
-package com.github.thanospapapetrou.funcky.parser;
+package com.github.thanospapapetrou.funcky.script;
 
 import com.github.thanospapapetrou.funcky.FunckyEngine;
 import com.github.thanospapapetrou.funcky.FunckyException;
 
 import javax.script.ScriptContext;
 
-class Application extends Expression {
+public class Application extends Expression {
     private static final String APPLICATION_FORMAT = "%1$s %2$s";
     private static final String NESTED_APPLICATION = "(%1$s)";
 
     private final Expression function;
     private final Expression argument;
 
-    Application(final FunckyEngine engine, final Expression function, final Expression argument) {
+    public Application(final FunckyEngine engine, final Expression function,
+            final Expression argument) {
         super(engine);
         this.function = function;
         this.argument = argument;

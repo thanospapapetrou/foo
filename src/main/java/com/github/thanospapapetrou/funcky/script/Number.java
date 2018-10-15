@@ -1,4 +1,4 @@
-package com.github.thanospapapetrou.funcky.parser;
+package com.github.thanospapapetrou.funcky.script;
 
 import com.github.thanospapapetrou.funcky.FunckyEngine;
 
@@ -7,7 +7,7 @@ import javax.script.ScriptContext;
 public class Number extends Expression {
     private final double value;
 
-    Number(final FunckyEngine engine, final double value) {
+    public Number(final FunckyEngine engine, final double value) {
         super(engine);
         this.value = value;
     }
