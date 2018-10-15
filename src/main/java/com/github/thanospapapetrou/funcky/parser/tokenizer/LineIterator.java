@@ -5,7 +5,12 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Iterator;
 
-class LineIterator implements Iterator<String> {
+/**
+ * Class implementing an iterator over the lines of a {@link BufferedReader}.
+ * 
+ * @author thanos
+ */
+public class LineIterator implements Iterator<String> {
     private final URI script;
     private final BufferedReader reader;
     private String next;

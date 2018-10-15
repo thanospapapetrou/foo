@@ -25,17 +25,31 @@ public class Tokenizer {
     private int line;
     private int column;
 
+    /**
+     * Construct a new tokenizer.
+     * 
+     * @param script
+     *            the URI of the script to tokenize
+     */
     public Tokenizer(final URI script) {
         this.script = script;
         line = 0;
         column = 0;
     }
 
+    /**
+     * Lazily tokenize a script.
+     * 
+     * @param reader
+     *            the reader from which to read the script to tokenize
+     * @return a stream of tokens
+     * @throws IOException
+     *             if any I/O errors occur while tokenizing
+     */
     public Stream<Token> tokenize(final Reader reader) throws IOException {
         return Stream.concat(
-                StreamSupport.stream(
-                        Spliterators.spliteratorUnknownSize(
-                                new LineIterator(script, new BufferedReader(reader)), Spliterator.ORDERED),
+                StreamSupport.stream(Spliterators.spliteratorUnknownSize(
+                        new LineIterator(script, new BufferedReader(reader)), Spliterator.ORDERED),
                         false).flatMap(this::tokenize),
                 Stream.generate(() -> token(TokenType.EOF, null)).limit(1L));
     }

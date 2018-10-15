@@ -46,7 +46,7 @@ public class Token {
     /**
      * Get script.
      * 
-     * @return the script in which this token was encountered
+     * @return the URI of the script in which this token was encountered
      */
     public URI getScript() {
         return script;
@@ -55,7 +55,7 @@ public class Token {
     /**
      * Get line.
      * 
-     * @return line the line in which this token was encountered (starting from <code>1</code>)
+     * @return line the line at which this token was encountered (starting from <code>1</code>)
      */
     public int getLine() {
         return line;
@@ -64,7 +64,7 @@ public class Token {
     /**
      * Get column.
      * 
-     * @return column the column in which this token was encountered (starting from <code>1</code>)
+     * @return column the column at which this token was encountered (starting from <code>1</code>)
      */
     public int getColumn() {
         return column;
