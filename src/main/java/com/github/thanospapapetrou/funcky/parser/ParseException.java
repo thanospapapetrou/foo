@@ -8,11 +8,12 @@ import java.net.URI;
 abstract class ParseException extends FunckyException {
     private static final long serialVersionUID = 0L;
 
-    ParseException(final URI script, final IOException e) {
+    protected ParseException(final URI script, final IOException e) {
         super(script, e);
     }
 
-    ParseException(final String message, final URI script, final int line, final int column) {
+    protected ParseException(final String message, final URI script, final int line,
+            final int column) {
         super(message, script, line, column);
     }
 }
