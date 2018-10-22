@@ -1,8 +1,8 @@
 package com.github.thanospapapetrou.funcky;
 
 import com.github.thanospapapetrou.funcky.parser.Parser;
-import com.github.thanospapapetrou.funcky.script.Expression;
-import com.github.thanospapapetrou.funcky.script.Number;
+import com.github.thanospapapetrou.funcky.script.expression.Expression;
+import com.github.thanospapapetrou.funcky.script.expression.literal.Literal;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -14,7 +14,6 @@ import javax.script.Compilable;
 import javax.script.Invocable;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
-import javax.script.ScriptException;
 
 public class FunckyEngine extends AbstractScriptEngine
         implements Compilable, Invocable, ScriptEngine {
@@ -47,14 +46,14 @@ public class FunckyEngine extends AbstractScriptEngine
     }
 
     @Override
-    public Object eval(final Reader script, final ScriptContext context) throws ScriptException {
+    public Literal eval(final Reader script, final ScriptContext context) throws FunckyException {
         // TODO change to FunckyException
         return compile(script).eval(context);
     }
 
     @Override
-    public Number eval(final String expression, final ScriptContext context)
-            throws ScriptException {
+    public Literal eval(final String expression, final ScriptContext context)
+            throws FunckyException {
         // TODO change to FunckyException
         return compile(expression).eval(context);
     }

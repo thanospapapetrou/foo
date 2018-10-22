@@ -6,10 +6,10 @@ import com.github.thanospapapetrou.funcky.parser.tokenizer.Token;
 import com.github.thanospapapetrou.funcky.parser.tokenizer.TokenType;
 import com.github.thanospapapetrou.funcky.parser.tokenizer.Tokenizer;
 import com.github.thanospapapetrou.funcky.parser.tokenizer.UnparsableInputRuntimeException;
-import com.github.thanospapapetrou.funcky.script.Application;
-import com.github.thanospapapetrou.funcky.script.Expression;
-import com.github.thanospapapetrou.funcky.script.Number;
-import com.github.thanospapapetrou.funcky.script.Reference;
+import com.github.thanospapapetrou.funcky.script.expression.Application;
+import com.github.thanospapapetrou.funcky.script.expression.Expression;
+import com.github.thanospapapetrou.funcky.script.expression.Reference;
+import com.github.thanospapapetrou.funcky.script.expression.literal.Number;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -103,7 +103,8 @@ public class Parser {
             case LEFT_PARENTHESIS:
             case NUMBER:
                 tokens.pushback(token);
-                expression = new Application(engine, expression, parseSimpleExpression());
+                expression = new Application(engine, expression.getScript(), expression.getLine(),
+                        expression.getColumn(), expression, parseSimpleExpression());
                 break;
             default:
                 throw new ParserIllegalStateException(token);
@@ -116,13 +117,15 @@ public class Parser {
                 parse(TokenType.IDENTIFIER, TokenType.LEFT_PARENTHESIS, TokenType.NUMBER);
         switch (token.getType()) {
         case IDENTIFIER:
-            return new Reference(engine, token.getValue());
+            return new Reference(engine, token.getScript(), token.getLine(), token.getColumn(),
+                    token.getValue());
         case LEFT_PARENTHESIS:
             final Expression expression = _parseExpression();
             parse(TokenType.RIGHT_PARENTHESIS);
             return expression;
         case NUMBER:
-            return new Number(engine, Double.valueOf(token.getValue()));
+            return new Number(engine, token.getScript(), token.getLine(), token.getColumn(),
+                    Double.valueOf(token.getValue()));
         default:
             throw new ParserIllegalStateException(token);
         }

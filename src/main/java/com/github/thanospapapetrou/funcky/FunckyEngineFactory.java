@@ -131,7 +131,9 @@ public class FunckyEngineFactory implements ScriptEngineFactory {
 
     @Override
     public FunckyEngine getScriptEngine() {
-        return new FunckyEngine(this);
+        final FunckyEngine engine = new FunckyEngine(this);
+        // TODO set global scope bindings
+        return engine;
     }
 
     private String getStringProperty(final String key) {
