@@ -1,12 +1,17 @@
 package com.github.thanospapapetrou.funcky;
 
+import com.github.thanospapapetrou.funcky.prelude.Numbers;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+import javax.script.Bindings;
+import javax.script.ScriptContext;
 import javax.script.ScriptEngineFactory;
+import javax.script.SimpleBindings;
 
 /**
  * Class implementing a Funcky engine factory.
@@ -56,7 +61,9 @@ public class FunckyEngineFactory implements ScriptEngineFactory {
 
     private static final String DELIMITER = ",\\s*";
     private static final String PROPERTIES = "/funcky.properties";
+
     private final Properties properties;
+    private final Bindings bindings;
 
     /**
      * Construct a new Funcky engine factory.
@@ -67,6 +74,11 @@ public class FunckyEngineFactory implements ScriptEngineFactory {
     public FunckyEngineFactory() throws IOException {
         properties = new Properties();
         properties.load(FunckyEngineFactory.class.getResourceAsStream(PROPERTIES));
+        // TODO rename to prelude and define as a set of libraries
+        bindings = new SimpleBindings();
+        bindings.put(Numbers.NUMBER.toString(), Numbers.NUMBER);
+        bindings.put(Numbers.NAN.toString(), Numbers.NAN);
+        bindings.put(Numbers.INFINITY.toString(), Numbers.INFINITY);
     }
 
     @Override
@@ -132,7 +144,8 @@ public class FunckyEngineFactory implements ScriptEngineFactory {
     @Override
     public FunckyEngine getScriptEngine() {
         final FunckyEngine engine = new FunckyEngine(this);
-        // TODO set global scope bindings
+        // TODO use custom scope
+        engine.getBindings(ScriptContext.ENGINE_SCOPE).putAll(bindings);
         return engine;
     }
 

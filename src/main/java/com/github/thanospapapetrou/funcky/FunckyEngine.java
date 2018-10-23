@@ -32,6 +32,7 @@ public class FunckyEngine extends AbstractScriptEngine
 
     @Override
     public Expression compile(final String expression) throws FunckyException {
+        // TODO change inline constant about stdin
         final Expression exp =
                 new Parser(this, new StringReader(expression), URI.create("funcky:stdin"))
                         .parseExpression();
@@ -41,7 +42,7 @@ public class FunckyEngine extends AbstractScriptEngine
 
     @Override
     public Bindings createBindings() {
-        // TODO Auto-generated method stub
+        // TODO
         return null;
     }
 

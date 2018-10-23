@@ -9,6 +9,9 @@ import java.net.URI;
 import javax.script.ScriptContext;
 
 public class Number extends Literal {
+    private static final String INFINITY = "infinity";
+    private static final String NAN = "nan";
+
     private final double value;
 
     public Number(final FunckyEngine engine, final URI script, final int line, final int column,
@@ -33,6 +36,8 @@ public class Number extends Literal {
 
     @Override
     public String toString() {
-        return Double.toString(value);
+        return (value == Double.POSITIVE_INFINITY) ? INFINITY
+                : ((value == Double.NEGATIVE_INFINITY) ? "TODO fix minus infinity as an expression"
+                        : (Double.isNaN(value) ? NAN : Double.toString(value)));
     }
 }

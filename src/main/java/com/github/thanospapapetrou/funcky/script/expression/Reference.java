@@ -19,7 +19,6 @@ public class Reference extends Expression {
 
     @Override
     public Literal eval(final ScriptContext context) {
-        // TODO
         return resolve(context).eval(context);
     }
 
@@ -34,6 +33,7 @@ public class Reference extends Expression {
     }
 
     private Expression resolve(final ScriptContext context) {
-        return (Expression) context.getAttribute(name);
+        // TODO use custom scope
+        return (Expression) context.getBindings(ScriptContext.ENGINE_SCOPE).get(name);
     }
 }
