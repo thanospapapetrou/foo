@@ -72,6 +72,7 @@ public class Token {
 
     @Override
     public String toString() {
-        return (value == null) ? type.toString() : String.format(FORMAT, type, value);
+        return ((type == TokenType.IDENTIFIER) || (type == TokenType.NUMBER))
+                ? String.format(FORMAT, type, value) : type.toString();
     }
 }
