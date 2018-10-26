@@ -1,17 +1,7 @@
-pushback iterator should not support remove
-reading exception and unparsableinputexception should be pojos
 funcky exception
-    parse exception (including exceptions just to wrap IOExceptions)
-        unparsable input
-        unexpected token
-            the above two must contain reference to script though, since more than one scripts may be loaded by an initial script
-            or not, since referenced scripts will be parsed as well
     type exception
     runtime exception
-script in javadoc -> the URI of the script
-- somehow it should differentiate between script as URI and script as syntax (definitions + imports)
 
-numbers
 booleans
 types and type inference
 chars
@@ -21,4 +11,3 @@ packages and loading
 functors
 pairs
 extend library
-

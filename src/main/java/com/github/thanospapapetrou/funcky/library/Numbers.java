@@ -16,7 +16,6 @@ import javax.script.ScriptException;
 
 public class Numbers extends Library {
     public static final SimpleType NUMBER = new SimpleType("Number");
-    // TODO minus = subtract 0
     private static final Set<Literal> LITERALS =
             Collections.unmodifiableSet(new HashSet<Literal>() {
                 private static final long serialVersionUID = 0L;
@@ -25,19 +24,6 @@ public class Numbers extends Library {
                     add(NUMBER);
                     add(new Number(Double.NaN));
                     add(new Number(Double.POSITIVE_INFINITY));
-                    add(new Function("minus", new FunctionType(NUMBER, NUMBER)) {
-                        @Override
-                        public Literal apply(final ScriptContext context,
-                                final Expression argument) {
-                            try {
-                                return new Number(-((Number) argument.eval()).getValue());
-                            } catch (final ScriptException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                                return null;
-                            }
-                        }
-                    });
                     add(new BinaryArithmeticOperator("add") {
                         @Override
                         protected double apply(final double a, final double b) {
@@ -68,7 +54,8 @@ public class Numbers extends Library {
                             return a % b;
                         }
                     });
-
+                    // TODO minus = subtract 0
+                    // TODO modulo = a - int (a / b) * b
                 }
             });
 
