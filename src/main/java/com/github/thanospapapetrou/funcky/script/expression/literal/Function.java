@@ -5,21 +5,26 @@ import com.github.thanospapapetrou.funcky.script.expression.literal.type.Functio
 
 import javax.script.ScriptContext;
 
-public abstract class Function extends Literal
-        implements java.util.function.Function<Expression, Literal> {
+public abstract class Function extends Literal {
+    private final String name;
     private final FunctionType type;
 
-    protected Function(final FunctionType type) {
+    protected Function(final String name, final FunctionType type) {
         super();
+        this.name = name;
         this.type = type;
     }
 
-    @Override
-    public abstract Literal apply(final Expression argument);
+    public abstract Literal apply(final ScriptContext context, final Expression argument);
 
     @Override
-    public FunctionType getType(final ScriptContext context) {
+    public FunctionType getType() {
         return type;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 
 }

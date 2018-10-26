@@ -1,9 +1,7 @@
 package com.github.thanospapapetrou.funcky.script.expression.literal.type;
 
-import com.github.thanospapapetrou.funcky.prelude.Core;
+import com.github.thanospapapetrou.funcky.library.Core;
 import com.github.thanospapapetrou.funcky.script.expression.literal.Literal;
-
-import javax.script.ScriptContext;
 
 public abstract class Type extends Literal {
     protected Type() {
@@ -11,7 +9,7 @@ public abstract class Type extends Literal {
     }
 
     @Override
-    public SimpleType getType(final ScriptContext context) {
+    public SimpleType getType() {
         return Core.TYPE;
     }
 }

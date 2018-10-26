@@ -18,12 +18,16 @@ public abstract class Literal extends Expression {
         super();
     }
 
+    public abstract Type getType();
+
     @Override
     public Literal eval(final ScriptContext context) {
         return this;
     }
 
     @Override
-    public abstract Type getType(final ScriptContext context);
+    public Type getType(final ScriptContext context) {
+        return getType();
+    }
 
 }

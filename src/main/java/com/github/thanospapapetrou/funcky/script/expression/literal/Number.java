@@ -1,12 +1,10 @@
 package com.github.thanospapapetrou.funcky.script.expression.literal;
 
 import com.github.thanospapapetrou.funcky.FunckyEngine;
-import com.github.thanospapapetrou.funcky.prelude.Numbers;
+import com.github.thanospapapetrou.funcky.library.Numbers;
 import com.github.thanospapapetrou.funcky.script.expression.literal.type.SimpleType;
 
 import java.net.URI;
-
-import javax.script.ScriptContext;
 
 public class Number extends Literal {
     private static final String INFINITY = "infinity";
@@ -30,7 +28,7 @@ public class Number extends Literal {
     }
 
     @Override
-    public SimpleType getType(final ScriptContext context) {
+    public SimpleType getType() {
         return Numbers.NUMBER;
     }
 

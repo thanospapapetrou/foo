@@ -24,10 +24,16 @@ public class Application extends Expression {
         this.argument = argument;
     }
 
+    public Application(final Expression function, final Expression argument) {
+        super();
+        this.function = function;
+        this.argument = argument;
+    }
+
     @Override
     public Literal eval(final ScriptContext context) {
         // TODO function may not be a function
-        return ((Function) function.eval(context)).apply(argument);
+        return ((Function) function.eval(context)).apply(context, argument);
     }
 
     @Override

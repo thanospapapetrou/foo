@@ -1,17 +1,22 @@
 package com.github.thanospapapetrou.funcky;
 
-import com.github.thanospapapetrou.funcky.prelude.Numbers;
+import com.github.thanospapapetrou.funcky.library.Core;
+import com.github.thanospapapetrou.funcky.library.Library;
+import com.github.thanospapapetrou.funcky.library.Numbers;
+import com.github.thanospapapetrou.funcky.script.expression.literal.Literal;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
-import javax.script.Bindings;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngineFactory;
-import javax.script.SimpleBindings;
 
 /**
  * Class implementing a Funcky engine factory.
@@ -60,10 +65,15 @@ public class FunckyEngineFactory implements ScriptEngineFactory {
     public static final String THREADING = "THREADING";
 
     private static final String DELIMITER = ",\\s*";
+    private static final Set<Library> PRELUDE = Collections.unmodifiableSet(new HashSet<Library>() {
+        {
+            add(new Core());
+            add(new Numbers());
+        }
+    });
     private static final String PROPERTIES = "/funcky.properties";
 
     private final Properties properties;
-    private final Bindings bindings;
 
     /**
      * Construct a new Funcky engine factory.
@@ -74,11 +84,6 @@ public class FunckyEngineFactory implements ScriptEngineFactory {
     public FunckyEngineFactory() throws IOException {
         properties = new Properties();
         properties.load(FunckyEngineFactory.class.getResourceAsStream(PROPERTIES));
-        // TODO rename to prelude and define as a set of libraries
-        bindings = new SimpleBindings();
-        bindings.put(Numbers.NUMBER.toString(), Numbers.NUMBER);
-        bindings.put(Numbers.NAN.toString(), Numbers.NAN);
-        bindings.put(Numbers.INFINITY.toString(), Numbers.INFINITY);
     }
 
     @Override
@@ -145,7 +150,10 @@ public class FunckyEngineFactory implements ScriptEngineFactory {
     public FunckyEngine getScriptEngine() {
         final FunckyEngine engine = new FunckyEngine(this);
         // TODO use custom scope
-        engine.getBindings(ScriptContext.ENGINE_SCOPE).putAll(bindings);
+        PRELUDE.stream()
+                .flatMap(((Function<Set<Literal>, Stream<Literal>>) Set::stream)
+                        .compose(Library::getLiterals))
+                .forEach(l -> engine.getBindings(ScriptContext.ENGINE_SCOPE).put(l.toString(), l));
         return engine;
     }
 
