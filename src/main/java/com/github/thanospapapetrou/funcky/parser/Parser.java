@@ -76,9 +76,9 @@ public class Parser {
      *             if any errors occur while parsing
      */
     public Expression parseExpression() throws ParseException {
-        // TODO h = f produces invalid error (expected right parenthesis)
         try {
-            final Expression expression = _parseExpression();
+            final Expression expression = parseExpression(TokenType.EOL, TokenType.IDENTIFIER,
+                    TokenType.LEFT_PARENTHESIS, TokenType.NUMBER);
             parse(TokenType.EOL);
             parse(TokenType.EOF);
             return expression;
@@ -89,12 +89,13 @@ public class Parser {
         }
     }
 
-    private Expression _parseExpression() throws UnexpectedTokenException {
+    private Expression parseExpression(final TokenType... expected)
+            throws UnexpectedTokenException {
         Expression expression = parseSimpleExpression();
         while (true) {
-            final Token token = parse(TokenType.EOL, TokenType.IDENTIFIER,
-                    TokenType.LEFT_PARENTHESIS, TokenType.NUMBER, TokenType.RIGHT_PARENTHESIS);
-            switch (token.getType()) {
+            final Token token = parse(expected);
+            final TokenType type = token.getType();
+            switch (type) {
             case EOL:
             case RIGHT_PARENTHESIS:
                 tokens.pushback(token);
@@ -120,7 +121,8 @@ public class Parser {
             return new Reference(engine, token.getScript(), token.getLine(), token.getColumn(),
                     token.getValue());
         case LEFT_PARENTHESIS:
-            final Expression expression = _parseExpression();
+            final Expression expression = parseExpression(TokenType.IDENTIFIER,
+                    TokenType.LEFT_PARENTHESIS, TokenType.NUMBER, TokenType.RIGHT_PARENTHESIS);
             parse(TokenType.RIGHT_PARENTHESIS);
             return expression;
         case NUMBER:
