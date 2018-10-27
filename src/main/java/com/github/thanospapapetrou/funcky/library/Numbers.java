@@ -1,18 +1,12 @@
 package com.github.thanospapapetrou.funcky.library;
 
-import com.github.thanospapapetrou.funcky.script.expression.Expression;
-import com.github.thanospapapetrou.funcky.script.expression.literal.Function;
 import com.github.thanospapapetrou.funcky.script.expression.literal.Literal;
 import com.github.thanospapapetrou.funcky.script.expression.literal.Number;
-import com.github.thanospapapetrou.funcky.script.expression.literal.type.FunctionType;
 import com.github.thanospapapetrou.funcky.script.expression.literal.type.SimpleType;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.script.ScriptContext;
-import javax.script.ScriptException;
 
 public class Numbers extends Library {
     public static final SimpleType NUMBER = new SimpleType("Number");

@@ -33,11 +33,13 @@ public class Application extends Expression {
     @Override
     public Literal eval(final ScriptContext context) {
         // TODO function may not be a function
+        // TODO casting
         return ((Function) function.eval(context)).apply(context, argument);
     }
 
     @Override
     public Type getType(final ScriptContext context) {
+        // TODO casting
         return ((FunctionType) function.getType(context)).getRange();
     }
 

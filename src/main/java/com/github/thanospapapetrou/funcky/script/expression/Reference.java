@@ -34,6 +34,7 @@ public class Reference extends Expression {
 
     private Expression resolve(final ScriptContext context) {
         // TODO use custom scope
+        // TODO casting
         return (Expression) context.getBindings(ScriptContext.ENGINE_SCOPE).get(name);
     }
 }

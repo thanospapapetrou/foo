@@ -18,6 +18,7 @@ abstract class BinaryArithmeticOperator extends Functor {
 
     @Override
     public Number apply(final ScriptContext context, final Expression... arguments) {
+        // TODO castings
         return new Number(apply(((Number) arguments[0].eval(context)).getValue(),
                 ((Number) arguments[1].eval(context)).getValue()));
     }

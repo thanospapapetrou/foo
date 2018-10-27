@@ -23,6 +23,7 @@ abstract class Functor extends Function {
         // TODO use inference for generic types
         final Type newType = this.getType().getRange();
         return (arguments > 1) ? new Functor(new Application(that, argument).toString(),
+                // TODO casting
                 (FunctionType) newType, arguments - 1) {
             @Override
             public Literal apply(final ScriptContext context, final Expression... arguments) {

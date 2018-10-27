@@ -23,7 +23,7 @@ public abstract class Expression extends CompiledScript {
         this.column = column;
     }
 
-    protected Expression() {
+    protected Expression() { // TODO do we need this?
         this(null, null, -1, -1);
     }
 
