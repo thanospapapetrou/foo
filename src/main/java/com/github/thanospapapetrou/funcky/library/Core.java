@@ -19,6 +19,7 @@ public class Core extends Library {
                 }
             });
     // TODO typeOf
+    // TODO function
     // TODO equals
     // TODO if
 
