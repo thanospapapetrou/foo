@@ -19,7 +19,9 @@ import javax.script.ScriptContext;
 public class Application extends Expression {
     private static final String APPLICATION_FORMAT = "%1$s %2$s";
     private static final String NESTED_APPLICATION = "(%1$s)";
+    private static final String NULL_ARGUMENT = "Argument must not be null";
     private static final String NULL_CONTEXT = "Context must not be null";
+    private static final String NULL_FUNCTION = "Function must not be null";
 
     private final Expression function;
     private final Expression argument;
@@ -43,6 +45,8 @@ public class Application extends Expression {
     public Application(final FunckyEngine engine, final URI script, final int line,
             final int column, final Expression function, final Expression argument) {
         super(engine, script, line, column);
+        Objects.requireNonNull(function, NULL_FUNCTION);
+        Objects.requireNonNull(argument, NULL_ARGUMENT);
         this.function = function;
         this.argument = argument;
     }
@@ -57,8 +61,42 @@ public class Application extends Expression {
      */
     public Application(final Expression function, final Expression argument) {
         super();
+        Objects.requireNonNull(function, NULL_FUNCTION);
+        Objects.requireNonNull(argument, NULL_ARGUMENT);
         this.function = function;
         this.argument = argument;
+    }
+
+    Expression getFunction() {
+        return function;
+    }
+
+    Expression getArgument() {
+        return argument;
+    }
+
+    @Override
+    public void check(final ScriptContext context)
+            throws IllegalApplicationException, UndefinedReferenceException {
+        Objects.requireNonNull(context, NULL_CONTEXT);
+        function.check(context);
+        argument.check(context);
+        final Type functionType = function.getType(context);
+        final Type argumentType = argument.getType(context);
+        if (!((functionType instanceof FunctionType)
+                && ((FunctionType) functionType).getDomain().equals(argumentType))) {
+            throw new IllegalApplicationException(this, functionType, argumentType);
+        }
+
+    }
+
+    @Override
+    public boolean equals(final Object object) {
+        if (object instanceof Application) {
+            final Application application = (Application) object;
+            return function.equals(application.function) && argument.equals(application.argument);
+        }
+        return false;
     }
 
     @Override
@@ -74,6 +112,11 @@ public class Application extends Expression {
         Objects.requireNonNull(context, NULL_CONTEXT);
         // TODO casting
         return ((FunctionType) function.getType(context)).getRange();
+    }
+
+    @Override
+    public int hashCode() {
+        return function.hashCode() + argument.hashCode();
     }
 
     @Override

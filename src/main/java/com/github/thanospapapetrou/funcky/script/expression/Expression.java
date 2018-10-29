@@ -67,6 +67,19 @@ public abstract class Expression extends CompiledScript {
     }
 
     /**
+     * Check this expression.
+     * 
+     * @param context
+     *            the context in which to check this expression
+     * @throws IllegalApplicationException
+     *             if any illegal application is encountered
+     * @throws UndefinedReferenceException
+     *             if any undefined reference is encountered
+     */
+    public abstract void check(final ScriptContext context)
+            throws IllegalApplicationException, UndefinedReferenceException;
+
+    /**
      * Get column.
      * 
      * @return the column of the script at which this expression was encountered or <code>-1</code>

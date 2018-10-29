@@ -62,8 +62,22 @@ public class Number extends Literal {
     }
 
     @Override
+    public boolean equals(final Object object) {
+        if (object instanceof Number) {
+            final Number number = (Number) object;
+            return Double.isNaN(value) ? Double.isNaN(number.value) : (value == number.value);
+        }
+        return false;
+    }
+
+    @Override
     public SimpleType getType() {
         return Numbers.NUMBER;
+    }
+
+    @Override
+    public int hashCode() {
+        return Double.hashCode(Double.isNaN(value) ? Double.NaN : value);
     }
 
     @Override

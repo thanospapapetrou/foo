@@ -1,3 +1,8 @@
+use double quotes in exception messages
+multiple functions and multiple simple types with the same name may exist
+finish type checking (type inference)
+exceptions in different subpackages
+assert that any method overriding a method throwing a parent exception, only throws the actual child exceptions needed
 funcky exception
     type exception
     runtime exception

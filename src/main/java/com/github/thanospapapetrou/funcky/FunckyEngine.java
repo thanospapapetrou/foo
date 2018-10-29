@@ -36,6 +36,7 @@ public class FunckyEngine extends AbstractScriptEngine
         final Expression exp =
                 new Parser(this, new StringReader(expression), URI.create("funcky:stdin"))
                         .parseExpression();
+        exp.check(context);
         System.out.println(exp);
         return exp;
     }

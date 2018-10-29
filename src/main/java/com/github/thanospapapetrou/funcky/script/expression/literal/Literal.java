@@ -46,6 +46,10 @@ public abstract class Literal extends Expression {
     public abstract Type getType();
 
     @Override
+    public void check(final ScriptContext context) {
+    }
+
+    @Override
     public Literal eval(final ScriptContext context) {
         return this;
     }
@@ -54,5 +58,4 @@ public abstract class Literal extends Expression {
     public Type getType(final ScriptContext context) {
         return getType();
     }
-
 }

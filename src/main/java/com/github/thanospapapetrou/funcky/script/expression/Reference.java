@@ -61,6 +61,20 @@ public class Reference extends Expression {
     }
 
     @Override
+    public void check(final ScriptContext context) throws UndefinedReferenceException {
+        Objects.requireNonNull(context, NULL_CONTEXT);
+        if (resolve(context) == null) {
+            throw new UndefinedReferenceException(this);
+        }
+    }
+
+    @Override
+    public boolean equals(final Object object) {
+        // TODO check namespace as well
+        return (object instanceof Reference) && name.equals(((Reference) object).name);
+    }
+
+    @Override
     public Literal eval(final ScriptContext context) {
         Objects.requireNonNull(context, NULL_CONTEXT);
         return resolve(context).eval(context);
@@ -70,6 +84,11 @@ public class Reference extends Expression {
     public Type getType(final ScriptContext context) {
         Objects.requireNonNull(context, NULL_CONTEXT);
         return resolve(context).getType(context);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
     }
 
     @Override

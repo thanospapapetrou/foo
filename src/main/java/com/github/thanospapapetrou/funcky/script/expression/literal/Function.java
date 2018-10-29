@@ -3,6 +3,8 @@ package com.github.thanospapapetrou.funcky.script.expression.literal;
 import com.github.thanospapapetrou.funcky.script.expression.Expression;
 import com.github.thanospapapetrou.funcky.script.expression.literal.type.FunctionType;
 
+import java.util.Objects;
+
 import javax.script.ScriptContext;
 
 /**
@@ -11,8 +13,19 @@ import javax.script.ScriptContext;
  * @author thanos
  */
 public abstract class Function extends Literal {
+    private static final String EMPTY_NAME = "Name must not be empty";
+    private static final String NULL_NAME = "Name must not be null";
+    private static final String NULL_TYPE = "Type must not be null";
+
     private final String name;
     private final FunctionType type;
+
+    private static void requireValidName(final String name) {
+        Objects.requireNonNull(name, NULL_NAME);
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException(EMPTY_NAME);
+        }
+    }
 
     /**
      * Construct a new function.
@@ -23,6 +36,8 @@ public abstract class Function extends Literal {
      *            the type of this function
      */
     protected Function(final String name, final FunctionType type) {
+        requireValidName(name);
+        Objects.requireNonNull(type, NULL_TYPE);
         this.name = name;
         this.type = type;
     }
@@ -40,8 +55,18 @@ public abstract class Function extends Literal {
     public abstract Literal apply(final ScriptContext context, final Expression argument);
 
     @Override
+    public boolean equals(final Object object) {
+        return (object instanceof Function) && name.equals(((Function) object).name);
+    }
+
+    @Override
     public FunctionType getType() {
         return type;
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
     }
 
     @Override
