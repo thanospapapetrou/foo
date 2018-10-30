@@ -1,6 +1,8 @@
 package com.github.thanospapapetrou.funcky.script.expression;
 
 import com.github.thanospapapetrou.funcky.FunckyEngine;
+import com.github.thanospapapetrou.funcky.script.expression.exception.IllegalApplicationException;
+import com.github.thanospapapetrou.funcky.script.expression.exception.TypeCheckException;
 import com.github.thanospapapetrou.funcky.script.expression.literal.Function;
 import com.github.thanospapapetrou.funcky.script.expression.literal.Literal;
 import com.github.thanospapapetrou.funcky.script.expression.literal.type.FunctionType;
@@ -34,9 +36,11 @@ public class Application extends Expression {
      * @param script
      *            the URI of the script in which this application was encountered
      * @param line
-     *            the line of the script at which this application was encountered
+     *            the line of the script at which this application was encountered (starting from
+     *            <code>1</code>)
      * @param column
-     *            the column of the script at which this application was encountered
+     *            the column of the script at which this application was encountered (starting from
+     *            <code>1</code>)
      * @param function
      *            the function of this application
      * @param argument
@@ -67,17 +71,26 @@ public class Application extends Expression {
         this.argument = argument;
     }
 
-    Expression getFunction() {
+    /**
+     * Get function.
+     * 
+     * @return the function of this application
+     */
+    public Expression getFunction() {
         return function;
     }
 
-    Expression getArgument() {
+    /**
+     * Get argument.
+     * 
+     * @return the argument of this application
+     */
+    public Expression getArgument() {
         return argument;
     }
 
     @Override
-    public void check(final ScriptContext context)
-            throws IllegalApplicationException, UndefinedReferenceException {
+    public void check(final ScriptContext context) throws TypeCheckException {
         Objects.requireNonNull(context, NULL_CONTEXT);
         function.check(context);
         argument.check(context);
@@ -87,7 +100,6 @@ public class Application extends Expression {
                 && ((FunctionType) functionType).getDomain().equals(argumentType))) {
             throw new IllegalApplicationException(this, functionType, argumentType);
         }
-
     }
 
     @Override

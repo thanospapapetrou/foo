@@ -1,6 +1,7 @@
 package com.github.thanospapapetrou.funcky.script.expression;
 
 import com.github.thanospapapetrou.funcky.FunckyEngine;
+import com.github.thanospapapetrou.funcky.script.expression.exception.TypeCheckException;
 import com.github.thanospapapetrou.funcky.script.expression.literal.Literal;
 import com.github.thanospapapetrou.funcky.script.expression.literal.type.Type;
 
@@ -40,9 +41,11 @@ public abstract class Expression extends CompiledScript {
      * @param script
      *            the URI of the script in which this expression was encountered
      * @param line
-     *            the line of the script at which this expression was encountered
+     *            the line of the script at which this expression was encountered (starting from
+     *            <code>1</code>)
      * @param column
-     *            the column of the script at which this expression was encountered
+     *            the column of the script at which this expression was encountered (starting from
+     *            <code>1</code>)
      */
     protected Expression(final FunckyEngine engine, final URI script, final int line,
             final int column) {
@@ -71,13 +74,10 @@ public abstract class Expression extends CompiledScript {
      * 
      * @param context
      *            the context in which to check this expression
-     * @throws IllegalApplicationException
-     *             if any illegal application is encountered
-     * @throws UndefinedReferenceException
-     *             if any undefined reference is encountered
+     * @throws TypeCheckException
+     *             if an error occurs while checking the type of this expression
      */
-    public abstract void check(final ScriptContext context)
-            throws IllegalApplicationException, UndefinedReferenceException;
+    public abstract void check(final ScriptContext context) throws TypeCheckException;
 
     /**
      * Get column.

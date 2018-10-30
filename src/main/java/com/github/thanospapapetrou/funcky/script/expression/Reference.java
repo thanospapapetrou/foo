@@ -1,6 +1,7 @@
 package com.github.thanospapapetrou.funcky.script.expression;
 
 import com.github.thanospapapetrou.funcky.FunckyEngine;
+import com.github.thanospapapetrou.funcky.script.expression.exception.UndefinedReferenceException;
 import com.github.thanospapapetrou.funcky.script.expression.literal.Literal;
 import com.github.thanospapapetrou.funcky.script.expression.literal.type.Type;
 
@@ -35,9 +36,11 @@ public class Reference extends Expression {
      * @param script
      *            the URI of the script in which this reference was encountered
      * @param line
-     *            the line of the script at which this reference was encountered
+     *            the line of the script at which this reference was encountered (starting from
+     *            <code>1</code>)
      * @param column
-     *            the column of the script at which this reference was encountered
+     *            the column of the script at which this reference was encountered (starting from
+     *            <code>1</code>)
      * @param name
      *            the name of this reference
      */

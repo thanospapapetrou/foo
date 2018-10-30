@@ -21,8 +21,7 @@ public abstract class Function extends Literal {
     private final FunctionType type;
 
     private static void requireValidName(final String name) {
-        Objects.requireNonNull(name, NULL_NAME);
-        if (name.isEmpty()) {
+        if (Objects.requireNonNull(name, NULL_NAME).isEmpty()) {
             throw new IllegalArgumentException(EMPTY_NAME);
         }
     }
@@ -49,8 +48,8 @@ public abstract class Function extends Literal {
      *            the context to use to evaluate argument
      * @param argument
      *            the argument to apply this function to
-     * @return the result of this function when applied to the given argument as evaluated in the
-     *         given context
+     * @return the result of this function applied to the given argument as evaluated in the given
+     *         context
      */
     public abstract Literal apply(final ScriptContext context, final Expression argument);
 

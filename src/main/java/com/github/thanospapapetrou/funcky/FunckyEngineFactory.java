@@ -79,7 +79,7 @@ public class FunckyEngineFactory implements ScriptEngineFactory {
      * Construct a new Funcky engine factory.
      * 
      * @throws IOException
-     *             if any errors occur while loading Funcky properties.
+     *             if an error occurs while loading Funcky properties
      */
     public FunckyEngineFactory() throws IOException {
         properties = new Properties();

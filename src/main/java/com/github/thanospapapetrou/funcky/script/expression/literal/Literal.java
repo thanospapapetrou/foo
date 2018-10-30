@@ -22,9 +22,11 @@ public abstract class Literal extends Expression {
      * @param script
      *            the URI of the script in which this literal was encountered
      * @param line
-     *            the line of the script at which this literal was encountered
+     *            the line of the script at which this literal was encountered (starting from
+     *            <code>1</code>)
      * @param column
-     *            the column of the script at which this literal was encountered
+     *            the column of the script at which this literal was encountered (starting from
+     *            <code>1</code>)
      */
     protected Literal(final FunckyEngine engine, final URI script, final int line,
             final int column) {

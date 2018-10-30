@@ -14,8 +14,7 @@ public class SimpleType extends Type {
     private final String name;
 
     private static void requireValidName(final String name) {
-        Objects.requireNonNull(name, NULL_NAME);
-        if (name.isEmpty()) {
+        if (Objects.requireNonNull(name, NULL_NAME).isEmpty()) {
             throw new IllegalArgumentException(EMPTY_NAME);
         }
     }

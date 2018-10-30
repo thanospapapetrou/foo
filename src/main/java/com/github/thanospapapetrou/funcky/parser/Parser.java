@@ -1,11 +1,16 @@
 package com.github.thanospapapetrou.funcky.parser;
 
 import com.github.thanospapapetrou.funcky.FunckyEngine;
-import com.github.thanospapapetrou.funcky.parser.tokenizer.ReadingException;
+import com.github.thanospapapetrou.funcky.parser.exception.ParseException;
+import com.github.thanospapapetrou.funcky.parser.exception.ParserIllegalStateException;
+import com.github.thanospapapetrou.funcky.parser.exception.ParsingErrorException;
+import com.github.thanospapapetrou.funcky.parser.exception.UnexpectedTokenException;
+import com.github.thanospapapetrou.funcky.parser.exception.UnparsableInputException;
 import com.github.thanospapapetrou.funcky.parser.tokenizer.Token;
 import com.github.thanospapapetrou.funcky.parser.tokenizer.TokenType;
 import com.github.thanospapapetrou.funcky.parser.tokenizer.Tokenizer;
-import com.github.thanospapapetrou.funcky.parser.tokenizer.UnparsableInputRuntimeException;
+import com.github.thanospapapetrou.funcky.parser.tokenizer.exception.ReadingException;
+import com.github.thanospapapetrou.funcky.parser.tokenizer.exception.UnparsableInputRuntimeException;
 import com.github.thanospapapetrou.funcky.script.expression.Application;
 import com.github.thanospapapetrou.funcky.script.expression.Expression;
 import com.github.thanospapapetrou.funcky.script.expression.Reference;
@@ -48,7 +53,7 @@ public class Parser {
      * @param script
      *            the URI of the script to parse
      * @throws ParsingErrorException
-     *             if any I/O errors occur while parsing
+     *             if an I/O error occurs while parsing
      */
     public Parser(final FunckyEngine engine, final Reader reader, final URI script)
             throws ParsingErrorException {
@@ -73,7 +78,7 @@ public class Parser {
      * 
      * @return the expression parsed
      * @throws ParseException
-     *             if any errors occur while parsing
+     *             if an error occurs while parsing
      */
     public Expression parseExpression() throws ParseException {
         try {

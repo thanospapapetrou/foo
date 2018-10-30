@@ -29,9 +29,11 @@ public class Number extends Literal {
      * @param script
      *            the URI of the script in which this number was encountered
      * @param line
-     *            the line of the script at which this number was encountered
+     *            the line of the script at which this number was encountered (starting from
+     *            <code>1</code>)
      * @param column
-     *            the column of the script at which this number was encountered
+     *            the column of the script at which this number was encountered (starting from
+     *            <code>1</code>)
      * @param value
      *            the value of this number
      */

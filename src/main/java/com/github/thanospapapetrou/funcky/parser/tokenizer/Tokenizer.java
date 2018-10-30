@@ -1,5 +1,7 @@
 package com.github.thanospapapetrou.funcky.parser.tokenizer;
 
+import com.github.thanospapapetrou.funcky.parser.tokenizer.exception.UnparsableInputRuntimeException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -48,7 +50,7 @@ public class Tokenizer {
      *            the reader from which to read the script to tokenize
      * @return a stream of tokens
      * @throws IOException
-     *             if any I/O errors occur while tokenizing
+     *             if an I/O error occurs while tokenizing
      */
     public Stream<Token> tokenize(final Reader reader) throws IOException {
         Objects.requireNonNull(reader, NULL_READER);

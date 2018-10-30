@@ -1,10 +1,12 @@
 use double quotes in exception messages
 multiple functions and multiple simple types with the same name may exist
+    simple types should be compared by identity equality
+    both should be compared by qname equality
+    simple types should be compared based on their reference
+    functions should be compared based on their expression
+    both of them already have a URI
 finish type checking (type inference)
-exceptions in different subpackages
-assert that any method overriding a method throwing a parent exception, only throws the actual child exceptions needed
 funcky exception
-    type exception
     runtime exception
 
 booleans

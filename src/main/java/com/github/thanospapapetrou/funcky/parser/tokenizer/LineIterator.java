@@ -1,5 +1,7 @@
 package com.github.thanospapapetrou.funcky.parser.tokenizer;
 
+import com.github.thanospapapetrou.funcky.parser.tokenizer.exception.ReadingException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URI;
