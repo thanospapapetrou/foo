@@ -41,7 +41,7 @@ public enum TokenType {
     /**
      * Number.
      */
-    NUMBER("number", "[\\+\\-]?\\d+(\\.\\d+)?"),
+    NUMBER("number", "[\\+\\-]?\\d+(\\.\\d+([Ee][\\+\\-]?\\d+)?)?"),
 
     /**
      * Right parenthesis (')').

@@ -8,9 +8,9 @@ multiple functions and multiple simple types with the same name may exist
 finish type checking (type inference)
 funcky exception
     runtime exception
-
 booleans
 types and type inference
+bytes with hex representation
 chars
 lists
 strings
