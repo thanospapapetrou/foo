@@ -51,17 +51,17 @@ public class FunctionType extends Type {
     }
 
     @Override
-    public int hashCode() {
-        return domain.hashCode() + range.hashCode();
-    }
-
-    @Override
     public boolean equals(final Object object) {
         if (object instanceof FunctionType) {
             final FunctionType functionType = (FunctionType) object;
             return domain.equals(functionType.domain) && range.equals(functionType.range);
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return domain.hashCode() + range.hashCode();
     }
 
     @Override

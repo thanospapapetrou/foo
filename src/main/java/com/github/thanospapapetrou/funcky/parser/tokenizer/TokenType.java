@@ -14,6 +14,11 @@ public enum TokenType {
     COMMENT("comment", "#.*$"),
 
     /**
+     * Dollar ('$').
+     */
+    DOLLAR("dollar", "\\$"),
+
+    /**
      * End of file.
      */
     EOF("end of file", null),

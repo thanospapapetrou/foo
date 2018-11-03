@@ -15,6 +15,7 @@ import com.github.thanospapapetrou.funcky.script.expression.Application;
 import com.github.thanospapapetrou.funcky.script.expression.Expression;
 import com.github.thanospapapetrou.funcky.script.expression.Reference;
 import com.github.thanospapapetrou.funcky.script.expression.literal.Number;
+import com.github.thanospapapetrou.funcky.script.expression.literal.type.TypeVariable;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -82,8 +83,8 @@ public class Parser {
      */
     public Expression parseExpression() throws ParseException {
         try {
-            final Expression expression = parseExpression(TokenType.EOL, TokenType.IDENTIFIER,
-                    TokenType.LEFT_PARENTHESIS, TokenType.NUMBER);
+            final Expression expression = parseExpression(TokenType.DOLLAR, TokenType.EOL,
+                    TokenType.IDENTIFIER, TokenType.LEFT_PARENTHESIS, TokenType.NUMBER);
             parse(TokenType.EOL);
             parse(TokenType.EOF);
             return expression;
@@ -105,6 +106,7 @@ public class Parser {
             case RIGHT_PARENTHESIS:
                 tokens.pushback(token);
                 return expression;
+            case DOLLAR:
             case IDENTIFIER:
             case LEFT_PARENTHESIS:
             case NUMBER:
@@ -119,14 +121,17 @@ public class Parser {
     }
 
     private Expression parseSimpleExpression() throws UnexpectedTokenException {
-        final Token token =
-                parse(TokenType.IDENTIFIER, TokenType.LEFT_PARENTHESIS, TokenType.NUMBER);
+        final Token token = parse(TokenType.DOLLAR, TokenType.IDENTIFIER,
+                TokenType.LEFT_PARENTHESIS, TokenType.NUMBER);
         switch (token.getType()) {
+        case DOLLAR:
+            return new TypeVariable(engine, token.getScript(), token.getLine(), token.getColumn(),
+                    parse(TokenType.IDENTIFIER).getValue());
         case IDENTIFIER:
             return new Reference(engine, token.getScript(), token.getLine(), token.getColumn(),
                     token.getValue());
         case LEFT_PARENTHESIS:
-            final Expression expression = parseExpression(TokenType.IDENTIFIER,
+            final Expression expression = parseExpression(TokenType.DOLLAR, TokenType.IDENTIFIER,
                     TokenType.LEFT_PARENTHESIS, TokenType.NUMBER, TokenType.RIGHT_PARENTHESIS);
             parse(TokenType.RIGHT_PARENTHESIS);
             return expression;

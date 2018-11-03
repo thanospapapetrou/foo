@@ -11,6 +11,7 @@ funcky exception
 booleans
 types and type inference
 bytes with hex representation
+Unit type
 chars
 lists
 strings
