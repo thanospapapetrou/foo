@@ -23,6 +23,7 @@ public class TypeVariable extends Type {
     public TypeVariable(final FunckyEngine engine, final URI script, final int line,
             final int column, final String name) {
         super(engine, script, line, column);
+        requireValidName(name);
         this.name = name;
     }
 
