@@ -1,5 +1,7 @@
 package com.github.thanospapapetrou.funcky.script.expression.literal.type;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -10,6 +12,7 @@ import java.util.Objects;
 public class SimpleType extends Type {
     private static final String EMPTY_NAME = "Name must not be empty";
     private static final String NULL_NAME = "Name must not be null";
+    private static final String NULL_TYPE = "Type must not be null";
 
     private final String name;
 
@@ -31,6 +34,11 @@ public class SimpleType extends Type {
     }
 
     @Override
+    public Type bind(final Map<TypeVariable, Type> bindings) {
+        return this;
+    }
+
+    @Override
     public boolean equals(final Object object) {
         return (object instanceof SimpleType) && name.equals(((SimpleType) object).name);
     }
@@ -41,7 +49,19 @@ public class SimpleType extends Type {
     }
 
     @Override
+    public Map<TypeVariable, Type> infer(final Type type) {
+        Objects.requireNonNull(type, NULL_TYPE);
+        return (type instanceof TypeVariable) ? Collections.singletonMap((TypeVariable) type, this)
+                : (equals(type) ? Collections.emptyMap() : null);
+    }
+
+    @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    protected Type free(final Map<TypeVariable, TypeVariable> freed) {
+        return this;
     }
 }

@@ -96,8 +96,8 @@ public class Application extends Expression {
         argument.check(context);
         final Type functionType = function.getType(context);
         final Type argumentType = argument.getType(context);
-        if (!((functionType instanceof FunctionType)
-                && ((FunctionType) functionType).getDomain().equals(argumentType))) {
+        if (!(functionType instanceof FunctionType)
+                && (((FunctionType) functionType).getDomain().infer(argumentType.free()) == null)) {
             throw new IllegalApplicationException(this, functionType, argumentType);
         }
     }
@@ -114,16 +114,16 @@ public class Application extends Expression {
     @Override
     public Literal eval(final ScriptContext context) {
         Objects.requireNonNull(context, NULL_CONTEXT);
-        // TODO function may not be a function
-        // TODO casting
         return ((Function) function.eval(context)).apply(context, argument);
     }
 
     @Override
     public Type getType(final ScriptContext context) {
         Objects.requireNonNull(context, NULL_CONTEXT);
-        // TODO casting
-        return ((FunctionType) function.getType(context)).getRange();
+        final FunctionType functionType = (FunctionType) function.getType(context);
+        // TODO reuse
+        return functionType.getRange()
+                .bind(functionType.getDomain().infer(argument.getType(context).free()));
     }
 
     @Override

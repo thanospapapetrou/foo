@@ -3,6 +3,7 @@ package com.github.thanospapapetrou.funcky.library;
 import com.github.thanospapapetrou.funcky.script.expression.Expression;
 import com.github.thanospapapetrou.funcky.script.expression.literal.Function;
 import com.github.thanospapapetrou.funcky.script.expression.literal.Literal;
+import com.github.thanospapapetrou.funcky.script.expression.literal.Number;
 import com.github.thanospapapetrou.funcky.script.expression.literal.type.FunctionType;
 import com.github.thanospapapetrou.funcky.script.expression.literal.type.SimpleType;
 import com.github.thanospapapetrou.funcky.script.expression.literal.type.Type;
@@ -39,11 +40,23 @@ public class Core extends Library {
                 private static final long serialVersionUID = 0L;
 
                 {
-                    // function
+                    // equals
+                    final TypeVariable a = new TypeVariable(); // TODO add name to type variable
+                    add(new Functor("equals",
+                            new FunctionType(a, new FunctionType(a, Numbers.NUMBER)), 2) {
+                        @Override
+                        protected Literal apply(final ScriptContext context,
+                                final Expression... arguments) {
+                            // TODO return boolean
+                            return new Number(arguments[0].equals(arguments[1]) ? 1.0 : 0.0);
+                        }
+                    });
+                    // Function
                     add(FUNCTION);
                     // Type
                     add(TYPE);
                     // typeOf
+                    // TODO add name to type variable
                     add(new Function("typeOf", new FunctionType(new TypeVariable(), TYPE)) {
                         @Override
                         public Type apply(final ScriptContext context, final Expression argument) {
