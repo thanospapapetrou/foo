@@ -125,4 +125,20 @@ public abstract class Expression extends CompiledScript {
     public FunckyEngine getEngine() {
         return engine;
     }
+
+    @Override
+    public String toString() {
+        return toExpression().toString();
+    }
+
+    /**
+     * Convert this expression to another equivalent but more human readable expression for
+     * printing. This method is to be overriden by {@link Literal}s that can not be represented
+     * directly, but instead are represented by expressions.
+     * 
+     * @return an equivalent but more human readable expression
+     */
+    protected Expression toExpression() {
+        return this;
+    }
 }

@@ -1,6 +1,7 @@
 package com.github.thanospapapetrou.funcky.library;
 
 import com.github.thanospapapetrou.funcky.script.expression.Expression;
+import com.github.thanospapapetrou.funcky.script.expression.Reference;
 import com.github.thanospapapetrou.funcky.script.expression.literal.Number;
 import com.github.thanospapapetrou.funcky.script.expression.literal.type.FunctionType;
 
@@ -11,7 +12,8 @@ abstract class BinaryArithmeticOperator extends Functor {
             new FunctionType(Numbers.NUMBER, new FunctionType(Numbers.NUMBER, Numbers.NUMBER));
 
     protected BinaryArithmeticOperator(final String name) {
-        super(name, TYPE, 2);
+        // TODO validate name
+        super(new Reference(name), TYPE, 2);
     }
 
     protected abstract double apply(final double a, final double b);

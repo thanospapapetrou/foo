@@ -7,8 +7,10 @@ import com.github.thanospapapetrou.funcky.script.expression.literal.Function;
 import com.github.thanospapapetrou.funcky.script.expression.literal.Literal;
 import com.github.thanospapapetrou.funcky.script.expression.literal.type.FunctionType;
 import com.github.thanospapapetrou.funcky.script.expression.literal.type.Type;
+import com.github.thanospapapetrou.funcky.script.expression.literal.type.TypeVariable;
 
 import java.net.URI;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.script.ScriptContext;
@@ -96,8 +98,7 @@ public class Application extends Expression {
         argument.check(context);
         final Type functionType = function.getType(context);
         final Type argumentType = argument.getType(context);
-        if (!(functionType instanceof FunctionType)
-                && (((FunctionType) functionType).getDomain().infer(argumentType.free()) == null)) {
+        if (!(functionType instanceof FunctionType) && (inferBindings(context) == null)) {
             throw new IllegalApplicationException(this, functionType, argumentType);
         }
     }
@@ -120,10 +121,7 @@ public class Application extends Expression {
     @Override
     public Type getType(final ScriptContext context) {
         Objects.requireNonNull(context, NULL_CONTEXT);
-        final FunctionType functionType = (FunctionType) function.getType(context);
-        // TODO reuse
-        return functionType.getRange()
-                .bind(functionType.getDomain().infer(argument.getType(context).free()));
+        return ((FunctionType) function.getType(context)).getRange().bind(inferBindings(context));
     }
 
     @Override
@@ -133,7 +131,14 @@ public class Application extends Expression {
 
     @Override
     public String toString() {
-        return String.format(APPLICATION_FORMAT, function, (argument instanceof Application)
-                ? String.format(NESTED_APPLICATION, argument) : argument);
+        final Expression argument = this.argument.toExpression();
+        return String.format(APPLICATION_FORMAT, function.toExpression(),
+                (argument instanceof Application) ? String.format(NESTED_APPLICATION, argument)
+                        : argument);
+    }
+
+    private Map<TypeVariable, Type> inferBindings(final ScriptContext context) {
+        return ((FunctionType) function.getType(context)).getDomain()
+                .infer(argument.getType(context).free());
     }
 }

@@ -3,6 +3,7 @@ package com.github.thanospapapetrou.funcky.script.expression.literal;
 import com.github.thanospapapetrou.funcky.FunckyEngine;
 import com.github.thanospapapetrou.funcky.library.Numbers;
 import com.github.thanospapapetrou.funcky.script.expression.Application;
+import com.github.thanospapapetrou.funcky.script.expression.Expression;
 import com.github.thanospapapetrou.funcky.script.expression.Reference;
 import com.github.thanospapapetrou.funcky.script.expression.literal.type.SimpleType;
 
@@ -14,10 +15,10 @@ import java.net.URI;
  * @author thanos
  */
 public class Number extends Literal {
-    private static final String INFINITY = new Reference("infinity").toString();
-    private static final String MINUS_INFINITY =
-            new Application(new Reference("minus"), new Reference("infinity")).toString();
-    private static final String NAN = new Reference("nan").toString();
+    private static final Reference INFINITY = new Reference("infinity");
+    private static final Application MINUS_INFINITY =
+            new Application(new Reference("minus"), INFINITY);
+    private static final Reference NAN = new Reference("nan");
 
     private final double value;
 
@@ -84,7 +85,13 @@ public class Number extends Literal {
 
     @Override
     public String toString() {
+        return ((value == Double.POSITIVE_INFINITY) || (value == Double.NEGATIVE_INFINITY)
+                || Double.isNaN(value)) ? toExpression().toString() : Double.toString(value);
+    }
+
+    @Override
+    protected Expression toExpression() {
         return (value == Double.POSITIVE_INFINITY) ? INFINITY : ((value == Double.NEGATIVE_INFINITY)
-                ? MINUS_INFINITY : (Double.isNaN(value) ? NAN : Double.toString(value)));
+                ? MINUS_INFINITY : (Double.isNaN(value) ? NAN : this));
     }
 }

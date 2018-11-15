@@ -2,6 +2,7 @@ package com.github.thanospapapetrou.funcky.script.expression.literal.type;
 
 import com.github.thanospapapetrou.funcky.library.Core;
 import com.github.thanospapapetrou.funcky.script.expression.Application;
+import com.github.thanospapapetrou.funcky.script.expression.Expression;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,7 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Class representing a Funcky function type.§
+ * Class representing a Funcky function type.
  * 
  * @author thanos
  */
@@ -100,13 +101,13 @@ public class FunctionType extends Type {
     }
 
     @Override
-    public String toString() {
-        return new Application(new Application(Core.FUNCTION, domain), range).toString();
-    }
-
-    @Override
     protected Type free(final Map<TypeVariable, TypeVariable> freed) {
         Objects.requireNonNull(freed, NULL_FREED);
         return new FunctionType(domain.free(freed), range.free(freed));
+    }
+
+    @Override
+    protected Expression toExpression() {
+        return new Application(new Application(Core.FUNCTION, domain), range);
     }
 }

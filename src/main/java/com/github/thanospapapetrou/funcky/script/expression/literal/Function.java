@@ -13,31 +13,24 @@ import javax.script.ScriptContext;
  * @author thanos
  */
 public abstract class Function extends Literal {
-    private static final String EMPTY_NAME = "Name must not be empty";
-    private static final String NULL_NAME = "Name must not be null";
+    private static final String NULL_EXPRESSION = "Expression must not be null";
     private static final String NULL_TYPE = "Type must not be null";
 
-    private final String name;
+    private final Expression expression;
     private final FunctionType type;
-
-    private static void requireValidName(final String name) {
-        if (Objects.requireNonNull(name, NULL_NAME).isEmpty()) {
-            throw new IllegalArgumentException(EMPTY_NAME);
-        }
-    }
 
     /**
      * Construct a new function.
      * 
-     * @param name
-     *            the name of this function
+     * @param expression
+     *            the expression to represent this function
      * @param type
      *            the type of this function
      */
-    protected Function(final String name, final FunctionType type) {
-        requireValidName(name);
+    protected Function(final Expression expression, final FunctionType type) {
+        Objects.requireNonNull(expression, NULL_EXPRESSION);
         Objects.requireNonNull(type, NULL_TYPE);
-        this.name = name;
+        this.expression = expression;
         this.type = type;
     }
 
@@ -55,7 +48,12 @@ public abstract class Function extends Literal {
 
     @Override
     public boolean equals(final Object object) {
-        return (object instanceof Function) && name.equals(((Function) object).name);
+        return (object instanceof Function) && expression.equals(((Function) object).expression);
+    }
+
+    @Override
+    public int hashCode() {
+        return expression.hashCode();
     }
 
     @Override
@@ -64,12 +62,7 @@ public abstract class Function extends Literal {
     }
 
     @Override
-    public int hashCode() {
-        return name.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return name;
+    protected Expression toExpression() {
+        return expression;
     }
 }

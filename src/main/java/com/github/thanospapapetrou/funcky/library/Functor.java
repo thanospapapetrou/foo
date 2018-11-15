@@ -12,8 +12,9 @@ import javax.script.ScriptContext;
 abstract class Functor extends Function {
     private final int arguments; // TODO get rid of arguments
 
-    protected Functor(final String name, final FunctionType type, final int arguments) {
-        super(name, type);
+    protected Functor(final Expression expression, final FunctionType type, final int arguments) {
+        super(expression, type);
+        // TODO validate arguments
         this.arguments = arguments;
     }
 
@@ -22,8 +23,7 @@ abstract class Functor extends Function {
         final Functor that = this;
         // TODO use inference for generic types
         final Type newType = this.getType().getRange();
-        return (arguments > 1) ? new Functor(new Application(that, argument).toString(),
-                // TODO casting
+        return (arguments > 1) ? new Functor(new Application(that, argument),
                 (FunctionType) newType, arguments - 1) {
             @Override
             public Literal apply(final ScriptContext context, final Expression... arguments) {
